@@ -2,11 +2,12 @@
  Semver -- python module for semantic versioning 
 =================================================
 
-Simple module for comparing versions as noted at `http://semver.org/`_.
+Simple module for comparing versions as noted at
+`semver.org <http://semver.org/>`_.
 
 This module provides just couple of functions, main of which are:
 
-.. doctest::
+.. ::
 
     >>> import semver
     >>> semver.compare("1.0.0", "2.0.0")
@@ -19,3 +20,20 @@ This module provides just couple of functions, main of which are:
     True
     >>> semver.match("1.0.0", ">1.0.0")
     False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
