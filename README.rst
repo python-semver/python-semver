@@ -7,7 +7,7 @@ Simple module for comparing versions as noted at
 
 This module provides just couple of functions, main of which are:
 
-.. ::
+..
 
     >>> import semver
     >>> semver.compare("1.0.0", "2.0.0")
@@ -20,20 +20,3 @@ This module provides just couple of functions, main of which are:
     True
     >>> semver.match("1.0.0", ">1.0.0")
     False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
