@@ -15,15 +15,19 @@ def parse(version):
     match = regex.match(version)
     if match is None:
         raise ValueError('{0} is not valid SemVer string'.format(version))
-    rv = {}
-    rv['major'] = int(match.group(1))
-    rv['minor'] = int(match.group(2))
-    rv['patch'] = int(match.group(3))
+
+    rv = {
+        'major': int(match.group(1)),
+        'minor': int(match.group(2)),
+        'patch': int(match.group(3)),
+    }
+
     if match.group(4):
         rv['prerelease'] = match.group(4).lstrip('-')
 
     if match.group(6):
         rv['build'] = match.group(6).lstrip('+')
+
     return rv
 
 
@@ -49,20 +53,19 @@ def match(version, match_expr):
         prefix = prefix[0]
         match_version = match_expr[1:]
     else:
-        raise ValueError(u"match_expr parameter should be in format <op><ver>, "
-                         u"where <op> is one of ['<', '>', '==', '<=', '>=']. "
-                         u"You provided: {}".format(match_expr))
+        raise ValueError("match_expr parameter should be in format <op><ver>, "
+                         "where <op> is one of ['<', '>', '==', '<=', '>=']. "
+                         "You provided: {}".format(match_expr))
 
     possibilities_dict = {
         '>': (1,),
         '<': (-1,),
         '==': (0,),
         '>=': (0, 1),
-        '<=': (-1, 0)}
+        '<=': (-1, 0)
+    }
+
     possibilities = possibilities_dict[prefix]
     cmp_res = compare(version, match_version)
 
-    if cmp_res in possibilities:
-        return True
-    else:
-        return False
+    return cmp_res in possibilities
