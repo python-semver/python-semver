@@ -27,22 +27,31 @@ def parse(version):
 
 def compare(ver1, ver2):
     def nat_cmp(a, b):
-        a, b = a and str(a) or '', b and str(b) or ''
+        a, b = a or '', b or ''
         convert = lambda text: int(text) if text.isdigit() else text.lower()
         alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
         return cmp(alphanum_key(a), alphanum_key(b))
 
-    def compare_by_keys(d1, d2, keys):
-        for key in keys:
-            v = nat_cmp(d1.get(key), d2.get(key))
-            if v != 0:
+    def compare_by_keys(d1, d2):
+        for key in ['major', 'minor', 'patch']:
+            v = cmp(d1.get(key), d2.get(key))
+            if v:
                 return v
-        return 0
+        rc1, rc2 = d1.get('prerelease'), d2.get('prerelease')
+        build1, build2 = d1.get('build'), d2.get('build')
+        rccmp = nat_cmp(rc1, rc2)
+        buildcmp = nat_cmp(build1, build2)
+        if not (rc1 or rc2):
+            return buildcmp
+        elif not rc1:
+            return 1
+        elif not rc2:
+            return -1
+        return rccmp or buildcmp or 0
 
     v1, v2 = parse(ver1), parse(ver2)
 
-    return compare_by_keys(
-        v1, v2, ['major', 'minor', 'patch', 'prerelease', 'build'])
+    return compare_by_keys(v1, v2)
 
 
 def match(version, match_expr):
