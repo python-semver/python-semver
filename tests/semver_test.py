@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-
 from semver import compare
 from semver import match
 from semver import parse
@@ -36,3 +35,13 @@ class TestSemver(TestCase):
         self.assertEquals(
             match("2.3.7", ">=2.3.8"),
             False)
+
+    def test_should_raise_value_error_for_invalid_value(self):
+        self.assertRaises(ValueError, compare, 'foo', 'bar')
+        self.assertRaises(ValueError, compare, '1.0', '1.0.0')
+        self.assertRaises(ValueError, compare, '1.x', '1.0.0')
+
+    def test_should_raise_value_error_for_invalid_match_expression(self):
+        self.assertRaises(ValueError, match, '1.0.0', '')
+        self.assertRaises(ValueError, match, '1.0.0', '!')
+        self.assertRaises(ValueError, match, '1.0.0', '1.0.0')
