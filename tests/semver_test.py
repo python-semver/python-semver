@@ -46,7 +46,7 @@ class TestSemver(TestCase):
         self.assertRaises(ValueError, match, '1.0.0', '!')
         self.assertRaises(ValueError, match, '1.0.0', '1.0.0')
 
-    def test_should_follow_specification_comparsion(self):
+    def test_should_follow_specification_comparison(self):
         # produce comparsion chain:
         # 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-beta.2 < 1.0.0-beta.11
         # < 1.0.0-rc.1 < 1.0.0-rc.1+build.1 < 1.0.0 < 1.0.0+0.3.7 < 1.3.7+build
