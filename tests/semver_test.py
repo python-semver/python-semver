@@ -66,10 +66,10 @@ class TestSemver(TestCase):
                 compare(high_version, low_version), 1,
                 '%s should be higher than %s' % (high_version, low_version))
 
-    def test_compare_rc_builds(self):
+    def test_should_compare_rc_builds(self):
         self.assertEqual(compare('1.0.0-beta.2', '1.0.0-beta.11'), -1)
 
-    def test_compare_release_candidate_with_release(self):
+    def test_should_compare_release_candidate_with_release(self):
         self.assertEqual(compare('1.0.0-rc.1+build.1', '1.0.0'), -1)
 
 
