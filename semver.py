@@ -2,67 +2,82 @@
 
 import re
 
+_REGEX = re.compile('^(?P<major>[0-9]+)'
+                    '\.(?P<minor>[0-9]+)'
+                    '\.(?P<patch>[0-9]+)'
+                    '(\-(?P<prerelease>[0-9A-Za-z]+(\.[0-9A-Za-z]+)*))?'
+                    '(\+(?P<build>[0-9A-Za-z]+(\.[0-9A-Za-z]+)*))?$')
+
+if 'cmp' not in __builtins__:
+    cmp = lambda a,b: (a > b) - (a < b)
 
 def parse(version):
     """
     Parse version to major, minor, patch, pre-release, build parts.
     """
-    regex = re.compile(r"^([0-9]+)"     # major
-                       + r"\.([0-9]+)"  # minor
-                       + r"\.([0-9]+)"  # patch
-                       + r"(\-[0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?"    # pre-release
-                       + r"(\+[0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?$")  # build
-    match = regex.match(version)
+    match = _REGEX.match(version)
     if match is None:
-        raise ValueError('{0} is not valid SemVer string'.format(version))
-    rv = {}
-    rv['major'] = int(match.group(1))
-    rv['minor'] = int(match.group(2))
-    rv['patch'] = int(match.group(3))
-    if match.group(4):
-        rv['prerelease'] = match.group(4).lstrip('-')
+        raise ValueError('%s is not valid SemVer string' % version)
 
-    if match.group(6):
-        rv['build'] = match.group(6).lstrip('+')
-    return rv
+    verinfo = match.groupdict()
+
+    verinfo['major'] = int(verinfo['major'])
+    verinfo['minor'] = int(verinfo['minor'])
+    verinfo['patch'] = int(verinfo['patch'])
+
+    return verinfo
 
 
 def compare(ver1, ver2):
-    def compare_by_keys(d1, d2, keys):
-        for key in keys:
+    def nat_cmp(a, b):
+        a, b = a or '', b or ''
+        convert = lambda text: text.isdigit() and int(text) or text.lower()
+        alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+        return cmp(alphanum_key(a), alphanum_key(b))
+
+    def compare_by_keys(d1, d2):
+        for key in ['major', 'minor', 'patch']:
             v = cmp(d1.get(key), d2.get(key))
-            if v != 0:
+            if v:
                 return v
-        return 0
+        rc1, rc2 = d1.get('prerelease'), d2.get('prerelease')
+        build1, build2 = d1.get('build'), d2.get('build')
+        rccmp = nat_cmp(rc1, rc2)
+        buildcmp = nat_cmp(build1, build2)
+        if not (rc1 or rc2):
+            return buildcmp
+        elif not rc1:
+            return 1
+        elif not rc2:
+            return -1
+        return rccmp or buildcmp or 0
 
     v1, v2 = parse(ver1), parse(ver2)
 
-    return compare_by_keys(
-        v1, v2, ['major', 'minor', 'patch', 'prerelease', 'build'])
+    return compare_by_keys(v1, v2)
 
 
 def match(version, match_expr):
     prefix = match_expr[:2]
     if prefix in ('>=', '<=', '=='):
         match_version = match_expr[2:]
-    elif prefix[0] in ('>', '<', '='):
+    elif prefix and prefix[0] in ('>', '<', '='):
         prefix = prefix[0]
         match_version = match_expr[1:]
     else:
-        raise ValueError(u"match_expr parameter should be in format <op><ver>, "
-                         u"where <op> is one of ['<', '>', '==', '<=', '>=']. "
-                         u"You provided: {}".format(match_expr))
+        raise ValueError("match_expr parameter should be in format <op><ver>, "
+                         "where <op> is one of ['<', '>', '==', '<=', '>=']. "
+                         "You provided: %r" % match_expr)
 
     possibilities_dict = {
         '>': (1,),
         '<': (-1,),
         '==': (0,),
         '>=': (0, 1),
-        '<=': (-1, 0)}
+        '<=': (-1, 0)
+    }
+
     possibilities = possibilities_dict[prefix]
     cmp_res = compare(version, match_version)
 
-    if cmp_res in possibilities:
-        return True
-    else:
-        return False
+    return cmp_res in possibilities
