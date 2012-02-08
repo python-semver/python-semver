@@ -49,13 +49,13 @@ def match(version, match_expr):
     prefix = match_expr[:2]
     if prefix in ('>=', '<=', '=='):
         match_version = match_expr[2:]
-    elif prefix[0] in ('>', '<', '='):
+    elif prefix and prefix[0] in ('>', '<', '='):
         prefix = prefix[0]
         match_version = match_expr[1:]
     else:
         raise ValueError("match_expr parameter should be in format <op><ver>, "
                          "where <op> is one of ['<', '>', '==', '<=', '>=']. "
-                         "You provided: %s" % match_expr)
+                         "You provided: %r" % match_expr)
 
     possibilities_dict = {
         '>': (1,),
