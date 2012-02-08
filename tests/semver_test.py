@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import unittest
 from unittest import TestCase
 from semver import compare
 from semver import match
@@ -70,3 +71,7 @@ class TestSemver(TestCase):
 
     def test_compare_release_candidate_with_release(self):
         self.assertEqual(compare('1.0.0-rc.1+build.1', '1.0.0'), -1)
+
+
+if __name__ == '__main__':
+    unittest.main()
