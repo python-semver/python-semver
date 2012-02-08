@@ -14,7 +14,7 @@ def parse(version):
                        + r"(\+[0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?$")  # build
     match = regex.match(version)
     if match is None:
-        raise ValueError('{0} is not valid SemVer string'.format(version))
+        raise ValueError('%s is not valid SemVer string' % version)
 
     rv = {
         'major': int(match.group(1)),
@@ -55,7 +55,7 @@ def match(version, match_expr):
     else:
         raise ValueError("match_expr parameter should be in format <op><ver>, "
                          "where <op> is one of ['<', '>', '==', '<=', '>=']. "
-                         "You provided: {}".format(match_expr))
+                         "You provided: %s" % match_expr)
 
     possibilities_dict = {
         '>': (1,),
