@@ -45,3 +45,22 @@ class TestSemver(TestCase):
         self.assertRaises(ValueError, match, '1.0.0', '')
         self.assertRaises(ValueError, match, '1.0.0', '!')
         self.assertRaises(ValueError, match, '1.0.0', '1.0.0')
+
+    def test_should_follow_specification_comparsion(self):
+        # produce comparsion chain:
+        # 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-beta.2 < 1.0.0-beta.11
+        # < 1.0.0-rc.1 < 1.0.0-rc.1+build.1 < 1.0.0 < 1.0.0+0.3.7 < 1.3.7+build
+        # < 1.3.7+build.2.b8f12d7 < 1.3.7+build.11.e0f985a
+        # and in backward too.
+        chain = ['1.0.0-alpha', '1.0.0-alpha.1', '1.0.0-beta.2',
+                 '1.0.0-beta.11', '1.0.0-rc.1', '1.0.0-rc.1+build.1',
+                 '1.0.0', '1.0.0+0.3.7', '1.3.7+build', '1.3.7+build.2.b8f12d7',
+                 '1.3.7+build.11.e0f985a']
+        versions = zip(chain[:-1], chain[1:])
+        for low_version, high_version in versions:
+            self.assertEqual(
+                compare(low_version, high_version), -1,
+                '%s should be lesser than %s' % (low_version, high_version))
+            self.assertEqual(
+                compare(high_version, low_version), 1,
+                '%s should be higher than %s' % (high_version, low_version))
