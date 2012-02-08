@@ -2,17 +2,17 @@
 
 import re
 
+_REGEX = re.compile("^([0-9]+)"   # major
+                    "\.([0-9]+)"  # minor
+                    "\.([0-9]+)"  # patch
+                    "(\-[0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?"    # pre-release
+                    "(\+[0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?$")  # build
 
 def parse(version):
     """
     Parse version to major, minor, patch, pre-release, build parts.
     """
-    regex = re.compile(r"^([0-9]+)"     # major
-                       + r"\.([0-9]+)"  # minor
-                       + r"\.([0-9]+)"  # patch
-                       + r"(\-[0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?"    # pre-release
-                       + r"(\+[0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?$")  # build
-    match = regex.match(version)
+    match = _REGEX.match(version)
     if match is None:
         raise ValueError('%s is not valid SemVer string' % version)
 
