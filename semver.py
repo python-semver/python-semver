@@ -26,9 +26,15 @@ def parse(version):
 
 
 def compare(ver1, ver2):
+    def nat_cmp(a, b):
+        a, b = a and str(a) or '', b and str(b) or ''
+        convert = lambda text: int(text) if text.isdigit() else text.lower()
+        alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+        return cmp(alphanum_key(a), alphanum_key(b))
+
     def compare_by_keys(d1, d2, keys):
         for key in keys:
-            v = cmp(d1.get(key), d2.get(key))
+            v = nat_cmp(d1.get(key), d2.get(key))
             if v != 0:
                 return v
         return 0
