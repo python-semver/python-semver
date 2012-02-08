@@ -2,11 +2,11 @@
 
 import re
 
-_REGEX = re.compile("^([0-9]+)"   # major
-                    "\.([0-9]+)"  # minor
-                    "\.([0-9]+)"  # patch
-                    "(\-[0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?"    # pre-release
-                    "(\+[0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?$")  # build
+_REGEX = re.compile('^(?P<major>[0-9]+)'
+                    '\.(?P<minor>[0-9]+)'
+                    '\.(?P<patch>[0-9]+)'
+                    '(\-(?P<prerelease>[0-9A-Za-z]+(\.[0-9A-Za-z]+)*))?'
+                    '(\+(?P<build>[0-9A-Za-z]+(\.[0-9A-Za-z]+)*))?$')
 
 def parse(version):
     """
@@ -16,19 +16,13 @@ def parse(version):
     if match is None:
         raise ValueError('%s is not valid SemVer string' % version)
 
-    rv = {
-        'major': int(match.group(1)),
-        'minor': int(match.group(2)),
-        'patch': int(match.group(3)),
-    }
+    verinfo = match.groupdict()
 
-    if match.group(4):
-        rv['prerelease'] = match.group(4).lstrip('-')
+    verinfo['major'] = int(verinfo['major'])
+    verinfo['minor'] = int(verinfo['minor'])
+    verinfo['patch'] = int(verinfo['patch'])
 
-    if match.group(6):
-        rv['build'] = match.group(6).lstrip('+')
-
-    return rv
+    return verinfo
 
 
 def compare(ver1, ver2):
