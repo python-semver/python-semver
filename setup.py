@@ -9,7 +9,7 @@ setup(
     author_email='k-bx@k-bx.com',
     url='https://github.com/k-bx/python-semver',
     download_url='https://github.com/k-bx/python-semver/downloads',
-    py_modules=['semver',]
+    py_modules=['semver',],
     include_package_data=True,
     classifiers=[
         'Environment :: Web Environment',
