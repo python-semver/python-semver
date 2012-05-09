@@ -1,4 +1,6 @@
-from setuptools import setup, find_packages
+# -*- coding: utf-8 -*-
+
+from distutils.core import setup
 
 with open('README.rst') as f:
     LONG_DESCRIPTION = f.read()
