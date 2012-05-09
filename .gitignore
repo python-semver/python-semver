@@ -1,2 +1,3 @@
 .emacs-project
 *.pyc
+dist/
