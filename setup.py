@@ -1,15 +1,18 @@
 from setuptools import setup, find_packages
 
+with open('README.rst') as f:
+    LONG_DESCRIPTION = f.read()
+
 setup(
     name='semver',
     version='0.0.1',
     description='Python package to work with Semantic Versioning (http://semver.org/)',
-    long_description=open('README.rst').read(),
+    long_description=LONG_DESCRIPTION,
     author='Konstantine Rybnikov',
     author_email='k-bx@k-bx.com',
     url='https://github.com/k-bx/python-semver',
     download_url='https://github.com/k-bx/python-semver/downloads',
-    py_modules=['semver',],
+    py_modules=['semver'],
     include_package_data=True,
     classifiers=[
         'Environment :: Web Environment',
