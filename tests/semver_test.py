@@ -17,6 +17,14 @@ class TestSemver(TestCase):
              'prerelease': 'alpha.1.2',
              'build': 'build.11.e0f985a'})
 
+        self.assertEqual(
+            parse("1.2.3-alpha-1+build.11.e0f985a"),
+            {'major': 1,
+             'minor': 2,
+             'patch': 3,
+             'prerelease': 'alpha-1',
+             'build': 'build.11.e0f985a'})
+
     def test_should_get_less(self):
         self.assertEqual(
             compare("1.0.0", "2.0.0"),
@@ -36,6 +44,11 @@ class TestSemver(TestCase):
         self.assertEqual(
             match("2.3.7", ">=2.3.8"),
             False)
+
+    def test_should_raise_value_error_for_zero_prefixed_versions(self):
+        self.assertRaises(ValueError, parse, "01.2.3")
+        self.assertRaises(ValueError, parse, "1.02.3")
+        self.assertRaises(ValueError, parse, "1.2.03")
 
     def test_should_raise_value_error_for_invalid_value(self):
         self.assertRaises(ValueError, compare, 'foo', 'bar')

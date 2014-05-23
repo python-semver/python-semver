@@ -2,14 +2,15 @@
 
 import re
 
-_REGEX = re.compile('^(?P<major>[0-9]+)'
-                    '\.(?P<minor>[0-9]+)'
-                    '\.(?P<patch>[0-9]+)'
-                    '(\-(?P<prerelease>[0-9A-Za-z]+(\.[0-9A-Za-z]+)*))?'
-                    '(\+(?P<build>[0-9A-Za-z]+(\.[0-9A-Za-z]+)*))?$')
+_REGEX = re.compile('^(?P<major>(?:0|[1-9][0-9]*))'
+                    '\.(?P<minor>(?:0|[1-9][0-9]*))'
+                    '\.(?P<patch>(?:0|[1-9][0-9]*))'
+                    '(\-(?P<prerelease>[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?'
+                    '(\+(?P<build>[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?$')
 
 if 'cmp' not in __builtins__:
-    cmp = lambda a,b: (a > b) - (a < b)
+    cmp = lambda a, b: (a > b) - (a < b)
+
 
 def parse(version):
     """
