@@ -2,14 +2,15 @@
 
 import re
 
-_REGEX = re.compile('^(?P<major>[0-9]+)'
-                    '\.(?P<minor>[0-9]+)'
-                    '\.(?P<patch>[0-9]+)'
-                    '(\-(?P<prerelease>[0-9A-Za-z]+(\.[0-9A-Za-z]+)*))?'
-                    '(\+(?P<build>[0-9A-Za-z]+(\.[0-9A-Za-z]+)*))?$')
+_REGEX = re.compile('^(?P<major>(?:0|[1-9][0-9]*))'
+                    '\.(?P<minor>(?:0|[1-9][0-9]*))'
+                    '\.(?P<patch>(?:0|[1-9][0-9]*))'
+                    '(\-(?P<prerelease>[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?'
+                    '(\+(?P<build>[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?$')
 
 if 'cmp' not in __builtins__:
-    cmp = lambda a,b: (a > b) - (a < b)
+    cmp = lambda a, b: (a > b) - (a < b)
+
 
 def parse(version):
     """
@@ -41,16 +42,12 @@ def compare(ver1, ver2):
             if v:
                 return v
         rc1, rc2 = d1.get('prerelease'), d2.get('prerelease')
-        build1, build2 = d1.get('build'), d2.get('build')
         rccmp = nat_cmp(rc1, rc2)
-        buildcmp = nat_cmp(build1, build2)
-        if not (rc1 or rc2):
-            return buildcmp
-        elif not rc1:
+        if not rc1:
             return 1
         elif not rc2:
             return -1
-        return rccmp or buildcmp or 0
+        return rccmp or 0
 
     v1, v2 = parse(ver1), parse(ver2)
 
