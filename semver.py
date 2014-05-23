@@ -42,16 +42,12 @@ def compare(ver1, ver2):
             if v:
                 return v
         rc1, rc2 = d1.get('prerelease'), d2.get('prerelease')
-        build1, build2 = d1.get('build'), d2.get('build')
         rccmp = nat_cmp(rc1, rc2)
-        buildcmp = nat_cmp(build1, build2)
-        if not (rc1 or rc2):
-            return buildcmp
-        elif not rc1:
+        if not rc1:
             return 1
         elif not rc2:
             return -1
-        return rccmp or buildcmp or 0
+        return rccmp or 0
 
     v1, v2 = parse(ver1), parse(ver2)
 
