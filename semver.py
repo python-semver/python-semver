@@ -43,6 +43,8 @@ def compare(ver1, ver2):
                 return v
         rc1, rc2 = d1.get('prerelease'), d2.get('prerelease')
         rccmp = nat_cmp(rc1, rc2)
+        if not (rc1 or rc2):
+            return rccmp
         if not rc1:
             return 1
         elif not rc2:

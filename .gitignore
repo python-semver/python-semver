@@ -1,3 +1,4 @@
 .emacs-project
 *.pyc
 dist/
+.venv

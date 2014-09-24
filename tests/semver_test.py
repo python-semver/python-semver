@@ -84,6 +84,9 @@ class TestSemver(TestCase):
     def test_should_compare_release_candidate_with_release(self):
         self.assertEqual(compare('1.0.0-rc.1+build.1', '1.0.0'), -1)
 
+    def test_should_say_equal_versions_are_equal(self):
+        self.assertEqual(compare("2.0.0", "2.0.0"), 0)
+
 
 if __name__ == '__main__':
     unittest.main()
