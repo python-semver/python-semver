@@ -1,5 +1,5 @@
 .emacs-project
 *.pyc
 dist/
-.venv
+.venv*
 build/
