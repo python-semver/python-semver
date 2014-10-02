@@ -2,6 +2,8 @@
  Semver -- python module for semantic versioning 
 =================================================
 
+.. image:: https://travis-ci.org/k-bx/python-semver.svg?branch=master
+
 Simple module for comparing versions as noted at
 `semver.org <http://semver.org/>`_.
 
