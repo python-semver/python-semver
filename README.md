@@ -20,3 +20,20 @@ True
 >>> semver.match("1.0.0", ">1.0.0")
 False
 ```
+
+Installation
+------------
+
+For Python 2:
+
+```
+pip install semver
+```
+
+For Python 3:
+
+```
+pip3 install semver
+```
+
+Homepage at PyPi: https://pypi.python.org/pypi/semver
