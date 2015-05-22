@@ -5,6 +5,10 @@ from unittest import TestCase
 from semver import compare
 from semver import match
 from semver import parse
+from semver import format_version
+from semver import bump_major
+from semver import bump_minor
+from semver import bump_patch
 
 
 class TestSemver(TestCase):
@@ -86,6 +90,25 @@ class TestSemver(TestCase):
 
     def test_should_say_equal_versions_are_equal(self):
         self.assertEqual(compare("2.0.0", "2.0.0"), 0)
+
+    def test_should_correctly_format_version(self):
+        self.assertEqual(format_version(3, 4, 5), '3.4.5')
+        self.assertEqual(format_version(3, 4, 5, 'rc.1'), '3.4.5-rc.1')
+        self.assertEqual(format_version(3, 4, 5, prerelease='rc.1'), '3.4.5-rc.1')
+        self.assertEqual(format_version(3, 4, 5, build='build.4'), '3.4.5+build.4')
+        self.assertEqual(format_version(3, 4, 5, 'rc.1', 'build.4'), '3.4.5-rc.1+build.4')
+
+    def test_should_bump_major(self):
+        self.assertEqual(bump_major('3.4.5'), '4.0.0')
+
+    def test_should_bump_minor(self):
+        self.assertEqual(bump_minor('3.4.5'), '3.5.0')
+
+    def test_should_bump_patch(self):
+        self.assertEqual(bump_patch('3.4.5'), '3.4.6')
+
+    def test_should_ignore_extensions_for_bump(self):
+        self.assertEqual(bump_patch('3.4.5-rc1+build4'), '3.4.6')
 
 
 if __name__ == '__main__':
