@@ -19,6 +19,14 @@ This module provides just couple of functions, main of which are:
 True
 >>> semver.match("1.0.0", ">1.0.0")
 False
+>>> semver.format_version(3, 4, 5, 'pre.2', 'build.4')
+'3.4.5-pre.2+build.4'
+>>> semver.bump_major("3.4.5")
+'4.0.0'
+>>> semver.bump_minor("3.4.5")
+'3.5.0'
+>>> semver.bump_patch("3.4.5")
+'3.4.6'
 ```
 
 Installation
