@@ -80,3 +80,25 @@ def match(version, match_expr):
     cmp_res = compare(version, match_version)
 
     return cmp_res in possibilities
+
+def format_version(major, minor, patch, prerelease=None, build=None):
+    version = "%d.%d.%d" % (major, minor, patch)
+    if prerelease is not None:
+        version = version + "-%s" % prerelease
+
+    if build is not None:
+        version = version + "+%s" % build
+
+    return version
+
+def bump_major(version):
+    verinfo = parse(version)
+    return format_version(verinfo['major'] + 1, 0, 0)
+
+def bump_minor(version):
+    verinfo = parse(version)
+    return format_version(verinfo['major'], verinfo['minor'] + 1, 0)
+
+def bump_patch(version):
+    verinfo = parse(version)
+    return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'] + 1)
