@@ -9,6 +9,8 @@ from semver import format_version
 from semver import bump_major
 from semver import bump_minor
 from semver import bump_patch
+from semver import min_ver
+from semver import max_ver
 
 
 class TestSemver(TestCase):
@@ -109,6 +111,15 @@ class TestSemver(TestCase):
 
     def test_should_ignore_extensions_for_bump(self):
         self.assertEqual(bump_patch('3.4.5-rc1+build4'), '3.4.6')
+
+    def test_should_get_max(self):
+        self.assertEqual(max_ver('3.4.5', '4.0.2'), '4.0.2')
+
+    def test_should_get_min(self):
+        self.assertEqual(min_ver('3.4.5', '4.0.2'), '3.4.5')
+
+    def test_should_get_min_same(self):
+        self.assertEqual(min_ver('3.4.5', '3.4.5'), '3.4.5')
 
 
 if __name__ == '__main__':

@@ -81,6 +81,23 @@ def match(version, match_expr):
 
     return cmp_res in possibilities
 
+
+def max_ver(ver1, ver2):
+    cmp_res = compare(ver1, ver2)
+    if cmp_res == 0 or cmp_res == 1:
+        return ver1
+    else:
+        return ver2
+
+
+def min_ver(ver1, ver2):
+    cmp_res = compare(ver1, ver2)
+    if cmp_res == 0 or cmp_res == -1:
+        return ver1
+    else:
+        return ver2
+
+
 def format_version(major, minor, patch, prerelease=None, build=None):
     version = "%d.%d.%d" % (major, minor, patch)
     if prerelease is not None:

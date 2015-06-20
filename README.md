@@ -27,6 +27,10 @@ False
 '3.5.0'
 >>> semver.bump_patch("3.4.5")
 '3.4.6'
+>>> semver.max_ver("1.0.0", "2.0.0")
+'2.0.0'
+>>> semver.min_ver("1.0.0", "2.0.0")
+'1.0.0'
 ```
 
 Installation
