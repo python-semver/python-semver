@@ -121,6 +121,11 @@ class TestSemver(TestCase):
     def test_should_get_min_same(self):
         self.assertEqual(min_ver('3.4.5', '3.4.5'), '3.4.5')
 
+    def test_should_get_more_rc1(self):
+        self.assertEqual(
+            compare("1.0.0-rc1", "1.0.0-rc0"),
+            1)
+
 
 if __name__ == '__main__':
     unittest.main()
