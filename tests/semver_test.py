@@ -9,6 +9,8 @@ from semver import format_version
 from semver import bump_major
 from semver import bump_minor
 from semver import bump_patch
+from semver import bump_prerelease
+from semver import bump_build
 from semver import min_ver
 from semver import max_ver
 
@@ -125,6 +127,28 @@ class TestSemver(TestCase):
         self.assertEqual(
             compare("1.0.0-rc1", "1.0.0-rc0"),
             1)
+
+    def test_should_bump_prerelease(self):
+        self.assertEqual(bump_prerelease('3.4.5-rc.9'),
+                         '3.4.5-rc.10')
+        self.assertEqual(bump_prerelease('3.4.5-0009.dev'),
+                         '3.4.5-0010.dev')
+        self.assertEqual(bump_prerelease('3.4.5'),
+                         '3.4.5-rc.1')
+
+    def test_should_ignore_build_on_prerelease_bump(self):
+        self.assertEqual(bump_prerelease('3.4.5-rc.1+build.4'),
+                         '3.4.5-rc.2')
+
+    def test_should_bump_build(self):
+        self.assertEqual(bump_build('3.4.5-rc.1+build.9'),
+                         '3.4.5-rc.1+build.10')
+        self.assertEqual(bump_build('3.4.5-rc.1+0009.dev'),
+                         '3.4.5-rc.1+0010.dev')
+        self.assertEqual(bump_build('3.4.5-rc.1'),
+                         '3.4.5-rc.1+build.1')
+        self.assertEqual(bump_build('3.4.5'),
+                         '3.4.5+build.1')
 
 
 if __name__ == '__main__':
