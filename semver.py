@@ -8,6 +8,8 @@ _REGEX = re.compile('^(?P<major>(?:0|[1-9][0-9]*))'
                     '(\-(?P<prerelease>[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?'
                     '(\+(?P<build>[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?$')
 
+_LAST_NUMBER = re.compile(r'(?:[^\d]*(\d+)[^\d]*)+')
+
 if not hasattr(__builtins__, 'cmp'):
     cmp = lambda a, b: (a > b) - (a < b)
 
@@ -108,6 +110,18 @@ def format_version(major, minor, patch, prerelease=None, build=None):
 
     return version
 
+
+def _increment_string(string):
+    # look for the last sequence of number(s) in a string and increment, from:
+    # http://code.activestate.com/recipes/442460-increment-numbers-in-a-string/#c1
+    match = _LAST_NUMBER.search(string)
+    if match:
+        next_ = str(int(match.group(1))+1)
+        start, end = match.span(1)
+        string = string[:max(end - len(next_), start)] + next_ + string[end:]
+    return string
+
+
 def bump_major(version):
     verinfo = parse(version)
     return format_version(verinfo['major'] + 1, 0, 0)
@@ -119,3 +133,15 @@ def bump_minor(version):
 def bump_patch(version):
     verinfo = parse(version)
     return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'] + 1)
+
+def bump_prerelease(version):
+    verinfo = parse(version)
+    verinfo['prerelease'] = _increment_string(verinfo['prerelease'] or 'rc.0')
+    return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'],
+                          verinfo['prerelease'])
+
+def bump_build(version):
+    verinfo = parse(version)
+    verinfo['build'] = _increment_string(verinfo['build'] or 'build.0')
+    return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'],
+                          verinfo['prerelease'], verinfo['build'])
