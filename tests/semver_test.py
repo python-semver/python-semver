@@ -128,6 +128,28 @@ class TestSemver(TestCase):
             compare("1.0.0-rc1", "1.0.0-rc0"),
             1)
 
+    def test_prerelease_order(self):
+        self.assertEqual(min_ver('1.2.3-rc.2', '1.2.3-rc.10'),
+                         '1.2.3-rc.2')
+        self.assertEqual(min_ver('1.2.3-rc2', '1.2.3-rc10'),
+                         '1.2.3-rc10')
+        # identifiers with letters or hyphens are compared lexically in ASCII sort order.
+        self.assertEqual(min_ver('1.2.3-Rc10', '1.2.3-rc10'),
+                         '1.2.3-Rc10')
+        # Numeric identifiers always have lower precedence than non-numeric identifiers.
+        self.assertEqual(min_ver('1.2.3-2', '1.2.3-rc'),
+                         '1.2.3-rc')
+        # A larger set of pre-release fields has a higher precedence than a smaller set,
+        # if all of the preceding identifiers are equal.
+        self.assertEqual(min_ver('1.2.3-rc.2.1', '1.2.3-rc.2'),
+                         '1.2.3-rc.2')
+        # When major, minor, and patch are equal, a pre-release version has lower precedence
+        # than a normal version.
+        self.assertEqual(min_ver('1.2.3', '1.2.3-1'),
+                         '1.2.3-1')
+        self.assertEqual(min_ver('1.0.0-alpha', '1.0.0-alpha.1'),
+                         '1.0.0-alpha')
+
     def test_should_bump_prerelease(self):
         self.assertEqual(bump_prerelease('3.4.5-rc.9'),
                          '3.4.5-rc.10')

@@ -34,9 +34,9 @@ def parse(version):
 def compare(ver1, ver2):
     def nat_cmp(a, b):
         a, b = a or '', b or ''
-        convert = lambda text: int(text) if text.isdigit() else text.lower()
-        alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
-        return cmp(alphanum_key(a), alphanum_key(b))
+        convert = lambda text: (2, int(text)) if re.match('[0-9]+', text) else (1, text)
+        split_key = lambda key: [convert(c) for c in key.split('.')]
+        return cmp(split_key(a), split_key(b))
 
     def compare_by_keys(d1, d2):
         for key in ['major', 'minor', 'patch']:
