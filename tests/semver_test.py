@@ -93,7 +93,14 @@ class TestSemver(TestCase):
         self.assertEqual(compare('1.0.0-rc.1+build.1', '1.0.0'), -1)
 
     def test_should_say_equal_versions_are_equal(self):
-        self.assertEqual(compare("2.0.0", "2.0.0"), 0)
+        self.assertEqual(compare('2.0.0', '2.0.0'), 0)
+        self.assertEqual(compare('1.1.9-rc.1', '1.1.9-rc.1'), 0)
+        self.assertEqual(compare('1.1.9+build.1', '1.1.9+build.1'), 0)
+        self.assertEqual(compare('1.1.9-rc.1+build.1', '1.1.9-rc.1+build.1'), 0)
+
+    def test_should_compare_versions_with_build_and_release(self):
+        self.assertEqual(compare('1.1.9-rc.1', '1.1.9-rc.1+build.1'), -1)
+        self.assertEqual(compare('1.1.9-rc.1', '1.1.9+build.1'), 1)
 
     def test_should_correctly_format_version(self):
         self.assertEqual(format_version(3, 4, 5), '3.4.5')
