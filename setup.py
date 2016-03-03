@@ -7,7 +7,7 @@ with open('README.md') as f:
 
 setup(
     name='semver',
-    version='2.4.0',
+    version='2.4.1',
     description='Python package to work with Semantic Versioning (http://semver.org/)',
     long_description=LONG_DESCRIPTION,
     author='Konstantine Rybnikov',
