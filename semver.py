@@ -84,7 +84,7 @@ def match(version, match_expr):
         '>=': (0, 1),
         '<=': (-1, 0),
         '~': (0, 1),
-        '^': (0, 1),
+        '^': (0, 1)
     }
 
     possibilities = possibilities_dict[prefix]
