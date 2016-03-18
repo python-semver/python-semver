@@ -89,12 +89,12 @@ def match(version, match_expr):
 
     possibilities = possibilities_dict[prefix]
 
-    cmp_res = compare(version, match_version)  # 0,1,-1
+    cmp_res = compare(version, match_version)
 
     if prefix in ('^',):
         if cmp_res in possibilities:
             v = parse(match_version)
-            if v.get('mojar') is 0:
+            if v.get('major') is 0:
                 if v.get('minor') is 0:
                     cmp_res = compare(version, bump_patch(match_version))
                     if cmp_res in possibilities_dict['<']:
@@ -108,7 +108,7 @@ def match(version, match_expr):
                     else:
                         return False
             else:
-                cmp_res = compare(version, bump_mojar(match_version))
+                cmp_res = compare(version, bump_major(match_version))
                 if cmp_res in possibilities_dict['<']:
                     return True
                 else:
