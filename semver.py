@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 
 import re
@@ -12,6 +13,7 @@ _LAST_NUMBER = re.compile(r'(?:[^\d]*(\d+)[^\d]*)+')
 
 if not hasattr(__builtins__, 'cmp'):
     cmp = lambda a, b: (a > b) - (a < b)
+
 
 def parse(version):
     """
@@ -28,6 +30,7 @@ def parse(version):
     verinfo['patch'] = int(verinfo['patch'])
 
     return verinfo
+
 
 def compare(ver1, ver2):
     def nat_cmp(a, b):
@@ -66,7 +69,7 @@ def match(version, match_expr):
     prefix = match_expr[:2]
     if prefix in ('>=', '<=', '=='):
         match_version = match_expr[2:]
-    elif prefix and prefix[0] in ('>', '<', '='):
+    elif prefix and prefix[0] in ('>', '<', '=', '~', '^'):
         prefix = prefix[0]
         match_version = match_expr[1:]
     else:
@@ -79,13 +82,49 @@ def match(version, match_expr):
         '<': (-1,),
         '==': (0,),
         '>=': (0, 1),
-        '<=': (-1, 0)
+        '<=': (-1, 0),
+        '~': (0, 1),
+        '^': (0, 1),
     }
 
     possibilities = possibilities_dict[prefix]
-    cmp_res = compare(version, match_version)
 
-    return cmp_res in possibilities
+    cmp_res = compare(version, match_version)  # 0,1,-1
+
+    if prefix in ('^',):
+        if cmp_res in possibilities:
+            v = parse(match_version)
+            if v.get('mojar') is 0:
+                if v.get('minor') is 0:
+                    cmp_res = compare(version, bump_patch(match_version))
+                    if cmp_res in possibilities_dict['<']:
+                        return True
+                    else:
+                        return False
+                else:
+                    cmp_res = compare(version, bump_minor(match_version))
+                    if cmp_res in possibilities_dict['<']:
+                        return True
+                    else:
+                        return False
+            else:
+                cmp_res = compare(version, bump_mojar(match_version))
+                if cmp_res in possibilities_dict['<']:
+                    return True
+                else:
+                    return False
+    elif prefix in ('~',):
+        if cmp_res in possibilities:
+            cmp_res = compare(version, bump_minor(match_version))
+            if cmp_res in possibilities_dict['<']:
+                return True
+            else:
+                return False
+        else:
+            return False
+    else:
+        return cmp_res in possibilities
+
 
 def max_ver(ver1, ver2):
     cmp_res = compare(ver1, ver2)
@@ -113,6 +152,7 @@ def format_version(major, minor, patch, prerelease=None, build=None):
 
     return version
 
+
 def _increment_string(string):
     # look for the last sequence of number(s) in a string and increment, from:
     # http://code.activestate.com/recipes/442460-increment-numbers-in-a-string/#c1
@@ -122,6 +162,7 @@ def _increment_string(string):
         start, end = match.span(1)
         string = string[:max(end - len(next_), start)] + next_ + string[end:]
     return string
+
 
 def bump_major(version):
     verinfo = parse(version)
