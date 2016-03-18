@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 
 import re
@@ -68,7 +69,7 @@ def match(version, match_expr):
     prefix = match_expr[:2]
     if prefix in ('>=', '<=', '=='):
         match_version = match_expr[2:]
-    elif prefix and prefix[0] in ('>', '<', '='):
+    elif prefix and prefix[0] in ('>', '<', '=', '~', '^'):
         prefix = prefix[0]
         match_version = match_expr[1:]
     else:
@@ -81,13 +82,48 @@ def match(version, match_expr):
         '<': (-1,),
         '==': (0,),
         '>=': (0, 1),
-        '<=': (-1, 0)
+        '<=': (-1, 0),
+        '~': (0, 1),
+        '^': (0, 1),
     }
 
     possibilities = possibilities_dict[prefix]
-    cmp_res = compare(version, match_version)
 
-    return cmp_res in possibilities
+    cmp_res = compare(version, match_version)  # 0,1,-1
+
+    if prefix in ('^',):
+        if cmp_res in possibilities:
+            v = parse(match_version)
+            if v.get('mojar') is 0:
+                if v.get('minor') is 0:
+                    cmp_res = compare(version, bump_patch(match_version))
+                    if cmp_res in possibilities_dict['<']:
+                        return True
+                    else:
+                        return False
+                else:
+                    cmp_res = compare(version, bump_minor(match_version))
+                    if cmp_res in possibilities_dict['<']:
+                        return True
+                    else:
+                        return False
+            else:
+                cmp_res = compare(version, bump_mojar(match_version))
+                if cmp_res in possibilities_dict['<']:
+                    return True
+                else:
+                    return False
+    elif prefix in ('~',):
+        if cmp_res in possibilities:
+            cmp_res = compare(version, bump_minor(match_version))
+            if cmp_res in possibilities_dict['<']:
+                return True
+            else:
+                return False
+        else:
+            return False
+    else:
+        return cmp_res in possibilities
 
 
 def max_ver(ver1, ver2):
