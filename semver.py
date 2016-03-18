@@ -13,7 +13,6 @@ _LAST_NUMBER = re.compile(r'(?:[^\d]*(\d+)[^\d]*)+')
 if not hasattr(__builtins__, 'cmp'):
     cmp = lambda a, b: (a > b) - (a < b)
 
-
 def parse(version):
     """
     Parse version to major, minor, patch, pre-release, build parts.
@@ -29,7 +28,6 @@ def parse(version):
     verinfo['patch'] = int(verinfo['patch'])
 
     return verinfo
-
 
 def compare(ver1, ver2):
     def nat_cmp(a, b):
@@ -89,7 +87,6 @@ def match(version, match_expr):
 
     return cmp_res in possibilities
 
-
 def max_ver(ver1, ver2):
     cmp_res = compare(ver1, ver2)
     if cmp_res == 0 or cmp_res == 1:
@@ -116,7 +113,6 @@ def format_version(major, minor, patch, prerelease=None, build=None):
 
     return version
 
-
 def _increment_string(string):
     # look for the last sequence of number(s) in a string and increment, from:
     # http://code.activestate.com/recipes/442460-increment-numbers-in-a-string/#c1
@@ -126,7 +122,6 @@ def _increment_string(string):
         start, end = match.span(1)
         string = string[:max(end - len(next_), start)] + next_ + string[end:]
     return string
-
 
 def bump_major(version):
     verinfo = parse(version)
