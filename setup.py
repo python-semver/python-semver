@@ -58,7 +58,7 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    tests_require=['tox'],
+    tests_require=['tox', 'virtualenv<14.0.0'],
     cmdclass={
         'test': Tox,
     },

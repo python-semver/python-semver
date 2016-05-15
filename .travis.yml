@@ -1,4 +1,4 @@
 language: python
 python: "3.5"
-install: pip install virtualenv
+install: pip install "virtualenv<14.0.0"
 script: python setup.py test
