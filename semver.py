@@ -1,5 +1,11 @@
-"""Python helper for Semantic Versioning (http://semver.org/)"""
+"""
+Python helper for Semantic Versioning (http://semver.org/)
+"""
 import re
+
+__version__ = '2.4.1'
+__author__ = 'Konstantine Rybnikov'
+__author_email__ = 'k-bx@k-bx.com'
 
 _REGEX = re.compile('^(?P<major>(?:0|[1-9][0-9]*))'
                     '\.(?P<minor>(?:0|[1-9][0-9]*))'

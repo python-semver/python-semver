@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import semver as package
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
 from shlex import split
@@ -30,15 +31,15 @@ def read_file(filename):
         return f.read()
 
 setup(
-    name='semver',
-    version='2.4.1',
-    description='Python helper for Semantic Versioning (http://semver.org/)',
+    name=package.__name__,
+    version=package.__version__,
+    description=package.__doc__.strip(),
     long_description=read_file('README.rst'),
-    author='Konstantine Rybnikov',
-    author_email='k-bx@k-bx.com',
+    author=package.__author__,
+    author_email=package.__author_email__,
     url='https://github.com/k-bx/python-semver',
     download_url='https://github.com/k-bx/python-semver/downloads',
-    py_modules=['semver'],
+    py_modules=[package.__name__],
     include_package_data=True,
     license='BSD',
     classifiers=[
