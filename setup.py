@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 import semver as package
+from glob import glob
+from os import remove
+from os.path import dirname, join
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
 from shlex import split
+from shutil import rmtree
 
 
 class Tox(TestCommand):
@@ -26,8 +30,43 @@ class Tox(TestCommand):
         exit(errno)
 
 
+class Clean(TestCommand):
+    def run(self):
+        delete_in_root = [
+            'build',
+            '.cache',
+            'dist',
+            '.eggs',
+            '*.egg-info',
+            '.tox',
+        ]
+        delete_everywhere = [
+            '__pycache__',
+            '*.pyc',
+        ]
+        for candidate in delete_in_root:
+            rmtree_glob(candidate)
+        for visible_dir in glob('[A-Za-z0-9]*'):
+            for candidate in delete_everywhere:
+                rmtree_glob(join(visible_dir, candidate))
+                rmtree_glob(join(visible_dir, '*', candidate))
+
+
+def rmtree_glob(file_glob):
+    for fobj in glob(file_glob):
+        try:
+            rmtree(fobj)
+            print('%s/ removed ...' % fobj)
+        except OSError:
+            try:
+                remove(fobj)
+                print('%s removed ...' % fobj)
+            except OSError:
+                pass
+
+
 def read_file(filename):
-    with open(filename) as f:
+    with open(join(dirname(__file__), filename)) as f:
         return f.read()
 
 setup(
@@ -60,6 +99,7 @@ setup(
     ],
     tests_require=['tox', 'virtualenv<14.0.0'],
     cmdclass={
+        'clean': Clean,
         'test': Tox,
     },
 )

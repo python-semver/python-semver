@@ -87,6 +87,12 @@ virtualenv, which for the moment you still may have to install manually:
 
     pip install "virtualenv<14.0.0"  # <14.0.0 needed for Python 3.2 only
 
+You can use the ``clean`` command to remove build and test files and folders:
+
+.. code-block:: bash
+
+    python setup.py clean
+
 
 .. _pull request: https://github.com/k-bx/python-semver/pulls
 .. _py.test: http://pytest.org/
