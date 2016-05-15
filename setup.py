@@ -33,7 +33,7 @@ setup(
     name='semver',
     version='2.4.1',
     description='Python helper for Semantic Versioning (http://semver.org/)',
-    long_description=read_file('README.md'),
+    long_description=read_file('README.rst'),
     author='Konstantine Rybnikov',
     author_email='k-bx@k-bx.com',
     url='https://github.com/k-bx/python-semver',
