@@ -1,6 +1,11 @@
-# -*- coding: utf-8 -*-
-
+"""
+Python helper for Semantic Versioning (http://semver.org/)
+"""
 import re
+
+__version__ = '2.4.1'
+__author__ = 'Konstantine Rybnikov'
+__author_email__ = 'k-bx@k-bx.com'
 
 _REGEX = re.compile('^(?P<major>(?:0|[1-9][0-9]*))'
                     '\.(?P<minor>(?:0|[1-9][0-9]*))'
@@ -11,7 +16,8 @@ _REGEX = re.compile('^(?P<major>(?:0|[1-9][0-9]*))'
 _LAST_NUMBER = re.compile(r'(?:[^\d]*(\d+)[^\d]*)+')
 
 if not hasattr(__builtins__, 'cmp'):
-    cmp = lambda a, b: (a > b) - (a < b)
+    def cmp(a, b):
+        return (a > b) - (a < b)
 
 
 def parse(version):
@@ -33,9 +39,13 @@ def parse(version):
 
 def compare(ver1, ver2):
     def nat_cmp(a, b):
+        def convert(text):
+            return (2, int(text)) if re.match('[0-9]+', text) else (1, text)
+
+        def split_key(key):
+            return [convert(c) for c in key.split('.')]
+
         a, b = a or '', b or ''
-        convert = lambda text: (2, int(text)) if re.match('[0-9]+', text) else (1, text)
-        split_key = lambda key: [convert(c) for c in key.split('.')]
         return cmp(split_key(a), split_key(b))
 
     def compare_by_keys(d1, d2):
@@ -118,11 +128,13 @@ def format_version(major, minor, patch, prerelease=None, build=None):
 
 
 def _increment_string(string):
-    # look for the last sequence of number(s) in a string and increment, from:
-    # http://code.activestate.com/recipes/442460-increment-numbers-in-a-string/#c1
+    """
+    Look for the last sequence of number(s) in a string and increment, from:
+    http://code.activestate.com/recipes/442460-increment-numbers-in-a-string/#c1
+    """
     match = _LAST_NUMBER.search(string)
     if match:
-        next_ = str(int(match.group(1))+1)
+        next_ = str(int(match.group(1)) + 1)
         start, end = match.span(1)
         string = string[:max(end - len(next_), start)] + next_ + string[end:]
     return string
@@ -132,19 +144,24 @@ def bump_major(version):
     verinfo = parse(version)
     return format_version(verinfo['major'] + 1, 0, 0)
 
+
 def bump_minor(version):
     verinfo = parse(version)
     return format_version(verinfo['major'], verinfo['minor'] + 1, 0)
 
+
 def bump_patch(version):
     verinfo = parse(version)
-    return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'] + 1)
+    return format_version(verinfo['major'], verinfo['minor'],
+                          verinfo['patch'] + 1)
+
 
 def bump_prerelease(version):
     verinfo = parse(version)
     verinfo['prerelease'] = _increment_string(verinfo['prerelease'] or 'rc.0')
     return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'],
                           verinfo['prerelease'])
+
 
 def bump_build(version):
     verinfo = parse(version)
