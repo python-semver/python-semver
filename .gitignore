@@ -1,5 +1,12 @@
-.emacs-project
-*.pyc
-dist/
-.venv*
-build/
+/.coverage
+/.emacs-project
+/.idea
+/.tox
+/.venv*
+
+/*.egg-info
+/build
+/dist
+/MANIFEST
+
+*.py[co]

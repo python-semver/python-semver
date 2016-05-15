@@ -1,15 +1,39 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+from setuptools import setup
+from setuptools.command.test import test as TestCommand
+from shlex import split
 
-from distutils.core import setup
 
-with open('README.md') as f:
-    LONG_DESCRIPTION = f.read()
+class Tox(TestCommand):
+    user_options = [('tox-args=', 'a', "Arguments to pass to tox")]
+
+    def initialize_options(self):
+        TestCommand.initialize_options(self)
+        self.tox_args = None
+
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+
+    def run_tests(self):
+        from tox import cmdline
+        args = self.tox_args
+        if args:
+            args = split(self.tox_args)
+        errno = cmdline(args=args)
+        exit(errno)
+
+
+def read_file(filename):
+    with open(filename) as f:
+        return f.read()
 
 setup(
     name='semver',
     version='2.4.1',
     description='Python helper for Semantic Versioning (http://semver.org/)',
-    long_description=LONG_DESCRIPTION,
+    long_description=read_file('README.md'),
     author='Konstantine Rybnikov',
     author_email='k-bx@k-bx.com',
     url='https://github.com/k-bx/python-semver',
@@ -31,6 +55,11 @@ setup(
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
+    tests_require=['tox'],
+    cmdclass={
+        'test': Tox,
+    },
 )
