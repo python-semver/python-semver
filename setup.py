@@ -44,7 +44,6 @@ setup(
     license='BSD',
     classifiers=[
         'Environment :: Web Environment',
-        'Framework :: Django',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
