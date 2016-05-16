@@ -2,3 +2,14 @@ language: python
 python: "3.5"
 install: pip install "virtualenv<14.0.0"
 script: python setup.py test
+env:
+  # To generate (update) the env list run
+  # $ tox -l | sort | xargs -I ITEM echo "  - TOXENV="ITEM
+  - TOXENV=flake8
+  - TOXENV=py26
+  - TOXENV=py27
+  - TOXENV=py32
+  - TOXENV=py33
+  - TOXENV=py34
+  - TOXENV=py35
+  - TOXENV=pypy
