@@ -49,6 +49,31 @@ def test_should_no_match_simple():
     assert match("2.3.7", ">=2.3.8") is False
 
 
+def test_should_match_not_equal():
+    assert match("2.3.7", "!=2.3.8") is True
+    assert match("2.3.7", "!=2.3.6") is True
+    assert match("2.3.7", "!=2.3.7") is False
+
+
+def test_should_not_raise_value_error_for_expected_match_expression():
+    assert match("2.3.7", "<2.4.0") is True
+    assert match("2.3.7", ">2.3.5") is True
+
+    assert match("2.3.7", "<=2.3.9") is True
+    assert match("2.3.7", ">=2.3.5") is True
+    assert match("2.3.7", "==2.3.7") is True
+    assert match("2.3.7", "!=2.3.7") is False
+
+
+def test_should_raise_value_error_for_unexpected_match_expression():
+    with pytest.raises(ValueError):
+        match("2.3.7", "=2.3.7")
+    with pytest.raises(ValueError):
+        match("2.3.7", "~2.3.7")
+    with pytest.raises(ValueError):
+        match("2.3.7", "^2.3.7")
+
+
 def test_should_raise_value_error_for_zero_prefixed_versions():
     with pytest.raises(ValueError):
         parse("01.2.3")
