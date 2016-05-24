@@ -3,7 +3,7 @@ Python helper for Semantic Versioning (http://semver.org/)
 """
 import re
 
-__version__ = '2.4.2'
+__version__ = '2.5.0'
 __author__ = 'Konstantine Rybnikov'
 __author_email__ = 'k-bx@k-bx.com'
 
