@@ -126,6 +126,7 @@ def test_should_compare_rc_builds():
 
 
 def test_should_compare_release_candidate_with_release():
+    assert compare('1.0.0-rc.1', '1.0.0') == -1
     assert compare('1.0.0-rc.1+build.1', '1.0.0') == -1
 
 
@@ -137,8 +138,15 @@ def test_should_say_equal_versions_are_equal():
 
 
 def test_should_compare_versions_with_build_and_release():
-    assert compare('1.1.9-rc.1', '1.1.9-rc.1+build.1') == -1
-    assert compare('1.1.9-rc.1', '1.1.9+build.1') == 1
+    assert compare('1.1.9-rc.1', '1.1.9-rc.1+build.1') == 0
+    assert compare('1.1.9-rc.1', '1.1.9+build.1') == -1
+
+
+def test_should_ignore_builds_on_compare():
+    assert compare('1.0.0+build.1', '1.0.0') == 0
+    assert compare('1.0.0-alpha.1+build.1', '1.0.0-alpha.1') == 0
+    assert compare('1.0.0+build.1', '1.0.0-alpha.1') == 1
+    assert compare('1.0.0+build.1', '1.0.0-alpha.1+build.1') == 1
 
 
 def test_should_correctly_format_version():
