@@ -9,6 +9,18 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.4.0
+=============
+
+:Released: 2016-02-12
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Bug Fixes
+---------
+
+* [GitHub issue #21] Compare alphanumeric components correctly.
+
+
 Version 2.3.1
 =============
 
