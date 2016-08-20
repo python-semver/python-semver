@@ -9,6 +9,20 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.2.0
+=============
+
+:Released: 2015-06-21
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* Add functions to determined minimum and maximum version.
+
+* Add code examples for recently-added functions.
+
+
 Version 2.1.2
 =============
 
