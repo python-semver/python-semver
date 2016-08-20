@@ -9,6 +9,34 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.1.0
+=============
+
+:Released: 2015-05-22
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* Document installation instructions.
+
+* Document project home page.
+
+* Add function to format a version string from components.
+
+* Add functions to increment specific components in a version.
+
+Changes
+-------
+
+* Migrate README document to Markdown format.
+
+Bug Fixes
+---------
+
+* Correct code examples in README document.
+
+
 Version 2.0.2
 =============
 
