@@ -9,6 +9,20 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.0.2
+=============
+
+:Released: 2015-04-14
+:Maintainer: Konstantine Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* Add configuration for Travis continuous integration.
+
+* Explicitly declare supported Python versions.
+
+
 Version 2.0.1
 =============
 
