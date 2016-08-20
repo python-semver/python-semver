@@ -1,0 +1,18 @@
+##########
+Change Log
+##########
+
+Python SemVer library
+#####################
+
+All notable changes to this code base will be documented in this file,
+in every released version.
+
+
+..
+    Local variables:
+    coding: utf-8
+    mode: text
+    mode: rst
+    End:
+    vim: fileencoding=utf-8 filetype=rst :
