@@ -9,6 +9,18 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.1.1
+=============
+
+:Released: 2015-05-23
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Bug Fixes
+---------
+
+* Remove absent document from distribution manifest.
+
+
 Version 2.1.0
 =============
 
