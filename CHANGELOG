@@ -9,6 +9,18 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 0.0.2
+=============
+
+:Released: 2012-05-10
+:Maintainer: Konstantine Rybnikov <k-bx@k-bx.com>
+
+Changes
+-------
+
+* Use standard library Distutils for distribution management.
+
+
 Version 0.0.1
 =============
 
