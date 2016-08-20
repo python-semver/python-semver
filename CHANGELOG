@@ -9,6 +9,18 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.4.1
+=============
+
+:Released: 2016-03-04
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* [GitHub issue #23] Compare build component of a version.
+
+
 Version 2.4.0
 =============
 
