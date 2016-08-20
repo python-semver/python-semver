@@ -9,6 +9,18 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.3.1
+=============
+
+:Released: 2016-01-30
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* Declare granted license name in distribution metadata.
+
+
 Version 2.3.0
 =============
 
