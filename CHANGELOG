@@ -9,6 +9,18 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.0.1
+=============
+
+:Released: 2014-09-24
+:Maintainer: Konstantine Rybnikov <k-bx@k-bx.com>
+
+Bug Fixes
+---------
+
+* [GitHub issue #9] Correct comparison of equal version strings.
+
+
 Version 2.0.0
 =============
 
