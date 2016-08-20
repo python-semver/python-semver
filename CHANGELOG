@@ -9,6 +9,25 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.0.0
+=============
+
+:Released: 2014-05-24
+:Maintainer: Konstantine Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* Grant license in this code base under BSD 3-clause license terms.
+
+Changes
+-------
+
+* Update parser to SemVer standard 2.0.0.
+
+* Ignore build component for comparison.
+
+
 Version 0.0.2
 =============
 
