@@ -9,6 +9,24 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.4.2
+=============
+
+:Released: 2016-05-16
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Changes
+-------
+
+* Migrate README document to reStructuredText format.
+
+* Use Setuptools for distribution management.
+
+* Migrate test cases to Py.test.
+
+* Add configuration for Tox test runner.
+
+
 Version 2.4.1
 =============
 
