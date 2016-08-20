@@ -9,6 +9,21 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.6.0
+=============
+
+:Released: 2016-06-08
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Removals
+--------
+
+* Remove comparison of build component.
+
+  SemVer 2.0.0 specification recommends that build component is
+  ignored in comparisons.
+
+
 Version 2.5.0
 =============
 
