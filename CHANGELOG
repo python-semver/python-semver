@@ -9,6 +9,15 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 0.0.1
+=============
+
+:Released: 2012-04-28
+:Maintainer: Konstantine Rybnikov <kost-bebix@yandex.ru>
+
+* Initial release.
+
+
 ..
     Local variables:
     coding: utf-8
