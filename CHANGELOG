@@ -9,6 +9,19 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.3.0
+=============
+
+:Released: 2016-01-29
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* Add functions to increment prerelease and build components in a
+  version.
+
+
 Version 2.2.1
 =============
 
