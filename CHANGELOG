@@ -9,6 +9,23 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.5.0
+=============
+
+:Released: 2016-05-25
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* Support matching 'not equal' with “!=”.
+
+Changes
+-------
+
+* Make separate builds for tests on Travis CI.
+
+
 Version 2.4.2
 =============
 
