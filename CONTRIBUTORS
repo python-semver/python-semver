@@ -1,0 +1,44 @@
+############
+Contributors
+############
+
+Python SemVer library
+#####################
+
+This document records the primary maintainers and significant
+contributors to this code base.
+
+Thank you to everyone whose work has made this possible.
+
+
+Primary maintainers
+===================
+
+* Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+
+Significant contributors
+========================
+
+* Alexander Shorin <kxepal@gmail.com>
+* Anton Talevnin <TalAntR@users.noreply.github.com>
+* Ben Finney <ben+python@benfinney.id.au>
+* Carles Barrobés <carles@barrobes.com>
+* Craig Blaszczyk <masterjakul@gmail.com>
+* Jan Pieter Waagmeester <jieter@jieter.nl>
+* Jelo Agnasin <jelo@icannhas.com>
+* Karol Werner <karol.werner@codete.co>
+* Peter Bittner <django@bittner.it>
+* robi-wan <robi-wan@suyu.de>
+* T. Jameson Little <t.jameson.little@gmail.com>
+* Tuure Laurinolli <tuure@laurinolli.net>
+* Tyler Cross <tyler@crosscollab.com>
+* Zack Lalanne <zack.lalanne@gmail.com>
+
+..
+    Local variables:
+    coding: utf-8
+    mode: text
+    mode: rst
+    End:
+    vim: fileencoding=utf-8 filetype=rst :
