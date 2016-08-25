@@ -1,0 +1,261 @@
+##########
+Change Log
+##########
+
+Python SemVer library
+#####################
+
+All notable changes to this code base will be documented in this file,
+in every released version.
+
+
+Version 2.6.0
+=============
+
+:Released: 2016-06-08
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Removals
+--------
+
+* Remove comparison of build component.
+
+  SemVer 2.0.0 specification recommends that build component is
+  ignored in comparisons.
+
+
+Version 2.5.0
+=============
+
+:Released: 2016-05-25
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* Support matching 'not equal' with “!=”.
+
+Changes
+-------
+
+* Make separate builds for tests on Travis CI.
+
+
+Version 2.4.2
+=============
+
+:Released: 2016-05-16
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Changes
+-------
+
+* Migrate README document to reStructuredText format.
+
+* Use Setuptools for distribution management.
+
+* Migrate test cases to Py.test.
+
+* Add configuration for Tox test runner.
+
+
+Version 2.4.1
+=============
+
+:Released: 2016-03-04
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* [GitHub issue #23] Compare build component of a version.
+
+
+Version 2.4.0
+=============
+
+:Released: 2016-02-12
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Bug Fixes
+---------
+
+* [GitHub issue #21] Compare alphanumeric components correctly.
+
+
+Version 2.3.1
+=============
+
+:Released: 2016-01-30
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* Declare granted license name in distribution metadata.
+
+
+Version 2.3.0
+=============
+
+:Released: 2016-01-29
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* Add functions to increment prerelease and build components in a
+  version.
+
+
+Version 2.2.1
+=============
+
+:Released: 2015-08-04
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Bug Fixes
+---------
+
+* Correct comparison when any component includes zero.
+
+
+Version 2.2.0
+=============
+
+:Released: 2015-06-21
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* Add functions to determined minimum and maximum version.
+
+* Add code examples for recently-added functions.
+
+
+Version 2.1.2
+=============
+
+:Released: 2015-05-23
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Bug Fixes
+---------
+
+* Restore current README document to distribution manifest.
+
+
+Version 2.1.1
+=============
+
+:Released: 2015-05-23
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Bug Fixes
+---------
+
+* Remove absent document from distribution manifest.
+
+
+Version 2.1.0
+=============
+
+:Released: 2015-05-22
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* Document installation instructions.
+
+* Document project home page.
+
+* Add function to format a version string from components.
+
+* Add functions to increment specific components in a version.
+
+Changes
+-------
+
+* Migrate README document to Markdown format.
+
+Bug Fixes
+---------
+
+* Correct code examples in README document.
+
+
+Version 2.0.2
+=============
+
+:Released: 2015-04-14
+:Maintainer: Konstantine Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* Add configuration for Travis continuous integration.
+
+* Explicitly declare supported Python versions.
+
+
+Version 2.0.1
+=============
+
+:Released: 2014-09-24
+:Maintainer: Konstantine Rybnikov <k-bx@k-bx.com>
+
+Bug Fixes
+---------
+
+* [GitHub issue #9] Correct comparison of equal version strings.
+
+
+Version 2.0.0
+=============
+
+:Released: 2014-05-24
+:Maintainer: Konstantine Rybnikov <k-bx@k-bx.com>
+
+Additions
+---------
+
+* Grant license in this code base under BSD 3-clause license terms.
+
+Changes
+-------
+
+* Update parser to SemVer standard 2.0.0.
+
+* Ignore build component for comparison.
+
+
+Version 0.0.2
+=============
+
+:Released: 2012-05-10
+:Maintainer: Konstantine Rybnikov <k-bx@k-bx.com>
+
+Changes
+-------
+
+* Use standard library Distutils for distribution management.
+
+
+Version 0.0.1
+=============
+
+:Released: 2012-04-28
+:Maintainer: Konstantine Rybnikov <kost-bebix@yandex.ru>
+
+* Initial release.
+
+
+..
+    Local variables:
+    coding: utf-8
+    mode: text
+    mode: rst
+    End:
+    vim: fileencoding=utf-8 filetype=rst :
