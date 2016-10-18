@@ -9,6 +9,19 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version NEXT
+============
+
+:Released: FUTURE
+:Maintainer: UNKNOWN <unknown>
+
+Additions
+---------
+
+* Add ‘parse_version_info’ to parse a version string to a version info
+  tuple.
+
+
 Version 2.6.0
 =============
 
