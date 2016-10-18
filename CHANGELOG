@@ -9,6 +9,21 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version NEXT
+============
+
+:Released: FUTURE
+:Maintainer: UNKNOWN <unknown>
+
+Bug Fixes
+---------
+
+* Refine parsing to conform more strictly to SemVer 2.0.0.
+
+  SemVer 2.0.0 specification §9 forbids leading zero on identifiers in
+  the prerelease version.
+
+
 Version 2.6.0
 =============
 
