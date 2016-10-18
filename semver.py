@@ -1,7 +1,10 @@
 """
 Python helper for Semantic Versioning (http://semver.org/)
 """
+
+import collections
 import re
+
 
 __version__ = '2.6.0'
 __author__ = 'Konstantine Rybnikov'
@@ -35,6 +38,21 @@ def parse(version):
     version_parts['patch'] = int(version_parts['patch'])
 
     return version_parts
+
+
+VersionInfo = collections.namedtuple(
+        'VersionInfo', 'major minor patch prerelease build')
+
+def parse_version_info(version):
+    """
+    Parse version string to a VersionInfo instance.
+    """
+    parts = parse(version)
+    version_info = VersionInfo(
+            parts['major'], parts['minor'], parts['patch'],
+            parts['prerelease'], parts['build'])
+
+    return version_info
 
 
 def compare(ver1, ver2):
