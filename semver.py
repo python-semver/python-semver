@@ -28,13 +28,13 @@ def parse(version):
     if match is None:
         raise ValueError('%s is not valid SemVer string' % version)
 
-    verinfo = match.groupdict()
+    version_parts = match.groupdict()
 
-    verinfo['major'] = int(verinfo['major'])
-    verinfo['minor'] = int(verinfo['minor'])
-    verinfo['patch'] = int(verinfo['patch'])
+    version_parts['major'] = int(version_parts['major'])
+    version_parts['minor'] = int(version_parts['minor'])
+    version_parts['patch'] = int(version_parts['patch'])
 
-    return verinfo
+    return version_parts
 
 
 def compare(ver1, ver2):
