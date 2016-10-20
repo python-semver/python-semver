@@ -21,6 +21,14 @@ Additions
 * Add ‘parse_version_info’ to parse a version string to a version info
   tuple.
 
+Bug Fixes
+---------
+  
+* Refine parsing to conform more strictly to SemVer 2.0.0.
+
+  SemVer 2.0.0 specification §9 forbids leading zero on identifiers in
+  the prerelease version.
+
 
 Version 2.6.0
 =============
