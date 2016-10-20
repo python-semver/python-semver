@@ -43,6 +43,7 @@ def parse(version):
 VersionInfo = collections.namedtuple(
         'VersionInfo', 'major minor patch prerelease build')
 
+
 def parse_version_info(version):
     """
     Parse version string to a VersionInfo instance.
