@@ -209,7 +209,6 @@ def test_prerelease_order():
 
 def test_should_bump_prerelease():
     assert bump_prerelease('3.4.5-rc.9') == '3.4.5-rc.10'
-    assert bump_prerelease('3.4.5-0009.dev') == '3.4.5-0010.dev'
     assert bump_prerelease('3.4.5') == '3.4.5-rc.1'
 
 
