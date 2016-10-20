@@ -43,6 +43,20 @@ This module provides just couple of functions, main of which are:
     False
     >>> semver.format_version(3, 4, 5, 'pre.2', 'build.4')
     '3.4.5-pre.2+build.4'
+    >>> version_parts = semver.parse("3.4.5-pre.2+build.4")
+    >>> version_parts == {
+    ...     'major': 3, 'minor': 4, 'patch': 5,
+    ...     'prerelease': 'pre.2', 'build': 'build.4'}
+    True
+    >>> version_info = semver.parse_version_info("3.4.5-pre.2+build.4")
+    >>> version_info
+    VersionInfo(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')
+    >>> version_info.major
+    3
+    >>> version_info > (1, 0)
+    True
+    >>> version_info < (3, 5)
+    True
     >>> semver.bump_major("3.4.5")
     '4.0.0'
     >>> semver.bump_minor("3.4.5")
