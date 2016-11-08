@@ -33,6 +33,28 @@ def test_should_parse_version():
     }
 
 
+def test_should_parse_zero_prerelease():
+    result = parse("1.2.3-rc.0+build.0")
+
+    assert result == {
+        'major': 1,
+        'minor': 2,
+        'patch': 3,
+        'prerelease': 'rc.0',
+        'build': 'build.0',
+    }
+
+    result = parse("1.2.3-rc.0.0+build.0")
+
+    assert result == {
+        'major': 1,
+        'minor': 2,
+        'patch': 3,
+        'prerelease': 'rc.0.0',
+        'build': 'build.0',
+    }
+
+
 def test_should_get_less():
     assert compare("1.0.0", "2.0.0") == -1
 
