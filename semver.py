@@ -19,8 +19,8 @@ _REGEX = re.compile(
         \.
         (?P<patch>(?:0|[1-9][0-9]*))
         (\-(?P<prerelease>
-            [1-9A-Za-z-][0-9A-Za-z-]*
-            (\.[1-9A-Za-z-][0-9A-Za-z-]*)*
+            (?:0|[1-9A-Za-z-][0-9A-Za-z-]*)
+            (\.(?:0|[1-9A-Za-z-][0-9A-Za-z-]*))*
         ))?
         (\+(?P<build>
             [0-9A-Za-z-]+
