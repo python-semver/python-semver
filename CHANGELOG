@@ -9,15 +9,17 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
-Version 2.7.0
+Version 2.7.2
 =============
 
-:Released: FUTURE
-:Maintainer: UNKNOWN <unknown>
+:Released: 2016-11-08
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
 
 Additions
 ---------
 
+* Fix issue #37 (Remove trailing zeros from prelease doesn't allow to
+  parse 0 pre-release version)
 * Add ‘parse_version_info’ to parse a version string to a version info
   tuple.
 
