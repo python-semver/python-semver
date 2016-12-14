@@ -16,16 +16,18 @@ _REGEX = re.compile(
         (?P<major>(?:0|[1-9][0-9]*))
         \.
         (?P<minor>(?:0|[1-9][0-9]*))
-        \.
-        (?P<patch>(?:0|[1-9][0-9]*))
-        (\-(?P<prerelease>
-            (?:0|[1-9A-Za-z-][0-9A-Za-z-]*)
-            (\.(?:0|[1-9A-Za-z-][0-9A-Za-z-]*))*
-        ))?
-        (\+(?P<build>
-            [0-9A-Za-z-]+
-            (\.[0-9A-Za-z-]+)*
-        ))?
+        (
+            \.
+            (?P<patch>(?:0|[1-9][0-9]*))
+            (\-(?P<prerelease>
+                (?:0|[1-9A-Za-z-][0-9A-Za-z-]*)
+                (\.(?:0|[1-9A-Za-z-][0-9A-Za-z-]*))*
+            ))?
+            ((\+|\.)(?P<build>
+                [0-9A-Za-z-]+
+                (\.[0-9A-Za-z-]+)*
+            ))?
+        )?
         $
         """, re.VERBOSE)
 
@@ -48,7 +50,8 @@ def parse(version):
 
     version_parts['major'] = int(version_parts['major'])
     version_parts['minor'] = int(version_parts['minor'])
-    version_parts['patch'] = int(version_parts['patch'])
+    if version_parts['patch'] is not None:
+        version_parts['patch'] = int(version_parts['patch'])
 
     return version_parts
 
