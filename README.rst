@@ -68,6 +68,70 @@ This module provides just couple of functions, main of which are:
     >>> semver.min_ver("1.0.0", "2.0.0")
     '1.0.0'
 
+The version 1.7.4 supports lenient mode for these versions:
+* major.minor. For e.g: 1.0
+* dot in patch. For e.g: 5.2.6.Final, 2.0.4.RELEASE
+
+By default the lenient mode is false, if you want to have these above support, you need to turn on the lenient mode by
+calling method:
+
+.. code-block:: python
+
+    semver.set_lenient(True)
+
+
+Below are examples with lenient mode is False:
+
+.. code-block:: python
+
+    >>> import semver
+    >>> semver.parse("1")
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      File "semver.py", line 99, in parse
+        raise ValueError('%s is not valid SemVer string' % version)
+    ValueError: 1 is not valid SemVer string
+    >>> semver.parse("1.0")
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      File "semver.py", line 132, in parse
+        raise ValueError('%s is not valid SemVer string' % version)
+    ValueError: 1.0 is not valid SemVer string
+    >>> semver.parse("1.0.0.FINAL")
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      File "semver.py", line 132, in parse
+        raise ValueError('%s is not valid SemVer string' % version)
+    ValueError: 1.0.0.FINAL is not valid SemVer string
+    >>> semver.parse("5.2.6.Final")
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      File "semver.py", line 132, in parse
+        raise ValueError('%s is not valid SemVer string' % version)
+    ValueError: 5.2.6.Final is not valid SemVer string
+    >>> semver.parse("2.0.4.RELEASE")
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      File "semver.py", line 132, in parse
+        raise ValueError('%s is not valid SemVer string' % version)
+    ValueError: 2.0.4.RELEASE is not valid SemVer string
+
+
+Below are examples when we turn on lenient mode:
+
+.. code-block:: python
+
+    >>> import semver
+    >>> semver.set_lenient(True)
+    >>> semver.parse("1")
+    {'major': 1, 'prerelease': None, 'build': None, 'minor': 0, 'patch': 0}
+    >>> semver.parse("1.0")
+    {'major': 1, 'prerelease': None, 'build': None, 'minor': 0, 'patch': 0}
+    >>> semver.parse("5.2.6.Final")
+    {'major': 5, 'prerelease': None, 'build': 'Final', 'minor': 2, 'patch': 6}
+    >>> semver.parse("2.0.4.RELEASE")
+    {'major': 2, 'prerelease': None, 'build': 'RELEASE', 'minor': 0, 'patch': 4}
+
 Installation
 ------------
 

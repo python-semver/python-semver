@@ -10,45 +10,100 @@ __version__ = '2.7.2'
 __author__ = 'Kostiantyn Rybnikov'
 __author_email__ = 'k-bx@k-bx.com'
 
-_REGEX = re.compile(
-        r"""
-        ^
-        (?P<major>(?:0|[1-9][0-9]*))
-        \.
-        (?P<minor>(?:0|[1-9][0-9]*))
-        \.
-        (?P<patch>(?:0|[1-9][0-9]*))
-        (\-(?P<prerelease>
-            (?:0|[1-9A-Za-z-][0-9A-Za-z-]*)
-            (\.(?:0|[1-9A-Za-z-][0-9A-Za-z-]*))*
-        ))?
-        (\+(?P<build>
-            [0-9A-Za-z-]+
-            (\.[0-9A-Za-z-]+)*
-        ))?
-        $
-        """, re.VERBOSE)
+# Lenient mode is off by default
+lenient = False
 
 _LAST_NUMBER = re.compile(r'(?:[^\d]*(\d+)[^\d]*)+')
 
 if not hasattr(__builtins__, 'cmp'):
     def cmp(a, b):
-        return (a > b) - (a < b)
+        if lenient:
+            if a is not None and b is not None:
+                return (a > b) - (a < b)
+            elif a is not None and b is None:
+                return 1
+            elif a is None and b is not None:
+                return -1
+            else:
+                return 0
+        else:
+            return (a > b) - (a < b)
+
+
+def set_lenient(a):
+    global lenient
+    lenient = a
+
+
+def get_regex():
+    if lenient:
+        return re.compile(
+            r"""
+            ^
+            (?P<major>(?:0|[1-9][0-9]*))
+            (
+                \.
+                (?P<minor>(?:0|[1-9][0-9]*))
+                (
+                    \.
+                    (?P<patch>(?:0|[1-9][0-9]*))
+                    (\-(?P<prerelease>
+                        (?:0|[1-9A-Za-z-][0-9A-Za-z-]*)
+                        (\.(?:0|[1-9A-Za-z-][0-9A-Za-z-]*))*
+                    ))?
+                    ((\+|\.)(?P<build>
+                        [0-9A-Za-z-]+
+                        (\.[0-9A-Za-z-]+)*
+                    ))?
+                )?
+            )?
+            $
+            """, re.VERBOSE)
+    else:
+        return re.compile(
+            r"""
+            ^
+            (?P<major>(?:0|[1-9][0-9]*))
+            \.
+            (?P<minor>(?:0|[1-9][0-9]*))
+            \.
+            (?P<patch>(?:0|[1-9][0-9]*))
+            (\-(?P<prerelease>
+                (?:0|[1-9A-Za-z-][0-9A-Za-z-]*)
+                (\.(?:0|[1-9A-Za-z-][0-9A-Za-z-]*))*
+            ))?
+            (\+(?P<build>
+                [0-9A-Za-z-]+
+                (\.[0-9A-Za-z-]+)*
+            ))?
+            $
+            """, re.VERBOSE)
 
 
 def parse(version):
     """
     Parse version to major, minor, patch, pre-release, build parts.
     """
-    match = _REGEX.match(version)
+    match = get_regex().match(version)
     if match is None:
         raise ValueError('%s is not valid SemVer string' % version)
 
     version_parts = match.groupdict()
 
     version_parts['major'] = int(version_parts['major'])
-    version_parts['minor'] = int(version_parts['minor'])
-    version_parts['patch'] = int(version_parts['patch'])
+    if lenient:
+        if version_parts['minor'] is not None:
+            version_parts['minor'] = int(version_parts['minor'])
+        else:
+            version_parts['minor'] = 0
+
+        if version_parts['patch'] is not None:
+            version_parts['patch'] = int(version_parts['patch'])
+        else:
+            version_parts['patch'] = 0
+    else:
+        version_parts['minor'] = int(version_parts['minor'])
+        version_parts['patch'] = int(version_parts['patch'])
 
     return version_parts
 

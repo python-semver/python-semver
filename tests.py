@@ -11,6 +11,7 @@ from semver import bump_prerelease
 from semver import bump_build
 from semver import min_ver
 from semver import max_ver
+from semver import set_lenient
 
 
 def test_should_parse_version():
@@ -243,3 +244,66 @@ def test_should_bump_build():
     assert bump_build('3.4.5-rc.1+0009.dev') == '3.4.5-rc.1+0010.dev'
     assert bump_build('3.4.5-rc.1') == '3.4.5-rc.1+build.1'
     assert bump_build('3.4.5') == '3.4.5+build.1'
+
+
+def test_parse_version_has_major_and_minor_only():
+    set_lenient(True)
+    version_info = parse('1.0')
+    assert version_info['major'] == 1
+    assert version_info['minor'] == 0
+    set_lenient(False)
+
+
+def test_parse_version_with_patch_has_plus():
+    set_lenient(True)
+    version_info = parse('3.4.5+Final')
+    assert version_info['major'] == 3
+    assert version_info['minor'] == 4
+    assert version_info['patch'] == 5
+    assert version_info['build'] == 'Final'
+    set_lenient(False)
+
+
+def test_parse_version_with_patch_has_dot():
+    set_lenient(True)
+    version_info = parse('3.4.5.Final')
+    assert version_info['major'] == 3
+    assert version_info['minor'] == 4
+    assert version_info['patch'] == 5
+    assert version_info['build'] == 'Final'
+    set_lenient(False)
+
+
+def test_compare_versions_having_major_only():
+    set_lenient(True)
+    assert compare('1', '1.0') == 0
+    assert compare('1', '1.0.0') == 0
+    assert compare('1.1', '1') == 1
+    set_lenient(False)
+
+
+def test_compare_versions_having_major_and_minor_only():
+    set_lenient(True)
+    assert compare('1.0', '2.0') == -1
+    assert compare('2.0', '1.0') == 1
+    assert compare('2.0', '2.0') == 0
+    assert compare('2.0', '2.0.0') == 0
+    set_lenient(False)
+
+
+def test_compare_versions_with_patch_has_plus():
+    set_lenient(True)
+    assert compare('3.4.5+Final', '3.4.5') == 0
+    assert compare('3.4.5+Final', '3.4.6') == -1
+    assert compare('3.4.5+Final', '3.4.4') == 1
+    assert compare('3.4.5+Final', '3.4.5.Final') == 0
+    set_lenient(False)
+
+
+def test_compare_versions_with_patch_has_dot():
+    set_lenient(True)
+    assert compare('3.4.5.Final', '3.4.5') == 0
+    assert compare('3.4.5.Final', '3.4.6') == -1
+    assert compare('3.4.5.Final', '3.4.4') == 1
+    assert compare('3.4.5.Final', '3.4.5.Final') == 0
+    set_lenient(False)
