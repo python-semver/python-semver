@@ -263,7 +263,6 @@ def test_parse_version_with_patch_has_dot():
     assert version_info['minor'] == 4
     assert version_info['patch'] == 5
     assert version_info['build'] == 'Final'
-<<<<<<< HEAD
 
 
 def test_compare_versions_having_major_and_minor_only():
