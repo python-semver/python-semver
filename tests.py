@@ -109,8 +109,6 @@ def test_should_raise_value_error_for_invalid_value():
     with pytest.raises(ValueError):
         compare('foo', 'bar')
     with pytest.raises(ValueError):
-        compare('1.0', '1.0.0')
-    with pytest.raises(ValueError):
         compare('1.x', '1.0.0')
 
 
@@ -265,3 +263,23 @@ def test_parse_version_with_patch_has_dot():
     assert version_info['minor'] == 4
     assert version_info['patch'] == 5
     assert version_info['build'] == 'Final'
+
+
+def test_compare_versions_having_major_and_minor_only():
+    assert compare('1.0', '2.0') == -1
+    assert compare('2.0', '1.0') == 1
+    assert compare('2.0', '2.0') == 0
+
+
+def test_compare_versions_with_patch_has_plus():
+    assert compare('3.4.5+Final', '3.4.5') == 0
+    assert compare('3.4.5+Final', '3.4.6') == -1
+    assert compare('3.4.5+Final', '3.4.4') == 1
+    assert compare('3.4.5+Final', '3.4.5.Final') == 0
+
+
+def test_compare_versions_with_patch_has_dot():
+    assert compare('3.4.5.Final', '3.4.5') == 0
+    assert compare('3.4.5.Final', '3.4.6') == -1
+    assert compare('3.4.5.Final', '3.4.4') == 1
+    assert compare('3.4.5.Final', '3.4.5.Final') == 0
