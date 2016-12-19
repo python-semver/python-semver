@@ -13,6 +13,19 @@ from semver import min_ver
 from semver import max_ver
 
 
+SEMVERFUNCS = [
+    compare, match, parse, format_version,
+    bump_major, bump_minor, bump_patch, bump_prerelease, bump_build,
+    max_ver, min_ver,
+]
+
+
+@pytest.mark.parametrize("func", SEMVERFUNCS,
+                         ids=[func.__name__ for func in SEMVERFUNCS])
+def test_fordocstrings(func):
+    assert func.__doc__, "Need a docstring for function %r" % func.__name
+
+
 def test_should_parse_version():
     result = parse("1.2.3-alpha.1.2+build.11.e0f985a")
     assert result == {
