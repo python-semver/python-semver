@@ -103,7 +103,7 @@ VersionInfo = collections.namedtuple(
 
 # Only change it for Python > 3 as it is readonly
 # for version 2
-if sys.version_info > (3,0):
+if sys.version_info > (3, 0):
     VersionInfo.__doc__ = """
 :param int major: version when you make incompatible API changes.
 :param int minor: version when you add functionality in
