@@ -69,6 +69,7 @@ def read_file(filename):
     with open(join(dirname(__file__), filename)) as f:
         return f.read()
 
+
 setup(
     name=package.__name__,
     version=package.__version__,
