@@ -35,7 +35,14 @@ _LAST_NUMBER = re.compile(r'(?:[^\d]*(\d+)[^\d]*)+')
 
 if not hasattr(__builtins__, 'cmp'):
     def cmp(a, b):
-        return (a > b) - (a < b)
+        if a is not None and b is not None:
+            return (a > b) - (a < b)
+        elif a is not None and b is None:
+            return 1
+        elif a is None and b is not None:
+            return -1
+        else:
+            return 0
 
 
 def parse(version):
