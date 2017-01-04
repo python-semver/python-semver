@@ -1,12 +1,52 @@
 """
 Python helper for Semantic Versioning (http://semver.org/)
+
+Examples:
+>>> import semver
+>>> semver.compare("1.0.0", "2.0.0")
+-1
+>>> semver.compare("2.0.0", "1.0.0")
+1
+>>> semver.compare("2.0.0", "2.0.0")
+0
+>>> semver.match("2.0.0", ">=1.0.0")
+True
+>>> semver.match("1.0.0", ">1.0.0")
+False
+>>> semver.format_version(3, 4, 5, 'pre.2', 'build.4')
+'3.4.5-pre.2+build.4'
+>>> version_parts = semver.parse("3.4.5-pre.2+build.4")
+>>> version_parts == {
+...     'major': 3, 'minor': 4, 'patch': 5,
+...     'prerelease': 'pre.2', 'build': 'build.4'}
+True
+>>> version_info = semver.parse_version_info("3.4.5-pre.2+build.4")
+>>> version_info
+VersionInfo(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')
+>>> version_info.major
+3
+>>> version_info > (1, 0)
+True
+>>> version_info < (3, 5)
+True
+>>> semver.bump_major("3.4.5")
+'4.0.0'
+>>> semver.bump_minor("3.4.5")
+'3.5.0'
+>>> semver.bump_patch("3.4.5")
+'3.4.6'
+>>> semver.max_ver("1.0.0", "2.0.0")
+'2.0.0'
+>>> semver.min_ver("1.0.0", "2.0.0")
+'1.0.0'
 """
 
 import collections
 import re
+import sys
 
 
-__version__ = '2.7.2'
+__version__ = '2.7.3'
 __author__ = 'Kostiantyn Rybnikov'
 __author_email__ = 'k-bx@k-bx.com'
 
@@ -81,8 +121,13 @@ def get_regex():
 
 
 def parse(version):
-    """
-    Parse version to major, minor, patch, pre-release, build parts.
+    """Parse version to major, minor, patch, pre-release, build parts.
+
+    :param version: version string
+    :return: dictionary with the keys 'build', 'major', 'minor', 'patch',
+             and 'prerelease'. The prerelease or build keys can be None
+             if not provided
+    :rtype: dict
     """
     match = get_regex().match(version)
     if match is None:
@@ -111,10 +156,31 @@ def parse(version):
 VersionInfo = collections.namedtuple(
         'VersionInfo', 'major minor patch prerelease build')
 
+# Only change it for Python > 3 as it is readonly
+# for version 2
+if sys.version_info > (3, 0):
+    VersionInfo.__doc__ = """
+:param int major: version when you make incompatible API changes.
+:param int minor: version when you add functionality in
+                  a backwards-compatible manner.
+:param int patch: version when you make backwards-compatible bug fixes.
+:param str prerelease: an optional prerelease string
+:param str build: an optional build string
+
+>>> import semver
+>>> ver = semver.parse('3.4.5-pre.2+build.4')
+>>> ver
+{'build': 'build.4', 'major': 3, 'minor': 4, 'patch': 5,
+'prerelease': 'pre.2'}
+"""
+
 
 def parse_version_info(version):
-    """
-    Parse version string to a VersionInfo instance.
+    """Parse version string to a VersionInfo instance.
+
+    :param version: version string
+    :return: a :class:`VersionInfo` instance
+    :rtype: :class:`VersionInfo`
     """
     parts = parse(version)
     version_info = VersionInfo(
@@ -125,6 +191,14 @@ def parse_version_info(version):
 
 
 def compare(ver1, ver2):
+    """Compare two versions
+
+    :param ver1: version string 1
+    :param ver2: version string 2
+    :return: The return value is negative if ver1 < ver2,
+             zero if ver1 == ver2 and strictly positive if ver1 > ver2
+    :rtype: int
+    """
     def nat_cmp(a, b):
         def convert(text):
             return (2, int(text)) if re.match('[0-9]+', text) else (1, text)
@@ -159,6 +233,19 @@ def compare(ver1, ver2):
 
 
 def match(version, match_expr):
+    """Compare two versions through a comparison
+
+    :param str version: a version string
+    :param str match_expr: operator and version; valid operators are
+          <   smaller than
+          >   greater than
+          >=  greator or equal than
+          <=  smaller or equal than
+          ==  equal
+          !=  not equal
+    :return: True if the expression matches the version, otherwise False
+    :rtype: bool
+    """
     prefix = match_expr[:2]
     if prefix in ('>=', '<=', '==', '!='):
         match_version = match_expr[2:]
@@ -187,6 +274,13 @@ def match(version, match_expr):
 
 
 def max_ver(ver1, ver2):
+    """Returns the greater version of two versions
+
+    :param ver1: version string 1
+    :param ver2: version string 2
+    :return: the greater version of the two
+    :rtype: :class:`VersionInfo`
+    """
     cmp_res = compare(ver1, ver2)
     if cmp_res == 0 or cmp_res == 1:
         return ver1
@@ -195,6 +289,13 @@ def max_ver(ver1, ver2):
 
 
 def min_ver(ver1, ver2):
+    """Returns the smaller version of two versions
+
+    :param ver1: version string 1
+    :param ver2: version string 2
+    :return: the smaller version of the two
+    :rtype: :class:`VersionInfo`
+    """
     cmp_res = compare(ver1, ver2)
     if cmp_res == 0 or cmp_res == -1:
         return ver1
@@ -203,6 +304,16 @@ def min_ver(ver1, ver2):
 
 
 def format_version(major, minor, patch, prerelease=None, build=None):
+    """Format a version according to the Semantic Versioning specification
+
+    :param str major: the required major part of a version
+    :param str minor: the required minor part of a version
+    :param str patch: the required patch part of a version
+    :param str prerelease: the optional prerelease part of a version
+    :param str build: the optional build part of a version
+    :return: the formatted string
+    :rtype: str
+    """
     version = "%d.%d.%d" % (major, minor, patch)
     if prerelease is not None:
         version = version + "-%s" % prerelease
@@ -227,22 +338,46 @@ def _increment_string(string):
 
 
 def bump_major(version):
+    """Raise the major part of the version
+
+    :param: version string
+    :return: the raised version string
+    :rtype: str
+    """
     verinfo = parse(version)
     return format_version(verinfo['major'] + 1, 0, 0)
 
 
 def bump_minor(version):
+    """Raise the minor part of the version
+
+    :param: version string
+    :return: the raised version string
+    :rtype: str
+    """
     verinfo = parse(version)
     return format_version(verinfo['major'], verinfo['minor'] + 1, 0)
 
 
 def bump_patch(version):
+    """Raise the patch part of the version
+
+    :param: version string
+    :return: the raised version string
+    :rtype: str
+    """
     verinfo = parse(version)
     return format_version(verinfo['major'], verinfo['minor'],
                           verinfo['patch'] + 1)
 
 
 def bump_prerelease(version):
+    """Raise the prerelease part of the version
+
+    :param: version string
+    :return: the raised version string
+    :rtype: str
+    """
     verinfo = parse(version)
     verinfo['prerelease'] = _increment_string(verinfo['prerelease'] or 'rc.0')
     return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'],
@@ -250,6 +385,12 @@ def bump_prerelease(version):
 
 
 def bump_build(version):
+    """Raise the build part of the version
+
+    :param: version string
+    :return: the raised version string
+    :rtype: str
+    """
     verinfo = parse(version)
     verinfo['build'] = _increment_string(verinfo['build'] or 'build.0')
     return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'],
