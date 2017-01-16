@@ -146,13 +146,29 @@ def compare(ver1, ver2):
     """
     def nat_cmp(a, b):
         def convert(text):
-            return (2, int(text)) if re.match('[0-9]+', text) else (1, text)
+            return int(text) if re.match('[0-9]+', text) else text
 
         def split_key(key):
             return [convert(c) for c in key.split('.')]
 
+        def cmp_prerelease_tag(a, b):
+            if isinstance(a, int) and isinstance(b, int):
+                return cmp(a, b)
+            elif isinstance(a, int):
+                return -1
+            elif isinstance(b, int):
+                return 1
+            else:
+                return cmp(a, b)
+
         a, b = a or '', b or ''
-        return cmp(split_key(a), split_key(b))
+        a_parts, b_parts = split_key(a), split_key(b)
+        for sub_a, sub_b in zip(a_parts, b_parts):
+            cmp_result = cmp_prerelease_tag(sub_a, sub_b)
+            if cmp_result != 0:
+                return cmp_result
+        else:
+            return cmp(len(a), len(b))
 
     def compare_by_keys(d1, d2):
         for key in ['major', 'minor', 'patch']:

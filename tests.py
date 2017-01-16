@@ -70,10 +70,24 @@ def test_should_parse_zero_prerelease():
 
 def test_should_get_less():
     assert compare("1.0.0", "2.0.0") == -1
+    assert compare('1.0.0-alpha', '1.0.0-alpha.1') == -1
+    assert compare('1.0.0-alpha.1', '1.0.0-alpha.beta') == -1
+    assert compare('1.0.0-alpha.beta', '1.0.0-beta') == -1
+    assert compare('1.0.0-beta', '1.0.0-beta.2') == -1
+    assert compare('1.0.0-beta.2', '1.0.0-beta.11') == -1
+    assert compare('1.0.0-beta.11', '1.0.0-rc.1') == -1
+    assert compare('1.0.0-rc.1', '1.0.0') == -1
 
 
 def test_should_get_greater():
     assert compare("2.0.0", "1.0.0") == 1
+    assert compare('1.0.0-alpha.1', '1.0.0-alpha') == 1
+    assert compare('1.0.0-alpha.beta', '1.0.0-alpha.1') == 1
+    assert compare('1.0.0-beta', '1.0.0-alpha.beta') == 1
+    assert compare('1.0.0-beta.2', '1.0.0-beta') == 1
+    assert compare('1.0.0-beta.11', '1.0.0-beta.2') == 1
+    assert compare('1.0.0-rc.1', '1.0.0-beta.11') == 1
+    assert compare('1.0.0', '1.0.0-rc.1') == 1
 
 
 def test_should_match_simple():
@@ -232,7 +246,7 @@ def test_prerelease_order():
     assert min_ver('1.2.3-Rc10', '1.2.3-rc10') == '1.2.3-Rc10'
     # Numeric identifiers always have lower precedence than non-numeric
     # identifiers.
-    assert min_ver('1.2.3-2', '1.2.3-rc') == '1.2.3-rc'
+    assert min_ver('1.2.3-2', '1.2.3-rc') == '1.2.3-2'
     # A larger set of pre-release fields has a higher precedence than a
     # smaller set, if all of the preceding identifiers are equal.
     assert min_ver('1.2.3-rc.2.1', '1.2.3-rc.2') == '1.2.3-rc.2'
