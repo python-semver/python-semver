@@ -132,7 +132,9 @@ def test_should_match_not_equal(left, right, expected):
     ("2.3.7", "==2.3.7", True),
     ("2.3.7", "!=2.3.7", False),
 ])
-def test_should_not_raise_value_error_for_expected_match_expression(left, right, expected):
+def test_should_not_raise_value_error_for_expected_match_expression(left,
+                                                                    right,
+                                                                    expected):
     assert match(left, right) is expected
 
 
@@ -231,8 +233,8 @@ def test_should_compare_versions_with_build_and_release(left, right, expected):
     ('1.0.0+build.1', '1.0.0-alpha.1', 1),
     ('1.0.0+build.1', '1.0.0-alpha.1+build.1', 1),
 ])
-def test_should_ignore_builds_on_compare(left,right,expected):
-    assert compare(left,right) == expected
+def test_should_ignore_builds_on_compare(left, right, expected):
+    assert compare(left, right) == expected
 
 
 def test_should_correctly_format_version():
@@ -302,9 +304,9 @@ def test_prerelease_order(left, right, expected):
     ('3.4.5', 'dev', '3.4.5-dev.1'),
     ('3.4.5', '', '3.4.5-rc.1'),
 ])
-def test_should_bump_prerelease(version,expected):
+def test_should_bump_prerelease(version, expected):
     token = "rc" if token is None else token
-    assert bump_prerelease(version, token) == expected
+    assert bump_prerelease(version) == expected
 
 
 def test_should_ignore_build_on_prerelease_bump():
