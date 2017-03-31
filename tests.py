@@ -2,6 +2,8 @@ import pytest  # noqa
 
 from semver import compare
 from semver import match
+from semver import match_all
+from semver import match_expr
 from semver import parse
 from semver import format_version
 from semver import bump_major
@@ -102,6 +104,19 @@ def test_should_match_not_equal():
     assert match("2.3.7", "!=2.3.8") is True
     assert match("2.3.7", "!=2.3.6") is True
     assert match("2.3.7", "!=2.3.7") is False
+
+
+def test_should_match_all():
+    assert match_all("2.3.7", [">2.0.0", "<=2.4.0"]) is True
+    assert match_all("2.3.7", [">2.0.0", "<=2.1.3"]) is False
+    assert match_all("2.3.7", ["<=1.0.0", ">3.0.0"]) is False
+
+
+def test_should_match_expr():
+    assert match_expr("2.3.7", ">2.0.0,<=2.9.0") is True
+    assert match_expr("2.3.7", "<2.0.0,>3.0.0") is False
+    assert match_expr("2.3.7", ">1.0.0,<1.5.0|>2.0.0,<=2.3.9") is True
+    assert match_expr("2.3.7", ">1.0.0,<1.5.0|>3.0.0,<=3.2.1") is False
 
 
 def test_should_not_raise_value_error_for_expected_match_expression():

@@ -195,6 +195,38 @@ def match(version, match_expr):
     return cmp_res in possibilities
 
 
+def match_all(version, match_exprs):
+    """Compare a version with a list of expressions
+
+    :param str version: a version string
+    :param list match_exprs: list of operators, see match(version, match_expr)
+    :return: True if all expressions match the version, otherwise False
+    :rtype: bool
+    """
+    for expr in match_exprs:
+        if not match(version, expr):
+            return False
+    else:
+        return True
+
+
+def match_expr(version, match_expr):
+    """Compare a version with an expression
+
+    :param str version: a version string
+    :param str match_expr: an expression that specifies version ranges
+          example: >1.0.0,<=1.2.3|>2.0.0,<=2.4.5
+          matches versions between 1.0.0 and 1.2.3 or between 2.0.0 and 2.4.5
+    :return: True if the expression matches the version, otherwise False
+    :rtype: bool
+    """
+    for exprs in match_expr.split('|'):
+        if match_all(version, exprs.split(',')):
+            return True
+    else:
+        return False
+
+
 def max_ver(ver1, ver2):
     """Returns the greater version of two versions
 
