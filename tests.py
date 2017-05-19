@@ -11,6 +11,7 @@ from semver import bump_prerelease
 from semver import bump_build
 from semver import min_ver
 from semver import max_ver
+from semver import VersionInfo
 
 
 SEMVERFUNCS = [
@@ -270,3 +271,63 @@ def test_should_bump_build():
     assert bump_build('3.4.5-rc.1+0009.dev') == '3.4.5-rc.1+0010.dev'
     assert bump_build('3.4.5-rc.1') == '3.4.5-rc.1+build.1'
     assert bump_build('3.4.5') == '3.4.5+build.1'
+
+
+def test_should_compare_version_info_objects():
+    v1 = VersionInfo(major=0, minor=10, patch=4, prerelease=None, build=None)
+    v2 = VersionInfo(
+        major=0, minor=10, patch=4, prerelease='beta.1', build=None)
+
+    # use `not` to enforce using comparision operators
+    assert v1 != v2
+    assert v1 > v2
+    assert v1 >= v2
+    assert not(v1 < v2)
+    assert not(v1 <= v2)
+    assert not(v1 == v2)
+
+    v3 = VersionInfo(major=0, minor=10, patch=4, prerelease=None, build=None)
+
+    assert not(v1 != v3)
+    assert not(v1 > v3)
+    assert v1 >= v3
+    assert not(v1 < v3)
+    assert v1 <= v3
+    assert v1 == v3
+
+    v4 = VersionInfo(major=0, minor=10, patch=5, prerelease=None, build=None)
+    assert v1 != v4
+    assert not(v1 > v4)
+    assert not(v1 >= v4)
+    assert v1 < v4
+    assert v1 <= v4
+    assert not(v1 == v4)
+
+
+def test_should_compare_version_dictionaries():
+    v1 = VersionInfo(major=0, minor=10, patch=4, prerelease=None, build=None)
+    v2 = dict(major=0, minor=10, patch=4, prerelease='beta.1', build=None)
+
+    assert v1 != v2
+    assert v1 > v2
+    assert v1 >= v2
+    assert not(v1 < v2)
+    assert not(v1 <= v2)
+    assert not(v1 == v2)
+
+    v3 = dict(major=0, minor=10, patch=4, prerelease=None, build=None)
+
+    assert not(v1 != v3)
+    assert not(v1 > v3)
+    assert v1 >= v3
+    assert not(v1 < v3)
+    assert v1 <= v3
+    assert v1 == v3
+
+    v4 = dict(major=0, minor=10, patch=5, prerelease=None, build=None)
+    assert v1 != v4
+    assert not(v1 > v4)
+    assert not(v1 >= v4)
+    assert v1 < v4
+    assert v1 <= v4
+    assert not(v1 == v4)
