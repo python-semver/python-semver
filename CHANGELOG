@@ -8,6 +8,14 @@ Python SemVer library
 All notable changes to this code base will be documented in this file,
 in every released version.
 
+Version 2.7.3
+=============
+
+:Released: 2017-05-25
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+* Issue #54 (PR #55) Add comparision between VersionInfo objects
+* PR #56. Add support for Python 3.6
 
 Version 2.7.2
 =============
