@@ -4,7 +4,6 @@ Python helper for Semantic Versioning (http://semver.org/)
 
 import collections
 import re
-import sys
 
 
 __version__ = '2.7.6'
@@ -59,26 +58,59 @@ def parse(version):
     return version_parts
 
 
-VersionInfo = collections.namedtuple(
-        'VersionInfo', 'major minor patch prerelease build')
+class VersionInfo(collections.namedtuple(
+        'VersionInfo', 'major minor patch prerelease build')):
+    """
+    :param int major: version when you make incompatible API changes.
+    :param int minor: version when you add functionality in
+                      a backwards-compatible manner.
+    :param int patch: version when you make backwards-compatible bug fixes.
+    :param str prerelease: an optional prerelease string
+    :param str build: an optional build string
 
-# Only change it for Python > 3 as it is readonly
-# for version 2
-if sys.version_info >= (3, 5):
-    VersionInfo.__doc__ = """
-:param int major: version when you make incompatible API changes.
-:param int minor: version when you add functionality in
-                  a backwards-compatible manner.
-:param int patch: version when you make backwards-compatible bug fixes.
-:param str prerelease: an optional prerelease string
-:param str build: an optional build string
+    >>> import semver
+    >>> ver = semver.parse('3.4.5-pre.2+build.4')
+    >>> ver
+    {'build': 'build.4', 'major': 3, 'minor': 4, 'patch': 5,
+    'prerelease': 'pre.2'}
+    """
+    __slots__ = ()
 
->>> import semver
->>> ver = semver.parse('3.4.5-pre.2+build.4')
->>> ver
-{'build': 'build.4', 'major': 3, 'minor': 4, 'patch': 5,
-'prerelease': 'pre.2'}
-"""
+    def __eq__(self, other):
+        if not isinstance(other, (VersionInfo, dict)):
+            return NotImplemented
+        return _compare_by_keys(self._asdict(), _to_dict(other)) == 0
+
+    def __ne__(self, other):
+        if not isinstance(other, (VersionInfo, dict)):
+            return NotImplemented
+        return _compare_by_keys(self._asdict(), _to_dict(other)) != 0
+
+    def __lt__(self, other):
+        if not isinstance(other, (VersionInfo, dict)):
+            return NotImplemented
+        return _compare_by_keys(self._asdict(), _to_dict(other)) < 0
+
+    def __le__(self, other):
+        if not isinstance(other, (VersionInfo, dict)):
+            return NotImplemented
+        return _compare_by_keys(self._asdict(), _to_dict(other)) <= 0
+
+    def __gt__(self, other):
+        if not isinstance(other, (VersionInfo, dict)):
+            return NotImplemented
+        return _compare_by_keys(self._asdict(), _to_dict(other)) > 0
+
+    def __ge__(self, other):
+        if not isinstance(other, (VersionInfo, dict)):
+            return NotImplemented
+        return _compare_by_keys(self._asdict(), _to_dict(other)) >= 0
+
+
+def _to_dict(obj):
+    if isinstance(obj, VersionInfo):
+        return obj._asdict()
+    return obj
 
 
 def parse_version_info(version):
@@ -96,6 +128,52 @@ def parse_version_info(version):
     return version_info
 
 
+def _nat_cmp(a, b):
+    def convert(text):
+        return int(text) if re.match('[0-9]+', text) else text
+
+    def split_key(key):
+        return [convert(c) for c in key.split('.')]
+
+    def cmp_prerelease_tag(a, b):
+        if isinstance(a, int) and isinstance(b, int):
+            return cmp(a, b)
+        elif isinstance(a, int):
+            return -1
+        elif isinstance(b, int):
+            return 1
+        else:
+            return cmp(a, b)
+
+    a, b = a or '', b or ''
+    a_parts, b_parts = split_key(a), split_key(b)
+    for sub_a, sub_b in zip(a_parts, b_parts):
+        cmp_result = cmp_prerelease_tag(sub_a, sub_b)
+        if cmp_result != 0:
+            return cmp_result
+    else:
+        return cmp(len(a), len(b))
+
+
+def _compare_by_keys(d1, d2):
+    for key in ['major', 'minor', 'patch']:
+        v = cmp(d1.get(key), d2.get(key))
+        if v:
+            return v
+
+    rc1, rc2 = d1.get('prerelease'), d2.get('prerelease')
+    rccmp = _nat_cmp(rc1, rc2)
+
+    if not rccmp:
+        return 0
+    if not rc1:
+        return 1
+    elif not rc2:
+        return -1
+
+    return rccmp
+
+
 def compare(ver1, ver2):
     """Compare two versions
 
@@ -105,53 +183,10 @@ def compare(ver1, ver2):
              zero if ver1 == ver2 and strictly positive if ver1 > ver2
     :rtype: int
     """
-    def nat_cmp(a, b):
-        def convert(text):
-            return int(text) if re.match('[0-9]+', text) else text
-
-        def split_key(key):
-            return [convert(c) for c in key.split('.')]
-
-        def cmp_prerelease_tag(a, b):
-            if isinstance(a, int) and isinstance(b, int):
-                return cmp(a, b)
-            elif isinstance(a, int):
-                return -1
-            elif isinstance(b, int):
-                return 1
-            else:
-                return cmp(a, b)
-
-        a, b = a or '', b or ''
-        a_parts, b_parts = split_key(a), split_key(b)
-        for sub_a, sub_b in zip(a_parts, b_parts):
-            cmp_result = cmp_prerelease_tag(sub_a, sub_b)
-            if cmp_result != 0:
-                return cmp_result
-        else:
-            return cmp(len(a), len(b))
-
-    def compare_by_keys(d1, d2):
-        for key in ['major', 'minor', 'patch']:
-            v = cmp(d1.get(key), d2.get(key))
-            if v:
-                return v
-
-        rc1, rc2 = d1.get('prerelease'), d2.get('prerelease')
-        rccmp = nat_cmp(rc1, rc2)
-
-        if not rccmp:
-            return 0
-        if not rc1:
-            return 1
-        elif not rc2:
-            return -1
-
-        return rccmp
 
     v1, v2 = parse(ver1), parse(ver2)
 
-    return compare_by_keys(v1, v2)
+    return _compare_by_keys(v1, v2)
 
 
 def match(version, match_expr):
