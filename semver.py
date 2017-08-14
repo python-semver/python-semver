@@ -130,7 +130,7 @@ def parse_version_info(version):
 
 def _nat_cmp(a, b):
     def convert(text):
-        return int(text) if re.match('[0-9]+', text) else text
+        return int(text) if re.match('^[0-9]+$', text) else text
 
     def split_key(key):
         return [convert(c) for c in key.split('.')]

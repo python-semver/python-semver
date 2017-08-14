@@ -331,3 +331,10 @@ def test_should_compare_version_dictionaries():
     assert v1 < v4
     assert v1 <= v4
     assert not(v1 == v4)
+
+
+def test_should_compare_prerelease_with_numbers_and_letters():
+    v1 = VersionInfo(major=1, minor=9, patch=1, prerelease='1unms', build=None)
+    v2 = VersionInfo(major=1, minor=9, patch=1, prerelease=None, build='1asd')
+    assert v1 < v2
+    assert compare("1.9.1-1unms", "1.9.1+1") == -1
