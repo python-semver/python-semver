@@ -260,6 +260,8 @@ def test_prerelease_order():
 def test_should_bump_prerelease():
     assert bump_prerelease('3.4.5-rc.9') == '3.4.5-rc.10'
     assert bump_prerelease('3.4.5') == '3.4.5-rc.1'
+    assert bump_prerelease('3.4.5', 'dev') == '3.4.5-dev.1'
+    assert bump_prerelease('3.4.5', '') == '3.4.5-rc.1'
 
 
 def test_should_ignore_build_on_prerelease_bump():
@@ -271,6 +273,8 @@ def test_should_bump_build():
     assert bump_build('3.4.5-rc.1+0009.dev') == '3.4.5-rc.1+0010.dev'
     assert bump_build('3.4.5-rc.1') == '3.4.5-rc.1+build.1'
     assert bump_build('3.4.5') == '3.4.5+build.1'
+    assert bump_build('3.4.5', 'nightly') == '3.4.5+nightly.1'
+    assert bump_build('3.4.5', '') == '3.4.5+build.1'
 
 
 def test_should_compare_version_info_objects():
