@@ -336,7 +336,9 @@ def bump_prerelease(version, token='rc'):
     :rtype: str
     """
     verinfo = parse(version)
-    verinfo['prerelease'] = _increment_string(verinfo['prerelease'] or token + '.0')
+    verinfo['prerelease'] = _increment_string(
+        verinfo['prerelease'] or token + '.0'
+    )
     return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'],
                           verinfo['prerelease'])
 
