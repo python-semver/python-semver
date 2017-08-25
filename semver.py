@@ -328,7 +328,7 @@ def bump_patch(version):
                           verinfo['patch'] + 1)
 
 
-def bump_prerelease(version):
+def bump_prerelease(version, token='rc'):
     """Raise the prerelease part of the version
 
     :param: version string
@@ -336,12 +336,12 @@ def bump_prerelease(version):
     :rtype: str
     """
     verinfo = parse(version)
-    verinfo['prerelease'] = _increment_string(verinfo['prerelease'] or 'rc.0')
+    verinfo['prerelease'] = _increment_string(verinfo['prerelease'] or token + '.0')
     return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'],
                           verinfo['prerelease'])
 
 
-def bump_build(version):
+def bump_build(version, token='build'):
     """Raise the build part of the version
 
     :param: version string
@@ -349,6 +349,6 @@ def bump_build(version):
     :rtype: str
     """
     verinfo = parse(version)
-    verinfo['build'] = _increment_string(verinfo['build'] or 'build.0')
+    verinfo['build'] = _increment_string(verinfo['build'] or token + '.0')
     return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'],
                           verinfo['prerelease'], verinfo['build'])
