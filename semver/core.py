@@ -5,11 +5,6 @@ Python helper for Semantic Versioning (http://semver.org/)
 import collections
 import re
 
-
-__version__ = '2.7.8'
-__author__ = 'Kostiantyn Rybnikov'
-__author_email__ = 'k-bx@k-bx.com'
-
 _REGEX = re.compile(
         r"""
         ^

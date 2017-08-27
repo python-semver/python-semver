@@ -3,7 +3,7 @@ import semver as package
 from glob import glob
 from os import remove
 from os.path import dirname, join
-from setuptools import setup
+from setuptools import find_packages, setup
 from setuptools.command.test import test as TestCommand
 from shlex import split
 from shutil import rmtree
@@ -80,6 +80,7 @@ setup(
     url='https://github.com/k-bx/python-semver',
     download_url='https://github.com/k-bx/python-semver/downloads',
     py_modules=[package.__name__],
+    packages=find_packages(),
     include_package_data=True,
     license='BSD',
     classifiers=[

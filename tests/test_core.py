@@ -1,17 +1,9 @@
 import pytest  # noqa
 
-from semver import compare
-from semver import match
-from semver import parse
-from semver import format_version
-from semver import bump_major
-from semver import bump_minor
-from semver import bump_patch
-from semver import bump_prerelease
-from semver import bump_build
-from semver import min_ver
-from semver import max_ver
-from semver import VersionInfo
+from semver import (
+    VersionInfo, bump_major, bump_minor, bump_patch, bump_prerelease,
+    bump_build, compare, format_version, match, max_ver, min_ver, parse
+)
 
 
 SEMVERFUNCS = [
