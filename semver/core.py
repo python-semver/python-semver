@@ -5,29 +5,24 @@ Python helper for Semantic Versioning (http://semver.org/)
 import collections
 import re
 
-
-__version__ = '2.7.8'
-__author__ = 'Kostiantyn Rybnikov'
-__author_email__ = 'k-bx@k-bx.com'
-
 _REGEX = re.compile(
-        r"""
-        ^
-        (?P<major>(?:0|[1-9][0-9]*))
-        \.
-        (?P<minor>(?:0|[1-9][0-9]*))
-        \.
-        (?P<patch>(?:0|[1-9][0-9]*))
-        (\-(?P<prerelease>
-            (?:0|[1-9A-Za-z-][0-9A-Za-z-]*)
-            (\.(?:0|[1-9A-Za-z-][0-9A-Za-z-]*))*
-        ))?
-        (\+(?P<build>
-            [0-9A-Za-z-]+
-            (\.[0-9A-Za-z-]+)*
-        ))?
-        $
-        """, re.VERBOSE)
+    r"""
+    ^
+    (?P<major>(?:0|[1-9][0-9]*))
+    \.
+    (?P<minor>(?:0|[1-9][0-9]*))
+    \.
+    (?P<patch>(?:0|[1-9][0-9]*))
+    (\-(?P<prerelease>
+        (?:0|[1-9A-Za-z-][0-9A-Za-z-]*)
+        (\.(?:0|[1-9A-Za-z-][0-9A-Za-z-]*))*
+    ))?
+    (\+(?P<build>
+        [0-9A-Za-z-]+
+        (\.[0-9A-Za-z-]+)*
+    ))?
+    $
+    """, re.VERBOSE)
 
 _LAST_NUMBER = re.compile(r'(?:[^\d]*(\d+)[^\d]*)+')
 
@@ -122,8 +117,8 @@ def parse_version_info(version):
     """
     parts = parse(version)
     version_info = VersionInfo(
-            parts['major'], parts['minor'], parts['patch'],
-            parts['prerelease'], parts['build'])
+        parts['major'], parts['minor'], parts['patch'],
+        parts['prerelease'], parts['build'])
 
     return version_info
 
