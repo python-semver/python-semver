@@ -9,6 +9,7 @@ from semver import bump_minor
 from semver import bump_patch
 from semver import bump_prerelease
 from semver import bump_build
+from semver import finalize_version
 from semver import min_ver
 from semver import max_ver
 from semver import VersionInfo
@@ -17,7 +18,7 @@ from semver import VersionInfo
 SEMVERFUNCS = [
     compare, match, parse, format_version,
     bump_major, bump_minor, bump_patch, bump_prerelease, bump_build,
-    max_ver, min_ver,
+    max_ver, min_ver, finalize_version
 ]
 
 
@@ -275,6 +276,15 @@ def test_should_bump_build():
     assert bump_build('3.4.5') == '3.4.5+build.1'
     assert bump_build('3.4.5', 'nightly') == '3.4.5+nightly.1'
     assert bump_build('3.4.5', '') == '3.4.5+build.1'
+
+
+def test_should_finalize_version():
+    assert finalize_version('1.2.3') == '1.2.3'
+    assert finalize_version('1.2.3-rc.5') == '1.2.3'
+    assert finalize_version('1.2.3+build.2') == '1.2.3'
+    assert finalize_version('1.2.3-rc.1+build.5') == '1.2.3'
+    assert finalize_version('1.2.3-alpha') == '1.2.3'
+    assert finalize_version('1.2.0') == '1.2.0'
 
 
 def test_should_compare_version_info_objects():
