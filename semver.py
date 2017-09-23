@@ -358,3 +358,14 @@ def bump_build(version, token='build'):
     )
     return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'],
                           verinfo['prerelease'], verinfo['build'])
+
+
+def finalize_version(version):
+    """Remove any prerelease and build metadata from the version
+
+    :param version: version string
+    :return: the finalized version string
+    :rtype: str
+    """
+    verinfo = parse(version)
+    return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'])
