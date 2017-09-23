@@ -8,6 +8,14 @@ Python SemVer library
 All notable changes to this code base will be documented in this file,
 in every released version.
 
+Version 2.7.9
+=============
+
+:Released: 2017-09-23
+:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
+
+* Issue #65 (PR #66). Add finalize_version function
+
 Version 2.7.8
 =============
 

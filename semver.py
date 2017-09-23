@@ -6,7 +6,7 @@ import collections
 import re
 
 
-__version__ = '2.7.8'
+__version__ = '2.7.9'
 __author__ = 'Kostiantyn Rybnikov'
 __author_email__ = 'k-bx@k-bx.com'
 
