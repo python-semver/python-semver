@@ -68,6 +68,19 @@ This module provides just couple of functions, main of which are:
     >>> semver.min_ver("1.0.0", "2.0.0")
     '1.0.0'
 
+Old style
+.. code-block:: python
+   >>> import semver
+   >>> semver.parse('4.0')
+   4.0.0
+
+New style
+.. code-block:: python
+   >>> from semver import semver
+   >>> version = semver('3.2.1')
+   >>> print version
+   3.2.1
+   
 Installation
 ------------
 

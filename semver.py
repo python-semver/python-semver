@@ -5,7 +5,6 @@ Python helper for Semantic Versioning (http://semver.org/)
 import collections
 import re
 
-
 __version__ = '2.7.9'
 __author__ = 'Kostiantyn Rybnikov'
 __author_email__ = 'k-bx@k-bx.com'
@@ -14,10 +13,10 @@ _REGEX = re.compile(
         r"""
         ^
         (?P<major>(?:0|[1-9][0-9]*))
-        \.
-        (?P<minor>(?:0|[1-9][0-9]*))
-        \.
-        (?P<patch>(?:0|[1-9][0-9]*))
+        (\.
+        (?P<minor>(?:0|[1-9][0-9]*)))?
+        (\.
+        (?P<patch>(?:0|[1-9][0-9]*)))?
         (\-(?P<prerelease>
             (?:0|[1-9A-Za-z-][0-9A-Za-z-]*)
             (\.(?:0|[1-9A-Za-z-][0-9A-Za-z-]*))*
@@ -35,6 +34,19 @@ if not hasattr(__builtins__, 'cmp'):
     def cmp(a, b):
         return (a > b) - (a < b)
 
+class semver:
+  def __init__(self, version):
+    self.version = self.parse(version)
+
+  def __str__(self):
+    return str("%d.%d.%d" % (
+      self.version['major'],
+      self.version['minor'],
+      self.version['patch'],
+    ))
+
+  def parse(self, version):
+    return parse(version)
 
 def parse(version):
     """Parse version to major, minor, patch, pre-release, build parts.
@@ -52,8 +64,8 @@ def parse(version):
     version_parts = match.groupdict()
 
     version_parts['major'] = int(version_parts['major'])
-    version_parts['minor'] = int(version_parts['minor'])
-    version_parts['patch'] = int(version_parts['patch'])
+    version_parts['minor'] = int(version_parts['minor']) if version_parts['minor'] is not None else 0
+    version_parts['patch'] = int(version_parts['patch']) if version_parts['patch'] is not None else 0
 
     return version_parts
 
@@ -105,8 +117,7 @@ class VersionInfo(collections.namedtuple(
         if not isinstance(other, (VersionInfo, dict)):
             return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) >= 0
-
-
+ 
 def _to_dict(obj):
     if isinstance(obj, VersionInfo):
         return obj._asdict()
