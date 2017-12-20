@@ -69,13 +69,17 @@ This module provides just couple of functions, main of which are:
     '1.0.0'
 
 Old style
+
 .. code-block:: python
+
    >>> import semver
    >>> semver.parse('4.0')
    4.0.0
 
 New style
-.. code-block:: python
+
+.. code-block:: pythona
+
    >>> from semver import semver
    >>> version = semver('3.2.1')
    >>> print version
