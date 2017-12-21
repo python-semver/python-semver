@@ -8,6 +8,12 @@ Python SemVer library
 All notable changes to this code base will be documented in this file,
 in every released version.
 
+Version 2.8.0
+=============
+* Backwards compatible change to use objects
+* Versions will default to 0 for minor and patch when not supplied
+* Semver object will take string, tuple or list for version
+
 Version 2.7.9
 =============
 

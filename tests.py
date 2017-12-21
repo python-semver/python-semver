@@ -69,6 +69,26 @@ def test_should_parse_zero_prerelease():
         'build': 'build.0',
     }
 
+def test_should_add_zero_patch():
+    result = parse("1.1")
+    assert result == {
+        'major': 1,
+        'minor': 1,
+        'patch': 0,
+        'prerelease': None,
+        'build': None,
+    }
+
+def test_should_add_zero_minor():
+    result = parse("10")
+    assert result == {
+        'major': 10,
+        'minor': 0,
+        'patch': 0,
+        'prerelease': None,
+        'build': None,
+    }
+
 
 def test_should_get_less():
     assert compare("1.0.0", "2.0.0") == -1
@@ -80,7 +100,6 @@ def test_should_get_less():
     assert compare('1.0.0-beta.11', '1.0.0-rc.1') == -1
     assert compare('1.0.0-rc.1', '1.0.0') == -1
 
-
 def test_should_get_greater():
     assert compare("2.0.0", "1.0.0") == 1
     assert compare('1.0.0-alpha.1', '1.0.0-alpha') == 1
@@ -91,20 +110,19 @@ def test_should_get_greater():
     assert compare('1.0.0-rc.1', '1.0.0-beta.11') == 1
     assert compare('1.0.0', '1.0.0-rc.1') == 1
 
+def test_should_be_equal():
+    assert compare('1.0.0-alpha+1750', '1.0.0-alpha+1751') == 0
 
 def test_should_match_simple():
     assert match("2.3.7", ">=2.3.6") is True
 
-
 def test_should_no_match_simple():
     assert match("2.3.7", ">=2.3.8") is False
-
 
 def test_should_match_not_equal():
     assert match("2.3.7", "!=2.3.8") is True
     assert match("2.3.7", "!=2.3.6") is True
     assert match("2.3.7", "!=2.3.7") is False
-
 
 def test_should_not_raise_value_error_for_expected_match_expression():
     assert match("2.3.7", "<2.4.0") is True
@@ -137,8 +155,6 @@ def test_should_raise_value_error_for_zero_prefixed_versions():
 def test_should_raise_value_error_for_invalid_value():
     with pytest.raises(ValueError):
         compare('foo', 'bar')
-    with pytest.raises(ValueError):
-        compare('1.0', '1.0.0')
     with pytest.raises(ValueError):
         compare('1.x', '1.0.0')
 
@@ -352,3 +368,28 @@ def test_should_compare_prerelease_with_numbers_and_letters():
     v2 = VersionInfo(major=1, minor=9, patch=1, prerelease=None, build='1asd')
     assert v1 < v2
     assert compare("1.9.1-1unms", "1.9.1+1") == -1
+
+# v3 tests
+from semver import semver
+def test_should_make_obj():
+    v = semver("1.2.3")
+    assert isinstance(v, semver)
+
+def test_should_format_string():
+    v = semver("1.4.3")
+    assert v.format() == "1.4.3"
+
+def test_should_format_tuple():
+    v = semver((1,2,3))
+    assert v.format() == "1.2.3"
+  
+def test_should_compare_obj():
+    v = semver("1.2.3")
+    assert v.cmp(semver("1.2.3")) == 0
+
+def test_should_match_obj_not_equal():
+    v = semver("2.3.7")
+    assert v.match("!=2.3.8") is True
+    assert v.match("!=2.3.6") is True
+    assert v.match("!=2.3.7") is False
+ 

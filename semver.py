@@ -36,17 +36,102 @@ if not hasattr(__builtins__, 'cmp'):
 
 class semver:
   def __init__(self, version):
-    self.version = self.parse(version)
+    '''
+    param version: string, tuple or list
+    '''
+    version = self.parse(version)
+    self._set_attrs(version)
+
+  def _set_attrs(self, version):
+    # make nice attrs
+    self.major      = version['major']
+    self.minor      = version['minor']
+    self.patch      = version['patch']
+    self.prerelease = version['prerelease']
+    self.build      = version['build']
 
   def __str__(self):
-    return str("%d.%d.%d" % (
-      self.version['major'],
-      self.version['minor'],
-      self.version['patch'],
+    v = str("%d.%d.%d" % (
+      self.major,
+      self.minor,
+      self.patch,
     ))
 
-  def parse(self, version):
+    v = v + "-%s" % (self.prerelease) if self.prerelease is not None else v
+    v = v + "+%s" % (self.build) if self.build is not None else v
+
+    return v
+
+  # v2
+  def parse(self, *args):
+    '''
+    parse string "1.2.3", tuple (1,2,3), list [1,2,3]
+    '''
+    if type(args[0]) is str:
+      version = args[0]
+    elif type(args[0]) is tuple or type(args[0]) is list:
+      try:
+         version = str(args[0][0])
+         version = version + ".%s" % (args[0][1])
+         version = version + ".%s" % (args[0][2])
+         version = version + "-%s" % (args[0][3])
+         version = version + "+%s" % (args[0][4])
+      except IndexError as e:
+         pass
+
     return parse(version)
+  
+  # v2
+  def compare(self, v1, v2):
+    return compare(v1, v2)
+
+  # v3
+  def cmp(self, v2):
+    '''
+    compare self to other semverobj
+    '''
+    return compare(self.format(), v2.format())
+
+  # v2, v3
+  def match(self, expr):
+    version = self.format()
+    return match(version, expr)
+
+  # v2
+  def max_ver(self, v1, v2):
+    return self.max(v1, v2)
+
+  # v2
+  def min_ver(self, v1, v2):
+    return self.min(v1, v2)
+
+  # v3
+  def max(self, v1, v2):
+    return max_ver(v1, v2)
+
+  # v3
+  def min(self, v1, v2):
+    return min_ver(v1, v2)
+
+  # v2
+  def format_version(self, major, minor, patch, prerelease=None, build=None):
+    return self.format(major, minor, patch, prerelease, build)
+
+  # v3
+  def format(self, *args):
+    # accept args as (), [] and {}
+    if len(args) > 0:
+      v = self.parse(args[0])
+      self._set_attrs(v)
+
+    return format_version(
+      self.major,
+      self.minor,
+      self.patch,
+      self.prerelease,
+      self.build
+    )       
+        
 
 def parse(version):
     """Parse version to major, minor, patch, pre-release, build parts.
