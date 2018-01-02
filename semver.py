@@ -37,6 +37,7 @@ if not hasattr(__builtins__, 'cmp'):
         """
         return (_a > _b) - (_a < _b)
 
+
 class semver(object):
     """
     Object style version compare
@@ -64,8 +65,10 @@ class semver(object):
             self.patch,
         ))
 
-        _v = _v + "-%s" % (self.prerelease) if self.prerelease is not None else _v
-        _v = _v + "+%s" % (self.build) if self.build is not None else _v
+        _v = _v + "-%s" % (self.prerelease) \
+            if self.prerelease is not None else _v
+        _v = _v + "+%s" % (self.build) \
+            if self.build is not None else _v
 
         return _v
 
@@ -243,6 +246,7 @@ class VersionInfo(collections.namedtuple(
             return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) >= 0
 
+
 def _to_dict(obj):
     if isinstance(obj, VersionInfo):
         return obj._asdict()
@@ -287,7 +291,7 @@ def _nat_cmp(_a, _b):
             return -1
         elif isinstance(_b, int):
             return 1
-        
+
         return cmp(_a, _b)
 
     _a, _b = _a or '', _b or ''
@@ -327,6 +331,7 @@ def _compare_by_keys(d_1, d_2, strict=True):
 
     # seems equal
     return 0
+
 
 def compare(ver1, ver2, strict=True):
     """Compare two versions
