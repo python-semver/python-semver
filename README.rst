@@ -78,12 +78,21 @@ Old style
 
 New style
 
-.. code-block:: pythona
+.. code-block:: python
 
    >>> from semver import semver
    >>> version = semver('3.2.1')
    >>> print version
    3.2.1
+
+Non-strict comparison
+
+.. code-block:: python
+
+   >>> from semver import semver
+   >>> version = semver('1.2.3-alpha+1234')
+   >>> print version.cmp(semver('1.2.3-alpha+1235'), strict=False)
+   1 
    
 Installation
 ------------
