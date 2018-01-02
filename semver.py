@@ -10,129 +10,166 @@ __author__ = 'Kostiantyn Rybnikov'
 __author_email__ = 'k-bx@k-bx.com'
 
 _REGEX = re.compile(
-        r"""
-        ^
-        (?P<major>(?:0|[1-9][0-9]*))
-        (\.
-        (?P<minor>(?:0|[1-9][0-9]*)))?
-        (\.
-        (?P<patch>(?:0|[1-9][0-9]*)))?
-        (\-(?P<prerelease>
-            (?:0|[1-9A-Za-z-][0-9A-Za-z-]*)
-            (\.(?:0|[1-9A-Za-z-][0-9A-Za-z-]*))*
-        ))?
-        (\+(?P<build>
-            [0-9A-Za-z-]+
-            (\.[0-9A-Za-z-]+)*
-        ))?
-        $
-        """, re.VERBOSE)
+    r"""
+    ^
+    (?P<major>(?:0|[1-9][0-9]*))
+    (\.
+    (?P<minor>(?:0|[1-9][0-9]*)))?
+    (\.
+    (?P<patch>(?:0|[1-9][0-9]*)))?
+    (\-(?P<prerelease>
+        (?:0|[1-9A-Za-z-][0-9A-Za-z-]*)
+        (\.(?:0|[1-9A-Za-z-][0-9A-Za-z-]*))*
+    ))?
+    (\+(?P<build>
+        [0-9A-Za-z-]+
+        (\.[0-9A-Za-z-]+)*
+    ))?
+    $
+    """, re.VERBOSE)
 
 _LAST_NUMBER = re.compile(r'(?:[^\d]*(\d+)[^\d]*)+')
 
 if not hasattr(__builtins__, 'cmp'):
-    def cmp(a, b):
-        return (a > b) - (a < b)
+    def cmp(_a, _b):
+        """
+        Compare when not available
+        """
+        return (_a > _b) - (_a < _b)
 
-class semver:
-  def __init__(self, version):
-    '''
-    param version: string, tuple or list
-    param strict: when True (default) different buildversions compare equal
-    '''
-    version = self.parse(version)
-    self._set_attrs(version)
+class semver(object):
+    """
+    Object style version compare
+    """
+    def __init__(self, version):
+        '''
+        param version: string, tuple or list
+        param strict: when True (default) different buildversions compare equal
+        '''
+        version = self.parse(version)
+        self._set_attrs(version)
 
-  def _set_attrs(self, version):
-    # make nice attrs
-    self.major      = version['major']
-    self.minor      = version['minor']
-    self.patch      = version['patch']
-    self.prerelease = version['prerelease']
-    self.build      = version['build']
+    def _set_attrs(self, version):
+        # make nice attrs
+        self.major = version['major']
+        self.minor = version['minor']
+        self.patch = version['patch']
+        self.prerelease = version['prerelease']
+        self.build = version['build']
 
-  def __str__(self):
-    v = str("%d.%d.%d" % (
-      self.major,
-      self.minor,
-      self.patch,
-    ))
+    def __str__(self):
+        _v = str("%d.%d.%d" % (
+            self.major,
+            self.minor,
+            self.patch,
+        ))
 
-    v = v + "-%s" % (self.prerelease) if self.prerelease is not None else v
-    v = v + "+%s" % (self.build) if self.build is not None else v
+        _v = _v + "-%s" % (self.prerelease) if self.prerelease is not None else _v
+        _v = _v + "+%s" % (self.build) if self.build is not None else _v
 
-    return v
+        return _v
 
-  # v2
-  def parse(self, *args):
-    '''
-    parse string "1.2.3", tuple (1,2,3), list [1,2,3]
-    '''
-    if type(args[0]) is str:
-      version = args[0]
-    elif type(args[0]) is tuple or type(args[0]) is list:
-      try:
-         version = str(args[0][0])
-         version = version + ".%s" % (args[0][1])
-         version = version + ".%s" % (args[0][2])
-         version = version + "-%s" % (args[0][3])
-         version = version + "+%s" % (args[0][4])
-      except IndexError as e:
-         pass
+    # v2
+    @staticmethod
+    def parse(*args):
+        '''
+        parse string "1.2.3", tuple (1,2,3), list [1,2,3]
+        '''
+        if isinstance(args[0], str):
+            version = args[0]
+        elif isinstance(args[0], (tuple, list)):
+            try:
+                version = str(args[0][0])
+                version = version + ".%s" % (args[0][1])
+                version = version + ".%s" % (args[0][2])
+                version = version + "-%s" % (args[0][3])
+                version = version + "+%s" % (args[0][4])
+            except IndexError:
+                pass
 
-    return parse(version)
-  
-  # v2
-  def compare(self, v1, v2, strict=True):
-    return compare(v1, v2, strict)
+        return parse(version)
 
-  # v3
-  def cmp(self, v2, strict=True):
-    '''
-    compare self to other semverobj
-    '''
-    return compare(self.format(), v2.format(), strict)
+    # v2
+    @staticmethod
+    def compare(v_1, v_2, strict=True):
+        """
+        Compare two versions
+        param v_1 version 1
+        param v_2 version 2
+        param strict, False will compare buildnumbers as well
+        """
+        return compare(v_1, v_2, strict)
 
-  # v2, v3
-  def match(self, expr):
-    version = self.format()
-    return match(version, expr)
+    # v3
+    def cmp(self, v_2, strict=True):
+        '''
+        compare self to other semverobj
+        '''
+        return compare(self.format(), v_2.format(), strict)
 
-  # v2
-  def max_ver(self, v1, v2):
-    return self.max(v1, v2)
+    # v2, v3
+    def match(self, expr):
+        """
+        Compare two versions
+        """
+        version = self.format()
+        return match(version, expr)
 
-  # v2
-  def min_ver(self, v1, v2):
-    return self.min(v1, v2)
+    # v2
+    def max_ver(self, v_1, v_2):
+        """
+        Return highest version
+        """
+        return self.max(v_1, v_2)
 
-  # v3
-  def max(self, v1, v2):
-    return max_ver(v1, v2)
+    # v2
+    def min_ver(self, v_1, v_2):
+        """
+        Return lowest version
+        """
+        return self.min(v_1, v_2)
 
-  # v3
-  def min(self, v1, v2):
-    return min_ver(v1, v2)
+    # v3
+    @staticmethod
+    def max(v_1, v_2):
+        """
+        Return highest version
+        """
+        return max_ver(v_1, v_2)
 
-  # v2
-  def format_version(self, major, minor, patch, prerelease=None, build=None):
-    return self.format(major, minor, patch, prerelease, build)
+    # v3
+    @staticmethod
+    def min(v_1, v_2):
+        """
+        Return lowest version
+        """
+        return min_ver(v_1, v_2)
 
-  # v3
-  def format(self, *args):
-    # accept args as (), [] and {}
-    if len(args) > 0:
-      v = self.parse(args[0])
-      self._set_attrs(v)
+    # v2
+    def format_version(self, major, minor, patch, prerelease=None, build=None):
+        """
+        Return printable version number
+        """
+        return self.format(major, minor, patch, prerelease, build)
 
-    return format_version(
-      self.major,
-      self.minor,
-      self.patch,
-      self.prerelease,
-      self.build
-    )       
-        
+    # v3
+    def format(self, *args):
+        """
+        Return printable version number
+        """
+        # accept args as (), [] and {}
+        if args:
+            _v = self.parse(args[0])
+            self._set_attrs(_v)
+
+        return format_version(
+            self.major,
+            self.minor,
+            self.patch,
+            self.prerelease,
+            self.build
+        )
+
 
 def parse(version):
     """Parse version to major, minor, patch, pre-release, build parts.
@@ -143,15 +180,17 @@ def parse(version):
              if not provided
     :rtype: dict
     """
-    match = _REGEX.match(version)
-    if match is None:
+    _match = _REGEX.match(version)
+    if _match is None:
         raise ValueError('%s is not valid SemVer string' % version)
 
-    version_parts = match.groupdict()
+    version_parts = _match.groupdict()
 
     version_parts['major'] = int(version_parts['major'])
-    version_parts['minor'] = int(version_parts['minor']) if version_parts['minor'] is not None else 0
-    version_parts['patch'] = int(version_parts['patch']) if version_parts['patch'] is not None else 0
+    version_parts['minor'] = int(version_parts['minor']) \
+        if version_parts['minor'] is not None else 0
+    version_parts['patch'] = int(version_parts['patch']) \
+        if version_parts['patch'] is not None else 0
 
     return version_parts
 
@@ -203,7 +242,7 @@ class VersionInfo(collections.namedtuple(
         if not isinstance(other, (VersionInfo, dict)):
             return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) >= 0
- 
+
 def _to_dict(obj):
     if isinstance(obj, VersionInfo):
         return obj._asdict()
@@ -219,64 +258,73 @@ def parse_version_info(version):
     """
     parts = parse(version)
     version_info = VersionInfo(
-            parts['major'], parts['minor'], parts['patch'],
-            parts['prerelease'], parts['build'])
+        parts['major'], parts['minor'], parts['patch'],
+        parts['prerelease'], parts['build'])
 
     return version_info
 
 
-def _nat_cmp(a, b):
+def _nat_cmp(_a, _b):
     def convert(text):
+        """
+        Return a number if version is only number
+        """
         return int(text) if re.match('^[0-9]+$', text) else text
 
     def split_key(key):
-        return [convert(c) for c in key.split('.')]
+        """
+        Split dotted number and convert if possible
+        """
+        return [convert(_c) for _c in key.split('.')]
 
-    def cmp_prerelease_tag(a, b):
-        if isinstance(a, int) and isinstance(b, int):
-            return cmp(a, b)
-        elif isinstance(a, int):
+    def cmp_prerelease_tag(_a, _b):
+        """
+        Compare prerelease numbers
+        """
+        if isinstance(_a, int) and isinstance(_b, int):
+            return cmp(_a, _b)
+        elif isinstance(_a, int):
             return -1
-        elif isinstance(b, int):
+        elif isinstance(_b, int):
             return 1
-        else:
-            return cmp(a, b)
+        
+        return cmp(_a, _b)
 
-    a, b = a or '', b or ''
-    a_parts, b_parts = split_key(a), split_key(b)
+    _a, _b = _a or '', _b or ''
+    a_parts, b_parts = split_key(_a), split_key(_b)
     for sub_a, sub_b in zip(a_parts, b_parts):
         cmp_result = cmp_prerelease_tag(sub_a, sub_b)
         if cmp_result != 0:
             return cmp_result
-    else:
-        return cmp(len(a), len(b))
+
+    return cmp(len(_a), len(_b))
 
 
-def _compare_by_keys(d1, d2, strict=True):
+def _compare_by_keys(d_1, d_2, strict=True):
     # v is zero when all parts match
     for key in ['major', 'minor', 'patch']:
-        v = cmp(d1.get(key), d2.get(key))
-        if v:
-            return v
+        _v = cmp(d_1.get(key), d_2.get(key))
+        if _v:
+            return _v
 
     # parts are equal, test prerelease
-    rc1, rc2 = d1.get('prerelease'), d2.get('prerelease')
-    rccmp = _nat_cmp(rc1, rc2)
+    rc_1, rc_2 = d_1.get('prerelease'), d_2.get('prerelease')
+    rccmp = _nat_cmp(rc_1, rc_2)
 
     if rccmp:
-      if not rc1:
-        return 1
-      elif not rc2:
-        return -1
-      else:
+        if not rc_1:
+            return 1
+        elif not rc_2:
+            return -1
+
         return rccmp
 
     # compare buildnumber if not strict and all numbers are equal
-    if False == strict:
-       b1, b2 = d1.get('build'), d2.get('build')
-       bcmp = _nat_cmp(b2, b1)
-       return bcmp
-    
+    if not strict:
+        b_1, b_2 = d_1.get('build'), d_2.get('build')
+        bcmp = _nat_cmp(b_2, b_1)
+        return bcmp
+
     # seems equal
     return 0
 
@@ -290,9 +338,9 @@ def compare(ver1, ver2, strict=True):
     :rtype: int
     """
 
-    v1, v2 = parse(ver1), parse(ver2)
+    v_1, v_2 = parse(ver1), parse(ver2)
 
-    return _compare_by_keys(v1, v2, strict)
+    return _compare_by_keys(v_1, v_2, strict)
 
 
 def match(version, match_expr):
@@ -347,8 +395,8 @@ def max_ver(ver1, ver2):
     cmp_res = compare(ver1, ver2)
     if cmp_res == 0 or cmp_res == 1:
         return ver1
-    else:
-        return ver2
+
+    return ver2
 
 
 def min_ver(ver1, ver2):
@@ -362,8 +410,8 @@ def min_ver(ver1, ver2):
     cmp_res = compare(ver1, ver2)
     if cmp_res == 0 or cmp_res == -1:
         return ver1
-    else:
-        return ver2
+
+    return ver2
 
 
 def format_version(major, minor, patch, prerelease=None, build=None):
@@ -392,10 +440,10 @@ def _increment_string(string):
     Look for the last sequence of number(s) in a string and increment, from:
     http://code.activestate.com/recipes/442460-increment-numbers-in-a-string/#c1
     """
-    match = _LAST_NUMBER.search(string)
-    if match:
-        next_ = str(int(match.group(1)) + 1)
-        start, end = match.span(1)
+    _match = _LAST_NUMBER.search(string)
+    if _match:
+        next_ = str(int(_match.group(1)) + 1)
+        start, end = _match.span(1)
         string = string[:max(end - len(next_), start)] + next_ + string[end:]
     return string
 
