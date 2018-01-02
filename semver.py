@@ -38,6 +38,7 @@ class semver:
   def __init__(self, version):
     '''
     param version: string, tuple or list
+    param strict: when True (default) different buildversions compare equal
     '''
     version = self.parse(version)
     self._set_attrs(version)
@@ -82,15 +83,15 @@ class semver:
     return parse(version)
   
   # v2
-  def compare(self, v1, v2):
-    return compare(v1, v2)
+  def compare(self, v1, v2, strict=True):
+    return compare(v1, v2, strict)
 
   # v3
-  def cmp(self, v2):
+  def cmp(self, v2, strict=True):
     '''
     compare self to other semverobj
     '''
-    return compare(self.format(), v2.format())
+    return compare(self.format(), v2.format(), strict)
 
   # v2, v3
   def match(self, expr):
@@ -251,26 +252,35 @@ def _nat_cmp(a, b):
         return cmp(len(a), len(b))
 
 
-def _compare_by_keys(d1, d2):
+def _compare_by_keys(d1, d2, strict=True):
+    # v is zero when all parts match
     for key in ['major', 'minor', 'patch']:
         v = cmp(d1.get(key), d2.get(key))
         if v:
             return v
 
+    # parts are equal, test prerelease
     rc1, rc2 = d1.get('prerelease'), d2.get('prerelease')
     rccmp = _nat_cmp(rc1, rc2)
 
-    if not rccmp:
-        return 0
-    if not rc1:
+    if rccmp:
+      if not rc1:
         return 1
-    elif not rc2:
+      elif not rc2:
         return -1
+      else:
+        return rccmp
 
-    return rccmp
+    # compare buildnumber if not strict and all numbers are equal
+    if False == strict:
+       b1, b2 = d1.get('build'), d2.get('build')
+       bcmp = _nat_cmp(b2, b1)
+       return bcmp
+    
+    # seems equal
+    return 0
 
-
-def compare(ver1, ver2):
+def compare(ver1, ver2, strict=True):
     """Compare two versions
 
     :param ver1: version string 1
@@ -282,7 +292,7 @@ def compare(ver1, ver2):
 
     v1, v2 = parse(ver1), parse(ver2)
 
-    return _compare_by_keys(v1, v2)
+    return _compare_by_keys(v1, v2, strict)
 
 
 def match(version, match_expr):

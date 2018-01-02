@@ -110,8 +110,11 @@ def test_should_get_greater():
     assert compare('1.0.0-rc.1', '1.0.0-beta.11') == 1
     assert compare('1.0.0', '1.0.0-rc.1') == 1
 
+    assert compare('1.0.0-alpha+1234', '1.0.0-alpha+1235', strict=False) == 1
+
 def test_should_be_equal():
     assert compare('1.0.0-alpha+1750', '1.0.0-alpha+1751') == 0
+
 
 def test_should_match_simple():
     assert match("2.3.7", ">=2.3.6") is True
@@ -392,4 +395,12 @@ def test_should_match_obj_not_equal():
     assert v.match("!=2.3.8") is True
     assert v.match("!=2.3.6") is True
     assert v.match("!=2.3.7") is False
- 
+
+def test_should_match_equal_normal():
+    v = semver("1.2.3-alpha+1234")
+    assert v.cmp(semver("1.2.3-alpha+1235")) == 0
+
+def test_should_match_greater_strict():
+    v = semver("1.2.3-alpha+1234")
+    assert v.cmp(semver("1.2.3-alpha+1235"), strict=False) == 1
+
