@@ -13,6 +13,7 @@ from semver import finalize_version
 from semver import min_ver
 from semver import max_ver
 from semver import VersionInfo
+from semver import parse_version_info
 
 
 SEMVERFUNCS = [
@@ -352,3 +353,11 @@ def test_should_compare_prerelease_with_numbers_and_letters():
     v2 = VersionInfo(major=1, minor=9, patch=1, prerelease=None, build='1asd')
     assert v1 < v2
     assert compare("1.9.1-1unms", "1.9.1+1") == -1
+
+
+def test_parse_version_info_str_hash():
+    s_version = "1.2.3-alpha.1.2+build.11.e0f985a"
+    v = parse_version_info(s_version)
+    assert v.__str__() == s_version
+    d = {}
+    d[v] = ""  # to ensure that VersionInfo are hashable
