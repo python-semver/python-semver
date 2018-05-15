@@ -3,9 +3,6 @@ install: pip install "virtualenv<14.0.0"
 script: python setup.py test
 matrix:
   include:
-  - python: "2.6"
-    env: TOXENV=py26
-
   - python: "2.7"
     env: TOXENV=py27
 
