@@ -107,12 +107,7 @@ class VersionInfo(collections.namedtuple(
         return _compare_by_keys(self._asdict(), _to_dict(other)) >= 0
 
     def __str__(self):
-        return (str(self.major) or '') \
-            + (('.' + str(self.minor)) if self.minor is not None else '') \
-            + (('.' + str(self.patch)) if self.patch is not None else '') \
-            + (('-' + str(self.prerelease)) if self.prerelease is not None
-                else '') \
-            + (('+' + str(self.build)) if self.build is not None else '')
+        return format_version(*self)
 
     def __hash__(self):
         return hash(tuple(self))
