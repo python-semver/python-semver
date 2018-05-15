@@ -106,6 +106,12 @@ class VersionInfo(collections.namedtuple(
             return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) >= 0
 
+    def __str__(self):
+        return format_version(*self)
+
+    def __hash__(self):
+        return hash(tuple(self))
+
 
 def _to_dict(obj):
     if isinstance(obj, VersionInfo):
