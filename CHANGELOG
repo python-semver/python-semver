@@ -14,6 +14,7 @@ Version 2.8.1 (WIP)
 :Maintainer: Sébastien Celles <s.celles@gmail.com>
 
 * Issue #77 (PR #47). Convert multiple tests into pytest.mark.parametrize
+* Issue #89 (PR #90). Add doctests.
 
 Version 2.8.0
 =============
