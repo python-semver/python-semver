@@ -6,9 +6,11 @@ import collections
 import re
 
 
-__version__ = '2.7.9'
+__version__ = '2.8.0'
 __author__ = 'Kostiantyn Rybnikov'
 __author_email__ = 'k-bx@k-bx.com'
+__maintainer__ = 'Sebastien Celles'
+__maintainer_email__ = "s.celles@gmail.com"
 
 _REGEX = re.compile(
         r"""
