@@ -408,3 +408,9 @@ def test_parse_version_info_str_hash():
     assert v.__str__() == s_version
     d = {}
     d[v] = ""  # to ensure that VersionInfo are hashable
+
+
+def test_parse_method_for_version_info():
+    s_version = "1.2.3-alpha.1.2+build.11.e0f985a"
+    v = VersionInfo.parse(s_version)
+    assert str(v) == s_version
