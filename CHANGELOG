@@ -17,6 +17,7 @@ Version 2.8.0
 * Issue #79 (PR #81 #84). Define and improve a release procedure file
 * Issue #72 #73 (PR #75). Implements __str__ and __hash__
 * Issue #82 (PR #83). Rename test.py to test_semver.py so py.test can autodiscover test file
+* Issue #77 (PR #47). Convert multiple tests into pytest.mark.parametrize
 
 Version 2.7.9
 =============
