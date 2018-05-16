@@ -29,68 +29,82 @@ def test_fordocstrings(func):
     assert func.__doc__, "Need a docstring for function %r" % func.__name
 
 
-def test_should_parse_version():
-    result = parse("1.2.3-alpha.1.2+build.11.e0f985a")
-    assert result == {
+@pytest.mark.parametrize("version,expected", [
+    # no. 1
+    ("1.2.3-alpha.1.2+build.11.e0f985a",
+     {
         'major': 1,
         'minor': 2,
         'patch': 3,
         'prerelease': 'alpha.1.2',
         'build': 'build.11.e0f985a',
-    }
-
-    result = parse("1.2.3-alpha-1+build.11.e0f985a")
-    assert result == {
+        }),
+    # no. 2
+    ("1.2.3-alpha-1+build.11.e0f985a",
+     {
         'major': 1,
         'minor': 2,
         'patch': 3,
         'prerelease': 'alpha-1',
         'build': 'build.11.e0f985a',
-    }
+        }),
+])
+def test_should_parse_version(version, expected):
+    result = parse(version)
+    assert result == expected
 
 
-def test_should_parse_zero_prerelease():
-    result = parse("1.2.3-rc.0+build.0")
-
-    assert result == {
+@pytest.mark.parametrize("version,expected", [
+    # no. 1
+    ("1.2.3-rc.0+build.0",
+     {
         'major': 1,
         'minor': 2,
         'patch': 3,
         'prerelease': 'rc.0',
         'build': 'build.0',
-    }
-
-    result = parse("1.2.3-rc.0.0+build.0")
-
-    assert result == {
+        }),
+    # no. 2
+    ("1.2.3-rc.0.0+build.0",
+     {
         'major': 1,
         'minor': 2,
         'patch': 3,
         'prerelease': 'rc.0.0',
         'build': 'build.0',
-    }
+        }),
+])
+def test_should_parse_zero_prerelease(version, expected):
+    result = parse(version)
+    assert result == expected
 
 
-def test_should_get_less():
-    assert compare("1.0.0", "2.0.0") == -1
-    assert compare('1.0.0-alpha', '1.0.0-alpha.1') == -1
-    assert compare('1.0.0-alpha.1', '1.0.0-alpha.beta') == -1
-    assert compare('1.0.0-alpha.beta', '1.0.0-beta') == -1
-    assert compare('1.0.0-beta', '1.0.0-beta.2') == -1
-    assert compare('1.0.0-beta.2', '1.0.0-beta.11') == -1
-    assert compare('1.0.0-beta.11', '1.0.0-rc.1') == -1
-    assert compare('1.0.0-rc.1', '1.0.0') == -1
+@pytest.mark.parametrize("left,right", [
+    ("1.0.0", "2.0.0"),
+    ('1.0.0-alpha', '1.0.0-alpha.1'),
+    ('1.0.0-alpha.1', '1.0.0-alpha.beta'),
+    ('1.0.0-alpha.beta', '1.0.0-beta'),
+    ('1.0.0-beta', '1.0.0-beta.2'),
+    ('1.0.0-beta.2', '1.0.0-beta.11'),
+    ('1.0.0-beta.11', '1.0.0-rc.1'),
+    ('1.0.0-rc.1', '1.0.0'),
+])
+def test_should_get_less(left, right):
+    assert compare(left, right) == -1
 
 
-def test_should_get_greater():
-    assert compare("2.0.0", "1.0.0") == 1
-    assert compare('1.0.0-alpha.1', '1.0.0-alpha') == 1
-    assert compare('1.0.0-alpha.beta', '1.0.0-alpha.1') == 1
-    assert compare('1.0.0-beta', '1.0.0-alpha.beta') == 1
-    assert compare('1.0.0-beta.2', '1.0.0-beta') == 1
-    assert compare('1.0.0-beta.11', '1.0.0-beta.2') == 1
-    assert compare('1.0.0-rc.1', '1.0.0-beta.11') == 1
-    assert compare('1.0.0', '1.0.0-rc.1') == 1
+@pytest.mark.parametrize("left,right", [
+    ("2.0.0", "1.0.0"),
+    ('1.0.0-alpha.1', '1.0.0-alpha'),
+    ('1.0.0-alpha.beta', '1.0.0-alpha.1'),
+    ('1.0.0-beta', '1.0.0-alpha.beta'),
+    ('1.0.0-beta.2', '1.0.0-beta'),
+    ('1.0.0-beta.11', '1.0.0-beta.2'),
+    ('1.0.0-rc.1', '1.0.0-beta.11'),
+    ('1.0.0', '1.0.0-rc.1')
+])
+def test_should_get_greater(left, right):
+    assert compare(left, right) == 1
 
 
 def test_should_match_simple():
@@ -101,56 +115,63 @@ def test_should_no_match_simple():
     assert match("2.3.7", ">=2.3.8") is False
 
 
-def test_should_match_not_equal():
-    assert match("2.3.7", "!=2.3.8") is True
-    assert match("2.3.7", "!=2.3.6") is True
-    assert match("2.3.7", "!=2.3.7") is False
+@pytest.mark.parametrize("left,right,expected", [
+    ("2.3.7", "!=2.3.8", True),
+    ("2.3.7", "!=2.3.6", True),
+    ("2.3.7", "!=2.3.7", False),
+])
+def test_should_match_not_equal(left, right, expected):
+    assert match(left, right) is expected
 
 
-def test_should_not_raise_value_error_for_expected_match_expression():
-    assert match("2.3.7", "<2.4.0") is True
-    assert match("2.3.7", ">2.3.5") is True
-
-    assert match("2.3.7", "<=2.3.9") is True
-    assert match("2.3.7", ">=2.3.5") is True
-    assert match("2.3.7", "==2.3.7") is True
-    assert match("2.3.7", "!=2.3.7") is False
-
-
-def test_should_raise_value_error_for_unexpected_match_expression():
-    with pytest.raises(ValueError):
-        match("2.3.7", "=2.3.7")
-    with pytest.raises(ValueError):
-        match("2.3.7", "~2.3.7")
-    with pytest.raises(ValueError):
-        match("2.3.7", "^2.3.7")
+@pytest.mark.parametrize("left,right,expected", [
+    ("2.3.7", "<2.4.0", True),
+    ("2.3.7", ">2.3.5", True),
+    ("2.3.7", "<=2.3.9", True),
+    ("2.3.7", ">=2.3.5", True),
+    ("2.3.7", "==2.3.7", True),
+    ("2.3.7", "!=2.3.7", False),
+])
+def test_should_not_raise_value_error_for_expected_match_expression(left,
+                                                                    right,
+                                                                    expected):
+    assert match(left, right) is expected
 
 
-def test_should_raise_value_error_for_zero_prefixed_versions():
+@pytest.mark.parametrize("left,right", [
+    ("2.3.7", "=2.3.7"),
+    ("2.3.7", "~2.3.7"),
+    ("2.3.7", "^2.3.7"),
+])
+def test_should_raise_value_error_for_unexpected_match_expression(left, right):
     with pytest.raises(ValueError):
-        parse("01.2.3")
-    with pytest.raises(ValueError):
-        parse("1.02.3")
-    with pytest.raises(ValueError):
-        parse("1.2.03")
+        match(left, right)
 
 
-def test_should_raise_value_error_for_invalid_value():
+@pytest.mark.parametrize("version", ["01.2.3", "1.02.3", "1.2.03"])
+def test_should_raise_value_error_for_zero_prefixed_versions(version):
     with pytest.raises(ValueError):
-        compare('foo', 'bar')
-    with pytest.raises(ValueError):
-        compare('1.0', '1.0.0')
-    with pytest.raises(ValueError):
-        compare('1.x', '1.0.0')
+        parse(version)
 
 
-def test_should_raise_value_error_for_invalid_match_expression():
+@pytest.mark.parametrize("left,right", [
+    ('foo', 'bar'),
+    ('1.0', '1.0.0'),
+    ('1.x', '1.0.0'),
+])
+def test_should_raise_value_error_for_invalid_value(left, right):
     with pytest.raises(ValueError):
-        match('1.0.0', '')
+        compare(left, right)
+
+
+@pytest.mark.parametrize("left,right", [
+    ('1.0.0', ''),
+    ('1.0.0', '!'),
+    ('1.0.0', '1.0.0'),
+])
+def test_should_raise_value_error_for_invalid_match_expression(left, right):
     with pytest.raises(ValueError):
-        match('1.0.0', '!')
-    with pytest.raises(ValueError):
-        match('1.0.0', '1.0.0')
+        match(left, right)
 
 
 def test_should_follow_specification_comparison():
@@ -173,32 +194,47 @@ def test_should_follow_specification_comparison():
             '%s should be higher than %s' % (high_version, low_version)
 
 
-def test_should_compare_rc_builds():
-    assert compare('1.0.0-beta.2', '1.0.0-beta.11') == -1
+@pytest.mark.parametrize("left,right", [
+    ('1.0.0-beta.2', '1.0.0-beta.11'),
+])
+def test_should_compare_rc_builds(left, right):
+    assert compare(left, right) == -1
 
 
-def test_should_compare_release_candidate_with_release():
-    assert compare('1.0.0-rc.1', '1.0.0') == -1
-    assert compare('1.0.0-rc.1+build.1', '1.0.0') == -1
+@pytest.mark.parametrize("left,right", [
+    ('1.0.0-rc.1', '1.0.0'),
+    ('1.0.0-rc.1+build.1', '1.0.0'),
+])
+def test_should_compare_release_candidate_with_release(left, right):
+    assert compare(left, right) == -1
 
 
-def test_should_say_equal_versions_are_equal():
-    assert compare('2.0.0', '2.0.0') == 0
-    assert compare('1.1.9-rc.1', '1.1.9-rc.1') == 0
-    assert compare('1.1.9+build.1', '1.1.9+build.1') == 0
-    assert compare('1.1.9-rc.1+build.1', '1.1.9-rc.1+build.1') == 0
+@pytest.mark.parametrize("left,right", [
+    ('2.0.0', '2.0.0'),
+    ('1.1.9-rc.1', '1.1.9-rc.1'),
+    ('1.1.9+build.1', '1.1.9+build.1'),
+    ('1.1.9-rc.1+build.1', '1.1.9-rc.1+build.1'),
+])
+def test_should_say_equal_versions_are_equal(left, right):
+    assert compare(left, right) == 0
 
 
-def test_should_compare_versions_with_build_and_release():
-    assert compare('1.1.9-rc.1', '1.1.9-rc.1+build.1') == 0
-    assert compare('1.1.9-rc.1', '1.1.9+build.1') == -1
+@pytest.mark.parametrize("left,right,expected", [
+    ('1.1.9-rc.1', '1.1.9-rc.1+build.1', 0),
+    ('1.1.9-rc.1', '1.1.9+build.1', -1),
+])
+def test_should_compare_versions_with_build_and_release(left, right, expected):
+    assert compare(left, right) == expected
 
 
-def test_should_ignore_builds_on_compare():
-    assert compare('1.0.0+build.1', '1.0.0') == 0
-    assert compare('1.0.0-alpha.1+build.1', '1.0.0-alpha.1') == 0
-    assert compare('1.0.0+build.1', '1.0.0-alpha.1') == 1
-    assert compare('1.0.0+build.1', '1.0.0-alpha.1+build.1') == 1
+@pytest.mark.parametrize("left,right,expected", [
+    ('1.0.0+build.1', '1.0.0', 0),
+    ('1.0.0-alpha.1+build.1', '1.0.0-alpha.1', 0),
+    ('1.0.0+build.1', '1.0.0-alpha.1', 1),
+    ('1.0.0+build.1', '1.0.0-alpha.1+build.1', 1),
+])
+def test_should_ignore_builds_on_compare(left, right, expected):
+    assert compare(left, right) == expected
 
 
 def test_should_correctly_format_version():
@@ -241,51 +277,62 @@ def test_should_get_more_rc1():
     assert compare("1.0.0-rc1", "1.0.0-rc0") == 1
 
 
-def test_prerelease_order():
-    assert min_ver('1.2.3-rc.2', '1.2.3-rc.10') == '1.2.3-rc.2'
-    assert min_ver('1.2.3-rc2', '1.2.3-rc10') == '1.2.3-rc10'
+@pytest.mark.parametrize("left,right,expected", [
+    ('1.2.3-rc.2', '1.2.3-rc.10', '1.2.3-rc.2'),
+    ('1.2.3-rc2', '1.2.3-rc10', '1.2.3-rc10'),
     # identifiers with letters or hyphens are compared lexically in ASCII sort
     # order.
-    assert min_ver('1.2.3-Rc10', '1.2.3-rc10') == '1.2.3-Rc10'
+    ('1.2.3-Rc10', '1.2.3-rc10', '1.2.3-Rc10'),
     # Numeric identifiers always have lower precedence than non-numeric
     # identifiers.
-    assert min_ver('1.2.3-2', '1.2.3-rc') == '1.2.3-2'
+    ('1.2.3-2', '1.2.3-rc', '1.2.3-2'),
     # A larger set of pre-release fields has a higher precedence than a
     # smaller set, if all of the preceding identifiers are equal.
-    assert min_ver('1.2.3-rc.2.1', '1.2.3-rc.2') == '1.2.3-rc.2'
+    ('1.2.3-rc.2.1', '1.2.3-rc.2', '1.2.3-rc.2'),
     # When major, minor, and patch are equal, a pre-release version has lower
     # precedence than a normal version.
-    assert min_ver('1.2.3', '1.2.3-1') == '1.2.3-1'
-    assert min_ver('1.0.0-alpha', '1.0.0-alpha.1') == '1.0.0-alpha'
+    ('1.2.3', '1.2.3-1', '1.2.3-1'),
+    ('1.0.0-alpha', '1.0.0-alpha.1', '1.0.0-alpha')
+])
+def test_prerelease_order(left, right, expected):
+    assert min_ver(left, right) == expected
 
 
-def test_should_bump_prerelease():
-    assert bump_prerelease('3.4.5-rc.9') == '3.4.5-rc.10'
-    assert bump_prerelease('3.4.5') == '3.4.5-rc.1'
-    assert bump_prerelease('3.4.5', 'dev') == '3.4.5-dev.1'
-    assert bump_prerelease('3.4.5', '') == '3.4.5-rc.1'
+@pytest.mark.parametrize("version,token,expected", [
+    ('3.4.5-rc.9', None, '3.4.5-rc.10'),
+    ('3.4.5', None, '3.4.5-rc.1'),
+    ('3.4.5', 'dev', '3.4.5-dev.1'),
+    ('3.4.5', '', '3.4.5-rc.1'),
+])
+def test_should_bump_prerelease(version, token, expected):
+    token = "rc" if not token else token
+    assert bump_prerelease(version, token) == expected
 
 
 def test_should_ignore_build_on_prerelease_bump():
     assert bump_prerelease('3.4.5-rc.1+build.4') == '3.4.5-rc.2'
 
 
-def test_should_bump_build():
-    assert bump_build('3.4.5-rc.1+build.9') == '3.4.5-rc.1+build.10'
-    assert bump_build('3.4.5-rc.1+0009.dev') == '3.4.5-rc.1+0010.dev'
-    assert bump_build('3.4.5-rc.1') == '3.4.5-rc.1+build.1'
-    assert bump_build('3.4.5') == '3.4.5+build.1'
-    assert bump_build('3.4.5', 'nightly') == '3.4.5+nightly.1'
-    assert bump_build('3.4.5', '') == '3.4.5+build.1'
+@pytest.mark.parametrize("version,expected", [
+    ('3.4.5-rc.1+build.9', '3.4.5-rc.1+build.10'),
+    ('3.4.5-rc.1+0009.dev', '3.4.5-rc.1+0010.dev'),
+    ('3.4.5-rc.1', '3.4.5-rc.1+build.1'),
+    ('3.4.5', '3.4.5+build.1'),
+])
+def test_should_bump_build(version, expected):
+    assert bump_build(version) == expected
 
 
-def test_should_finalize_version():
-    assert finalize_version('1.2.3') == '1.2.3'
-    assert finalize_version('1.2.3-rc.5') == '1.2.3'
-    assert finalize_version('1.2.3+build.2') == '1.2.3'
-    assert finalize_version('1.2.3-rc.1+build.5') == '1.2.3'
-    assert finalize_version('1.2.3-alpha') == '1.2.3'
-    assert finalize_version('1.2.0') == '1.2.0'
+@pytest.mark.parametrize("version,expected", [
+    ('1.2.3', '1.2.3'),
+    ('1.2.3-rc.5', '1.2.3'),
+    ('1.2.3+build.2', '1.2.3'),
+    ('1.2.3-rc.1+build.5', '1.2.3'),
+    ('1.2.3-alpha', '1.2.3'),
+    ('1.2.0', '1.2.0'),
+])
+def test_should_finalize_version(version, expected):
+    assert finalize_version(version) == expected
 
 
 def test_should_compare_version_info_objects():
