@@ -304,9 +304,9 @@ def test_prerelease_order(left, right, expected):
     ('3.4.5', 'dev', '3.4.5-dev.1'),
     ('3.4.5', '', '3.4.5-rc.1'),
 ])
-def test_should_bump_prerelease(version, expected):
-    token = "rc" if token is None else token
-    assert bump_prerelease(version) == expected
+def test_should_bump_prerelease(version, token, expected):
+    token = "rc" if not token else token
+    assert bump_prerelease(version, token) == expected
 
 
 def test_should_ignore_build_on_prerelease_bump():
@@ -331,7 +331,7 @@ def test_should_bump_build(version, expected):
     ('1.2.3-alpha', '1.2.3'),
     ('1.2.0', '1.2.0'),
 ])
-def test_should_finalize_version():
+def test_should_finalize_version(version, expected):
     assert finalize_version(version) == expected
 
 
