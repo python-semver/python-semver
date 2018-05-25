@@ -49,6 +49,9 @@ This module provides just couple of functions, main of which are:
     ...     'prerelease': 'pre.2', 'build': 'build.4'}
     True
     >>> version_info = semver.parse_version_info("3.4.5-pre.2+build.4")
+    >>> # or using static method parse
+    >>> from semver import VersionInfo
+    >>> version_info = VersionInfo.parse("3.4.5-pre.2+build.4")
     >>> version_info
     VersionInfo(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')
     >>> version_info.major

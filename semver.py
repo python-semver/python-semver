@@ -121,6 +121,21 @@ class VersionInfo(collections.namedtuple(
     def __hash__(self):
         return hash(tuple(self))
 
+    @staticmethod
+    def parse(version):
+        """Parse version string to a VersionInfo instance.
+
+        >>> from semver import VersionInfo
+        >>> VersionInfo.parse('3.4.5-pre.2+build.4')
+        VersionInfo(major=3, minor=4, patch=5, \
+prerelease='pre.2', build='build.4')
+
+        :param version: version string
+        :return: a :class:`VersionInfo` instance
+        :rtype: :class:`VersionInfo`
+        """
+        return parse_version_info(version)
+
 
 def _to_dict(obj):
     if isinstance(obj, VersionInfo):
