@@ -48,7 +48,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'semver'
+project = 'python-semver'
 copyright = '2018, Kostiantyn Rybnikov and all'
 author = 'Kostiantyn Rybnikov and all'
 
@@ -145,7 +145,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'semver.tex', 'semver Documentation',
+    (master_doc, 'semver.tex', 'python-semver Documentation',
      'Kostiantyn Rybnikov and all', 'manual'),
 ]
 
@@ -155,7 +155,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'semver', 'semver Documentation',
+    (master_doc, 'semver', 'python-semver Documentation',
      [author], 1)
 ]
 
@@ -166,7 +166,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'semver', 'semver Documentation',
+    (master_doc, 'semver', 'python-semver Documentation',
      author, 'semver', 'One line description of project.',
      'Miscellaneous'),
 ]
