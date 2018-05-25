@@ -4,7 +4,7 @@
 
 * Verify that [CHANGELOG](https://github.com/k-bx/python-semver/blob/master/CHANGELOG) have been updated
 
-* If one or several supported Python versions have removed or add, verify that the 3 following files have been updated:
+* If one or several supported Python versions have been removed or added, verify that the 3 following files have been updated:
   * [setup.py](https://github.com/k-bx/python-semver/blob/master/setup.py)
   * [tox.ini](https://github.com/k-bx/python-semver/blob/master/tox.ini)
   * [.travis.yml](https://github.com/k-bx/python-semver/blob/master/.travis.yml)
