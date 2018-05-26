@@ -73,8 +73,7 @@ def parse(version):
     return version_parts
 
 
-class VersionInfo(collections.namedtuple(
-        'VersionInfo', 'major minor patch prerelease build')):
+class VersionInfo:
     """
     :param int major: version when you make incompatible API changes.
     :param int minor: version when you add functionality in
@@ -83,7 +82,26 @@ class VersionInfo(collections.namedtuple(
     :param str prerelease: an optional prerelease string
     :param str build: an optional build string
     """
-    __slots__ = ()
+
+    def __init__(self, major, minor, patch, prerelease, build):
+        self.major = major
+        self.minor = minor
+        self.patch = patch
+        self.prerelease = prerelease
+        self.build = build
+
+    def _astuple(self):
+        return (self.major, self.minor, self.patch,
+                self.prerelease, self.build)
+
+    def _asdict(self):
+        return collections.OrderedDict((
+            ("major", self.major),
+            ("minor", self.minor),
+            ("patch", self.patch),
+            ("prerelease", self.prerelease),
+            ("build", self.build)
+        ))
 
     def __eq__(self, other):
         if not isinstance(other, (VersionInfo, dict)):
@@ -115,11 +133,16 @@ class VersionInfo(collections.namedtuple(
             return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) >= 0
 
+    def __repr__(self):
+        s = ", ".join("%s=%r" % (key, val)
+                      for key, val in self._asdict().items())
+        return "VersionInfo(%s)" % s
+
     def __str__(self):
-        return format_version(*self)
+        return format_version(*(self._astuple()))
 
     def __hash__(self):
-        return hash(tuple(self))
+        return hash(self._astuple())
 
     @staticmethod
     def parse(version):

@@ -15,6 +15,8 @@ Version 2.8.1 (WIP)
 
 * Issue #77 (PR #47). Convert multiple tests into pytest.mark.parametrize
 * Issue #89 (PR #90). Add doctests.
+* Issue #40 (PR #88). Add a static parse method to VersionInfo
+* Issue #87 #94 (PR #93). Remove named tuple inheritance. Fix bad rendering in Pandas DataFrame
 
 Version 2.8.0
 =============
