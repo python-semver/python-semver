@@ -73,7 +73,7 @@ def parse(version):
     return version_parts
 
 
-class VersionInfo:
+class VersionInfo(object):
     """
     :param int major: version when you make incompatible API changes.
     :param int minor: version when you add functionality in
@@ -82,13 +82,34 @@ class VersionInfo:
     :param str prerelease: an optional prerelease string
     :param str build: an optional build string
     """
+    __slots__ = ('_major', '_minor', '_patch', '_prerelease', '_build')
 
     def __init__(self, major, minor, patch, prerelease, build):
-        self.major = major
-        self.minor = minor
-        self.patch = patch
-        self.prerelease = prerelease
-        self.build = build
+        self._major = major
+        self._minor = minor
+        self._patch = patch
+        self._prerelease = prerelease
+        self._build = build
+
+    @property
+    def major(self):
+        return self._major
+
+    @property
+    def minor(self):
+        return self._minor
+
+    @property
+    def patch(self):
+        return self._patch
+
+    @property
+    def prerelease(self):
+        return self._prerelease
+
+    @property
+    def build(self):
+        return self._build
 
     def _astuple(self):
         return (self.major, self.minor, self.patch,
