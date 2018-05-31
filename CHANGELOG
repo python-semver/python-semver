@@ -17,6 +17,7 @@ Version 2.8.1 (WIP)
 * Issue #89 (PR #90). Add doctests.
 * Issue #40 (PR #88). Add a static parse method to VersionInfo
 * Issue #87 #94 (PR #93). Remove named tuple inheritance. Fix bad rendering in Pandas DataFrame
+* Issue #96 (PR #97). Make VersionInfo immutable
 
 Version 2.8.0
 =============

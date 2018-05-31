@@ -414,3 +414,49 @@ def test_parse_method_for_version_info():
     s_version = "1.2.3-alpha.1.2+build.11.e0f985a"
     v = VersionInfo.parse(s_version)
     assert str(v) == s_version
+
+
+def test_immutable():
+    v = VersionInfo(major=1, minor=2, patch=3,
+                    prerelease='alpha.1.2', build='build.11.e0f985a')
+    try:
+        v.major = 9
+    except AttributeError:
+        pass
+    else:
+        assert 0, "attribute 'major' must be readonly"
+
+    try:
+        v.minor = 9
+    except AttributeError:
+        pass
+    else:
+        assert 0, "attribute 'minor' must be readonly"
+
+    try:
+        v.patch = 9
+    except AttributeError:
+        pass
+    else:
+        assert 0, "attribute 'patch' must be readonly"
+
+    try:
+        v.prerelease = 'alpha.9.9'
+    except AttributeError:
+        pass
+    else:
+        assert 0, "attribute 'prerelease' must be readonly"
+
+    try:
+        v.build = 'build.99.e0f985a'
+    except AttributeError:
+        pass
+    else:
+        assert 0, "attribute 'build' must be readonly"
+
+    try:
+        v.new_attribute = 'forbidden'
+    except AttributeError:
+        pass
+    else:
+        assert 0, "no new attribute can be set"
