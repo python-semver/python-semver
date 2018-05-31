@@ -336,7 +336,7 @@ def test_should_finalize_version(version, expected):
 
 
 def test_should_compare_version_info_objects():
-    v1 = VersionInfo(major=0, minor=10, patch=4, prerelease=None, build=None)
+    v1 = VersionInfo(major=0, minor=10, patch=4)
     v2 = VersionInfo(
         major=0, minor=10, patch=4, prerelease='beta.1', build=None)
 
@@ -348,7 +348,7 @@ def test_should_compare_version_info_objects():
     assert not(v1 <= v2)
     assert not(v1 == v2)
 
-    v3 = VersionInfo(major=0, minor=10, patch=4, prerelease=None, build=None)
+    v3 = VersionInfo(major=0, minor=10, patch=4)
 
     assert not(v1 != v3)
     assert not(v1 > v3)
@@ -357,7 +357,7 @@ def test_should_compare_version_info_objects():
     assert v1 <= v3
     assert v1 == v3
 
-    v4 = VersionInfo(major=0, minor=10, patch=5, prerelease=None, build=None)
+    v4 = VersionInfo(major=0, minor=10, patch=5)
     assert v1 != v4
     assert not(v1 > v4)
     assert not(v1 >= v4)
@@ -367,7 +367,7 @@ def test_should_compare_version_info_objects():
 
 
 def test_should_compare_version_dictionaries():
-    v1 = VersionInfo(major=0, minor=10, patch=4, prerelease=None, build=None)
+    v1 = VersionInfo(major=0, minor=10, patch=4)
     v2 = dict(major=0, minor=10, patch=4, prerelease='beta.1', build=None)
 
     assert v1 != v2
@@ -377,7 +377,7 @@ def test_should_compare_version_dictionaries():
     assert not(v1 <= v2)
     assert not(v1 == v2)
 
-    v3 = dict(major=0, minor=10, patch=4, prerelease=None, build=None)
+    v3 = dict(major=0, minor=10, patch=4)
 
     assert not(v1 != v3)
     assert not(v1 > v3)
@@ -386,7 +386,7 @@ def test_should_compare_version_dictionaries():
     assert v1 <= v3
     assert v1 == v3
 
-    v4 = dict(major=0, minor=10, patch=5, prerelease=None, build=None)
+    v4 = dict(major=0, minor=10, patch=5)
     assert v1 != v4
     assert not(v1 > v4)
     assert not(v1 >= v4)
