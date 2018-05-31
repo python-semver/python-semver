@@ -84,7 +84,7 @@ class VersionInfo(object):
     """
     __slots__ = ('_major', '_minor', '_patch', '_prerelease', '_build')
 
-    def __init__(self, major, minor, patch, prerelease, build):
+    def __init__(self, major, minor, patch, prerelease=None, build=None):
         self._major = major
         self._minor = minor
         self._patch = patch
