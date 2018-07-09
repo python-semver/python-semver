@@ -8,9 +8,9 @@ Python SemVer library
 All notable changes to this code base will be documented in this file,
 in every released version.
 
-Version 2.8.1 (WIP)
-===================
-:Released: 2018-mm-dd
+Version 2.8.1
+=============
+:Released: 2018-07-09
 :Maintainer: Sébastien Celles <s.celles@gmail.com>
 
 * Issue #77 (PR #47). Convert multiple tests into pytest.mark.parametrize
