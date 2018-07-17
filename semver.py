@@ -4,9 +4,12 @@ Python helper for Semantic Versioning (http://semver.org/)
 
 import collections
 import re
+import sys
+
+PY2 = sys.version_info[0] == 2
 
 
-__version__ = '2.8.1'
+__version__ = '2.8.2'
 __author__ = 'Kostiantyn Rybnikov'
 __author_email__ = 'k-bx@k-bx.com'
 __maintainer__ = 'Sebastien Celles'
@@ -126,32 +129,50 @@ class VersionInfo(object):
 
     def __eq__(self, other):
         if not _is_comparable(other):
-            return NotImplemented
+            if PY2:
+                raise TypeError
+            else:
+                return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) == 0
 
     def __ne__(self, other):
         if not _is_comparable(other):
-            return NotImplemented
+            if PY2:
+                raise TypeError
+            else:
+                return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) != 0
 
     def __lt__(self, other):
         if not _is_comparable(other):
-            return NotImplemented
+            if PY2:
+                raise TypeError
+            else:
+                return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) < 0
 
     def __le__(self, other):
         if not _is_comparable(other):
-            return NotImplemented
+            if PY2:
+                raise TypeError
+            else:
+                return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) <= 0
 
     def __gt__(self, other):
         if not _is_comparable(other):
-            return NotImplemented
+            if PY2:
+                raise TypeError
+            else:
+                return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) > 0
 
     def __ge__(self, other):
         if not _is_comparable(other):
-            return NotImplemented
+            if PY2:
+                raise TypeError
+            else:
+                return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) >= 0
 
     def __repr__(self):
