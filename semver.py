@@ -84,7 +84,7 @@ class VersionInfo(object):
     """
     __slots__ = ('_major', '_minor', '_patch', '_prerelease', '_build')
 
-    def __init__(self, major, minor, patch, prerelease=None, build=None):
+    def __init__(self, major, minor=0, patch=0, prerelease=None, build=None):
         self._major = major
         self._minor = minor
         self._patch = patch
@@ -125,33 +125,27 @@ class VersionInfo(object):
         ))
 
     def __eq__(self, other):
-        if not isinstance(other, (VersionInfo, dict)):
-            return NotImplemented
+        _ensure_is_comparable(other)
         return _compare_by_keys(self._asdict(), _to_dict(other)) == 0
 
     def __ne__(self, other):
-        if not isinstance(other, (VersionInfo, dict)):
-            return NotImplemented
+        _ensure_is_comparable(other)
         return _compare_by_keys(self._asdict(), _to_dict(other)) != 0
 
     def __lt__(self, other):
-        if not isinstance(other, (VersionInfo, dict)):
-            return NotImplemented
+        _ensure_is_comparable(other)
         return _compare_by_keys(self._asdict(), _to_dict(other)) < 0
 
     def __le__(self, other):
-        if not isinstance(other, (VersionInfo, dict)):
-            return NotImplemented
+        _ensure_is_comparable(other)
         return _compare_by_keys(self._asdict(), _to_dict(other)) <= 0
 
     def __gt__(self, other):
-        if not isinstance(other, (VersionInfo, dict)):
-            return NotImplemented
+        _ensure_is_comparable(other)
         return _compare_by_keys(self._asdict(), _to_dict(other)) > 0
 
     def __ge__(self, other):
-        if not isinstance(other, (VersionInfo, dict)):
-            return NotImplemented
+        _ensure_is_comparable(other)
         return _compare_by_keys(self._asdict(), _to_dict(other)) >= 0
 
     def __repr__(self):
@@ -184,6 +178,8 @@ prerelease='pre.2', build='build.4')
 def _to_dict(obj):
     if isinstance(obj, VersionInfo):
         return obj._asdict()
+    elif isinstance(obj, tuple):
+        return VersionInfo(*obj)._asdict()
     return obj
 
 
@@ -259,6 +255,13 @@ def _compare_by_keys(d1, d2):
         return -1
 
     return rccmp
+
+
+def _ensure_is_comparable(other):
+    comparable_types = (VersionInfo, dict, tuple)
+    if not isinstance(other, comparable_types):
+        raise NotImplementedError("other type %r must be in %r"
+                                  % (type(other), comparable_types))
 
 
 def compare(ver1, ver2):
