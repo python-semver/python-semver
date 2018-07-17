@@ -125,27 +125,33 @@ class VersionInfo(object):
         ))
 
     def __eq__(self, other):
-        _ensure_is_comparable(other)
+        if not _is_comparable(other):
+            return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) == 0
 
     def __ne__(self, other):
-        _ensure_is_comparable(other)
+        if not _is_comparable(other):
+            return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) != 0
 
     def __lt__(self, other):
-        _ensure_is_comparable(other)
+        if not _is_comparable(other):
+            return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) < 0
 
     def __le__(self, other):
-        _ensure_is_comparable(other)
+        if not _is_comparable(other):
+            return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) <= 0
 
     def __gt__(self, other):
-        _ensure_is_comparable(other)
+        if not _is_comparable(other):
+            return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) > 0
 
     def __ge__(self, other):
-        _ensure_is_comparable(other)
+        if not _is_comparable(other):
+            return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) >= 0
 
     def __repr__(self):
@@ -257,11 +263,9 @@ def _compare_by_keys(d1, d2):
     return rccmp
 
 
-def _ensure_is_comparable(other):
+def _is_comparable(other):
     comparable_types = (VersionInfo, dict, tuple)
-    if not isinstance(other, comparable_types):
-        raise NotImplementedError("other type %r must be in %r"
-                                  % (type(other), comparable_types))
+    return isinstance(other, comparable_types)
 
 
 def compare(ver1, ver2):

@@ -408,14 +408,14 @@ def test_should_compare_version_tuples():
 def test_should_not_allow_to_compare_version_with_string():
     v1 = VersionInfo(major=3, minor=4, patch=5,
                      prerelease='pre.2', build='build.4')
-    with pytest.raises(NotImplementedError) as e_info:  # noqa
+    with pytest.raises(TypeError) as e_info:  # noqa
         v1 > "1.0.0"
 
 
 def test_should_not_allow_to_compare_version_with_int():
     v1 = VersionInfo(major=3, minor=4, patch=5,
                      prerelease='pre.2', build='build.4')
-    with pytest.raises(NotImplementedError) as e_info:  # noqa
+    with pytest.raises(TypeError) as e_info:  # noqa
         v1 > 1
 
 
