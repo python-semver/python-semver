@@ -3,6 +3,7 @@ import pytest  # noqa
 from semver import compare
 from semver import match
 from semver import parse
+from semver import try_parse
 from semver import format_version
 from semver import bump_major
 from semver import bump_minor
@@ -77,6 +78,56 @@ def test_should_parse_version(version, expected):
 def test_should_parse_zero_prerelease(version, expected):
     result = parse(version)
     assert result == expected
+
+
+@pytest.mark.parametrize("version, expected", [
+    # no. 1
+    (
+        "1",
+        {
+            'major': 1,
+            'minor': 0,
+            'patch': 0,
+            'prerelease': None,
+            'build': None,
+        }
+    ),
+    # no. 2
+    (
+        "1.2",
+        {
+            'major': 1,
+            'minor': 2,
+            'patch': 0,
+            'prerelease': None,
+            'build': None,
+        }
+    ),
+    # no. 3
+    (
+        "1.2.3",
+        {
+            'major': 1,
+            'minor': 2,
+            'patch': 3,
+            'prerelease': None,
+            'build': None,
+        }
+    ),
+])
+def test_try_parse_should_allow_partial_version(version, expected):
+    result = try_parse(version)
+    assert result == expected
+
+
+@pytest.mark.parametrize("version", [
+    'foo',
+    '1.x',
+    '1.0.x',
+])
+def test_try_parse_should_raise_value_error_for_invalid_value(version):
+    with pytest.raises(ValueError):
+        try_parse(version)
 
 
 @pytest.mark.parametrize("left,right", [

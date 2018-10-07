@@ -31,6 +31,18 @@ _REGEX = re.compile(
         $
         """, re.VERBOSE)
 
+_REGEX_PARTIAL = re.compile(
+    r"""
+    ^
+    (?P<major>(?:0|[1-9][0-9]*))
+    (?:
+        \.(?P<minor>(?:0|[1-9][0-9]*))
+    )?
+    $
+    """,
+    re.VERBOSE
+)
+
 _LAST_NUMBER = re.compile(r'(?:[^\d]*(\d+)[^\d]*)+')
 
 if not hasattr(__builtins__, 'cmp'):
@@ -71,6 +83,57 @@ def parse(version):
     version_parts['patch'] = int(version_parts['patch'])
 
     return version_parts
+
+
+def try_parse(version):
+    """Try parsing a version string to major, minor, patch, pre-release and
+    build parts. The version string may be incomplete in which case missing
+    parts are set to ``0`` or ``None``.
+
+    :param version: Version string.
+    :type version: str
+
+    :return: Dictionary with the keys 'build', 'major', 'minor', 'patch',
+             and 'prerelease'. The prerelease or build keys can be ``None``
+             if not provided.
+    :rtype: dict
+
+    >>> import semver
+    >>> ver = semver.try_parse('3')
+    >>> ver['major']
+    3
+    >>> ver['minor']
+    0
+    >>> ver['patch']
+    0
+    >>> ver['prerelease'] # None
+    >>> ver['build'] # None
+    >>> ver = semver.try_parse('3.1')
+    >>> ver['major']
+    3
+    >>> ver['minor']
+    1
+    >>> ver['patch']
+    0
+    >>> ver['prerelease'] # None
+    >>> ver['build'] # None
+    """
+    try:
+        return parse(version)
+    except ValueError:
+        match = _REGEX_PARTIAL.match(version)
+        if match is None:
+            raise ValueError('could not parse version string %s' % version)
+
+        version_parts = match.groupdict()
+
+        version_parts['major'] = int(version_parts['major'])
+        version_parts['minor'] = int(version_parts['minor'] or 0)
+        version_parts['patch'] = 0
+        version_parts['prerelease'] = None
+        version_parts['build'] = None
+
+        return version_parts
 
 
 class VersionInfo(object):
