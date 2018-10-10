@@ -460,3 +460,9 @@ def test_immutable():
         pass
     else:
         assert 0, "no new attribute can be set"
+
+
+def test_version_info_should_be_iterable():
+    v = VersionInfo(major=1, minor=2, patch=3,
+                    prerelease='alpha.1.2', build='build.11.e0f985a')
+    assert tuple(v) == v._astuple()

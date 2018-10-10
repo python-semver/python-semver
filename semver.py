@@ -124,6 +124,10 @@ class VersionInfo(object):
             ("build", self.build)
         ))
 
+    def __iter__(self):
+        for v in self._astuple():
+            yield v
+
     def __eq__(self, other):
         if not isinstance(other, (VersionInfo, dict)):
             return NotImplemented
