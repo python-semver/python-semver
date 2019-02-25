@@ -5,6 +5,7 @@ Python helper for Semantic Versioning (http://semver.org/)
 import collections
 import re
 
+from functools import wraps
 
 __version__ = '2.8.1'
 __author__ = 'Kostiantyn Rybnikov'
@@ -73,6 +74,16 @@ def parse(version):
     return version_parts
 
 
+def comparator(operator):
+    """ Wrap a VersionInfo binary op method in a type-check """
+    @wraps(operator)
+    def wrapper(self, other):
+        if not isinstance(other, (VersionInfo, dict)):
+            return NotImplemented
+        return operator(self, other)
+    return wrapper
+
+
 class VersionInfo(object):
     """
     :param int major: version when you make incompatible API changes.
@@ -124,34 +135,28 @@ class VersionInfo(object):
             ("build", self.build)
         ))
 
+    @comparator
     def __eq__(self, other):
-        if not isinstance(other, (VersionInfo, dict)):
-            return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) == 0
 
+    @comparator
     def __ne__(self, other):
-        if not isinstance(other, (VersionInfo, dict)):
-            return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) != 0
 
+    @comparator
     def __lt__(self, other):
-        if not isinstance(other, (VersionInfo, dict)):
-            return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) < 0
 
+    @comparator
     def __le__(self, other):
-        if not isinstance(other, (VersionInfo, dict)):
-            return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) <= 0
 
+    @comparator
     def __gt__(self, other):
-        if not isinstance(other, (VersionInfo, dict)):
-            return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) > 0
 
+    @comparator
     def __ge__(self, other):
-        if not isinstance(other, (VersionInfo, dict)):
-            return NotImplemented
         return _compare_by_keys(self._asdict(), _to_dict(other)) >= 0
 
     def __repr__(self):
