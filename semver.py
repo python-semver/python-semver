@@ -94,6 +94,7 @@ class VersionInfo(object):
     @property
     def major(self):
         return self._major
+
     @major.setter
     def major(self, value):
         raise AttributeError("attribute 'major' is readonly")
@@ -101,6 +102,7 @@ class VersionInfo(object):
     @property
     def minor(self):
         return self._minor
+
     @minor.setter
     def minor(self, value):
         raise AttributeError("attribute 'minor' is readonly")
@@ -108,6 +110,7 @@ class VersionInfo(object):
     @property
     def patch(self):
         return self._patch
+
     @patch.setter
     def patch(self, value):
         raise AttributeError("attribute 'patch' is readonly")
@@ -115,6 +118,7 @@ class VersionInfo(object):
     @property
     def prerelease(self):
         return self._prerelease
+
     @prerelease.setter
     def prerelease(self, value):
         raise AttributeError("attribute 'prerelease' is readonly")
@@ -122,6 +126,7 @@ class VersionInfo(object):
     @property
     def build(self):
         return self._build
+
     @build.setter
     def build(self, value):
         raise AttributeError("attribute 'build' is readonly")
