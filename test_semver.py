@@ -23,6 +23,12 @@ SEMVERFUNCS = [
 ]
 
 
+@pytest.fixture
+def version():
+    return VersionInfo(major=1, minor=2, patch=3,
+                       prerelease='alpha.1.2', build='build.11.e0f985a')
+
+
 @pytest.mark.parametrize("func", SEMVERFUNCS,
                          ids=[func.__name__ for func in SEMVERFUNCS])
 def test_fordocstrings(func):
@@ -416,47 +422,33 @@ def test_parse_method_for_version_info():
     assert str(v) == s_version
 
 
-def test_immutable():
-    v = VersionInfo(major=1, minor=2, patch=3,
-                    prerelease='alpha.1.2', build='build.11.e0f985a')
-    try:
-        v.major = 9
-    except AttributeError:
-        pass
-    else:
-        assert 0, "attribute 'major' must be readonly"
+def test_immutable_major(version):
+    with pytest.raises(AttributeError, match="attribute 'major' is readonly"):
+        version.major = 9
 
-    try:
-        v.minor = 9
-    except AttributeError:
-        pass
-    else:
-        assert 0, "attribute 'minor' must be readonly"
 
-    try:
-        v.patch = 9
-    except AttributeError:
-        pass
-    else:
-        assert 0, "attribute 'patch' must be readonly"
+def test_immutable_minor(version):
+    with pytest.raises(AttributeError, match="attribute 'minor' is readonly"):
+        version.minor = 9
 
-    try:
-        v.prerelease = 'alpha.9.9'
-    except AttributeError:
-        pass
-    else:
-        assert 0, "attribute 'prerelease' must be readonly"
 
-    try:
-        v.build = 'build.99.e0f985a'
-    except AttributeError:
-        pass
-    else:
-        assert 0, "attribute 'build' must be readonly"
+def test_immutable_patch(version):
+    with pytest.raises(AttributeError, match="attribute 'patch' is readonly"):
+        version.patch = 9
 
-    try:
-        v.new_attribute = 'forbidden'
-    except AttributeError:
-        pass
-    else:
-        assert 0, "no new attribute can be set"
+
+def test_immutable_prerelease(version):
+    with pytest.raises(AttributeError,
+                       match="attribute 'prerelease' is readonly"):
+        version.prerelease = 'alpha.9.9'
+
+
+def test_immutable_build(version):
+    with pytest.raises(AttributeError, match="attribute 'build' is readonly"):
+        version.build = 'build.99.e0f985a'
+
+
+def test_immutable_unknown_attribute(version):
+    # "no new attribute can be set"
+    with pytest.raises(AttributeError):
+        version.new_attribute = 'forbidden'
