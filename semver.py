@@ -182,7 +182,7 @@ class VersionInfo(object):
     def __repr__(self):
         s = ", ".join("%s=%r" % (key, val)
                       for key, val in self._asdict().items())
-        return "VersionInfo(%s)" % s
+        return "%s(%s)" % (type(self).__name__, s)
 
     def __str__(self):
         return format_version(*(self._astuple()))
