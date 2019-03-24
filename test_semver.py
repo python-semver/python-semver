@@ -452,3 +452,8 @@ def test_immutable_unknown_attribute(version):
     # "no new attribute can be set"
     with pytest.raises(AttributeError):
         version.new_attribute = 'forbidden'
+
+
+def test_version_info_should_be_iterable(version):
+    assert tuple(version) == (version.major, version.minor, version.patch,
+                              version.prerelease, version.build)

@@ -155,6 +155,12 @@ class VersionInfo(object):
             ("build", self.build)
         ))
 
+    def __iter__(self):
+        """Implement iter(self)."""
+        # As long as we support Py2.7, we can't use the "yield from" syntax
+        for v in self._astuple():
+            yield v
+
     @comparator
     def __eq__(self, other):
         return _compare_by_keys(self._asdict(), _to_dict(other)) == 0
