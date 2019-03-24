@@ -1,0 +1,9 @@
+# https://pytest-cov.readthedocs.io/
+
+[run]
+source = semver
+branch = True
+
+[report]
+exclude_lines =
+    pragma: no cover
