@@ -403,9 +403,9 @@ def min_ver(ver1, ver2):
 def format_version(major, minor, patch, prerelease=None, build=None):
     """Format a version according to the Semantic Versioning specification
 
-    :param int major: the required major part of a version
-    :param int minor: the required minor part of a version
-    :param int patch: the required patch part of a version
+    :param str major: the required major part of a version
+    :param str minor: the required minor part of a version
+    :param str patch: the required patch part of a version
     :param str prerelease: the optional prerelease part of a version
     :param str build: the optional build part of a version
     :return: the formatted string
