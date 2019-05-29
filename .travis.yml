@@ -20,5 +20,8 @@ matrix:
   - python: "3.6"
     env: TOXENV=py36
 
+  - python: "3.7"
+    env: TOXENV=py36
+
   - python: "pypy"
     env: TOXENV=pypy
