@@ -94,9 +94,10 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    tests_require=['tox', 'virtualenv<14.0.0'],
+    tests_require=['tox', 'virtualenv'],
     cmdclass={
         'clean': Clean,
         'test': Tox,

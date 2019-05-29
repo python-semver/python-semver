@@ -1,5 +1,7 @@
 language: python
-install: pip install "virtualenv<14.0.0"
+install:
+  - pip install --upgrade pip setuptools
+  - pip install virtualenv
 script: python setup.py test
 matrix:
   include:
@@ -17,6 +19,10 @@ matrix:
 
   - python: "3.6"
     env: TOXENV=py36
+
+  - python: "3.7"
+    dist: xenial
+    env: TOXENV=py37
 
   - python: "pypy"
     env: TOXENV=pypy
