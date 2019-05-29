@@ -401,6 +401,46 @@ def test_should_compare_version_dictionaries():
     assert not(v1 == v4)
 
 
+def test_should_compare_version_tuples():
+    v0 = VersionInfo(major=0, minor=4, patch=5,
+                     prerelease='pre.2', build='build.4')
+    v1 = VersionInfo(major=3, minor=4, patch=5,
+                     prerelease='pre.2', build='build.4')
+    for t in ((1, 0, 0), (1, 0), (1,), (1, 0, 0, 'pre.2'),
+              (1, 0, 0, 'pre.2', 'build.4')):
+        assert v0 < t
+        assert v0 <= t
+        assert v0 != t
+        assert not v0 == t
+        assert v1 > t
+        assert v1 >= t
+        # Symmetric
+        assert t > v0
+        assert t >= v0
+        assert t < v1
+        assert t <= v1
+        assert t != v0
+        assert not t == v0
+
+
+def test_should_not_allow_to_compare_version_with_string():
+    v1 = VersionInfo(major=3, minor=4, patch=5,
+                     prerelease='pre.2', build='build.4')
+    with pytest.raises(TypeError):
+        v1 > "1.0.0"
+    with pytest.raises(TypeError):
+        "1.0.0" > v1
+
+
+def test_should_not_allow_to_compare_version_with_int():
+    v1 = VersionInfo(major=3, minor=4, patch=5,
+                     prerelease='pre.2', build='build.4')
+    with pytest.raises(TypeError):
+        v1 > 1
+    with pytest.raises(TypeError):
+        1 > v1
+
+
 def test_should_compare_prerelease_with_numbers_and_letters():
     v1 = VersionInfo(major=1, minor=9, patch=1, prerelease='1unms', build=None)
     v2 = VersionInfo(major=1, minor=9, patch=1, prerelease=None, build='1asd')

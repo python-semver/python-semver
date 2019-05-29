@@ -8,6 +8,14 @@ Python SemVer library
 All notable changes to this code base will be documented in this file,
 in every released version.
 
+Version 2.8.x
+=============
+:Released: 20yy-mm-dd
+:Maintainer: Sébastien Celles <s.celles@gmail.com>
+
+* Issue #102 (PR #...). Fix comparison between VersionInfo and tuple
+* Issue #103 (PR #...). Disallow comparison between VersionInfo and string (and int)
+
 Version 2.8.1
 =============
 :Released: 2018-07-09

@@ -7,7 +7,8 @@ import re
 
 from functools import wraps
 
-__version__ = '2.8.1'
+
+__version__ = '2.8.2'
 __author__ = 'Kostiantyn Rybnikov'
 __author_email__ = 'k-bx@k-bx.com'
 __maintainer__ = 'Sebastien Celles'
@@ -78,8 +79,10 @@ def comparator(operator):
     """ Wrap a VersionInfo binary op method in a type-check """
     @wraps(operator)
     def wrapper(self, other):
-        if not isinstance(other, (VersionInfo, dict)):
-            return NotImplemented
+        comparable_types = (VersionInfo, dict, tuple)
+        if not isinstance(other, comparable_types):
+            raise TypeError("other type %r must be in %r"
+                            % (type(other), comparable_types))
         return operator(self, other)
     return wrapper
 
@@ -95,7 +98,7 @@ class VersionInfo(object):
     """
     __slots__ = ('_major', '_minor', '_patch', '_prerelease', '_build')
 
-    def __init__(self, major, minor, patch, prerelease=None, build=None):
+    def __init__(self, major, minor=0, patch=0, prerelease=None, build=None):
         self._major = major
         self._minor = minor
         self._patch = patch
@@ -215,6 +218,8 @@ prerelease='pre.2', build='build.4')
 def _to_dict(obj):
     if isinstance(obj, VersionInfo):
         return obj._asdict()
+    elif isinstance(obj, tuple):
+        return VersionInfo(*obj)._asdict()
     return obj
 
 
