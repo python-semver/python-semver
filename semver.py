@@ -164,6 +164,9 @@ class VersionInfo(object):
         for v in self._astuple():
             yield v
 
+    def __getitem__(self, index):
+        return self._astuple()[index]
+
     @comparator
     def __eq__(self, other):
         return _compare_by_keys(self._asdict(), _to_dict(other)) == 0
