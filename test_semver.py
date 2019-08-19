@@ -497,3 +497,15 @@ def test_immutable_unknown_attribute(version):
 def test_version_info_should_be_iterable(version):
     assert tuple(version) == (version.major, version.minor, version.patch,
                               version.prerelease, version.build)
+
+    
+@pytest.mark.parametrize("version, index, expected", [
+    ("1.2.3-rc.0+build.0", 0, 1),
+    ("1.2.3-rc.0+build.0", 1, 2),
+    ("1.2.3-rc.0+build.0", 2, 3),
+    ("1.2.3-rc.0+build.0", 3, "rc.0"),
+    ("1.2.3-rc.0+build.0", 4, "build.0"),
+])
+def test_version_info_should_be_accessed_with_index(version, index, expected):
+    version_info = VersionInfo.parse(version)
+    assert version_info[index] == expected
