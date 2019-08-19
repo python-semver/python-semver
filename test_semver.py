@@ -498,7 +498,7 @@ def test_version_info_should_be_iterable(version):
     assert tuple(version) == (version.major, version.minor, version.patch,
                               version.prerelease, version.build)
 
-    
+
 @pytest.mark.parametrize("version, index, expected", [
     ("1.2.3-rc.0+build.0", 0, 1),
     ("1.2.3-rc.0+build.0", 1, 2),
