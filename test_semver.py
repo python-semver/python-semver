@@ -497,3 +497,9 @@ def test_immutable_unknown_attribute(version):
 def test_version_info_should_be_iterable(version):
     assert tuple(version) == (version.major, version.minor, version.patch,
                               version.prerelease, version.build)
+
+
+def test_should_compare_prerelease_and_build_with_numbers():
+    v1 = VersionInfo(major=1, minor=9, patch=1, prerelease=1, build=1)
+    v2 = VersionInfo(major=1, minor=9, patch=1, prerelease=2, build=1)
+    assert v1 < v2
