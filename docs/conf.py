@@ -172,6 +172,6 @@ texinfo_documents = [
 ]
 
 
-interpshinx_mapping = {
+intersphinx_mapping = {
     "matplotlib": ('http://matplotlib.org', None),
 }
