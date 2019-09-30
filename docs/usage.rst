@@ -1,5 +1,5 @@
-Usage
------
+Using semver
+============
 
 This module provides just couple of functions, main of which are:
 

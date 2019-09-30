@@ -1,5 +1,5 @@
-How to Contribute
------------------
+Contributing to semver
+======================
 
 When you make changes to the code please run the tests before pushing your
 code to your fork and opening a `pull request`_:
