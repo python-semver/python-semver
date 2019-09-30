@@ -172,7 +172,3 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
-
-intersphinx_mapping = {
-    "matplotlib": ('http://matplotlib.org', None),
-}
