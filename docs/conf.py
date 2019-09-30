@@ -20,7 +20,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-from semver import __version__
+from semver import __version__  # noqa: E402
 
 # -- General configuration ------------------------------------------------
 
