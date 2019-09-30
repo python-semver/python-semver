@@ -164,6 +164,74 @@ class VersionInfo(object):
         for v in self._astuple():
             yield v
 
+    def bump_major(self):
+        """Raise the major part of the version
+
+        :return: the raised version string
+        :rtype: VersionInfo
+
+        >>> import semver
+        >>> ver = semver.parse_version_info("3.4.5")
+        >>> ver.bump_major()
+        VersionInfo(major=4, minor=0, patch=0, prerelease=None, build=None)
+        """
+        return parse_version_info(bump_major(str(self)))
+
+    def bump_minor(self):
+        """Raise the minor part of the version
+
+        :return: the raised version string
+        :rtype: VersionInfo
+
+        >>> import semver
+        >>> ver = semver.parse_version_info("3.4.5")
+        >>> ver.bump_minor()
+        VersionInfo(major=3, minor=5, patch=0, prerelease=None, build=None)
+        """
+        return parse_version_info(bump_minor(str(self)))
+
+    def bump_patch(self):
+        """Raise the patch part of the version
+
+        :return: the raised version string
+        :rtype: VersionInfo
+
+        >>> import semver
+        >>> ver = semver.parse_version_info("3.4.5")
+        >>> ver.bump_patch()
+        VersionInfo(major=3, minor=4, patch=6, prerelease=None, build=None)
+        """
+        return parse_version_info(bump_patch(str(self)))
+
+    def bump_prerelease(self, token='rc'):
+        """Raise the prerelease part of the version
+
+        :param token: defaults to 'rc'
+        :return: the raised version string
+        :rtype: str
+
+        >>> import semver
+        >>> ver = semver.parse_version_info("3.4.5-rc.1")
+        >>> ver.bump_prerelease()
+        VersionInfo(major=3, minor=4, patch=5, prerelease='rc.2', build=None)
+        """
+        return parse_version_info(bump_prerelease(str(self), token))
+
+
+    def bump_build(self, token='build'):
+        """Raise the build part of the version
+
+        :param token: defaults to 'build'
+        :return: the raised version string
+        :rtype: str
+
+        >>> import semver
+        >>> ver = semver.parse_version_info("3.4.5-rc.1+build.9")
+        >>> ver.bump_build()
+        VersionInfo(major=3, minor=4, patch=5, prerelease='rc.1', build='build.10')
+        """
+        return parse_version_info(bump_build(str(self), token))
+
     @comparator
     def __eq__(self, other):
         return _compare_by_keys(self._asdict(), _to_dict(other)) == 0
