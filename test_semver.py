@@ -262,6 +262,7 @@ def test_should_bump_minor():
 def test_should_bump_patch():
     assert bump_patch('3.4.5') == '3.4.6'
 
+
 def test_should_versioninfo_bump_major_and_minor():
     v = parse_version_info("3.4.5")
     expected = parse_version_info("4.1.0")

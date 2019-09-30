@@ -213,7 +213,8 @@ class VersionInfo(object):
         >>> import semver
         >>> ver = semver.parse_version_info("3.4.5-rc.1")
         >>> ver.bump_prerelease()
-        VersionInfo(major=3, minor=4, patch=5, prerelease='rc.2', build=None)
+        VersionInfo(major=3, minor=4, patch=5, prerelease='rc.2', \
+build=None)
         """
         return parse_version_info(bump_prerelease(str(self), token))
 
@@ -228,7 +229,8 @@ class VersionInfo(object):
         >>> import semver
         >>> ver = semver.parse_version_info("3.4.5-rc.1+build.9")
         >>> ver.bump_build()
-        VersionInfo(major=3, minor=4, patch=5, prerelease='rc.1', build='build.10')
+        VersionInfo(major=3, minor=4, patch=5, prerelease='rc.1', \
+build='build.10')
         """
         return parse_version_info(bump_build(str(self), token))
 
