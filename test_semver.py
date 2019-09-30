@@ -499,13 +499,9 @@ def test_version_info_should_be_iterable(version):
                               version.prerelease, version.build)
 
 
-@pytest.mark.parametrize("v1,v2", [
-  # no. 1
-  ({'major': 1, 'minor': 9, 'patch': 1, 'prerelease': 1, 'build': 1},
-   {'major': 1, 'minor': 9, 'patch': 1, 'prerelease': 2, 'build': 1}),
-  # no. 2
-  ({'major': 3, 'minor': 2, 'patch': 1, 'prerelease': 1},
-   {'major': 3, 'minor': 2, 'patch': 1, 'prerelease': 3}),
-])
-def test_should_compare_prerelease_and_build_with_numbers(v1, v2):
-    assert VersionInfo(**v1) < VersionInfo(**v2)
+def test_should_compare_prerelease_and_build_with_numbers():
+    assert VersionInfo(major=1, minor=9, patch=1, prerelease=1, build=1) < \
+           VersionInfo(major=1, minor=9, patch=1, prerelease=2, build=1)
+    assert VersionInfo(1, 9, 1, 1, 1) < VersionInfo(1, 9, 1, 2, 1)
+    assert VersionInfo('2') < VersionInfo(10)
+    assert VersionInfo('2') < VersionInfo('10')
