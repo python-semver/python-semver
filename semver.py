@@ -165,9 +165,10 @@ class VersionInfo(object):
             yield v
 
     def bump_major(self):
-        """Raise the major part of the version
+        """Raise the major part of the version, return a new object
+           but leave self untouched
 
-        :return: the raised version string
+        :return: new object with the raised major part
         :rtype: VersionInfo
 
         >>> import semver
@@ -178,9 +179,10 @@ class VersionInfo(object):
         return parse_version_info(bump_major(str(self)))
 
     def bump_minor(self):
-        """Raise the minor part of the version
+        """Raise the minor part of the version, return a new object
+           but leave self untouched
 
-        :return: the raised version string
+        :return: new object with the raised minor part
         :rtype: VersionInfo
 
         >>> import semver
@@ -191,9 +193,10 @@ class VersionInfo(object):
         return parse_version_info(bump_minor(str(self)))
 
     def bump_patch(self):
-        """Raise the patch part of the version
+        """Raise the patch part of the version, return a new object
+           but leave self untouched
 
-        :return: the raised version string
+        :return: new object with the raised patch part
         :rtype: VersionInfo
 
         >>> import semver
@@ -204,10 +207,11 @@ class VersionInfo(object):
         return parse_version_info(bump_patch(str(self)))
 
     def bump_prerelease(self, token='rc'):
-        """Raise the prerelease part of the version
+        """Raise the prerelease part of the version, return a new object
+           but leave self untouched
 
         :param token: defaults to 'rc'
-        :return: the raised version string
+        :return: new object with the raised prerelease part
         :rtype: str
 
         >>> import semver
@@ -218,12 +222,12 @@ build=None)
         """
         return parse_version_info(bump_prerelease(str(self), token))
 
-
     def bump_build(self, token='build'):
-        """Raise the build part of the version
+        """Raise the build part of the version, return a new object
+           but leave self untouched
 
         :param token: defaults to 'build'
-        :return: the raised version string
+        :return: new object with the raised build part
         :rtype: str
 
         >>> import semver
