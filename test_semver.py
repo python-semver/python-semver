@@ -505,3 +505,19 @@ def test_should_compare_prerelease_and_build_with_numbers():
     assert VersionInfo(1, 9, 1, 1, 1) < VersionInfo(1, 9, 1, 2, 1)
     assert VersionInfo('2') < VersionInfo(10)
     assert VersionInfo('2') < VersionInfo('10')
+
+
+def test_should_be_able_to_use_strings_as_major_minor_patch():
+    v = VersionInfo('1', '2', '3')
+    assert isinstance(v.major, int)
+    assert isinstance(v.minor, int)
+    assert isinstance(v.patch, int)
+    assert v.prerelease is None
+    assert v.build is None
+
+
+def test_should_be_able_to_use_integers_as_prerelease_build():
+    v = VersionInfo('1', '2', '3', 4, 5)
+    assert isinstance(v.prerelease, str)
+    assert isinstance(v.build, str)
+    assert VersionInfo('1', '2', '3') == VersionInfo(1, 2, 3)
