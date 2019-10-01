@@ -171,4 +171,3 @@ texinfo_documents = [
      author, 'semver', 'One line description of project.',
      'Miscellaneous'),
 ]
-
