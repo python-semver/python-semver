@@ -2,7 +2,7 @@ language: python
 install:
   - pip install --upgrade pip setuptools
   - pip install virtualenv
-script: python setup.py test
+script: tox -v
 matrix:
   include:
   - python: "2.7"
