@@ -1,8 +1,10 @@
+# config file for automatic testing at travis-ci.org
 language: python
+cache: pip
 install:
   - pip install --upgrade pip setuptools
-  - pip install virtualenv
-script: python setup.py test
+  - pip install virtualenv tox
+script: tox -v
 matrix:
   include:
   - python: "2.7"
