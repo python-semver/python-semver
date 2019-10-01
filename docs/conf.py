@@ -171,8 +171,3 @@ texinfo_documents = [
      author, 'semver', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-intersphinx_mapping = {
-    "matplotlib": ('http://matplotlib.org', None),
-}
