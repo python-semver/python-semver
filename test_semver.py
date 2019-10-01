@@ -519,11 +519,11 @@ def test_should_be_able_to_use_strings_as_major_minor_patch():
 
 def test_using_non_numeric_string_as_major_minor_patch_throws():
     with pytest.raises(ValueError):
-        v = VersionInfo('a')
+        VersionInfo('a')
     with pytest.raises(ValueError):
-        v = VersionInfo(1, 'a')
+        VersionInfo(1, 'a')
     with pytest.raises(ValueError):
-        v = VersionInfo(1, 2, 'a')
+        VersionInfo(1, 2, 'a')
 
 
 def test_should_be_able_to_use_integers_as_prerelease_build():
