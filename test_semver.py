@@ -514,11 +514,20 @@ def test_should_be_able_to_use_strings_as_major_minor_patch():
     assert isinstance(v.patch, int)
     assert v.prerelease is None
     assert v.build is None
-    assert v == VersionInfo(1, 2, 3)
-    assert VersionInfo(1, 2, 3, 4, 5) == VersionInfo(1, 2, 3, '4', '5')
+    assert VersionInfo('1', '2', '3') == VersionInfo(1, 2, 3)
+
+
+def test_using_non_numeric_string_as_major_minor_patch_throws():
+    with pytest.raises(ValueError):
+        v = VersionInfo('a')
+    with pytest.raises(ValueError):
+        v = VersionInfo(1, 'a')
+    with pytest.raises(ValueError):
+        v = VersionInfo(1, 2, 'a')
 
 
 def test_should_be_able_to_use_integers_as_prerelease_build():
-    v = VersionInfo('1', '2', '3', 4, 5)
+    v = VersionInfo(1, 2, 3, 4, 5)
     assert isinstance(v.prerelease, str)
     assert isinstance(v.build, str)
+    assert VersionInfo(1, 2, 3, 4, 5) == VersionInfo(1, 2, 3, '4', '5')
