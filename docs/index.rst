@@ -1,26 +1,33 @@
-Semver |latest-version|
-=======================
+Semver |version| -- Semantic Versioning
+=======================================
 
-|build-status| |python-support| |downloads| |license|
+|build-status| |latest-version| |python-support| |downloads| |license|
 
 .. python-semver documentation master file, created by
    sphinx-quickstart on Tue May  1 16:51:19 2018.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to python-semver's documentation!
-=========================================
+A Python module for `semantic versioning`_. Simplifies comparing versions.
+
+The module follows the ``MAJOR.MINOR.PATCH`` style:
+
+* ``MAJOR`` version when you make incompatible API changes,
+* ``MINOR`` version when you add functionality in a backwards compatible manner, and
+* ``PATCH`` version when you make backwards compatible bug fixes.
+
+Additional labels for pre-release and build metadata are supported.
+
+
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
-   Install <install.rst>
-   Usage <usage.rst>
-   Development <development.rst>
-   API <api.rst>
-
-A Python module for `semantic versioning`_. Simplifies comparing versions.
+   install
+   usage
+   development
+   api
 
 
 .. |latest-version| image:: https://img.shields.io/pypi/v/semver.svg
@@ -41,7 +48,7 @@ A Python module for `semantic versioning`_. Simplifies comparing versions.
 .. _semantic versioning: http://semver.org/
 
 
-Indices and tables
+Indices and Tables
 ==================
 
 * :ref:`genindex`

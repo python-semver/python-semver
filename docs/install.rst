@@ -1,5 +1,5 @@
-Installation
-------------
+Installing semver
+=================
 
 For Python 2:
 

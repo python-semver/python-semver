@@ -1,5 +1,5 @@
-How to Contribute
------------------
+Contributing to semver
+======================
 
 When you make changes to the code please run the tests before pushing your
 code to your fork and opening a `pull request`_:
@@ -8,7 +8,7 @@ code to your fork and opening a `pull request`_:
 
     python setup.py test
 
-We use `py.test`_ and `tox`_ to run tests against all supported Python
+We use `pytest`_ and `tox`_ to run tests against all supported Python
 versions.  All test dependencies are resolved automatically, apart from
 virtualenv, which for the moment you still may have to install manually:
 
@@ -24,5 +24,5 @@ You can use the ``clean`` command to remove build and test files and folders:
 
 
 .. _pull request: https://github.com/k-bx/python-semver/pulls
-.. _py.test: http://pytest.org/
+.. _pytest: http://pytest.org/
 .. _tox: http://tox.testrun.org/
