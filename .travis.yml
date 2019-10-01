@@ -1,7 +1,7 @@
 language: python
 install:
   - pip install --upgrade pip setuptools
-  - pip install virtualenv
+  - pip install virtualenv tox
 script: tox -v
 matrix:
   include:
