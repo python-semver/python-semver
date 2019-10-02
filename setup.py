@@ -5,6 +5,10 @@ from os import remove
 from os.path import dirname, join
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
+try:
+    from setuptools.command.clean import clean as CleanCommand
+except ImportError:
+    from distutils.command.clean import clean as CleanCommand
 from shlex import split
 from shutil import rmtree
 
@@ -30,8 +34,9 @@ class Tox(TestCommand):
         exit(errno)
 
 
-class Clean(TestCommand):
+class Clean(CleanCommand):
     def run(self):
+        super().run()
         delete_in_root = [
             'build',
             '.cache',
