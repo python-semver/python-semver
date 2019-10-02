@@ -316,6 +316,10 @@ def test_should_get_max():
     assert max_ver('3.4.5', '4.0.2') == '4.0.2'
 
 
+def test_should_get_max_same():
+    assert max_ver('3.4.5', '3.4.5') == '3.4.5'
+
+
 def test_should_get_min():
     assert min_ver('3.4.5', '4.0.2') == '3.4.5'
 
