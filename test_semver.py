@@ -546,3 +546,37 @@ def test_immutable_unknown_attribute(version):
 def test_version_info_should_be_iterable(version):
     assert tuple(version) == (version.major, version.minor, version.patch,
                               version.prerelease, version.build)
+
+
+def test_should_compare_prerelease_and_build_with_numbers():
+    assert VersionInfo(major=1, minor=9, patch=1, prerelease=1, build=1) < \
+           VersionInfo(major=1, minor=9, patch=1, prerelease=2, build=1)
+    assert VersionInfo(1, 9, 1, 1, 1) < VersionInfo(1, 9, 1, 2, 1)
+    assert VersionInfo('2') < VersionInfo(10)
+    assert VersionInfo('2') < VersionInfo('10')
+
+
+def test_should_be_able_to_use_strings_as_major_minor_patch():
+    v = VersionInfo('1', '2', '3')
+    assert isinstance(v.major, int)
+    assert isinstance(v.minor, int)
+    assert isinstance(v.patch, int)
+    assert v.prerelease is None
+    assert v.build is None
+    assert VersionInfo('1', '2', '3') == VersionInfo(1, 2, 3)
+
+
+def test_using_non_numeric_string_as_major_minor_patch_throws():
+    with pytest.raises(ValueError):
+        VersionInfo('a')
+    with pytest.raises(ValueError):
+        VersionInfo(1, 'a')
+    with pytest.raises(ValueError):
+        VersionInfo(1, 2, 'a')
+
+
+def test_should_be_able_to_use_integers_as_prerelease_build():
+    v = VersionInfo(1, 2, 3, 4, 5)
+    assert isinstance(v.prerelease, str)
+    assert isinstance(v.build, str)
+    assert VersionInfo(1, 2, 3, 4, 5) == VersionInfo(1, 2, 3, '4', '5')

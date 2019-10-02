@@ -99,11 +99,11 @@ class VersionInfo(object):
     __slots__ = ('_major', '_minor', '_patch', '_prerelease', '_build')
 
     def __init__(self, major, minor=0, patch=0, prerelease=None, build=None):
-        self._major = major
-        self._minor = minor
-        self._patch = patch
-        self._prerelease = prerelease
-        self._build = build
+        self._major = int(major)
+        self._minor = int(minor)
+        self._patch = int(patch)
+        self._prerelease = None if prerelease is None else str(prerelease)
+        self._build = None if build is None else str(build)
 
     @property
     def major(self):
