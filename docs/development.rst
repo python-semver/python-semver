@@ -49,17 +49,17 @@ We recommend to use the following workflow if you would like to contribute:
 4. Work on your branch. Commit your work. Don't forget to write test cases
    for your new feature.
 
-5. Run the test suite. You have the following options:
+5. Run the test suite. You can decide to run the complete test suite or
+   only part of it:
 
-   * To run a complete test use the ``setup.py`` script (shown for Python 3)::
+   * To run all tests, use::
 
-     $ python3 setup.py test
+     $ tox
 
-    This may create some errors as you probably do not have all Python
-    versions installed on your system. To restrict it to only installed
-    version (probably 2.7 and 3.x), pass this options::
+    If you have not all Python interpreters installed on your system
+    it will probably give you some errors. To avoid such errors, use::
 
-     $ python3 setup.py test -a --skip-missing-interpreters
+     $ tox --skip-missing-interpreters
 
    * To run a test for a specific Python version, use the
      :command:`tox` command, for example, for Python 3.6::
