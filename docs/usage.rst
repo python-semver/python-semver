@@ -235,7 +235,7 @@ If you need to convert some types into other, refer to :ref:`sec.convert.version
 
 
 Comparing Versions through an Expression
----------------------------------------
+----------------------------------------
 
 If you need a more fine-grained approach of comparing two versions,
 use the :func:`semver.match` function. It expects two arguments:

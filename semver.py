@@ -107,6 +107,7 @@ class VersionInfo(object):
 
     @property
     def major(self):
+        """The major part of a version"""
         return self._major
 
     @major.setter
@@ -115,6 +116,7 @@ class VersionInfo(object):
 
     @property
     def minor(self):
+        """The minor part of a version"""
         return self._minor
 
     @minor.setter
@@ -123,6 +125,7 @@ class VersionInfo(object):
 
     @property
     def patch(self):
+        """The patch part of a version"""
         return self._patch
 
     @patch.setter
@@ -131,6 +134,7 @@ class VersionInfo(object):
 
     @property
     def prerelease(self):
+        """The prerelease part of a version"""
         return self._prerelease
 
     @prerelease.setter
@@ -139,6 +143,7 @@ class VersionInfo(object):
 
     @property
     def build(self):
+        """The build part of a version"""
         return self._build
 
     @build.setter
