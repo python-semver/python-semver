@@ -292,6 +292,28 @@ prerelease='pre.2', build='build.4')
         """
         return parse_version_info(version)
 
+    def replace(self, **parts):
+        """Replace one or more parts of a version and return a new
+          :class:`semver.VersionInfo` object, but leave self untouched
+
+        :param dict parts: the parts to be updated. Valid keys are:
+          ``major``, ``minor``, ``patch``, ``prerelease``, or ``build``
+        :return: the new :class:`semver.VersionInfo` object with the changed
+          parts
+        :raises: TypeError, if ``parts`` contains invalid keys
+        """
+        version = self._asdict()
+        version.update(parts)
+        try:
+            return VersionInfo(**version)
+        except TypeError:
+            unknownkeys = set(parts) - set(self._asdict())
+            error = ("replace() got %d unexpected keyword "
+                     "argument(s): %s" % (len(unknownkeys),
+                                          ", ".join(unknownkeys))
+                     )
+            raise TypeError(error)
+
 
 def _to_dict(obj):
     if isinstance(obj, VersionInfo):
@@ -702,6 +724,24 @@ def main(cliargs=None):
     except (ValueError, TypeError) as err:
         print("ERROR", err, file=sys.stderr)
         return 2
+
+
+def replace(version, **parts):
+    """Replace one or more parts of a version and return the new string
+
+    :param str version: the version string to replace
+    :param dict parts: the parts to be updated. Valid keys are:
+      ``major``, ``minor``, ``patch``, ``prerelease``, or ``build``
+    :return: the replaced version string
+    :raises: TypeError, if ``parts`` contains invalid keys
+    :rtype: str
+
+    >>> import semver
+    >>> semver.replace("1.2.3", major=2, patch=10)
+    '2.2.10'
+    """
+    version = parse_version_info(version)
+    return str(version.replace(**parts))
 
 
 if __name__ == "__main__":

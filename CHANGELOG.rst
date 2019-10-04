@@ -23,6 +23,8 @@ Features
 * :pr:`125`: Created :file:`setup.cfg` for pytest and tox
 * :gh:`126` (:pr:`127`): Added target for documentation in :file:`tox.ini`
 * :gh:`142` (:pr:`143`): Improved usage section
+* :gh:`144` (:pr:`156`): Added :func:`semver.replace` and :func:`semver.VersionInfo.replace`
+  functions
 * :gh:`145` (:pr:`146`): Added posargs in :file:`tox.ini`
 * :pr:`157`: Introduce :file:`conftest.py` to improve doctests
 * :pr:`165`: Improved code coverage
