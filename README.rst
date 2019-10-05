@@ -1,9 +1,80 @@
-Semver |latest-version|
-=======================
+Quickstart
+==========
+
+.. teaser-begin
+
+A Python module for `semantic versioning`_. Simplifies comparing versions.
 
 |build-status| |python-support| |downloads| |license| |docs|
 
-A Python module for `semantic versioning`_. Simplifies comparing versions.
+.. teaser-end
+
+
+The module follows the ``MAJOR.MINOR.PATCH`` style:
+
+* ``MAJOR`` version when you make incompatible API changes,
+* ``MINOR`` version when you add functionality in a backwards compatible manner, and
+* ``PATCH`` version when you make backwards compatible bug fixes.
+
+Additional labels for pre-release and build metadata are supported.
+
+To import this library, use:
+
+.. code-block:: python
+
+    >>> import semver
+
+Working with the library is quite straightforward. To turn a version string into the
+different parts, use the :func:`semver.parse` function:
+
+.. code-block:: python
+
+    >>> ver = semver.parse('1.2.3-pre.2+build.4')
+    >>> ver['major']
+    1
+    >>> ver['minor']
+    2
+    >>> ver['patch']
+    3
+    >>> ver['prerelease']
+    'pre.2'
+    >>> ver['build']
+    'build.5'
+
+To raise parts of a version, there are a couple of functions available for
+you. The :func:`semver.parse_version_info` function converts a version string
+into a :class:`semver.VersionInfo` class. The function
+:func:`semver.VersionInfo.bump_major` leaves the original object untouched, but
+returns a new :class:`semver.VersionInfo` instance with the raised major part:
+
+.. code-block:: python
+
+    >>> ver = semver.parse_version_info("3.4.5")
+    >>> ver.bump_major()
+    VersionInfo(major=4, minor=0, patch=0, prerelease=None, build=None)
+
+It is allowed to concatenate different "bump functions":
+
+.. code-block:: python
+
+    >>> ver.bump_major().bump_minor()
+    VersionInfo(major=4, minor=0, patch=1, prerelease=None, build=None)
+
+To compare two versions, semver provides the :func:`semver.compare` function.
+The return value indicates the relationship between the first and second
+version:
+
+.. code-block:: python
+
+    >>> semver.compare("1.0.0", "2.0.0")
+    -1
+    >>> semver.compare("2.0.0", "1.0.0")
+    1
+    >>> semver.compare("2.0.0", "2.0.0")
+    0
+
+
+There are other functions to discover. Read on!
 
 
 .. |latest-version| image:: https://img.shields.io/pypi/v/semver.svg
@@ -25,7 +96,3 @@ A Python module for `semantic versioning`_. Simplifies comparing versions.
    :target: http://python-semver.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 .. _semantic versioning: http://semver.org/
-
-Documentation
--------------
-|docs|
