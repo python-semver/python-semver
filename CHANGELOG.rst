@@ -2,41 +2,109 @@
 Change Log
 ##########
 
-Python SemVer library
-#####################
 
 All notable changes to this code base will be documented in this file,
 in every released version.
 
-Version 2.8.x
-=============
+
+Version 2.9.0 (WIP)
+===================
 :Released: 20yy-mm-dd
 :Maintainer: Sébastien Celles <s.celles@gmail.com>
 
-* Issue #102 (PR #...). Fix comparison between VersionInfo and tuple
-* Issue #103 (PR #...). Disallow comparison between VersionInfo and string (and int)
+Features
+--------
+
+* :gh:`85` (:pr:`147`, :pr:`154`): Improved contribution section
+* :gh:`126` (:pr:`127`): Added target for documentation in :file:`tox.ini`
+* :gh:`142` (:pr:`143`): Improved usage section
+* :gh:`145` (:pr:`146`): Added posargs in :file:`tox.ini`
+* :pr:`157`: Introduce :file:`conftest.py` to improve doctests
+
+Bug Fixes
+---------
+
+* :gh:`102`: Fixed comparison between VersionInfo and tuple
+* :gh:`103`: Disallow comparison between VersionInfo and string (and int)
+* :gh:`135` (:pr:`140`): Converted prerelease and build to string
+* :gh:`136` (:pr:`151`): Added testsuite to tarball
+* :gh:`154` (:pr:`155`): Improved README description
+
+Removals
+--------
+
+* :gh:`148` (:pr:`149`): Removed and replaced ``python setup.py test``
+
+
+Version 2.8.2
+=============
+:Released: 2019-05-19
+:Maintainer: Sébastien Celles <s.celles@gmail.com>
+
+Features
+--------
+
+* :gh:`104` (:pr:`125`): Added iterator to :func:`semver.VersionInfo`
+* :gh:`112`, :gh:`113`: Added Python 3.7 support
+* :pr:`120`: Improved test_immutable function with properties
+* :pr:`125`: Created :file:`setup.cfg` for pytest and tox
+
+Bug Fixes
+---------
+
+* :gh:`121` (:pr:`122`): Use python3 instead of python3.4 in :file:`tox.ini`
+* :pr:`123`: Improved :func:`__repr__` and derive class name from :func:`type`
+* :gh:`128` (:pr:`129`): Fixed wrong datatypes in docstring for :func:`semver.format_version`
+
+Removals
+--------
+
+* :gh:`111` (:pr:`110`): Droped Python 3.3
+
 
 Version 2.8.1
 =============
 :Released: 2018-07-09
 :Maintainer: Sébastien Celles <s.celles@gmail.com>
 
-* Issue #77 (PR #47). Convert multiple tests into pytest.mark.parametrize
-* Issue #89 (PR #90). Add doctests.
-* Issue #40 (PR #88). Add a static parse method to VersionInfo
-* Issue #87 #94 (PR #93). Remove named tuple inheritance. Fix bad rendering in Pandas DataFrame
-* Issue #96 (PR #97). Make VersionInfo immutable
-* Issue #98 (PR #99). prerelease and build set to None by default
+Features
+--------
+
+* :gh:`40` (:pr:`88`): Added a static parse method to VersionInfo
+* :gh:`77` (:pr:`47`): Converted multiple tests into pytest.mark.parametrize
+* :gh:`87`, :gh:`94` (:pr:`93`): Removed named tuple inheritance.
+* :gh:`89` (:pr:`90`): Added doctests.
+
+Bug Fixes
+---------
+
+* :gh:`98` (:pr:`99`): Set prerelease and build to None by default
+* :gh:`96` (:pr:`97`): Made VersionInfo immutable
+
 
 Version 2.8.0
 =============
 :Released: 2018-05-16
 :Maintainer: Sébastien Celles <s.celles@gmail.com>
 
-* Issue #76 (PR #80). Remove Python 2.6 compatibility
-* Issue #79 (PR #81 #84). Define and improve a release procedure file
-* Issue #72 #73 (PR #75). Implements __str__ and __hash__
-* Issue #82 (PR #83). Rename test.py to test_semver.py so py.test can autodiscover test file
+
+Changes
+-------
+
+* :gh:`82` (:pr:`83`): Renamed :file:`test.py` to :file:`test_semver.py` so 
+  py.test can autodiscover test file
+
+Additions
+---------
+
+* :gh:`79` (:pr:`81`, :pr:`84`): Defined and improve a release procedure file
+* :gh:`72`, :gh:`73` (:pr:`75`): Implemented :func:`__str__` and :func:`__hash__`
+
+Removals
+--------
+
+* :gh:`76` (:pr:`80`): Removed Python 2.6 compatibility
+
 
 Version 2.7.9
 =============
@@ -44,7 +112,12 @@ Version 2.7.9
 :Released: 2017-09-23
 :Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
 
-* Issue #65 (PR #66). Add finalize_version function
+
+Additions
+---------
+
+* :gh:`65` (:pr:`66`): Added :func:`semver.finalize_version` function.
+
 
 Version 2.7.8
 =============
@@ -52,7 +125,8 @@ Version 2.7.8
 :Released: 2017-08-25
 :Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
 
-* PR #62. Support custom default names for pre and build
+* :gh:`62`: Support custom default names for pre and build
+
 
 Version 2.7.7
 =============
@@ -60,8 +134,9 @@ Version 2.7.7
 :Released: 2017-05-25
 :Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
 
-* Issue #54 (PR #55) Add comparision between VersionInfo objects
-* PR #56. Add support for Python 3.6
+* :gh:`54` (:pr:`55`): Added comparision between VersionInfo objects
+* :pr:`56`: Added support for Python 3.6
+
 
 Version 2.7.2
 =============
@@ -72,14 +147,15 @@ Version 2.7.2
 Additions
 ---------
 
-* Fix issue #37 (Remove trailing zeros from prelease doesn't allow to
-  parse 0 pre-release version)
-* Add ‘parse_version_info’ to parse a version string to a version info
-  tuple.
+* Added :func:`semver.parse_version_info` to parse a version string to a
+  version info tuple.
 
 Bug Fixes
 ---------
-  
+
+* :gh:`37`: Removed trailing zeros from prelease doesn't allow to
+  parse 0 pre-release version
+
 * Refine parsing to conform more strictly to SemVer 2.0.0.
 
   SemVer 2.0.0 specification §9 forbids leading zero on identifiers in
@@ -115,7 +191,7 @@ Additions
 Changes
 -------
 
-* Make separate builds for tests on Travis CI.
+* Made separate builds for tests on Travis CI.
 
 
 Version 2.4.2
@@ -127,13 +203,13 @@ Version 2.4.2
 Changes
 -------
 
-* Migrate README document to reStructuredText format.
+* Migrated README document to reStructuredText format.
 
-* Use Setuptools for distribution management.
+* Used Setuptools for distribution management.
 
-* Migrate test cases to Py.test.
+* Migrated test cases to Py.test.
 
-* Add configuration for Tox test runner.
+* Added configuration for Tox test runner.
 
 
 Version 2.4.1
@@ -145,7 +221,7 @@ Version 2.4.1
 Additions
 ---------
 
-* [GitHub issue #23] Compare build component of a version.
+* :gh:`23`: Compared build component of a version.
 
 
 Version 2.4.0
@@ -157,7 +233,7 @@ Version 2.4.0
 Bug Fixes
 ---------
 
-* [GitHub issue #21] Compare alphanumeric components correctly.
+* :gh:`21`: Compared alphanumeric components correctly.
 
 
 Version 2.3.1
@@ -169,7 +245,7 @@ Version 2.3.1
 Additions
 ---------
 
-* Declare granted license name in distribution metadata.
+* Declared granted license name in distribution metadata.
 
 
 Version 2.3.0
@@ -181,7 +257,7 @@ Version 2.3.0
 Additions
 ---------
 
-* Add functions to increment prerelease and build components in a
+* Added functions to increment prerelease and build components in a
   version.
 
 
@@ -194,7 +270,7 @@ Version 2.2.1
 Bug Fixes
 ---------
 
-* Correct comparison when any component includes zero.
+* Corrected comparison when any component includes zero.
 
 
 Version 2.2.0
@@ -220,7 +296,7 @@ Version 2.1.2
 Bug Fixes
 ---------
 
-* Restore current README document to distribution manifest.
+* Restored current README document to distribution manifest.
 
 
 Version 2.1.1
@@ -232,7 +308,7 @@ Version 2.1.1
 Bug Fixes
 ---------
 
-* Remove absent document from distribution manifest.
+* Removed absent document from distribution manifest.
 
 
 Version 2.1.0
@@ -244,23 +320,23 @@ Version 2.1.0
 Additions
 ---------
 
-* Document installation instructions.
+* Documented installation instructions.
 
-* Document project home page.
+* Documented project home page.
 
-* Add function to format a version string from components.
+* Added function to format a version string from components.
 
-* Add functions to increment specific components in a version.
+* Added functions to increment specific components in a version.
 
 Changes
 -------
 
-* Migrate README document to Markdown format.
+* Migrated README document to Markdown format.
 
 Bug Fixes
 ---------
 
-* Correct code examples in README document.
+* Corrected code examples in README document.
 
 
 Version 2.0.2
@@ -272,9 +348,9 @@ Version 2.0.2
 Additions
 ---------
 
-* Add configuration for Travis continuous integration.
+* Added configuration for Travis continuous integration.
 
-* Explicitly declare supported Python versions.
+* Explicitly declared supported Python versions.
 
 
 Version 2.0.1
@@ -286,7 +362,7 @@ Version 2.0.1
 Bug Fixes
 ---------
 
-* [GitHub issue #9] Correct comparison of equal version strings.
+* :gh:`9`: Fixed comparison of equal version strings.
 
 
 Version 2.0.0

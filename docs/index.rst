@@ -11,7 +11,7 @@ Semver |version| -- Semantic Versioning
    usage
    development
    api
-
+   changelog
 
 
 Indices and Tables
