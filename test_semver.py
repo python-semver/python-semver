@@ -316,6 +316,10 @@ def test_should_get_max():
     assert max_ver('3.4.5', '4.0.2') == '4.0.2'
 
 
+def test_should_get_max_same():
+    assert max_ver('3.4.5', '3.4.5') == '3.4.5'
+
+
 def test_should_get_min():
     assert min_ver('3.4.5', '4.0.2') == '3.4.5'
 
@@ -544,6 +548,7 @@ def test_version_info_should_be_iterable(version):
                               version.prerelease, version.build)
 
 
+<<<<<<< HEAD
 @pytest.mark.parametrize("version, index, expected", [
     ("1.2.3-rc.0+build.0", 0, 1),
     ("1.2.3-rc.0+build.0", 1, 2),
@@ -554,3 +559,37 @@ def test_version_info_should_be_iterable(version):
 def test_version_info_should_be_accessed_with_index(version, index, expected):
     version_info = VersionInfo.parse(version)
     assert version_info[index] == expected
+=======
+def test_should_compare_prerelease_and_build_with_numbers():
+    assert VersionInfo(major=1, minor=9, patch=1, prerelease=1, build=1) < \
+           VersionInfo(major=1, minor=9, patch=1, prerelease=2, build=1)
+    assert VersionInfo(1, 9, 1, 1, 1) < VersionInfo(1, 9, 1, 2, 1)
+    assert VersionInfo('2') < VersionInfo(10)
+    assert VersionInfo('2') < VersionInfo('10')
+
+
+def test_should_be_able_to_use_strings_as_major_minor_patch():
+    v = VersionInfo('1', '2', '3')
+    assert isinstance(v.major, int)
+    assert isinstance(v.minor, int)
+    assert isinstance(v.patch, int)
+    assert v.prerelease is None
+    assert v.build is None
+    assert VersionInfo('1', '2', '3') == VersionInfo(1, 2, 3)
+
+
+def test_using_non_numeric_string_as_major_minor_patch_throws():
+    with pytest.raises(ValueError):
+        VersionInfo('a')
+    with pytest.raises(ValueError):
+        VersionInfo(1, 'a')
+    with pytest.raises(ValueError):
+        VersionInfo(1, 2, 'a')
+
+
+def test_should_be_able_to_use_integers_as_prerelease_build():
+    v = VersionInfo(1, 2, 3, 4, 5)
+    assert isinstance(v.prerelease, str)
+    assert isinstance(v.build, str)
+    assert VersionInfo(1, 2, 3, 4, 5) == VersionInfo(1, 2, 3, '4', '5')
+>>>>>>> c585f5cb8b9a0d5859a885e94a7e84597a554d67

@@ -1,10 +1,26 @@
 Contributing to semver
 ======================
 
-Do you want to contribute? Great! We would like to give you some
-helpful tips and tricks.
-When you make changes to the code, we would greatly appreciate if you
-consider the following requirements:
+The semver source code is managed using Git and is hosted on GitHub::
+
+   git clone git://github.com/k-bx/python-semver
+
+
+Reporting Bugs and Feedback
+---------------------------
+
+If you think you have encountered a bug in semver or have an idea for a new
+feature? Great! We like to hear from you.
+
+First, take the time to look into our GitHub `issues`_ tracker if
+this already covered. If not, changes are good that we avoid double work.
+
+
+Fixing Bugs and Implementing New Features
+-----------------------------------------
+
+Before you make changes to the code, we would highly appreciate if you
+consider the following general requirements:
 
 * Make sure your code adheres to the `Semantic Versioning`_ specification.
 
@@ -15,70 +31,163 @@ consider the following requirements:
 
 * Test also for side effects of your new feature and run the complete
   test suite.
-* Document the new feature.
 
-We use `pytest`_ and `tox`_ to run tests against all supported Python
-versions.  All test dependencies are resolved automatically, apart from
-virtualenv, which for the moment you still may have to install manually:
+* Document the new feature, see :ref:`doc` for details.
 
-.. code-block:: bash
 
-    pip install "virtualenv<14.0.0"  # <14.0.0 needed for Python 3.2 only
+Modifying the Code
+------------------
 
-We recommend to use the following workflow if you would like to contribute:
+We recommend the following workflow:
 
-1. Fork our project on GitHub using this link:
+#. Fork our project on GitHub using this link:
    https://github.com/k-bx/python-semver/fork
 
-2. Clone your forked Git repository (replace ``GITHUB_USER`` with your
+#. Clone your forked Git repository (replace ``GITHUB_USER`` with your
    account name on GitHub)::
 
     $ git clone git@github.com:GITHUB_USER/python-semver.git
 
-3. Create a new branch. You can name your branch whatever you like, but we
+#. Create a new branch. You can name your branch whatever you like, but we
    recommend to use some meaningful name. If your fix is based on a
    existing GitHub issue, add also the number. Good examples would be:
 
-   * ``feature/123-improve-foo`` when implementing a new feature
-   * ``bugfix/123-fix-security-bar`` when dealing with bugfixes
+   * ``feature/123-improve-foo`` when implementing a new feature in issue 123
+   * ``bugfix/234-fix-security-bar`` a bugfixes for issue 234
 
    Use this :command:`git` command::
 
    $ git checkout -b feature/NAME_OF_YOUR_FEATURE
 
-4. Work on your branch. Commit your work. Don't forget to write test cases
-   for your new feature.
+#. Work on your branch. Commit your work.
 
-5. Run the test suite. You have the following options:
+#. Write test cases and run the test suite, see :ref:`testsuite` for details.
 
-   * To run a complete test use the ``setup.py`` script (shown for Python 3)::
-
-     $ python3 setup.py test
-
-    This may create some errors as you probably do not have all Python
-    versions installed on your system. To restrict it to only installed
-    version (probably 2.7 and 3.x), pass this options::
-
-     $ python3 setup.py test -a --skip-missing-interpreters
-
-   * To run a test for a specific Python version, use the
-     :command:`tox` command, for example, for Python 3.6::
-
-      $ tox -e py36
-
-6. Create a `pull request`_. Describe in the pull request what you did
+#. Create a `pull request`_. Describe in the pull request what you did
    and why. If you have open questions, ask.
 
-7. Wait for feedback. If you receive any comments, address these.
+#. Wait for feedback. If you receive any comments, address these.
 
-8. After your pull request got accepted, delete your branch.
+#. After your pull request got accepted, delete your branch.
 
-9. Use the ``clean`` command to remove build and test files and folders::
+#. Use the ``clean`` command to remove build and test files and folders::
 
    $ python setup.py clean
 
 
+.. _testsuite:
+
+Running the Test Suite
+----------------------
+
+We use `pytest`_ and `tox`_ to run tests against all supported Python
+versions.  All test dependencies are resolved automatically.
+
+You can decide to run the complete test suite or only part of it:
+
+* To run all tests, use::
+
+     $ tox
+
+  If you have not all Python interpreters installed on your system
+  it will probably give you some errors (``InterpreterNotFound``).
+  To avoid such errors, use::
+
+     $ tox --skip-missing-interpreters
+
+  It is possible to use only specific Python versions. Use the ``-e``
+  option and one or more abbreviations (``py27`` for Python 2.7, ``py34`` for
+  Python 3.4 etc.)::
+
+      $ tox -e py34
+      $ tox -e py27,py34
+
+  To get a complete list, run::
+
+      $ tox -l
+
+* To run only a specific test, pytest requires the syntax
+  ``TEST_FILE::TEST_FUNCTION``.
+
+  For example, the following line tests only the function
+  :func:`test_immutable_major` in the file :file:`test_semver.py` for all
+  Python versions::
+
+      $ tox test_semver.py::test_immutable_major
+
+  By default, pytest prints a dot for each test function only. To
+  reveal the executed test function, use the following syntax::
+
+     $ tox -- -v
+
+  You can combine the specific test function with the ``-e`` option, for
+  example, to limit the tests for Python 2.7 and 3.6 only::
+
+      $ tox -e py27,py36 test_semver.py::test_immutable_major
+
+Our code is checked against `flake8`_ for style guide issues. It is recommended
+to run your tests in combination with :command:`flake8`, for example::
+
+   $ tox -e py27,py36,flake8
+
+
+.. _doc:
+
+Documenting semver
+------------------
+
+Documenting the features of semver is very important. It gives our developers
+an overview what is possible with semver, how it "feels", and how it is
+used efficiently.
+
+.. note::
+
+    To build the documentation locally use the following command::
+
+      $ tox -e docs
+
+    The built documentation is available in :file:`dist/docs`.
+
+
+A new feature is *not* complete if it isn't proberly documented. A good
+documentation includes:
+
+  * **A docstring**
+
+    Each docstring contains a summary line, a linebreak, the description
+    of its arguments in `Sphinx style`_, and an optional doctest.
+    The docstring is extracted and reused in the :ref:`api` section.
+    An appropriate docstring should look like this::
+
+        def compare(ver1, ver2):
+            """Compare two versions
+
+            :param ver1: version string 1
+            :param ver2: version string 2
+            :return: The return value is negative if ver1 < ver2,
+                    zero if ver1 == ver2 and strictly positive if ver1 > ver2
+            :rtype: int
+
+            >>> semver.compare("1.0.0", "2.0.0")
+            -1
+            >>> semver.compare("2.0.0", "1.0.0")
+            1
+            >>> semver.compare("2.0.0", "2.0.0")
+            0
+            """
+
+  * **The documentation**
+
+    A docstring is good, but in most cases it's too dense. Describe how
+    to use your new feature in our documentation. Here you can give your
+    readers more examples, describe it in a broader context or show
+    edge cases.
+
+
+.. _flake8: https://flake8.readthedocs.io
+.. _issues:  https://github.com/k-bx/python-semver/issues
 .. _pull request: https://github.com/k-bx/python-semver/pulls
 .. _pytest: http://pytest.org/
-.. _tox: https://tox.readthedocs.org/
 .. _Semantic Versioning: https://semver.org
+.. _Sphinx style: https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html
+.. _tox: https://tox.readthedocs.org/
