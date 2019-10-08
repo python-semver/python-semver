@@ -589,16 +589,18 @@ def test_should_be_able_to_use_integers_as_prerelease_build():
     ("1.2.3-rc.0+build.0", 2, 3),
     ("1.2.3-rc.0+build.0", 3, "rc.0"),
     ("1.2.3-rc.0+build.0", 4, "build.0"),
+    ("1.2.3-rc.0+build.0", -1, "build.0"),
     ("1.2.3-rc.0", 0, 1),
     ("1.2.3-rc.0", 1, 2),
     ("1.2.3-rc.0", 2, 3),
     ("1.2.3-rc.0", 3, "rc.0"),
+    ("1.2.3-rc.0", -1, "rc.0"),
     ("1.2.3", 0, 1),
     ("1.2.3", 1, 2),
     ("1.2.3", 2, 3),
+    ("1.2.3", -1, 3),
 ])
-def test_version_info_should_be_accessed_with_positive_index(version,
-                                                             index, expected):
+def test_version_info_should_be_accessed_with_index(version, index, expected):
     version_info = VersionInfo.parse(version)
     assert version_info[index] == expected
 
@@ -613,6 +615,7 @@ def test_version_info_should_be_accessed_with_positive_index(version,
     ("1.2.3-rc.0", slice(0, 4), (1, 2, 3, "rc.0")),
     ("1.2.3-rc.0", slice(0, 3), (1, 2, 3)),
     ("1.2.3-rc.0", slice(0, 2), (1, 2)),
+    ("1.2.3", slice(0, 10), (1, 2, 3)),
     ("1.2.3", slice(0, 3), (1, 2, 3)),
     ("1.2.3", slice(0, 2), (1, 2)),
     # Special cases
@@ -630,7 +633,6 @@ def test_version_info_should_be_accessed_with_slice_object(version,
 
 @pytest.mark.parametrize("version, index", [
     ("1.2.3-rc.0", 4),
-    ("1.2.3-rc.0+build.0", -1),
     ("1.2.3", 3),
     ("1.2.3", 4),
 ])
