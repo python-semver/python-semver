@@ -16,6 +16,10 @@ Features
 --------
 
 * :gh:`85` (:pr:`147`, :pr:`154`): Improved contribution section
+* :gh:`104` (:pr:`125`): Added iterator to :func:`semver.VersionInfo`
+* :gh:`112`, :gh:`113`: Added Python 3.7 support
+* :pr:`120`: Improved test_immutable function with properties
+* :pr:`125`: Created :file:`setup.cfg` for pytest and tox
 * :gh:`126` (:pr:`127`): Added target for documentation in :file:`tox.ini`
 * :gh:`142` (:pr:`143`): Improved usage section
 * :gh:`145` (:pr:`146`): Added posargs in :file:`tox.ini`
@@ -26,6 +30,9 @@ Bug Fixes
 
 * :gh:`102`: Fixed comparison between VersionInfo and tuple
 * :gh:`103`: Disallow comparison between VersionInfo and string (and int)
+* :gh:`121` (:pr:`122`): Use python3 instead of python3.4 in :file:`tox.ini`
+* :pr:`123`: Improved :func:`__repr__` and derive class name from :func:`type`
+* :gh:`128` (:pr:`129`): Fixed wrong datatypes in docstring for :func:`semver.format_version`
 * :gh:`135` (:pr:`140`): Converted prerelease and build to string
 * :gh:`136` (:pr:`151`): Added testsuite to tarball
 * :gh:`154` (:pr:`155`): Improved README description
@@ -33,6 +40,7 @@ Bug Fixes
 Removals
 --------
 
+* :gh:`111` (:pr:`110`): Droped Python 3.3
 * :gh:`148` (:pr:`149`): Removed and replaced ``python setup.py test``
 
 
@@ -41,25 +49,7 @@ Version 2.8.2
 :Released: 2019-05-19
 :Maintainer: Sébastien Celles <s.celles@gmail.com>
 
-Features
---------
-
-* :gh:`104` (:pr:`125`): Added iterator to :func:`semver.VersionInfo`
-* :gh:`112`, :gh:`113`: Added Python 3.7 support
-* :pr:`120`: Improved test_immutable function with properties
-* :pr:`125`: Created :file:`setup.cfg` for pytest and tox
-
-Bug Fixes
----------
-
-* :gh:`121` (:pr:`122`): Use python3 instead of python3.4 in :file:`tox.ini`
-* :pr:`123`: Improved :func:`__repr__` and derive class name from :func:`type`
-* :gh:`128` (:pr:`129`): Fixed wrong datatypes in docstring for :func:`semver.format_version`
-
-Removals
---------
-
-* :gh:`111` (:pr:`110`): Droped Python 3.3
+Skipped, not released.
 
 
 Version 2.8.1
