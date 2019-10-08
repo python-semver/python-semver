@@ -548,18 +548,6 @@ def test_version_info_should_be_iterable(version):
                               version.prerelease, version.build)
 
 
-<<<<<<< HEAD
-@pytest.mark.parametrize("version, index, expected", [
-    ("1.2.3-rc.0+build.0", 0, 1),
-    ("1.2.3-rc.0+build.0", 1, 2),
-    ("1.2.3-rc.0+build.0", 2, 3),
-    ("1.2.3-rc.0+build.0", 3, "rc.0"),
-    ("1.2.3-rc.0+build.0", 4, "build.0"),
-])
-def test_version_info_should_be_accessed_with_index(version, index, expected):
-    version_info = VersionInfo.parse(version)
-    assert version_info[index] == expected
-=======
 def test_should_compare_prerelease_and_build_with_numbers():
     assert VersionInfo(major=1, minor=9, patch=1, prerelease=1, build=1) < \
            VersionInfo(major=1, minor=9, patch=1, prerelease=2, build=1)
@@ -592,4 +580,61 @@ def test_should_be_able_to_use_integers_as_prerelease_build():
     assert isinstance(v.prerelease, str)
     assert isinstance(v.build, str)
     assert VersionInfo(1, 2, 3, 4, 5) == VersionInfo(1, 2, 3, '4', '5')
->>>>>>> c585f5cb8b9a0d5859a885e94a7e84597a554d67
+
+
+@pytest.mark.parametrize("version, index, expected", [
+    # Simple positive indices
+    ("1.2.3-rc.0+build.0", 0, 1),
+    ("1.2.3-rc.0+build.0", 1, 2),
+    ("1.2.3-rc.0+build.0", 2, 3),
+    ("1.2.3-rc.0+build.0", 3, "rc.0"),
+    ("1.2.3-rc.0+build.0", 4, "build.0"),
+    ("1.2.3-rc.0", 0, 1),
+    ("1.2.3-rc.0", 1, 2),
+    ("1.2.3-rc.0", 2, 3),
+    ("1.2.3-rc.0", 3, "rc.0"),
+    ("1.2.3", 0, 1),
+    ("1.2.3", 1, 2),
+    ("1.2.3", 2, 3),
+])
+def test_version_info_should_be_accessed_with_positive_index(version,
+                                                             index, expected):
+    version_info = VersionInfo.parse(version)
+    assert version_info[index] == expected
+
+
+@pytest.mark.parametrize("version, slice_object, expected", [
+    # Slice indices
+    ("1.2.3-rc.0+build.0", slice(0, 5), (1, 2, 3, "rc.0", "build.0")),
+    ("1.2.3-rc.0+build.0", slice(0, 4), (1, 2, 3, "rc.0")),
+    ("1.2.3-rc.0+build.0", slice(0, 3), (1, 2, 3)),
+    ("1.2.3-rc.0+build.0", slice(0, 2), (1, 2)),
+    ("1.2.3-rc.0+build.0", slice(3, 5), ("rc.0", "build.0")),
+    ("1.2.3-rc.0", slice(0, 4), (1, 2, 3, "rc.0")),
+    ("1.2.3-rc.0", slice(0, 3), (1, 2, 3)),
+    ("1.2.3-rc.0", slice(0, 2), (1, 2)),
+    ("1.2.3", slice(0, 3), (1, 2, 3)),
+    ("1.2.3", slice(0, 2), (1, 2)),
+    # Special cases
+    ("1.2.3-rc.0+build.0", slice(3), (1, 2, 3)),
+    ("1.2.3-rc.0+build.0", slice(0, 5, 2), (1, 3, "build.0")),
+    ("1.2.3-rc.0+build.0", slice(None, 5, 2), (1, 3, "build.0")),
+    ("1.2.3-rc.0+build.0", slice(5, 0, -2), ("build.0", 3)),
+])
+def test_version_info_should_be_accessed_with_slice_object(version,
+                                                           slice_object,
+                                                           expected):
+    version_info = VersionInfo.parse(version)
+    assert version_info[slice_object] == expected
+
+
+@pytest.mark.parametrize("version, index", [
+    ("1.2.3-rc.0", 4),
+    ("1.2.3-rc.0+build.0", -1),
+    ("1.2.3", 3),
+    ("1.2.3", 4),
+])
+def test_version_info_should_throw_index_error(version, index):
+    version_info = VersionInfo.parse(version)
+    with pytest.raises(IndexError):
+        version_info[index]

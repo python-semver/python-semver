@@ -168,8 +168,33 @@ class VersionInfo(object):
         for v in self._astuple():
             yield v
 
+    @staticmethod
+    def _validate_index(index):
+        if isinstance(index, slice):
+            checks = [index.stop >= 0]
+            if index.start is not None:
+                checks.append(index.start >= 0)
+                if index.step is not None:
+                    if index.step > 0:
+                        checks.append(index.start < index.stop)
+                    else:
+                        checks.append(index.start > index.stop)
+            elif index.step is not None:
+                checks.append(index.step > 0)
+            return all(checks)
+        else:
+            return index >= 0
+
     def __getitem__(self, index):
-        return self._astuple()[index]
+        if VersionInfo._validate_index(index):
+            sub_version = self._astuple()[index]
+            if sub_version is not None:
+                return sub_version
+            else:
+                raise IndexError("Version part at index %d is not defined"
+                                 % index)
+        else:
+            raise IndexError("VersionInfo does not support negative index")
 
     def bump_major(self):
         """Raise the major part of the version, return a new object
