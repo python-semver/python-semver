@@ -170,7 +170,11 @@ class VersionInfo(object):
 
     def __getitem__(self, index):
         """Implement getitem. This automatically strips empty parts of the
-           version from the iterable from which the index is taken."""
+           version from the iterable from which the index is taken.
+
+           :param int index: a positive or negative integer indicating the offset
+           :raises: IndexError, if index is beyond the range
+           """
         return tuple(part for part in self._astuple()
                      if part is not None)[index]
 
