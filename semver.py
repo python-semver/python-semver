@@ -35,6 +35,10 @@ _REGEX = re.compile(
 
 _LAST_NUMBER = re.compile(r'(?:[^\d]*(\d+)[^\d]*)+')
 
+#: Contains the implemented semver.org version of the spec
+SEMVER_SPEC_VERSION = "2.0.0"
+
+
 if not hasattr(__builtins__, 'cmp'):
     def cmp(a, b):
         return (a > b) - (a < b)
