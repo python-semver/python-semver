@@ -15,6 +15,7 @@ Version 2.9.0 (WIP)
 Features
 --------
 
+* :gh:`59` (:pr:`164`): Implemented a command line interface
 * :gh:`85` (:pr:`147`, :pr:`154`): Improved contribution section
 * :gh:`104` (:pr:`125`): Added iterator to :func:`semver.VersionInfo`
 * :gh:`112`, :gh:`113`: Added Python 3.7 support
@@ -24,6 +25,7 @@ Features
 * :gh:`142` (:pr:`143`): Improved usage section
 * :gh:`145` (:pr:`146`): Added posargs in :file:`tox.ini`
 * :pr:`157`: Introduce :file:`conftest.py` to improve doctests
+
 
 Bug Fixes
 ---------
