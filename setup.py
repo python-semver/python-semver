@@ -107,4 +107,7 @@ setup(
         'clean': Clean,
         'test': Tox,
     },
+    entry_points={
+        'console_scripts': ['pysemver = semver:main'],
+    }
 )

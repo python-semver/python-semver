@@ -1,25 +1,30 @@
+from argparse import Namespace
 import pytest  # noqa
 
-from semver import compare
-from semver import match
-from semver import parse
-from semver import format_version
-from semver import bump_major
-from semver import bump_minor
-from semver import bump_patch
-from semver import bump_prerelease
-from semver import bump_build
-from semver import finalize_version
-from semver import min_ver
-from semver import max_ver
-from semver import VersionInfo
-from semver import parse_version_info
-
+from semver import (VersionInfo,
+                    bump_build,
+                    bump_major,
+                    bump_minor,
+                    bump_patch,
+                    bump_prerelease,
+                    compare,
+                    createparser,
+                    finalize_version,
+                    format_version,
+                    main,
+                    match,
+                    max_ver,
+                    min_ver,
+                    parse,
+                    parse_version_info,
+                    process,
+                    )
 
 SEMVERFUNCS = [
-    compare, match, parse, format_version,
-    bump_major, bump_minor, bump_patch, bump_prerelease, bump_build,
-    max_ver, min_ver, finalize_version
+    compare, createparser,
+    bump_build, bump_major, bump_minor, bump_patch, bump_prerelease,
+    finalize_version, format_version,
+    match, max_ver, min_ver, parse, process,
 ]
 
 
@@ -590,3 +595,63 @@ def test_should_be_able_to_use_integers_as_prerelease_build():
     assert isinstance(v.prerelease, str)
     assert isinstance(v.build, str)
     assert VersionInfo(1, 2, 3, 4, 5) == VersionInfo(1, 2, 3, '4', '5')
+
+
+@pytest.mark.parametrize("cli,expected", [
+    (["bump", "major", "1.2.3"],
+     Namespace(which='bump', bump='major', version='1.2.3')),
+    (["bump", "minor", "1.2.3"],
+     Namespace(which='bump', bump='minor', version='1.2.3')),
+    (["bump", "patch", "1.2.3"],
+     Namespace(which='bump', bump='patch', version='1.2.3')),
+    (["bump", "prerelease", "1.2.3"],
+     Namespace(which='bump', bump='prerelease', version='1.2.3')),
+    (["bump", "build", "1.2.3"],
+     Namespace(which='bump', bump='build', version='1.2.3')),
+    # ---
+    (["compare", "1.2.3", "2.1.3"],
+     Namespace(which='compare', version1='1.2.3', version2='2.1.3')),
+])
+def test_should_parse_cli_arguments(cli, expected):
+    parser = createparser()
+    assert parser
+    result = parser.parse_args(cli)
+    assert result == expected
+
+
+@pytest.mark.parametrize("args,expected", [
+    # bump subcommand
+    (Namespace(which='bump', bump='major', version='1.2.3'),
+     "2.0.0"),
+    (Namespace(which='bump', bump='minor', version='1.2.3'),
+     "1.3.0"),
+    (Namespace(which='bump', bump='patch', version='1.2.3'),
+     "1.2.4"),
+    (Namespace(which='bump', bump='prerelease', version='1.2.3-rc1'),
+     "1.2.3-rc2"),
+    (Namespace(which='bump', bump='build', version='1.2.3+build.13'),
+     "1.2.3+build.14"),
+    # compare subcommand
+    (Namespace(which='compare', version1='1.2.3', version2='2.1.3'),
+     "-1"),
+    (Namespace(which='compare', version1='1.2.3', version2='1.2.3'),
+     "0"),
+    (Namespace(which='compare', version1='2.4.0', version2='2.1.3'),
+     "1"),
+])
+def test_should_process_parsed_cli_arguments(args, expected):
+    assert process(args) == expected
+
+
+def test_should_process_print(capsys):
+    rc = main(["bump", "major", "1.2.3"])
+    assert rc == 0
+    captured = capsys.readouterr()
+    assert captured.out.rstrip() == "2.0.0"
+
+
+def test_should_process_raise_error(capsys):
+    rc = main(["bump", "major", "1.2"])
+    assert rc != 0
+    captured = capsys.readouterr()
+    assert captured.err.startswith("ERROR")

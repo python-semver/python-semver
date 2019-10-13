@@ -15,6 +15,7 @@ Version 2.9.0 (WIP)
 Features
 --------
 
+* :gh:`59` (:pr:`164`): Implemented a command line interface
 * :gh:`85` (:pr:`147`, :pr:`154`): Improved contribution section
 * :gh:`104` (:pr:`125`): Added iterator to :func:`semver.VersionInfo`
 * :gh:`112`, :gh:`113`: Added Python 3.7 support
@@ -27,6 +28,7 @@ Features
 * :pr:`165`: Improved code coverage
 * :pr:`166`: Reworked :file:`.gitignore` file
 * :gh:`167` (:pr:`168`): Introduced global constant :data:`SEMVER_SPEC_VERSION`
+
 
 Bug Fixes
 ---------
