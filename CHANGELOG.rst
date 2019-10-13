@@ -24,6 +24,7 @@ Features
 * :gh:`142` (:pr:`143`): Improved usage section
 * :gh:`145` (:pr:`146`): Added posargs in :file:`tox.ini`
 * :pr:`157`: Introduce :file:`conftest.py` to improve doctests
+* :pr:`165`: Improved code coverage
 
 Bug Fixes
 ---------
