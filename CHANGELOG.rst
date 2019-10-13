@@ -24,6 +24,7 @@ Features
 * :gh:`142` (:pr:`143`): Improved usage section
 * :gh:`145` (:pr:`146`): Added posargs in :file:`tox.ini`
 * :pr:`157`: Introduce :file:`conftest.py` to improve doctests
+* :pr:`165`: Improved code coverage
 * :pr:`166`: Reworked :file:`.gitignore` file
 * :gh:`167` (:pr:`168`): Introduced global constant :data:`SEMVER_SPEC_VERSION`
 

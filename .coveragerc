@@ -5,6 +5,9 @@ source = semver
 branch = True
 
 [report]
+show_missing = true
+precision = 1
 exclude_lines =
     pragma: no cover
     if __name__ == .__main__.:
+    if not hasattr\(__builtins__, .cmp.\):

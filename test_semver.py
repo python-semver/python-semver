@@ -23,6 +23,16 @@ SEMVERFUNCS = [
 ]
 
 
+@pytest.mark.parametrize("string,expected", [
+    ("rc", "rc"),
+    ("rc.1", "rc.2"),
+    ("2x", "3x"),
+])
+def test_should_private_increment_string(string, expected):
+    from semver import _increment_string
+    assert _increment_string(string) == expected
+
+
 @pytest.fixture
 def version():
     return VersionInfo(major=1, minor=2, patch=3,
