@@ -11,6 +11,17 @@ Each type can be converted into the other, if the minimum requirements
 are met.
 
 
+Knowing the Implemented semver.org Version
+------------------------------------------
+
+The semver.org is the authorative specification of how semantical versioning is
+definied. To know which version of semver.org is implemented in the semver
+libary, use the following constant::
+
+   >>> semver.SEMVER_SPEC_VERSION
+   '2.0.0'
+
+
 Creating a Version
 ------------------
 
