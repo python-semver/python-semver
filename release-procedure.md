@@ -2,7 +2,9 @@
 Release procedure
 #################
 
-* Verify that latest build was passing https://travis-ci.org/k-bx/python-semver
+* Verify that issues about new release are closed https://github.com/k-bx/python-semver/issues and that no pull requests that should be included in this release haven't been left out https://github.com/k-bx/python-semver/pulls
+
+* Verify that continuous integration for latest build was passing https://travis-ci.org/k-bx/python-semver
 
 * Verify that `__version__` in [semver.py](https://github.com/k-bx/python-semver/blob/master/semver.py) have been updated and follow https://semver.org/
 
