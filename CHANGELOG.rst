@@ -6,10 +6,23 @@ Change Log
 All notable changes to this code base will be documented in this file,
 in every released version.
 
-
-Version 2.9.0 (WIP)
+Version 2.9.1 (WIP)
 ===================
-:Released: 20yy-mm-dd
+:Released: 20xy-xy-xy
+:Maintainer: ...
+
+Features
+--------
+
+Bug Fixes
+---------
+
+Removals
+--------
+
+Version 2.9.0
+=============
+:Released: 2019-10-30
 :Maintainer: Sébastien Celles <s.celles@gmail.com>
 
 Features
