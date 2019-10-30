@@ -15,7 +15,7 @@ Release procedure
   * [tox.ini](https://github.com/k-bx/python-semver/blob/master/tox.ini)
   * [.travis.yml](https://github.com/k-bx/python-semver/blob/master/.travis.yml)
 
-* Verify that doc reflecting new changes have been updated
+* Verify that doc reflecting new changes have been updated and are available at https://python-semver.readthedocs.io/en/latest/ If necessary, trigger doc build at https://readthedocs.org/projects/python-semver/
 
 * Add eventually new contributor(s) to [CONTRIBUTORS](https://github.com/k-bx/python-semver/blob/master/CONTRIBUTORS)
 
