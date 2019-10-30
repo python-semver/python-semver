@@ -42,7 +42,7 @@ To import this library, use:
     >>> import semver
 
 Working with the library is quite straightforward. To turn a version string into the
-different parts, use the :func:`semver.parse` function:
+different parts, use the `semver.parse` function:
 
 .. code-block:: python
 
@@ -59,10 +59,10 @@ different parts, use the :func:`semver.parse` function:
     'build.5'
 
 To raise parts of a version, there are a couple of functions available for
-you. The :func:`semver.parse_version_info` function converts a version string
-into a :class:`semver.VersionInfo` class. The function
-:func:`semver.VersionInfo.bump_major` leaves the original object untouched, but
-returns a new :class:`semver.VersionInfo` instance with the raised major part:
+you. The `semver.parse_version_info` function converts a version string
+into a `semver.VersionInfo` class. The function
+`semver.VersionInfo.bump_major` leaves the original object untouched, but
+returns a new `semver.VersionInfo` instance with the raised major part:
 
 .. code-block:: python
 
@@ -77,7 +77,7 @@ It is allowed to concatenate different "bump functions":
     >>> ver.bump_major().bump_minor()
     VersionInfo(major=4, minor=0, patch=1, prerelease=None, build=None)
 
-To compare two versions, semver provides the :func:`semver.compare` function.
+To compare two versions, semver provides the `semver.compare` function.
 The return value indicates the relationship between the first and second
 version:
 
