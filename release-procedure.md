@@ -19,14 +19,7 @@ Release procedure
 
 * Add eventually new contributor(s) to [CONTRIBUTORS](https://github.com/k-bx/python-semver/blob/master/CONTRIBUTORS)
 
-* Tag commit and push to github using command line interface
-
-```bash
-git tag -a x.x.x -m 'Version x.x.x'
-git push python-semver master --tags
-```
-
-or using GitHub web interface available at https://github.com/k-bx/python-semver/releases
+* Ensure that long description (ie [README.rst](https://github.com/k-bx/python-semver/blob/master/README.rst)) can be correctly rendered by Pypi using `restview --long-description`
 
 * Upload to PyPI
 
@@ -37,3 +30,12 @@ twine upload dist/*
 ```
 
 * Go to https://pypi.org/project/semver/ to verify that new version is online and page is rendered correctly
+
+* Tag commit and push to github using command line interface
+
+```bash
+git tag -a x.x.x -m 'Version x.x.x'
+git push python-semver master --tags
+```
+
+or using GitHub web interface available at https://github.com/k-bx/python-semver/releases
