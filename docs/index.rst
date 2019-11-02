@@ -9,9 +9,10 @@ Semver |version| -- Semantic Versioning
    readme
    install
    usage
+   cli
    development
    api
-
+   changelog
 
 
 Indices and Tables

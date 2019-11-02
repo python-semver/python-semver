@@ -11,6 +11,17 @@ Each type can be converted into the other, if the minimum requirements
 are met.
 
 
+Knowing the Implemented semver.org Version
+------------------------------------------
+
+The semver.org is the authorative specification of how semantical versioning is
+definied. To know which version of semver.org is implemented in the semver
+libary, use the following constant::
+
+   >>> semver.SEMVER_SPEC_VERSION
+   '2.0.0'
+
+
 Creating a Version
 ------------------
 
@@ -105,6 +116,37 @@ In case you need the different parts of a version stepwise, iterate over the :cl
     build.4
     >>> list(VersionInfo.parse("3.4.5-pre.2+build.4"))
     [3, 4, 5, 'pre.2', 'build.4']
+
+
+Replacing Parts of a Version
+----------------------------
+
+If you want to replace different parts of a version, but leave other parts
+unmodified, use one of the functions :func:`semver.replace` or
+:func:`semver.VersionInfo.replace`:
+
+* From a version string::
+
+   >>> semver.replace("1.4.5-pre.1+build.6", major=2)
+   '2.4.5-pre.1+build.6'
+
+* From a :class:`semver.VersionInfo` instance::
+
+   >>> version = semver.VersionInfo.parse("1.4.5-pre.1+build.6")
+   >>> version.replace(major=2, minor=2)
+   VersionInfo(major=2, minor=2, patch=5, prerelease='pre.1', build='build.6')
+
+If you pass invalid keys you get an exception::
+
+   >>> semver.replace("1.2.3", invalidkey=2)
+   Traceback (most recent call last)
+   ...
+   TypeError: replace() got 1 unexpected keyword argument(s): invalidkey
+   >>> version = semver.VersionInfo.parse("1.4.5-pre.1+build.6")
+   >>> version.replace(invalidkey=2)
+   Traceback (most recent call last)
+   ...
+   TypeError: replace() got 1 unexpected keyword argument(s): invalidkey
 
 
 .. _sec.convert.versions:

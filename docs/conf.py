@@ -35,6 +35,8 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
+    'sphinx.ext.extlinks',
+    'sphinxarg.ext',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -80,6 +82,13 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
 
+# Markup to shorten external links
+# See https://www.sphinx-doc.org/en/master/usage/extensions/extlinks.html
+extlinks = {'gh': ('https://github.com/k-bx/python-semver/issues/%s',
+                   '#'),
+            'pr': ('https://github.com/k-bx/python-semver/pull/%s',
+                   'PR #'),
+            }
 
 # -- Options for HTML output ----------------------------------------------
 

@@ -1,14 +1,16 @@
 """
 Python helper for Semantic Versioning (http://semver.org/)
 """
+from __future__ import print_function
 
+import argparse
 import collections
-import re
-
 from functools import wraps
+import re
+import sys
 
 
-__version__ = '2.8.2'
+__version__ = '2.9.0'
 __author__ = 'Kostiantyn Rybnikov'
 __author_email__ = 'k-bx@k-bx.com'
 __maintainer__ = 'Sebastien Celles'
@@ -34,6 +36,10 @@ _REGEX = re.compile(
         """, re.VERBOSE)
 
 _LAST_NUMBER = re.compile(r'(?:[^\d]*(\d+)[^\d]*)+')
+
+#: Contains the implemented semver.org version of the spec
+SEMVER_SPEC_VERSION = "2.0.0"
+
 
 if not hasattr(__builtins__, 'cmp'):
     def cmp(a, b):
@@ -295,6 +301,28 @@ build='build.10')
 prerelease='pre.2', build='build.4')
         """
         return parse_version_info(version)
+
+    def replace(self, **parts):
+        """Replace one or more parts of a version and return a new
+          :class:`semver.VersionInfo` object, but leave self untouched
+
+        :param dict parts: the parts to be updated. Valid keys are:
+          ``major``, ``minor``, ``patch``, ``prerelease``, or ``build``
+        :return: the new :class:`semver.VersionInfo` object with the changed
+          parts
+        :raises: TypeError, if ``parts`` contains invalid keys
+        """
+        version = self._asdict()
+        version.update(parts)
+        try:
+            return VersionInfo(**version)
+        except TypeError:
+            unknownkeys = set(parts) - set(self._asdict())
+            error = ("replace() got %d unexpected keyword "
+                     "argument(s): %s" % (len(unknownkeys),
+                                          ", ".join(unknownkeys))
+                     )
+            raise TypeError(error)
 
 
 def _to_dict(obj):
@@ -612,6 +640,118 @@ def finalize_version(version):
     """
     verinfo = parse(version)
     return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'])
+
+
+def createparser():
+    """Create an :class:`argparse.ArgumentParser` instance
+
+    :return: parser instance
+    :rtype: :class:`argparse.ArgumentParser`
+    """
+    parser = argparse.ArgumentParser(prog=__package__,
+                                     description=__doc__)
+    s = parser.add_subparsers()
+
+    # create compare subcommand
+    parser_compare = s.add_parser("compare",
+                                  help="Compare two versions"
+                                  )
+    parser_compare.set_defaults(which="compare")
+    parser_compare.add_argument("version1",
+                                help="First version"
+                                )
+    parser_compare.add_argument("version2",
+                                help="Second version"
+                                )
+
+    # create bump subcommand
+    parser_bump = s.add_parser("bump",
+                               help="Bumps a version"
+                               )
+    parser_bump.set_defaults(which="bump")
+    sb = parser_bump.add_subparsers(title="Bump commands",
+                                    dest="bump")
+
+    # Create subparsers for the bump subparser:
+    for p in (sb.add_parser("major",
+                            help="Bump the major part of the version"),
+              sb.add_parser("minor",
+                            help="Bump the minor part of the version"),
+              sb.add_parser("patch",
+                            help="Bump the patch part of the version"),
+              sb.add_parser("prerelease",
+                            help="Bump the prerelease part of the version"),
+              sb.add_parser("build",
+                            help="Bump the build part of the version")):
+        p.add_argument("version",
+                       help="Version to raise"
+                       )
+
+    return parser
+
+
+def process(args):
+    """Process the input from the CLI
+
+    :param args: The parsed arguments
+    :type args: :class:`argparse.Namespace`
+    :param parser: the parser instance
+    :type parser: :class:`argparse.ArgumentParser`
+    :return: result of the selected action
+    :rtype: str
+    """
+    if args.which == "bump":
+        maptable = {'major': 'bump_major',
+                    'minor': 'bump_minor',
+                    'patch': 'bump_patch',
+                    'prerelease': 'bump_prerelease',
+                    'build': 'bump_build',
+                    }
+        ver = parse_version_info(args.version)
+        # get the respective method and call it
+        func = getattr(ver, maptable[args.bump])
+        return str(func())
+
+    elif args.which == "compare":
+        return str(compare(args.version1, args.version2))
+
+
+def main(cliargs=None):
+    """Entry point for the application script
+
+    :param list cliargs: Arguments to parse or None (=use :class:`sys.argv`)
+    :return: error code
+    :rtype: int
+    """
+    try:
+        parser = createparser()
+        args = parser.parse_args(args=cliargs)
+        # args.parser = parser
+        result = process(args)
+        print(result)
+        return 0
+
+    except (ValueError, TypeError) as err:
+        print("ERROR", err, file=sys.stderr)
+        return 2
+
+
+def replace(version, **parts):
+    """Replace one or more parts of a version and return the new string
+
+    :param str version: the version string to replace
+    :param dict parts: the parts to be updated. Valid keys are:
+      ``major``, ``minor``, ``patch``, ``prerelease``, or ``build``
+    :return: the replaced version string
+    :raises: TypeError, if ``parts`` contains invalid keys
+    :rtype: str
+
+    >>> import semver
+    >>> semver.replace("1.2.3", major=2, patch=10)
+    '2.2.10'
+    """
+    version = parse_version_info(version)
+    return str(version.replace(**parts))
 
 
 if __name__ == "__main__":

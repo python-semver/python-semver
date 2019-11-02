@@ -18,6 +18,23 @@ The module follows the ``MAJOR.MINOR.PATCH`` style:
 
 Additional labels for pre-release and build metadata are supported.
 
+
+.. warning::
+
+   Major version 3.0.0 of semver will remove support for Python 2.7 and 3.4.
+
+   As anything comes to an end, this project will focus on Python 3.x.
+   New features and bugfixes will be integrated only into the 3.x.y branch
+   of semver.
+
+   The last version of semver which supports Python 2.7 and 3.4 will be
+   2.9.x. However, keep in mind, version 2.9.x is frozen: no new
+   features nor backports will be integrated.
+
+   We recommend to upgrade your workflow to Python 3.x to gain support,
+   bugfixes, and new features.
+
+
 To import this library, use:
 
 .. code-block:: python
@@ -25,7 +42,7 @@ To import this library, use:
     >>> import semver
 
 Working with the library is quite straightforward. To turn a version string into the
-different parts, use the :func:`semver.parse` function:
+different parts, use the `semver.parse` function:
 
 .. code-block:: python
 
@@ -42,10 +59,10 @@ different parts, use the :func:`semver.parse` function:
     'build.5'
 
 To raise parts of a version, there are a couple of functions available for
-you. The :func:`semver.parse_version_info` function converts a version string
-into a :class:`semver.VersionInfo` class. The function
-:func:`semver.VersionInfo.bump_major` leaves the original object untouched, but
-returns a new :class:`semver.VersionInfo` instance with the raised major part:
+you. The `semver.parse_version_info` function converts a version string
+into a `semver.VersionInfo` class. The function
+`semver.VersionInfo.bump_major` leaves the original object untouched, but
+returns a new `semver.VersionInfo` instance with the raised major part:
 
 .. code-block:: python
 
@@ -60,7 +77,7 @@ It is allowed to concatenate different "bump functions":
     >>> ver.bump_major().bump_minor()
     VersionInfo(major=4, minor=0, patch=1, prerelease=None, build=None)
 
-To compare two versions, semver provides the :func:`semver.compare` function.
+To compare two versions, semver provides the `semver.compare` function.
 The return value indicates the relationship between the first and second
 version:
 
