@@ -14,7 +14,7 @@ Version 2.9.1 (WIP)
 Features
 --------
 
-* :gh:`177` (:pr:`178`): Fixed repository and CI links (moved https://github.com/k-bx/python-semver/ repository from https://github.com/python-semver/python-semver/)
+* :gh:`177` (:pr:`178`): Fixed repository and CI links (moved https://github.com/k-bx/python-semver/ repository to https://github.com/python-semver/python-semver/)
 
 Bug Fixes
 ---------
