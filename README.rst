@@ -9,6 +9,18 @@ A Python module for `semantic versioning`_. Simplifies comparing versions.
 
 .. teaser-end
 
+.. note::
+
+   With version 2.9.0 we've moved the GitHub project. The project is now
+   located under the organization ``python-semver``.
+   The complete URL is::
+
+       https://github.com/python-semver/python-semver
+
+   If you still have an old repository, correct your upstream URL to the new URL::
+
+       $ git remote set-url upstream git@github.com:python-semver/python-semver.git
+
 
 The module follows the ``MAJOR.MINOR.PATCH`` style:
 
