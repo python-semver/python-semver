@@ -3,7 +3,7 @@ Contributing to semver
 
 The semver source code is managed using Git and is hosted on GitHub::
 
-   git clone git://github.com/k-bx/python-semver
+   git clone git://github.com/python-semver/python-semver
 
 
 Reporting Bugs and Feedback
@@ -41,7 +41,7 @@ Modifying the Code
 We recommend the following workflow:
 
 #. Fork our project on GitHub using this link:
-   https://github.com/k-bx/python-semver/fork
+   https://github.com/python-semver/python-semver/fork
 
 #. Clone your forked Git repository (replace ``GITHUB_USER`` with your
    account name on GitHub)::
@@ -185,8 +185,8 @@ documentation includes:
 
 
 .. _flake8: https://flake8.readthedocs.io
-.. _issues:  https://github.com/k-bx/python-semver/issues
-.. _pull request: https://github.com/k-bx/python-semver/pulls
+.. _issues:  https://github.com/python-semver/python-semver/issues
+.. _pull request: https://github.com/python-semver/python-semver/pulls
 .. _pytest: http://pytest.org/
 .. _Semantic Versioning: https://semver.org
 .. _Sphinx style: https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html

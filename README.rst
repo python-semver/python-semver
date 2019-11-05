@@ -97,9 +97,9 @@ There are other functions to discover. Read on!
 .. |latest-version| image:: https://img.shields.io/pypi/v/semver.svg
    :alt: Latest version on PyPI
    :target: https://pypi.org/project/semver
-.. |build-status| image:: https://travis-ci.org/k-bx/python-semver.svg?branch=master
+.. |build-status| image:: https://travis-ci.com/python-semver/python-semver.svg?branch=master
    :alt: Build status
-   :target: https://travis-ci.org/k-bx/python-semver
+   :target: https://travis-ci.com/python-semver/python-semver
 .. |python-support| image:: https://img.shields.io/pypi/pyversions/semver.svg
    :target: https://pypi.org/project/semver
    :alt: Python versions
@@ -108,7 +108,7 @@ There are other functions to discover. Read on!
    :target: https://pypi.org/project/semver
 .. |license| image:: https://img.shields.io/pypi/l/semver.svg
    :alt: Software license
-   :target: https://github.com/k-bx/python-semver/blob/master/LICENSE.txt
+   :target: https://github.com/python-semver/python-semver/blob/master/LICENSE.txt
 .. |docs| image:: https://readthedocs.org/projects/python-semver/badge/?version=latest
    :target: http://python-semver.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
