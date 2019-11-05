@@ -15,6 +15,7 @@ Features
 --------
 
 * :gh:`177` (:pr:`178`): Fixed repository and CI links (moved https://github.com/k-bx/python-semver/ repository to https://github.com/python-semver/python-semver/)
+* :pr:`179`: Added note about moving this project to the new python-semver organization on GitHub
 
 Bug Fixes
 ---------
