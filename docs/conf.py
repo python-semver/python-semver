@@ -36,7 +36,6 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
     'sphinx.ext.extlinks',
-    'sphinxarg.ext',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -167,9 +166,14 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
+manpage_doc = "pysemver"
+
 man_pages = [
-    (master_doc, 'semver', 'python-semver Documentation',
-     [author], 1)
+    (manpage_doc,
+     'pysemver',
+     'Helper script for Semantic Versioning',
+     ["Thomas Schraitle"],
+     1)
 ]
 
 

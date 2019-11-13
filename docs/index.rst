@@ -9,7 +9,7 @@ Semver |version| -- Semantic Versioning
    readme
    install
    usage
-   cli
+   pysemver
    development
    api
    changelog
