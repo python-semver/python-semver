@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   xml:lang="en"
+   id="logo"
+   width="74mm"
+   height="74mm"
+   sodipodi:docname="logo.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+  <defs>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4671"
+       id="linearGradient1475"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.8800213,0,0,0.88851737,-14.778237,-8.5178369)"
+       x1="150.96111"
+       y1="192.35176"
+       x2="112.03144"
+       y2="137.27299" />
+    <linearGradient
+       id="linearGradient4671">
+      <stop
+         style="stop-color:#ffd43b;stop-opacity:1;"
+         offset="0"
+         id="stop4673" />
+      <stop
+         style="stop-color:#ffe873;stop-opacity:1"
+         offset="1"
+         id="stop4675" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4689"
+       id="linearGradient1478"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.8800213,0,0,0.88851737,-14.778237,-8.5178369)"
+       x1="26.648937"
+       y1="20.603781"
+       x2="135.66525"
+       y2="114.39767" />
+    <linearGradient
+       id="linearGradient4689">
+      <stop
+         style="stop-color:#5a9fd4;stop-opacity:1;"
+         offset="0"
+         id="stop4691" />
+      <stop
+         style="stop-color:#306998;stop-opacity:1;"
+         offset="1"
+         id="stop4693" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2188"
+     inkscape:window-height="1205"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:zoom="3.89"
+     inkscape:cx="160.49792"
+     inkscape:cy="94.411676"
+     inkscape:window-x="941"
+     inkscape:window-y="81"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g1438"
+     id="namedview1057">
+    <sodipodi:guide
+       position="-14.395887,136.76093"
+       orientation="0,1"
+       inkscape:locked="false"
+       id="guide1047" />
+    <sodipodi:guide
+       position="-6.1696658,55.784062"
+       orientation="0,1"
+       inkscape:locked="false"
+       id="guide1049" />
+    <sodipodi:guide
+       position="67.609254,74.550129"
+       orientation="0,1"
+       inkscape:locked="false"
+       id="guide1051" />
+    <sodipodi:guide
+       position="106.94087,120.56555"
+       orientation="0,1"
+       inkscape:locked="false"
+       id="guide1053" />
+    <sodipodi:guide
+       position="142.67352,166.58098"
+       orientation="1,0"
+       inkscape:locked="false"
+       id="guide1055" />
+  </sodipodi:namedview>
+  <title>python-semver Logo</title>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>python-semver Logo</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Tom Schraitle</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>python</rdf:li>
+            <rdf:li>semver</rdf:li>
+            <rdf:li>version</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title>https://github.com/python-semver/python-semver</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:source>https://github.com/python-semver/python-semver</dc:source>
+        <dc:identifier>python-semver-logo</dc:identifier>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>scls19fr</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g id="snakes"
+      transform="matrix(0.46040593,0,0,0.46040593,182.87717,6.2545048)">
+      <path
+         id="blue.snake"
+         style="fill:url(#linearGradient1475);fill-opacity:1;stroke-width:1.56436825"
+         d="M 142.64203,54.619346 V 73.24511 c 0,14.440304 -12.24258,26.594256 -26.20316,26.594256 H 74.543131 c -11.475944,0 -20.972311,9.821864 -20.972313,21.314514 v 39.94029 c 0,11.36722 9.884599,18.05331 20.972313,21.3145 13.277311,3.90407 26.009559,4.60963 41.895739,0 10.55973,-3.05737 20.97231,-9.21037 20.97231,-21.3145 v -15.9859 H 95.515444 v -5.32862 h 41.895736 20.97233 c 12.19027,0 16.73287,-8.50298 20.97229,-21.26563 4.3792,-13.13896 4.19286,-25.774191 0,-42.629038 -3.01262,-12.1355 -8.76652,-21.265636 -20.97229,-21.265636 z M 119.07874,155.76554 c 4.34813,0 7.87073,3.56271 7.87073,7.96849 0,4.42145 -3.5226,8.0174 -7.87073,8.0174 -4.3326,0 -7.87073,-3.59595 -7.87073,-8.0174 1e-5,-4.40578 3.53813,-7.96849 7.87073,-7.96849 z"
+         inkscape:connector-curvature="0" />
+      <path
+         id="yellow.snake"
+         style="fill:url(#linearGradient1478);fill-opacity:1;stroke-width:1.56436825"
+         d="M 94.586601,9.7904176 C 87.416079,9.8237396 80.56839,10.435277 74.543131,11.501444 56.793469,14.637226 53.57082,21.200688 53.570818,33.304827 v 15.985889 h 41.944626 v 5.32863 H 53.570818 37.829362 c -12.190277,0 -22.864431,7.327059 -26.203169,21.265636 -3.8512003,15.97684 -4.0220147,25.946638 0,42.629038 2.981574,12.41772 10.101975,21.26563 22.292249,21.26563 h 14.421519 v -19.1635 c 0,-13.84452 11.978594,-26.056525 26.20317,-26.056525 h 41.895739 c 11.66229,0 20.97231,-9.602343 20.97231,-21.314515 V 33.304827 c 0,-11.367229 -9.58955,-19.906237 -20.97231,-21.803383 C 109.23341,10.302003 101.75712,9.7570996 94.586601,9.7904176 Z M 71.90326,22.647567 c 4.33259,0 7.870727,3.595929 7.870727,8.017389 -3e-6,4.405786 -3.538137,7.968501 -7.870727,7.968501 -4.348124,-10e-7 -7.870728,-3.562716 -7.870728,-7.968501 -2e-6,-4.421458 3.522604,-8.017389 7.870728,-8.017389 z"
+         inkscape:connector-curvature="0" />
+   </g>
+  <!--<rect id="debug.rect"
+     x="0"
+     y="0"
+     stroke="red"
+     fill="none"
+     width="100%"
+     height="100%" />-->
+  <g
+     id="g1438"
+     text-anchor="middle"
+     font-family="Roboto">
+    <text text-anchor="start"
+       x="10"
+       y="125"
+       font-size="45pt"
+       font-weight="bold"
+       id="text1425">semver</text>
+    <g>
+      <rect
+         stroke-miterlimit="4"
+         width="96.875%"
+         height="95.5%"
+         x="4"
+         y="4"
+         id="rect1063"
+         stroke-linejoin="round"
+         stroke-linecap="round"
+         stroke-width="8"
+         stroke="#000"
+         fill="none" />
+      <g
+         id="version.text"
+         transform="translate(0,16.452432)">
+        <text
+           id="version"
+           font-size="30pt"
+           x="50%"
+           y="61%"
+           style="font-size:40px"><tspan
+   id="major">3</tspan>.<tspan id="minor"
+   style="fill:#ff0000">x</tspan>.<tspan
+   id="patch"
+   style="fill:#008000">y</tspan>-</text>
+        <text
+           x="50%"
+           y="80%"
+           font-size="30pt"
+           id="text1434"
+           style="font-size:40px"><tspan
+   id="prerelease">rc.1</tspan>
++<tspan
+   id="build">build.42</tspan>
+</text>
+      </g>
+    </g>
+  </g>
+</svg>
