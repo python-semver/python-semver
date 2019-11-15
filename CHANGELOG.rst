@@ -22,6 +22,9 @@ Features
 Bug Fixes
 ---------
 
+* :gh:`192` (:pr:`193`): Fixed "pysemver" and "pysemver bump" when called without arguments
+
+
 Removals
 --------
 

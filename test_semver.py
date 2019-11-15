@@ -658,6 +658,16 @@ def test_should_process_raise_error(capsys):
     assert captured.err.startswith("ERROR")
 
 
+def test_should_raise_systemexit_when_called_with_empty_arguments():
+    with pytest.raises(SystemExit):
+        main([])
+
+
+def test_should_raise_systemexit_when_bump_iscalled_with_empty_arguments():
+    with pytest.raises(SystemExit):
+        main(["bump"])
+
+
 @pytest.mark.parametrize("version,parts,expected", [
     ("3.4.5", dict(major=2), '2.4.5'),
     ("3.4.5", dict(major="2"), '2.4.5'),
