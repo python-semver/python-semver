@@ -676,7 +676,6 @@ def createparser():
         p.add_argument("version",
                        help="Version to raise"
                        )
-
     return parser
 
 
@@ -690,13 +689,21 @@ def process(args):
     :return: result of the selected action
     :rtype: str
     """
-    if args.which == "bump":
+    if not hasattr(args, "which"):
+        args.parser.print_help()
+        raise SystemExit()
+    elif args.which == "bump":
         maptable = {'major': 'bump_major',
                     'minor': 'bump_minor',
                     'patch': 'bump_patch',
                     'prerelease': 'bump_prerelease',
                     'build': 'bump_build',
                     }
+        if args.bump is None:
+            # When bump is called without arguments,
+            # print the help and exit
+            args.parser.parse_args([args.which, "-h"])
+
         ver = parse_version_info(args.version)
         # get the respective method and call it
         func = getattr(ver, maptable[args.bump])
@@ -716,7 +723,8 @@ def main(cliargs=None):
     try:
         parser = createparser()
         args = parser.parse_args(args=cliargs)
-        # args.parser = parser
+        # Save parser instance:
+        args.parser = parser
         result = process(args)
         print(result)
         return 0
