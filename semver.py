@@ -640,8 +640,13 @@ def createparser():
     """
     parser = argparse.ArgumentParser(prog=__package__,
                                      description=__doc__)
-    s = parser.add_subparsers()
 
+    parser.add_argument('--version',
+                        action='version',
+                        version='%(prog)s ' + __version__
+                        )
+
+    s = parser.add_subparsers()
     # create compare subcommand
     parser_compare = s.add_parser("compare",
                                   help="Compare two versions"
