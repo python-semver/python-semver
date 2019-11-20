@@ -175,14 +175,35 @@ class VersionInfo(object):
             yield v
 
     def __getitem__(self, index):
-        """Implement getitem. This automatically strips empty parts of the
-           version from the iterable from which the index is taken.
+        """Implement getitem. If the part requested is undefined, or a part of the
+           range requested is undefined, it will throw an index error.
+           Negative indices are not supported
 
-           :param int index: a positive or negative integer indicating the offset
-           :raises: IndexError, if index is beyond the range
+           :param int index: a positive integer indicating the offset or a slice
+           :raises: IndexError, if index is beyond the range or the part is None
            """
-        return tuple(part for part in self._astuple()
-                     if part is not None)[index]
+        undefined_error = IndexError("Version part undefined")
+        negative_error = IndexError("Version index cannot be negative")
+        if isinstance(index, slice):
+            if (False if index.start is None else index.start < 0) or (False if index.stop is None else index.stop < 0):
+                raise negative_error
+            else:
+                slice_is_full = True
+                part = self._astuple()[index]
+                for i in part:
+                    if i is None:
+                        slice_is_full = False
+                    elif not slice_is_full:
+                        raise undefined_error
+                part = tuple(filter(None, part))
+        else:
+            if index < 0:
+                raise negative_error
+            else:
+                part = self._astuple()[index]
+                if part is None:
+                    raise undefined_error
+        return part
 
     def bump_major(self):
         """Raise the major part of the version, return a new object

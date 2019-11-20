@@ -707,16 +707,13 @@ def test_replace_raises_ValueError_for_non_numeric_values():
     ("1.2.3-rc.0+build.0", 2, 3),
     ("1.2.3-rc.0+build.0", 3, "rc.0"),
     ("1.2.3-rc.0+build.0", 4, "build.0"),
-    ("1.2.3-rc.0+build.0", -1, "build.0"),
     ("1.2.3-rc.0", 0, 1),
     ("1.2.3-rc.0", 1, 2),
     ("1.2.3-rc.0", 2, 3),
     ("1.2.3-rc.0", 3, "rc.0"),
-    ("1.2.3-rc.0", -1, "rc.0"),
     ("1.2.3", 0, 1),
     ("1.2.3", 1, 2),
     ("1.2.3", 2, 3),
-    ("1.2.3", -1, 3),
 ])
 def test_version_info_should_be_accessed_with_index(version, index, expected):
     version_info = VersionInfo.parse(version)
@@ -750,7 +747,10 @@ def test_version_info_should_be_accessed_with_slice_object(version,
 
 
 @pytest.mark.parametrize("version, index", [
+    ("1.2.3-rc.0+build.0", -1),
+    ("1.2.3-rc.0", -1),
     ("1.2.3-rc.0", 4),
+    ("1.2.3", -1),
     ("1.2.3", 3),
     ("1.2.3", 4),
 ])
