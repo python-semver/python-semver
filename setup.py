@@ -36,7 +36,7 @@ class Tox(TestCommand):
 
 class Clean(CleanCommand):
     def run(self):
-        super().run()
+        super(CleanCommand, self).run()
         delete_in_root = [
             'build',
             '.cache',
