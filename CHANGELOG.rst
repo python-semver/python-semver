@@ -18,6 +18,8 @@ Features
 * :pr:`179`: Added note about moving this project to the new python-semver organization on GitHub
 * :gh:`187` (:pr:`188`): Added logo for python-semver organization and documentation
 * :gh:`191` (:pr:`194`): Created manpage for pysemver
+* :gh:`196` (:pr:`197`): Added distribution specific installation instructions
+
 
 Bug Fixes
 ---------
