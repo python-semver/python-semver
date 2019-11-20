@@ -179,13 +179,15 @@ class VersionInfo(object):
            range requested is undefined, it will throw an index error.
            Negative indices are not supported
 
-           :param Union[int, slice] index: a positive integer indicating the offset or a slice
+           :param Union[int, slice] index: a positive integer indicating the offset
+                  or a slice
            :raises: IndexError, if index is beyond the range or a part is None
            """
         undefined_error = IndexError("Version part undefined")
         negative_error = IndexError("Version index cannot be negative")
         if isinstance(index, slice):
-            if (False if index.start is None else index.start < 0) or (False if index.stop is None else index.stop < 0):
+            if (False if index.start is None else index.start < 0) or \
+                    (False if index.stop is None else index.stop < 0):
                 raise negative_error
             else:
                 slice_is_full = True
