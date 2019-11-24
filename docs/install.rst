@@ -1,6 +1,10 @@
 Installing semver
 =================
 
+
+Pip
+---
+
 For Python 2:
 
 .. code-block:: bash
@@ -13,6 +17,8 @@ For Python 3:
 
     pip3 install semver
 
+Linux Distributions
+-------------------
 
 .. note::
 
@@ -26,7 +32,7 @@ For Python 3:
 
 
 Arch Linux
-----------
+^^^^^^^^^^
 
 1. Enable the community repositories first:
 
@@ -41,7 +47,7 @@ Arch Linux
 
 
 Debian
-------
+^^^^^^
 
 1. Update the package index::
 
@@ -53,7 +59,7 @@ Debian
 
 
 Fedora
-------
+^^^^^^
 
 .. code-block:: bash
 
@@ -61,13 +67,14 @@ Fedora
 
 
 FreeBSD
--------
+^^^^^^^
 
 .. code-block:: bash
 
+    $ pkg install py36-semver
 
 openSUSE
---------
+^^^^^^^^
 
 1. Enable the the ``devel:languages:python`` repository on the Open Build Service (replace ``<VERSION>`` with the preferred openSUSE release)::
 
@@ -79,7 +86,7 @@ openSUSE
 
 
 Ubuntu
-------
+^^^^^^
 
 1. Update the package index::
 
