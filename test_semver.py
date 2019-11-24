@@ -70,6 +70,30 @@ def test_fordocstrings(func):
         'prerelease': 'alpha-1',
         'build': 'build.11.e0f985a',
         }),
+    ("0.1.0-0f",
+     {
+         'major': 0,
+         'minor': 1,
+         'patch': 0,
+         'prerelease': '0f',
+         'build': None,
+     }),
+    ("0.0.0-0foo.1",
+     {
+         'major': 0,
+         'minor': 0,
+         'patch': 0,
+         'prerelease': '0foo.1',
+         'build': None,
+     }),
+    ("0.0.0-0foo.1+build.1",
+     {
+         'major': 0,
+         'minor': 0,
+         'patch': 0,
+         'prerelease': '0foo.1',
+         'build': 'build.1',
+     }),
 ])
 def test_should_parse_version(version, expected):
     result = parse(version)

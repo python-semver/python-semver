@@ -19,18 +19,18 @@ __maintainer_email__ = "s.celles@gmail.com"
 _REGEX = re.compile(
         r"""
         ^
-        (?P<major>(?:0|[1-9][0-9]*))
+        (?P<major>0|[1-9]\d*)
         \.
-        (?P<minor>(?:0|[1-9][0-9]*))
+        (?P<minor>0|[1-9]\d*)
         \.
-        (?P<patch>(?:0|[1-9][0-9]*))
-        (\-(?P<prerelease>
-            (?:0|[1-9A-Za-z-][0-9A-Za-z-]*)
-            (\.(?:0|[1-9A-Za-z-][0-9A-Za-z-]*))*
+        (?P<patch>0|[1-9]\d*)
+        (?:-(?P<prerelease>
+            (?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)
+            (?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*
         ))?
-        (\+(?P<build>
-            [0-9A-Za-z-]+
-            (\.[0-9A-Za-z-]+)*
+        (?:\+(?P<build>
+            [0-9a-zA-Z-]+
+            (?:\.[0-9a-zA-Z-]+)*
         ))?
         $
         """, re.VERBOSE)
