@@ -5,7 +5,7 @@ Quickstart
 
 A Python module for `semantic versioning`_. Simplifies comparing versions.
 
-|build-status| |python-support| |downloads| |license| |docs|
+|build-status| |python-support| |downloads| |license| |docs| |black|
 
 .. teaser-end
 
@@ -125,3 +125,6 @@ There are other functions to discover. Read on!
    :target: http://python-semver.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 .. _semantic versioning: http://semver.org/
+.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
+    :alt: Black Formatter
