@@ -10,14 +10,14 @@ import re
 import sys
 
 
-__version__ = '2.9.0'
-__author__ = 'Kostiantyn Rybnikov'
-__author_email__ = 'k-bx@k-bx.com'
-__maintainer__ = 'Sebastien Celles'
+__version__ = "2.9.0"
+__author__ = "Kostiantyn Rybnikov"
+__author_email__ = "k-bx@k-bx.com"
+__maintainer__ = "Sebastien Celles"
 __maintainer_email__ = "s.celles@gmail.com"
 
 _REGEX = re.compile(
-        r"""
+    r"""
         ^
         (?P<major>0|[1-9]\d*)
         \.
@@ -33,15 +33,18 @@ _REGEX = re.compile(
             (?:\.[0-9a-zA-Z-]+)*
         ))?
         $
-        """, re.VERBOSE)
+        """,
+    re.VERBOSE,
+)
 
-_LAST_NUMBER = re.compile(r'(?:[^\d]*(\d+)[^\d]*)+')
+_LAST_NUMBER = re.compile(r"(?:[^\d]*(\d+)[^\d]*)+")
 
 #: Contains the implemented semver.org version of the spec
 SEMVER_SPEC_VERSION = "2.0.0"
 
 
-if not hasattr(__builtins__, 'cmp'):
+if not hasattr(__builtins__, "cmp"):
+
     def cmp(a, b):
         return (a > b) - (a < b)
 
@@ -69,26 +72,29 @@ def parse(version):
     """
     match = _REGEX.match(version)
     if match is None:
-        raise ValueError('%s is not valid SemVer string' % version)
+        raise ValueError("%s is not valid SemVer string" % version)
 
     version_parts = match.groupdict()
 
-    version_parts['major'] = int(version_parts['major'])
-    version_parts['minor'] = int(version_parts['minor'])
-    version_parts['patch'] = int(version_parts['patch'])
+    version_parts["major"] = int(version_parts["major"])
+    version_parts["minor"] = int(version_parts["minor"])
+    version_parts["patch"] = int(version_parts["patch"])
 
     return version_parts
 
 
 def comparator(operator):
     """ Wrap a VersionInfo binary op method in a type-check """
+
     @wraps(operator)
     def wrapper(self, other):
         comparable_types = (VersionInfo, dict, tuple)
         if not isinstance(other, comparable_types):
-            raise TypeError("other type %r must be in %r"
-                            % (type(other), comparable_types))
+            raise TypeError(
+                "other type %r must be in %r" % (type(other), comparable_types)
+            )
         return operator(self, other)
+
     return wrapper
 
 
@@ -101,7 +107,8 @@ class VersionInfo(object):
     :param str prerelease: an optional prerelease string
     :param str build: an optional build string
     """
-    __slots__ = ('_major', '_minor', '_patch', '_prerelease', '_build')
+
+    __slots__ = ("_major", "_minor", "_patch", "_prerelease", "_build")
 
     def __init__(self, major, minor=0, patch=0, prerelease=None, build=None):
         self._major = int(major)
@@ -156,17 +163,18 @@ class VersionInfo(object):
         raise AttributeError("attribute 'build' is readonly")
 
     def _astuple(self):
-        return (self.major, self.minor, self.patch,
-                self.prerelease, self.build)
+        return (self.major, self.minor, self.patch, self.prerelease, self.build)
 
     def _asdict(self):
-        return collections.OrderedDict((
-            ("major", self.major),
-            ("minor", self.minor),
-            ("patch", self.patch),
-            ("prerelease", self.prerelease),
-            ("build", self.build)
-        ))
+        return collections.OrderedDict(
+            (
+                ("major", self.major),
+                ("minor", self.minor),
+                ("patch", self.patch),
+                ("prerelease", self.prerelease),
+                ("build", self.build),
+            )
+        )
 
     def __iter__(self):
         """Implement iter(self)."""
@@ -213,7 +221,7 @@ class VersionInfo(object):
         """
         return parse_version_info(bump_patch(str(self)))
 
-    def bump_prerelease(self, token='rc'):
+    def bump_prerelease(self, token="rc"):
         """Raise the prerelease part of the version, return a new object
            but leave self untouched
 
@@ -228,7 +236,7 @@ build=None)
         """
         return parse_version_info(bump_prerelease(str(self), token))
 
-    def bump_build(self, token='build'):
+    def bump_build(self, token="build"):
         """Raise the build part of the version, return a new object
            but leave self untouched
 
@@ -268,8 +276,7 @@ build='build.10')
         return _compare_by_keys(self._asdict(), _to_dict(other)) >= 0
 
     def __repr__(self):
-        s = ", ".join("%s=%r" % (key, val)
-                      for key, val in self._asdict().items())
+        s = ", ".join("%s=%r" % (key, val) for key, val in self._asdict().items())
         return "%s(%s)" % (type(self).__name__, s)
 
     def __str__(self):
@@ -308,10 +315,10 @@ prerelease='pre.2', build='build.4')
             return VersionInfo(**version)
         except TypeError:
             unknownkeys = set(parts) - set(self._asdict())
-            error = ("replace() got %d unexpected keyword "
-                     "argument(s): %s" % (len(unknownkeys),
-                                          ", ".join(unknownkeys))
-                     )
+            error = "replace() got %d unexpected keyword " "argument(s): %s" % (
+                len(unknownkeys),
+                ", ".join(unknownkeys),
+            )
             raise TypeError(error)
 
 
@@ -344,18 +351,22 @@ def parse_version_info(version):
     """
     parts = parse(version)
     version_info = VersionInfo(
-            parts['major'], parts['minor'], parts['patch'],
-            parts['prerelease'], parts['build'])
+        parts["major"],
+        parts["minor"],
+        parts["patch"],
+        parts["prerelease"],
+        parts["build"],
+    )
 
     return version_info
 
 
 def _nat_cmp(a, b):
     def convert(text):
-        return int(text) if re.match('^[0-9]+$', text) else text
+        return int(text) if re.match("^[0-9]+$", text) else text
 
     def split_key(key):
-        return [convert(c) for c in key.split('.')]
+        return [convert(c) for c in key.split(".")]
 
     def cmp_prerelease_tag(a, b):
         if isinstance(a, int) and isinstance(b, int):
@@ -367,7 +378,7 @@ def _nat_cmp(a, b):
         else:
             return cmp(a, b)
 
-    a, b = a or '', b or ''
+    a, b = a or "", b or ""
     a_parts, b_parts = split_key(a), split_key(b)
     for sub_a, sub_b in zip(a_parts, b_parts):
         cmp_result = cmp_prerelease_tag(sub_a, sub_b)
@@ -378,12 +389,12 @@ def _nat_cmp(a, b):
 
 
 def _compare_by_keys(d1, d2):
-    for key in ['major', 'minor', 'patch']:
+    for key in ["major", "minor", "patch"]:
         v = cmp(d1.get(key), d2.get(key))
         if v:
             return v
 
-    rc1, rc2 = d1.get('prerelease'), d2.get('prerelease')
+    rc1, rc2 = d1.get("prerelease"), d2.get("prerelease")
     rccmp = _nat_cmp(rc1, rc2)
 
     if not rccmp:
@@ -438,24 +449,26 @@ def match(version, match_expr):
     False
     """
     prefix = match_expr[:2]
-    if prefix in ('>=', '<=', '==', '!='):
+    if prefix in (">=", "<=", "==", "!="):
         match_version = match_expr[2:]
-    elif prefix and prefix[0] in ('>', '<'):
+    elif prefix and prefix[0] in (">", "<"):
         prefix = prefix[0]
         match_version = match_expr[1:]
     else:
-        raise ValueError("match_expr parameter should be in format <op><ver>, "
-                         "where <op> is one of "
-                         "['<', '>', '==', '<=', '>=', '!=']. "
-                         "You provided: %r" % match_expr)
+        raise ValueError(
+            "match_expr parameter should be in format <op><ver>, "
+            "where <op> is one of "
+            "['<', '>', '==', '<=', '>=', '!=']. "
+            "You provided: %r" % match_expr
+        )
 
     possibilities_dict = {
-        '>': (1,),
-        '<': (-1,),
-        '==': (0,),
-        '!=': (-1, 1),
-        '>=': (0, 1),
-        '<=': (-1, 0)
+        ">": (1,),
+        "<": (-1,),
+        "==": (0,),
+        "!=": (-1, 1),
+        ">=": (0, 1),
+        "<=": (-1, 0),
     }
 
     possibilities = possibilities_dict[prefix]
@@ -533,7 +546,7 @@ def _increment_string(string):
     if match:
         next_ = str(int(match.group(1)) + 1)
         start, end = match.span(1)
-        string = string[:max(end - len(next_), start)] + next_ + string[end:]
+        string = string[: max(end - len(next_), start)] + next_ + string[end:]
     return string
 
 
@@ -548,7 +561,7 @@ def bump_major(version):
     '4.0.0'
     """
     verinfo = parse(version)
-    return format_version(verinfo['major'] + 1, 0, 0)
+    return format_version(verinfo["major"] + 1, 0, 0)
 
 
 def bump_minor(version):
@@ -562,7 +575,7 @@ def bump_minor(version):
     '3.5.0'
     """
     verinfo = parse(version)
-    return format_version(verinfo['major'], verinfo['minor'] + 1, 0)
+    return format_version(verinfo["major"], verinfo["minor"] + 1, 0)
 
 
 def bump_patch(version):
@@ -576,11 +589,10 @@ def bump_patch(version):
     '3.4.6'
     """
     verinfo = parse(version)
-    return format_version(verinfo['major'], verinfo['minor'],
-                          verinfo['patch'] + 1)
+    return format_version(verinfo["major"], verinfo["minor"], verinfo["patch"] + 1)
 
 
-def bump_prerelease(version, token='rc'):
+def bump_prerelease(version, token="rc"):
     """Raise the prerelease part of the version
 
     :param version: version string
@@ -592,14 +604,15 @@ def bump_prerelease(version, token='rc'):
     '3.4.5-dev.1'
     """
     verinfo = parse(version)
-    verinfo['prerelease'] = _increment_string(
-        verinfo['prerelease'] or (token or 'rc') + '.0'
+    verinfo["prerelease"] = _increment_string(
+        verinfo["prerelease"] or (token or "rc") + ".0"
     )
-    return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'],
-                          verinfo['prerelease'])
+    return format_version(
+        verinfo["major"], verinfo["minor"], verinfo["patch"], verinfo["prerelease"]
+    )
 
 
-def bump_build(version, token='build'):
+def bump_build(version, token="build"):
     """Raise the build part of the version
 
     :param version: version string
@@ -611,11 +624,14 @@ def bump_build(version, token='build'):
     '3.4.5-rc.1+build.10'
     """
     verinfo = parse(version)
-    verinfo['build'] = _increment_string(
-        verinfo['build'] or (token or 'build') + '.0'
+    verinfo["build"] = _increment_string(verinfo["build"] or (token or "build") + ".0")
+    return format_version(
+        verinfo["major"],
+        verinfo["minor"],
+        verinfo["patch"],
+        verinfo["prerelease"],
+        verinfo["build"],
     )
-    return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'],
-                          verinfo['prerelease'], verinfo['build'])
 
 
 def finalize_version(version):
@@ -629,7 +645,7 @@ def finalize_version(version):
     '1.2.3'
     """
     verinfo = parse(version)
-    return format_version(verinfo['major'], verinfo['minor'], verinfo['patch'])
+    return format_version(verinfo["major"], verinfo["minor"], verinfo["patch"])
 
 
 def createparser():
@@ -638,49 +654,33 @@ def createparser():
     :return: parser instance
     :rtype: :class:`argparse.ArgumentParser`
     """
-    parser = argparse.ArgumentParser(prog=__package__,
-                                     description=__doc__)
+    parser = argparse.ArgumentParser(prog=__package__, description=__doc__)
 
-    parser.add_argument('--version',
-                        action='version',
-                        version='%(prog)s ' + __version__
-                        )
+    parser.add_argument(
+        "--version", action="version", version="%(prog)s " + __version__
+    )
 
     s = parser.add_subparsers()
     # create compare subcommand
-    parser_compare = s.add_parser("compare",
-                                  help="Compare two versions"
-                                  )
+    parser_compare = s.add_parser("compare", help="Compare two versions")
     parser_compare.set_defaults(which="compare")
-    parser_compare.add_argument("version1",
-                                help="First version"
-                                )
-    parser_compare.add_argument("version2",
-                                help="Second version"
-                                )
+    parser_compare.add_argument("version1", help="First version")
+    parser_compare.add_argument("version2", help="Second version")
 
     # create bump subcommand
-    parser_bump = s.add_parser("bump",
-                               help="Bumps a version"
-                               )
+    parser_bump = s.add_parser("bump", help="Bumps a version")
     parser_bump.set_defaults(which="bump")
-    sb = parser_bump.add_subparsers(title="Bump commands",
-                                    dest="bump")
+    sb = parser_bump.add_subparsers(title="Bump commands", dest="bump")
 
     # Create subparsers for the bump subparser:
-    for p in (sb.add_parser("major",
-                            help="Bump the major part of the version"),
-              sb.add_parser("minor",
-                            help="Bump the minor part of the version"),
-              sb.add_parser("patch",
-                            help="Bump the patch part of the version"),
-              sb.add_parser("prerelease",
-                            help="Bump the prerelease part of the version"),
-              sb.add_parser("build",
-                            help="Bump the build part of the version")):
-        p.add_argument("version",
-                       help="Version to raise"
-                       )
+    for p in (
+        sb.add_parser("major", help="Bump the major part of the version"),
+        sb.add_parser("minor", help="Bump the minor part of the version"),
+        sb.add_parser("patch", help="Bump the patch part of the version"),
+        sb.add_parser("prerelease", help="Bump the prerelease part of the version"),
+        sb.add_parser("build", help="Bump the build part of the version"),
+    ):
+        p.add_argument("version", help="Version to raise")
     return parser
 
 
@@ -698,12 +698,13 @@ def process(args):
         args.parser.print_help()
         raise SystemExit()
     elif args.which == "bump":
-        maptable = {'major': 'bump_major',
-                    'minor': 'bump_minor',
-                    'patch': 'bump_patch',
-                    'prerelease': 'bump_prerelease',
-                    'build': 'bump_build',
-                    }
+        maptable = {
+            "major": "bump_major",
+            "minor": "bump_minor",
+            "patch": "bump_patch",
+            "prerelease": "bump_prerelease",
+            "build": "bump_build",
+        }
         if args.bump is None:
             # When bump is called without arguments,
             # print the help and exit
@@ -759,4 +760,5 @@ def replace(version, **parts):
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
