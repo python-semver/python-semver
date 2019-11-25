@@ -39,11 +39,5 @@ jobs:
       - name: Run black
         id: black
         run: |
-          black . > project.diff
+          black --check .
           echo "::set-output name=rc::$?"
-
-      - name: Upload diff artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: black-project-diff
-          path: project.diff
