@@ -94,6 +94,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
+    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
     tests_require=["tox", "virtualenv"],
     cmdclass={"clean": Clean, "test": Tox},
     entry_points={"console_scripts": ["pysemver = semver:main"]},
