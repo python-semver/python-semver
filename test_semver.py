@@ -841,3 +841,21 @@ def test_replace_raises_ValueError_for_non_numeric_values():
 def test_should_versioninfo_isvalid():
     assert VersionInfo.isvalid("1.0.0") is True
     assert VersionInfo.isvalid("foo") is False
+
+
+@pytest.mark.parametrize(
+    "version,expected",
+    [
+        ("v1", ("1.0.0", "")),
+        ("v1.1", ("1.1.0", "")),
+        ("v1.1.1", ("1.1.1", "")),
+        ("v1.1.1-abc", ("1.1.1", "-abc")),
+        ("not-semver", (None, "not-semver")),
+        ("1-2-3", ("1.0.0", "-2-3")),
+    ],
+)
+def test_should_versioninfo_coerce(version, expected):
+    ver = list(VersionInfo.coerce(version))
+    if ver[0] is not None:
+        ver[0] = str(ver[0])
+    assert tuple(ver) == expected

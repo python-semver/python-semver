@@ -213,6 +213,35 @@ Depending which function you call, you get different types
     {'major': 3, 'minor': 4, 'patch': 5, 'prerelease': None, 'build': None}
 
 
+Parsing Incomplete Versions
+---------------------------
+
+If a version is incomplete (some parts are missing) this would lead to an
+exception during the parsing process. As such, you cannot get a valid
+:class:`semver.VersionInfo` instance.
+
+To avoid such situations, such incomplete version strings can still be parsed
+with the :func:`semver.VersionInfo.coerce` function. This function applies
+the following rules:
+
+* Tries to detect a "basic" version string (``major.minor.patch``).
+* If not enough components can be found, missing components are
+  set to zero to obtain a valid semver version.
+
+It expects a version string and returns a tuple. The first item of the tuple
+is either a :class:`VersionInfo` instance or ``None`` if the function cannot
+extract a version. The second item is the rest of the string:
+
+.. code-block:: python
+
+    >>> semver.VersionInfo.coerce("v1.2")
+    (VersionInfo(major=1, minor=2, patch=0, prerelease=None, build=None), '')
+    >>> semver.VersionInfo.coerce("v1.2-abc")
+    (VersionInfo(major=1, minor=2, patch=0, prerelease=None, build=None), '-abc')
+    >>> semver.VersionInfo.coerce("abc")
+    (None, 'abc')
+
+
 Increasing Parts of a Version
 -----------------------------
 
