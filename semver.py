@@ -321,6 +321,21 @@ prerelease='pre.2', build='build.4')
             )
             raise TypeError(error)
 
+    @classmethod
+    def isvalid(cls, version):
+        """Check if the string is a valid semver version
+
+        :param str version: the version string to check
+        :return: True if the version string is a valid semver version, False
+                 otherwise.
+        :rtype: bool
+        """
+        try:
+            cls.parse(version)
+            return True
+        except ValueError:
+            return False
+
 
 def _to_dict(obj):
     if isinstance(obj, VersionInfo):
@@ -681,6 +696,14 @@ def createparser():
         sb.add_parser("build", help="Bump the build part of the version"),
     ):
         p.add_argument("version", help="Version to raise")
+
+    # Create the check subcommand
+    parser_check = s.add_parser(
+        "check", help="Checks if a string is a valid semver version"
+    )
+    parser_check.set_defaults(which="check")
+    parser_check.add_argument("version", help="Version to check")
+
     return parser
 
 
@@ -697,6 +720,7 @@ def process(args):
     if not hasattr(args, "which"):
         args.parser.print_help()
         raise SystemExit()
+
     elif args.which == "bump":
         maptable = {
             "major": "bump_major",
@@ -718,6 +742,11 @@ def process(args):
     elif args.which == "compare":
         return str(compare(args.version1, args.version2))
 
+    elif args.which == "check":
+        if VersionInfo.isvalid(args.version):
+            return None
+        raise ValueError("Invalid version %r" % args.version)
+
 
 def main(cliargs=None):
     """Entry point for the application script
@@ -732,7 +761,8 @@ def main(cliargs=None):
         # Save parser instance:
         args.parser = parser
         result = process(args)
-        print(result)
+        if result is not None:
+            print(result)
         return 0
 
     except (ValueError, TypeError) as err:

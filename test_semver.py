@@ -1,4 +1,5 @@
 from argparse import Namespace
+from contextlib import contextmanager
 import pytest  # noqa
 
 from semver import (
@@ -39,6 +40,11 @@ SEMVERFUNCS = [
     process,
     replace,
 ]
+
+
+@contextmanager
+def does_not_raise(item):
+    yield item
 
 
 @pytest.mark.parametrize(
@@ -703,6 +709,8 @@ def test_should_be_able_to_use_integers_as_prerelease_build():
             ["compare", "1.2.3", "2.1.3"],
             Namespace(which="compare", version1="1.2.3", version2="2.1.3"),
         ),
+        # ---
+        (["check", "1.2.3"], Namespace(which="check", version="1.2.3")),
     ],
 )
 def test_should_parse_cli_arguments(cli, expected):
@@ -713,25 +721,50 @@ def test_should_parse_cli_arguments(cli, expected):
 
 
 @pytest.mark.parametrize(
-    "args,expected",
+    "args,expectation",
     [
         # bump subcommand
-        (Namespace(which="bump", bump="major", version="1.2.3"), "2.0.0"),
-        (Namespace(which="bump", bump="minor", version="1.2.3"), "1.3.0"),
-        (Namespace(which="bump", bump="patch", version="1.2.3"), "1.2.4"),
-        (Namespace(which="bump", bump="prerelease", version="1.2.3-rc1"), "1.2.3-rc2"),
+        (
+            Namespace(which="bump", bump="major", version="1.2.3"),
+            does_not_raise("2.0.0"),
+        ),
+        (
+            Namespace(which="bump", bump="minor", version="1.2.3"),
+            does_not_raise("1.3.0"),
+        ),
+        (
+            Namespace(which="bump", bump="patch", version="1.2.3"),
+            does_not_raise("1.2.4"),
+        ),
+        (
+            Namespace(which="bump", bump="prerelease", version="1.2.3-rc1"),
+            does_not_raise("1.2.3-rc2"),
+        ),
         (
             Namespace(which="bump", bump="build", version="1.2.3+build.13"),
-            "1.2.3+build.14",
+            does_not_raise("1.2.3+build.14"),
         ),
         # compare subcommand
-        (Namespace(which="compare", version1="1.2.3", version2="2.1.3"), "-1"),
-        (Namespace(which="compare", version1="1.2.3", version2="1.2.3"), "0"),
-        (Namespace(which="compare", version1="2.4.0", version2="2.1.3"), "1"),
+        (
+            Namespace(which="compare", version1="1.2.3", version2="2.1.3"),
+            does_not_raise("-1"),
+        ),
+        (
+            Namespace(which="compare", version1="1.2.3", version2="1.2.3"),
+            does_not_raise("0"),
+        ),
+        (
+            Namespace(which="compare", version1="2.4.0", version2="2.1.3"),
+            does_not_raise("1"),
+        ),
+        # check subcommand
+        (Namespace(which="check", version="1.2.3"), does_not_raise(None)),
+        (Namespace(which="check", version="1.2"), pytest.raises(ValueError)),
     ],
 )
-def test_should_process_parsed_cli_arguments(args, expected):
-    assert process(args) == expected
+def test_should_process_parsed_cli_arguments(args, expectation):
+    with expectation as expected:
+        assert process(args) == expected
 
 
 def test_should_process_print(capsys):
@@ -803,3 +836,8 @@ def test_should_return_versioninfo_with_replaced_parts(version, parts, expected)
 def test_replace_raises_ValueError_for_non_numeric_values():
     with pytest.raises(ValueError):
         VersionInfo.parse("1.2.3").replace(major="x")
+
+
+def test_should_versioninfo_isvalid():
+    assert VersionInfo.isvalid("1.0.0") is True
+    assert VersionInfo.isvalid("foo") is False

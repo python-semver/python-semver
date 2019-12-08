@@ -20,6 +20,9 @@ Features
 * :gh:`191` (:pr:`194`): Created manpage for pysemver
 * :gh:`196` (:pr:`197`): Added distribution specific installation instructions
 * :gh:`201` (:pr:`202`): Reformatted source code with black
+* :gh:`208` (:pr:`209`): Introduce new function :func:`semver.VersionInfo.isvalid`
+  and extend :command:`pysemver` with :command:`check` subcommand
+
 
 Bug Fixes
 ---------
@@ -53,7 +56,6 @@ Features
 * :pr:`165`: Improved code coverage
 * :pr:`166`: Reworked :file:`.gitignore` file
 * :gh:`167` (:pr:`168`): Introduced global constant :data:`SEMVER_SPEC_VERSION`
-
 
 Bug Fixes
 ---------
