@@ -53,6 +53,13 @@ A version can be created in different ways:
     >>> semver.VersionInfo(1, 2, 3, 4, 5)
     VersionInfo(major=1, minor=2, patch=3, prerelease=4, build=5)
 
+If you pass an invalid version string you will get a ``ValueError``::
+
+    >>> semver.parse("1.2")
+    Traceback (most recent call last)
+    ...
+    ValueError: 1.2 is not valid SemVer string
+
 
 Parsing a Version String
 ------------------------
@@ -75,6 +82,20 @@ Parsing a Version String
 
     >>> semver.parse("3.4.5-pre.2+build.4")
     {'major': 3, 'minor': 4, 'patch': 5,  'prerelease': 'pre.2', 'build': 'build.4'}
+
+
+Checking for a Valid Semver Version
+-----------------------------------
+
+If you need to check a string if it is a valid semver version, use the
+classmethod :func:`semver.VersionInfo.isvalid`:
+
+.. code-block:: python
+
+    >>> VersionInfo.isvalid("1.0.0")
+    True
+    >>> VersionInfo.isvalid("invalid")
+    False
 
 
 Accessing Parts of a Version

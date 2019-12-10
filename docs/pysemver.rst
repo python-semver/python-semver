@@ -86,6 +86,29 @@ you get an error message and a return code != 0::
    ERROR 1.5 is not valid SemVer string
 
 
+pysemver check
+~~~~~~~~~~~~~~
+
+Checks if a string is a valid semver version.
+
+.. code:: bash
+
+   pysemver check <VERSION>
+
+.. option:: <VERSION>
+
+    The version string to check.
+
+The *error code* returned by the script indicates if the
+version is valid (=0) or not (!=0)::
+
+    $ pysemver check 1.2.3; echo $?
+    0
+    $ pysemver check 2.1; echo $?
+    ERROR Invalid version '2.1'
+    2
+
+
 pysemver compare
 ~~~~~~~~~~~~~~~~
 
@@ -120,7 +143,6 @@ are valid (return code 0) or not (return code != 0)::
     $ pysemver compare 1.2.3 2.4.0 ; echo $?
     ERROR 1.2.x is not valid SemVer string
     2
-
 
 See also
 --------
