@@ -133,16 +133,38 @@ to indicates which is the bigger version:
 * ``0`` if both versions are the same,
 * ``1`` if the first version is greater than the second version.
 
-The *error code* returned by the script indicates if both versions
-are valid (return code 0) or not (return code != 0)::
+
+Return Code
+-----------
+
+The *return code* of the script (accessible by ``$?`` from the Bash)
+indicates if the subcommand returned successfully nor not. It is *not*
+meant as the result of the subcommand.
+
+The result of the subcommand is printed on the standard out channel
+("stdout" or ``0``), any error messages to standard error ("stderr" or
+``2``).
+
+For example, to compare two versions, the command expects two valid
+semver versions::
 
     $ pysemver compare 1.2.3 2.4.0
     -1
-    $ pysemver compare 1.2.3 2.4.0 ; echo $?
+    $ echo $?
     0
-    $ pysemver compare 1.2.3 2.4.0 ; echo $?
-    ERROR 1.2.x is not valid SemVer string
+
+The return code is zero, but the result is ``-1``.
+
+However, if you pass invalid versions, you get this situation::
+
+    $ pysemver compare 1.2.3 2.4
+    ERROR 2.4 is not valid SemVer string
+    $ echo $?
     2
+
+If you use the :command:`pysemver` in your own scripts, check the
+return code first before you process the standard output.
+
 
 See also
 --------

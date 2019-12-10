@@ -9,6 +9,9 @@ from semver import (
     bump_minor,
     bump_patch,
     bump_prerelease,
+    cmd_bump,
+    cmd_check,
+    cmd_compare,
     compare,
     createparser,
     finalize_version,
@@ -684,87 +687,70 @@ def test_should_be_able_to_use_integers_as_prerelease_build():
 @pytest.mark.parametrize(
     "cli,expected",
     [
-        (
-            ["bump", "major", "1.2.3"],
-            Namespace(which="bump", bump="major", version="1.2.3"),
-        ),
-        (
-            ["bump", "minor", "1.2.3"],
-            Namespace(which="bump", bump="minor", version="1.2.3"),
-        ),
-        (
-            ["bump", "patch", "1.2.3"],
-            Namespace(which="bump", bump="patch", version="1.2.3"),
-        ),
+        (["bump", "major", "1.2.3"], Namespace(bump="major", version="1.2.3")),
+        (["bump", "minor", "1.2.3"], Namespace(bump="minor", version="1.2.3")),
+        (["bump", "patch", "1.2.3"], Namespace(bump="patch", version="1.2.3")),
         (
             ["bump", "prerelease", "1.2.3"],
-            Namespace(which="bump", bump="prerelease", version="1.2.3"),
+            Namespace(bump="prerelease", version="1.2.3"),
         ),
-        (
-            ["bump", "build", "1.2.3"],
-            Namespace(which="bump", bump="build", version="1.2.3"),
-        ),
+        (["bump", "build", "1.2.3"], Namespace(bump="build", version="1.2.3")),
         # ---
-        (
-            ["compare", "1.2.3", "2.1.3"],
-            Namespace(which="compare", version1="1.2.3", version2="2.1.3"),
-        ),
+        (["compare", "1.2.3", "2.1.3"], Namespace(version1="1.2.3", version2="2.1.3")),
         # ---
-        (["check", "1.2.3"], Namespace(which="check", version="1.2.3")),
+        (["check", "1.2.3"], Namespace(version="1.2.3")),
     ],
 )
 def test_should_parse_cli_arguments(cli, expected):
     parser = createparser()
     assert parser
     result = parser.parse_args(cli)
+    del result.func
     assert result == expected
 
 
 @pytest.mark.parametrize(
-    "args,expectation",
+    "func,args,expectation",
     [
         # bump subcommand
+        (cmd_bump, Namespace(bump="major", version="1.2.3"), does_not_raise("2.0.0")),
+        (cmd_bump, Namespace(bump="minor", version="1.2.3"), does_not_raise("1.3.0")),
+        (cmd_bump, Namespace(bump="patch", version="1.2.3"), does_not_raise("1.2.4")),
         (
-            Namespace(which="bump", bump="major", version="1.2.3"),
-            does_not_raise("2.0.0"),
-        ),
-        (
-            Namespace(which="bump", bump="minor", version="1.2.3"),
-            does_not_raise("1.3.0"),
-        ),
-        (
-            Namespace(which="bump", bump="patch", version="1.2.3"),
-            does_not_raise("1.2.4"),
-        ),
-        (
-            Namespace(which="bump", bump="prerelease", version="1.2.3-rc1"),
+            cmd_bump,
+            Namespace(bump="prerelease", version="1.2.3-rc1"),
             does_not_raise("1.2.3-rc2"),
         ),
         (
-            Namespace(which="bump", bump="build", version="1.2.3+build.13"),
+            cmd_bump,
+            Namespace(bump="build", version="1.2.3+build.13"),
             does_not_raise("1.2.3+build.14"),
         ),
         # compare subcommand
         (
-            Namespace(which="compare", version1="1.2.3", version2="2.1.3"),
+            cmd_compare,
+            Namespace(version1="1.2.3", version2="2.1.3"),
             does_not_raise("-1"),
         ),
         (
-            Namespace(which="compare", version1="1.2.3", version2="1.2.3"),
+            cmd_compare,
+            Namespace(version1="1.2.3", version2="1.2.3"),
             does_not_raise("0"),
         ),
         (
-            Namespace(which="compare", version1="2.4.0", version2="2.1.3"),
+            cmd_compare,
+            Namespace(version1="2.4.0", version2="2.1.3"),
             does_not_raise("1"),
         ),
         # check subcommand
-        (Namespace(which="check", version="1.2.3"), does_not_raise(None)),
-        (Namespace(which="check", version="1.2"), pytest.raises(ValueError)),
+        (cmd_check, Namespace(version="1.2.3"), does_not_raise(None)),
+        (cmd_check, Namespace(version="1.2"), pytest.raises(ValueError)),
     ],
 )
-def test_should_process_parsed_cli_arguments(args, expectation):
+def test_should_process_parsed_cli_arguments(func, args, expectation):
     with expectation as expected:
-        assert process(args) == expected
+        result = func(args)
+        assert result == expected
 
 
 def test_should_process_print(capsys):

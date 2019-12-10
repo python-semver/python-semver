@@ -663,6 +663,61 @@ def finalize_version(version):
     return format_version(verinfo["major"], verinfo["minor"], verinfo["patch"])
 
 
+def cmd_bump(args):
+    """
+    Subcommand: Bumps a version.
+
+    Synopsis: bump <PART> <VERSION>
+    <PART> can be major, minor, patch, prerelease, or build
+
+    :param args: The parsed arguments
+    :type args: :class:`argparse.Namespace`
+    :return: the new, bumped version
+    """
+    maptable = {
+        "major": "bump_major",
+        "minor": "bump_minor",
+        "patch": "bump_patch",
+        "prerelease": "bump_prerelease",
+        "build": "bump_build",
+    }
+    if args.bump is None:
+        # When bump is called without arguments,
+        # print the help and exit
+        args.parser.parse_args(["bump", "-h"])
+
+    ver = parse_version_info(args.version)
+    # get the respective method and call it
+    func = getattr(ver, maptable[args.bump])
+    return str(func())
+
+
+def cmd_check(args):
+    """
+    Subcommand: Checks if a string is a valid semver version.
+
+    Synopsis: check <VERSION>
+
+    :param args: The parsed arguments
+    :type args: :class:`argparse.Namespace`
+    """
+    if VersionInfo.isvalid(args.version):
+        return None
+    raise ValueError("Invalid version %r" % args.version)
+
+
+def cmd_compare(args):
+    """
+    Subcommand: Compare two versions
+
+    Synopsis: compare <VERSION1> <VERSION2>
+
+    :param args: The parsed arguments
+    :type args: :class:`argparse.Namespace`
+    """
+    return str(compare(args.version1, args.version2))
+
+
 def createparser():
     """Create an :class:`argparse.ArgumentParser` instance
 
@@ -678,13 +733,13 @@ def createparser():
     s = parser.add_subparsers()
     # create compare subcommand
     parser_compare = s.add_parser("compare", help="Compare two versions")
-    parser_compare.set_defaults(which="compare")
+    parser_compare.set_defaults(func=cmd_compare)
     parser_compare.add_argument("version1", help="First version")
     parser_compare.add_argument("version2", help="Second version")
 
     # create bump subcommand
     parser_bump = s.add_parser("bump", help="Bumps a version")
-    parser_bump.set_defaults(which="bump")
+    parser_bump.set_defaults(func=cmd_bump)
     sb = parser_bump.add_subparsers(title="Bump commands", dest="bump")
 
     # Create subparsers for the bump subparser:
@@ -701,7 +756,7 @@ def createparser():
     parser_check = s.add_parser(
         "check", help="Checks if a string is a valid semver version"
     )
-    parser_check.set_defaults(which="check")
+    parser_check.set_defaults(func=cmd_check)
     parser_check.add_argument("version", help="Version to check")
 
     return parser
@@ -717,35 +772,12 @@ def process(args):
     :return: result of the selected action
     :rtype: str
     """
-    if not hasattr(args, "which"):
+    if not hasattr(args, "func"):
         args.parser.print_help()
         raise SystemExit()
 
-    elif args.which == "bump":
-        maptable = {
-            "major": "bump_major",
-            "minor": "bump_minor",
-            "patch": "bump_patch",
-            "prerelease": "bump_prerelease",
-            "build": "bump_build",
-        }
-        if args.bump is None:
-            # When bump is called without arguments,
-            # print the help and exit
-            args.parser.parse_args([args.which, "-h"])
-
-        ver = parse_version_info(args.version)
-        # get the respective method and call it
-        func = getattr(ver, maptable[args.bump])
-        return str(func())
-
-    elif args.which == "compare":
-        return str(compare(args.version1, args.version2))
-
-    elif args.which == "check":
-        if VersionInfo.isvalid(args.version):
-            return None
-        raise ValueError("Invalid version %r" % args.version)
+    # Call the respective function object:
+    return args.func(args)
 
 
 def main(cliargs=None):
