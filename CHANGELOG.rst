@@ -23,7 +23,7 @@ Features
 * :gh:`208` (:pr:`209`): Introduce new function :func:`semver.VersionInfo.isvalid`
   and extend :command:`pysemver` with :command:`check` subcommand
 * :gh:`210` (:pr:`215`): Document how to deal with invalid versions
-
+* :pr:`212`: Improve docstrings according to PEP257
 
 Bug Fixes
 ---------

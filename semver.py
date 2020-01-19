@@ -1,6 +1,4 @@
-"""
-Python helper for Semantic Versioning (http://semver.org/)
-"""
+"""Python helper for Semantic Versioning (http://semver.org/)"""
 from __future__ import print_function
 
 import argparse
@@ -50,7 +48,8 @@ if not hasattr(__builtins__, "cmp"):
 
 
 def parse(version):
-    """Parse version to major, minor, patch, pre-release, build parts.
+    """
+    Parse version to major, minor, patch, pre-release, build parts.
 
     :param version: version string
     :return: dictionary with the keys 'build', 'major', 'minor', 'patch',
@@ -84,7 +83,7 @@ def parse(version):
 
 
 def comparator(operator):
-    """ Wrap a VersionInfo binary op method in a type-check """
+    """Wrap a VersionInfo binary op method in a type-check."""
 
     @wraps(operator)
     def wrapper(self, other):
@@ -100,6 +99,8 @@ def comparator(operator):
 
 class VersionInfo(object):
     """
+    A semver compatible version class.
+
     :param int major: version when you make incompatible API changes.
     :param int minor: version when you add functionality in
                       a backwards-compatible manner.
@@ -119,7 +120,7 @@ class VersionInfo(object):
 
     @property
     def major(self):
-        """The major part of a version"""
+        """The major part of a version."""
         return self._major
 
     @major.setter
@@ -128,7 +129,7 @@ class VersionInfo(object):
 
     @property
     def minor(self):
-        """The minor part of a version"""
+        """The minor part of a version."""
         return self._minor
 
     @minor.setter
@@ -137,7 +138,7 @@ class VersionInfo(object):
 
     @property
     def patch(self):
-        """The patch part of a version"""
+        """The patch part of a version."""
         return self._patch
 
     @patch.setter
@@ -146,7 +147,7 @@ class VersionInfo(object):
 
     @property
     def prerelease(self):
-        """The prerelease part of a version"""
+        """The prerelease part of a version."""
         return self._prerelease
 
     @prerelease.setter
@@ -155,7 +156,7 @@ class VersionInfo(object):
 
     @property
     def build(self):
-        """The build part of a version"""
+        """The build part of a version."""
         return self._build
 
     @build.setter
@@ -183,8 +184,9 @@ class VersionInfo(object):
             yield v
 
     def bump_major(self):
-        """Raise the major part of the version, return a new object
-           but leave self untouched
+        """
+        Raise the major part of the version, return a new object but leave self
+        untouched.
 
         :return: new object with the raised major part
         :rtype: VersionInfo
@@ -196,8 +198,9 @@ class VersionInfo(object):
         return parse_version_info(bump_major(str(self)))
 
     def bump_minor(self):
-        """Raise the minor part of the version, return a new object
-           but leave self untouched
+        """
+        Raise the minor part of the version, return a new object but leave self
+        untouched.
 
         :return: new object with the raised minor part
         :rtype: VersionInfo
@@ -209,8 +212,9 @@ class VersionInfo(object):
         return parse_version_info(bump_minor(str(self)))
 
     def bump_patch(self):
-        """Raise the patch part of the version, return a new object
-           but leave self untouched
+        """
+        Raise the patch part of the version, return a new object but leave self
+        untouched.
 
         :return: new object with the raised patch part
         :rtype: VersionInfo
@@ -222,8 +226,9 @@ class VersionInfo(object):
         return parse_version_info(bump_patch(str(self)))
 
     def bump_prerelease(self, token="rc"):
-        """Raise the prerelease part of the version, return a new object
-           but leave self untouched
+        """
+        Raise the prerelease part of the version, return a new object but leave
+        self untouched.
 
         :param token: defaults to 'rc'
         :return: new object with the raised prerelease part
@@ -237,8 +242,9 @@ build=None)
         return parse_version_info(bump_prerelease(str(self), token))
 
     def bump_build(self, token="build"):
-        """Raise the build part of the version, return a new object
-           but leave self untouched
+        """
+        Raise the build part of the version, return a new object but leave self
+        untouched.
 
         :param token: defaults to 'build'
         :return: new object with the raised build part
@@ -287,7 +293,8 @@ build='build.10')
 
     @staticmethod
     def parse(version):
-        """Parse version string to a VersionInfo instance.
+        """
+        Parse version string to a VersionInfo instance.
 
         :param version: version string
         :return: a :class:`semver.VersionInfo` instance
@@ -323,7 +330,8 @@ prerelease='pre.2', build='build.4')
 
     @classmethod
     def isvalid(cls, version):
-        """Check if the string is a valid semver version
+        """
+        Check if the string is a valid semver version.
 
         :param str version: the version string to check
         :return: True if the version string is a valid semver version, False
@@ -346,7 +354,8 @@ def _to_dict(obj):
 
 
 def parse_version_info(version):
-    """Parse version string to a VersionInfo instance.
+    """
+    Parse version string to a VersionInfo instance.
 
     :param version: version string
     :return: a :class:`VersionInfo` instance
@@ -423,7 +432,8 @@ def _compare_by_keys(d1, d2):
 
 
 def compare(ver1, ver2):
-    """Compare two versions
+    """
+    Compare two versions.
 
     :param ver1: version string 1
     :param ver2: version string 2
@@ -445,7 +455,8 @@ def compare(ver1, ver2):
 
 
 def match(version, match_expr):
-    """Compare two versions through a comparison
+    """
+    Compare two versions through a comparison.
 
     :param str version: a version string
     :param str match_expr: operator and version; valid operators are
@@ -493,7 +504,8 @@ def match(version, match_expr):
 
 
 def max_ver(ver1, ver2):
-    """Returns the greater version of two versions
+    """
+    Returns the greater version of two versions.
 
     :param ver1: version string 1
     :param ver2: version string 2
@@ -511,7 +523,8 @@ def max_ver(ver1, ver2):
 
 
 def min_ver(ver1, ver2):
-    """Returns the smaller version of two versions
+    """
+    Returns the smaller version of two versions.
 
     :param ver1: version string 1
     :param ver2: version string 2
@@ -529,7 +542,8 @@ def min_ver(ver1, ver2):
 
 
 def format_version(major, minor, patch, prerelease=None, build=None):
-    """Format a version according to the Semantic Versioning specification
+    """
+    Format a version according to the Semantic Versioning specification.
 
     :param int major: the required major part of a version
     :param int minor: the required minor part of a version
@@ -555,6 +569,7 @@ def format_version(major, minor, patch, prerelease=None, build=None):
 def _increment_string(string):
     """
     Look for the last sequence of number(s) in a string and increment, from:
+
     http://code.activestate.com/recipes/442460-increment-numbers-in-a-string/#c1
     """
     match = _LAST_NUMBER.search(string)
@@ -566,7 +581,8 @@ def _increment_string(string):
 
 
 def bump_major(version):
-    """Raise the major part of the version
+    """
+    Raise the major part of the version.
 
     :param: version string
     :return: the raised version string
@@ -580,7 +596,8 @@ def bump_major(version):
 
 
 def bump_minor(version):
-    """Raise the minor part of the version
+    """
+    Raise the minor part of the version.
 
     :param: version string
     :return: the raised version string
@@ -594,7 +611,8 @@ def bump_minor(version):
 
 
 def bump_patch(version):
-    """Raise the patch part of the version
+    """
+    Raise the patch part of the version.
 
     :param: version string
     :return: the raised version string
@@ -608,7 +626,8 @@ def bump_patch(version):
 
 
 def bump_prerelease(version, token="rc"):
-    """Raise the prerelease part of the version
+    """
+    Raise the prerelease part of the version.
 
     :param version: version string
     :param token: defaults to 'rc'
@@ -628,7 +647,8 @@ def bump_prerelease(version, token="rc"):
 
 
 def bump_build(version, token="build"):
-    """Raise the build part of the version
+    """
+    Raise the build part of the version.
 
     :param version: version string
     :param token: defaults to 'build'
@@ -650,7 +670,8 @@ def bump_build(version, token="build"):
 
 
 def finalize_version(version):
-    """Remove any prerelease and build metadata from the version
+    """
+    Remove any prerelease and build metadata from the version.
 
     :param version: version string
     :return: the finalized version string
@@ -663,8 +684,64 @@ def finalize_version(version):
     return format_version(verinfo["major"], verinfo["minor"], verinfo["patch"])
 
 
+def cmd_bump(args):
+    """
+    Subcommand: Bumps a version.
+
+    Synopsis: bump <PART> <VERSION>
+    <PART> can be major, minor, patch, prerelease, or build
+
+    :param args: The parsed arguments
+    :type args: :class:`argparse.Namespace`
+    :return: the new, bumped version
+    """
+    maptable = {
+        "major": "bump_major",
+        "minor": "bump_minor",
+        "patch": "bump_patch",
+        "prerelease": "bump_prerelease",
+        "build": "bump_build",
+    }
+    if args.bump is None:
+        # When bump is called without arguments,
+        # print the help and exit
+        args.parser.parse_args(["bump", "-h"])
+
+    ver = parse_version_info(args.version)
+    # get the respective method and call it
+    func = getattr(ver, maptable[args.bump])
+    return str(func())
+
+
+def cmd_check(args):
+    """
+    Subcommand: Checks if a string is a valid semver version.
+
+    Synopsis: check <VERSION>
+
+    :param args: The parsed arguments
+    :type args: :class:`argparse.Namespace`
+    """
+    if VersionInfo.isvalid(args.version):
+        return None
+    raise ValueError("Invalid version %r" % args.version)
+
+
+def cmd_compare(args):
+    """
+    Subcommand: Compare two versions
+
+    Synopsis: compare <VERSION1> <VERSION2>
+
+    :param args: The parsed arguments
+    :type args: :class:`argparse.Namespace`
+    """
+    return str(compare(args.version1, args.version2))
+
+
 def createparser():
-    """Create an :class:`argparse.ArgumentParser` instance
+    """
+    Create an :class:`argparse.ArgumentParser` instance.
 
     :return: parser instance
     :rtype: :class:`argparse.ArgumentParser`
@@ -678,13 +755,13 @@ def createparser():
     s = parser.add_subparsers()
     # create compare subcommand
     parser_compare = s.add_parser("compare", help="Compare two versions")
-    parser_compare.set_defaults(which="compare")
+    parser_compare.set_defaults(func=cmd_compare)
     parser_compare.add_argument("version1", help="First version")
     parser_compare.add_argument("version2", help="Second version")
 
     # create bump subcommand
     parser_bump = s.add_parser("bump", help="Bumps a version")
-    parser_bump.set_defaults(which="bump")
+    parser_bump.set_defaults(func=cmd_bump)
     sb = parser_bump.add_subparsers(title="Bump commands", dest="bump")
 
     # Create subparsers for the bump subparser:
@@ -701,14 +778,15 @@ def createparser():
     parser_check = s.add_parser(
         "check", help="Checks if a string is a valid semver version"
     )
-    parser_check.set_defaults(which="check")
+    parser_check.set_defaults(func=cmd_check)
     parser_check.add_argument("version", help="Version to check")
 
     return parser
 
 
 def process(args):
-    """Process the input from the CLI
+    """
+    Process the input from the CLI.
 
     :param args: The parsed arguments
     :type args: :class:`argparse.Namespace`
@@ -717,39 +795,17 @@ def process(args):
     :return: result of the selected action
     :rtype: str
     """
-    if not hasattr(args, "which"):
+    if not hasattr(args, "func"):
         args.parser.print_help()
         raise SystemExit()
 
-    elif args.which == "bump":
-        maptable = {
-            "major": "bump_major",
-            "minor": "bump_minor",
-            "patch": "bump_patch",
-            "prerelease": "bump_prerelease",
-            "build": "bump_build",
-        }
-        if args.bump is None:
-            # When bump is called without arguments,
-            # print the help and exit
-            args.parser.parse_args([args.which, "-h"])
-
-        ver = parse_version_info(args.version)
-        # get the respective method and call it
-        func = getattr(ver, maptable[args.bump])
-        return str(func())
-
-    elif args.which == "compare":
-        return str(compare(args.version1, args.version2))
-
-    elif args.which == "check":
-        if VersionInfo.isvalid(args.version):
-            return None
-        raise ValueError("Invalid version %r" % args.version)
+    # Call the respective function object:
+    return args.func(args)
 
 
 def main(cliargs=None):
-    """Entry point for the application script
+    """
+    Entry point for the application script.
 
     :param list cliargs: Arguments to parse or None (=use :class:`sys.argv`)
     :return: error code
@@ -771,7 +827,8 @@ def main(cliargs=None):
 
 
 def replace(version, **parts):
-    """Replace one or more parts of a version and return the new string
+    """
+    Replace one or more parts of a version and return the new string.
 
     :param str version: the version string to replace
     :param dict parts: the parts to be updated. Valid keys are:

@@ -1,10 +1,16 @@
 # config file for automatic testing at travis-ci.org
 language: python
 cache: pip
+
+before_install:
+    sudo apt-get install -y python3-dev
+
 install:
   - pip install --upgrade pip setuptools
   - pip install virtualenv tox
+
 script: tox -v
+
 matrix:
   include:
   - python: "2.7"
@@ -13,8 +19,8 @@ matrix:
   - python: "3.4"
     env: TOXENV=py34
 
-  - python: "3.4"
-    env: TOXENV=flake8
+  - python: "3.6"
+    env: TOXENV=checks
 
   - python: "3.5"
     env: TOXENV=py35
