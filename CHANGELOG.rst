@@ -22,7 +22,7 @@ Features
 * :gh:`201` (:pr:`202`): Reformatted source code with black
 * :gh:`208` (:pr:`209`): Introduce new function :func:`semver.VersionInfo.isvalid`
   and extend :command:`pysemver` with :command:`check` subcommand
-
+* :pr:`212`: Improve docstrings according to PEP257
 
 Bug Fixes
 ---------
