@@ -334,3 +334,75 @@ Getting Minimum and Maximum of two Versions
     '2.0.0'
     >>> semver.min_ver("1.0.0", "2.0.0")
     '1.0.0'
+
+
+Dealing with Invalid Versions
+-----------------------------
+
+As semver follows the semver specification, it cannot parse version
+strings which are considered "invalid" by that specification. The semver
+library cannot know all the possible variations so you need to help the
+library a bit.
+
+For example, if you have a version string ``v1.2`` would be an invalid
+semver version.
+However, "basic" version strings consisting of major, minor,
+and patch part, can be easy to convert. The following function extract this
+information and returns a tuple with two items:
+
+.. code-block:: python
+
+    import re
+
+    BASEVERSION = re.compile(
+        r"""[vV]?
+            (?P<major>0|[1-9]\d*)
+            (\.
+            (?P<minor>0|[1-9]\d*)
+            (\.
+                (?P<patch>0|[1-9]\d*)
+            )?
+            )?
+        """,
+        re.VERBOSE,
+    )
+    def coerce(version):
+        """
+        Convert an incomplete version string into a semver-compatible VersionInfo
+        object
+
+        * Tries to detect a "basic" version string (``major.minor.patch``).
+        * If not enough components can be found, missing components are
+            set to zero to obtain a valid semver version.
+
+        :param str version: the version string to convert
+        :return: a tuple with a :class:`VersionInfo` instance (or ``None``
+            if it's not a version) and the rest of the string which doesn't
+            belong to a basic version.
+        :rtype: tuple(:class:`VersionInfo` | None, str)
+        """
+        match = BASEVERSION.search(version)
+        if not match:
+            return (None, version)
+
+        ver = {
+            key: 0 if value is None else value
+            for key, value in match.groupdict().items()
+        }
+        ver = semver.VersionInfo(**ver)
+        rest = match.string[match.end() :]
+        return ver, rest
+
+The function returns a *tuple*, containing a :class:`VersionInfo`
+instance or None as the first element and the rest as the second element.
+The second element (the rest) can be used to make further adjustments.
+
+For example:
+
+.. code-block:: python
+
+    >>> coerce("v1.2")                                                                                                                                       
+    (VersionInfo(major=1, minor=2, patch=0, prerelease=None, build=None), '')
+    >>> coerce("v2.5.2-bla")
+    (VersionInfo(major=2, minor=5, patch=2, prerelease=None, build=None), '-bla')
+

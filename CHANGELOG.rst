@@ -22,6 +22,7 @@ Features
 * :gh:`201` (:pr:`202`): Reformatted source code with black
 * :gh:`208` (:pr:`209`): Introduce new function :func:`semver.VersionInfo.isvalid`
   and extend :command:`pysemver` with :command:`check` subcommand
+* :gh:`210` (:pr:`215`): Document how to deal with invalid versions
 
 
 Bug Fixes
