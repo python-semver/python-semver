@@ -6,10 +6,11 @@ Change Log
 All notable changes to this code base will be documented in this file,
 in every released version.
 
-Version 2.9.1 (WIP)
-===================
-:Released: 20xy-xy-xy
-:Maintainer: ...
+
+Version 2.9.1
+=============
+:Released: 2020-02-16
+:Maintainer: Tom Schraitle
 
 Features
 --------
@@ -33,6 +34,9 @@ Bug Fixes
 
 Removals
 --------
+
+not available
+
 
 Version 2.9.0
 =============

@@ -1,3 +1,9 @@
-include README.rst
-include LICENSE.txt
+include *.rst
+include *.txt
 include test_*.py
+
+exclude .travis.yml
+prune docs/_build
+recursive-exclude .github  *
+
+global-exclude *.py[cod] __pycache__ *.so *.dylib
