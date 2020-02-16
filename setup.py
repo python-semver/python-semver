@@ -80,6 +80,7 @@ setup(
     include_package_data=True,
     license="BSD",
     classifiers=[
+        # See https://pypi.org/pypi?%3Aaction=list_classifiers
         "Environment :: Web Environment",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: BSD License",

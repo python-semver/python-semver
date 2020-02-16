@@ -8,10 +8,10 @@ import re
 import sys
 
 
-__version__ = "2.9.0"
+__version__ = "2.9.1"
 __author__ = "Kostiantyn Rybnikov"
 __author_email__ = "k-bx@k-bx.com"
-__maintainer__ = "Sebastien Celles"
+__maintainer__ = ["Sebastien Celles", "Tom Schraitle"]
 __maintainer_email__ = "s.celles@gmail.com"
 
 _REGEX = re.compile(

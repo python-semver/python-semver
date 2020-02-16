@@ -21,6 +21,19 @@ Release procedure
 
 * Ensure that long description (ie [README.rst](https://github.com/python-semver/python-semver/blob/master/README.rst)) can be correctly rendered by Pypi using `restview --long-description`
 
+* Upload it to TestPyPI first:
+
+```bash
+git clean -xfd
+python setup.py register sdist bdist_wheel --universal
+twine upload --repository-url https://test.pypi.org/legacy/  dist/*
+```
+
+  If you have a `~/.pypirc` with a `testpyi` section, the upload can be
+  simplified:
+
+      twine upload --repository testpyi dist/*
+
 * Upload to PyPI
 
 ```bash
