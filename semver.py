@@ -422,6 +422,53 @@ build='build.10')
 
         return rccmp
 
+    def next_version(self, part, prerelease_token="rc"):
+        """
+        Determines next version, preserving natural order.
+
+        .. versionadded:: 2.10.0
+
+        This function is taking prereleases into account.
+        The "major", "minor", and "patch" raises the respective parts like
+        the ``bump_*`` functions. The real difference is using the
+        "preprelease" part. It gives you the next patch version of the prerelease,
+        for example:
+
+        >>> str(semver.VersionInfo.parse("0.1.4").next_version("prerelease"))
+        '0.1.5-rc.1'
+
+        :param part: One of "major", "minor", "patch", or "prerelease"
+        :param prerelease_token: prefix string of prerelease, defaults to 'rc'
+        :return:
+        """
+        validparts = {
+            "major",
+            "minor",
+            "patch",
+            "prerelease",
+            # "build", # currently not used
+        }
+        if part not in validparts:
+            raise ValueError(
+                "Invalid part. Expected one of {validparts}, but got {part!r}".format(
+                    validparts=validparts, part=part
+                )
+            )
+        version = self
+        if (version.prerelease or version.build) and (
+            part == "patch"
+            or (part == "minor" and version.patch == 0)
+            or (part == "major" and version.minor == version.patch == 0)
+        ):
+            return version.replace(prerelease=None, build=None)
+
+        if part in ("major", "minor", "patch"):
+            return str(getattr(version, "bump_" + part)())
+
+        if not version.prerelease:
+            version = version.bump_patch()
+        return version.bump_prerelease(prerelease_token)
+
     @comparator
     def __eq__(self, other):
         return self.compare(other) == 0
@@ -709,7 +756,10 @@ def max_ver(ver1, ver2):
     >>> semver.max_ver("1.0.0", "2.0.0")
     '2.0.0'
     """
-    ver1 = VersionInfo.parse(ver1)
+    if isinstance(ver1, str):
+        ver1 = VersionInfo.parse(ver1)
+    elif not isinstance(ver1, VersionInfo):
+        raise TypeError()
     cmp_res = ver1.compare(ver2)
     if cmp_res >= 0:
         return str(ver1)
@@ -898,6 +948,7 @@ def replace(version, **parts):
     return str(VersionInfo.parse(version).replace(**parts))
 
 
+# ---- CLI
 def cmd_bump(args):
     """
     Subcommand: Bumps a version.
@@ -953,6 +1004,19 @@ def cmd_compare(args):
     return str(compare(args.version1, args.version2))
 
 
+def cmd_nextver(args):
+    """
+    Subcommand: Determines the next version, taking prereleases into account.
+
+    Synopsis: nextver <VERSION> <PART>
+
+    :param args: The parsed arguments
+    :type args: :class:`argparse.Namespace`
+    """
+    version = VersionInfo.parse(args.version)
+    return str(version.next_version(args.part))
+
+
 def createparser():
     """
     Create an :class:`argparse.ArgumentParser` instance.
@@ -995,6 +1059,15 @@ def createparser():
     parser_check.set_defaults(func=cmd_check)
     parser_check.add_argument("version", help="Version to check")
 
+    # Create the nextver subcommand
+    parser_nextver = s.add_parser(
+        "nextver", help="Determines the next version, taking prereleases into account."
+    )
+    parser_nextver.set_defaults(func=cmd_nextver)
+    parser_nextver.add_argument("version", help="Version to raise")
+    parser_nextver.add_argument(
+        "part", help="One of 'major', 'minor', 'patch', or 'prerelease'"
+    )
     return parser
 
 
