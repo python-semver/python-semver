@@ -6,6 +6,25 @@ Change Log
 All notable changes to this code base will be documented in this file,
 in every released version.
 
+Version 2.9.x (WIP)
+===================
+
+:Released: 2020-xx-yy
+:Maintainer:
+
+Features
+--------
+
+Bug Fixes
+---------
+
+* :gh:`224` (:pr:`226`): Replaced in class ``clean``, ``super(CleanCommand, self).run()`` with  
+   ``CleanCommand.run(self)``
+
+
+Removals
+--------
+
 
 Version 2.9.1
 =============

@@ -38,7 +38,7 @@ class Tox(TestCommand):
 
 class Clean(CleanCommand):
     def run(self):
-        super(CleanCommand, self).run()
+        CleanCommand.run(self)
         delete_in_root = ["build", ".cache", "dist", ".eggs", "*.egg-info", ".tox"]
         delete_everywhere = ["__pycache__", "*.pyc"]
         for candidate in delete_in_root:
