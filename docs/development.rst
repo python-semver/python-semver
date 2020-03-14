@@ -174,6 +174,7 @@ documentation includes:
             1
             >>> semver.compare("2.0.0", "2.0.0")
             0
+
             """
 
   * **The documentation**

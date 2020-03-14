@@ -68,7 +68,7 @@ different parts, use the `semver.parse` function:
     >>> ver['prerelease']
     'pre.2'
     >>> ver['build']
-    'build.5'
+    'build.4'
 
 To raise parts of a version, there are a couple of functions available for
 you. The `semver.parse_version_info` function converts a version string
@@ -87,7 +87,7 @@ It is allowed to concatenate different "bump functions":
 .. code-block:: python
 
     >>> ver.bump_major().bump_minor()
-    VersionInfo(major=4, minor=0, patch=1, prerelease=None, build=None)
+    VersionInfo(major=4, minor=1, patch=0, prerelease=None, build=None)
 
 To compare two versions, semver provides the `semver.compare` function.
 The return value indicates the relationship between the first and second
