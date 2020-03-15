@@ -14,6 +14,7 @@ from semver import (
     cmd_compare,
     compare,
     createparser,
+    deprecated,
     finalize_version,
     format_version,
     main,
@@ -54,9 +55,7 @@ def does_not_raise(item):
     "string,expected", [("rc", "rc"), ("rc.1", "rc.2"), ("2x", "3x")]
 )
 def test_should_private_increment_string(string, expected):
-    from semver import _increment_string
-
-    assert _increment_string(string) == expected
+    assert VersionInfo._increment_string(string) == expected
 
 
 @pytest.fixture
@@ -391,6 +390,18 @@ def test_should_versioninfo_bump_multiple():
     assert v.bump_prerelease().bump_build().bump_build() == expected
     expected = parse_version_info("3.4.5-rc.3")
     assert v.bump_prerelease().bump_build().bump_build().bump_prerelease() == expected
+
+
+def test_should_versioninfo_to_dict(version):
+    resultdict = version.to_dict()
+    assert isinstance(resultdict, dict), "Got type from to_dict"
+    assert list(resultdict.keys()) == ["major", "minor", "patch", "prerelease", "build"]
+
+
+def test_should_versioninfo_to_tuple(version):
+    result = version.to_tuple()
+    assert isinstance(result, tuple), "Got type from to_dict"
+    assert len(result) == 5, "Different length from to_tuple()"
 
 
 def test_should_ignore_extensions_for_bump():
@@ -777,6 +788,13 @@ def test_should_raise_systemexit_when_bump_iscalled_with_empty_arguments():
         main(["bump"])
 
 
+def test_should_process_check_iscalled_with_valid_version(capsys):
+    result = main(["check", "1.1.1"])
+    assert not result
+    captured = capsys.readouterr()
+    assert not captured.out
+
+
 @pytest.mark.parametrize(
     "version,parts,expected",
     [
@@ -827,3 +845,37 @@ def test_replace_raises_ValueError_for_non_numeric_values():
 def test_should_versioninfo_isvalid():
     assert VersionInfo.isvalid("1.0.0") is True
     assert VersionInfo.isvalid("foo") is False
+
+
+@pytest.mark.parametrize(
+    "func, args, kwargs",
+    [
+        (bump_build, ("1.2.3",), {}),
+        (bump_major, ("1.2.3",), {}),
+        (bump_minor, ("1.2.3",), {}),
+        (bump_patch, ("1.2.3",), {}),
+        (bump_prerelease, ("1.2.3",), {}),
+        (format_version, (3, 4, 5), {}),
+        (finalize_version, ("1.2.3-rc.5",), {}),
+        (parse, ("1.2.3",), {}),
+        (parse_version_info, ("1.2.3",), {}),
+        (replace, ("1.2.3",), dict(major=2, patch=10)),
+    ],
+)
+def test_should_raise_deprecation_warnings(func, args, kwargs):
+    with pytest.warns(
+        DeprecationWarning, match=r"Function 'semver.[_a-zA-Z]+' is deprecated."
+    ) as record:
+        func(*args, **kwargs)
+        if not record:
+            pytest.fail("Expected a DeprecationWarning for {}".format(func.__name__))
+    assert len(record), "Expected one DeprecationWarning record"
+
+
+def test_deprecated_deco_without_argument():
+    @deprecated
+    def mock_func():
+        return True
+
+    with pytest.deprecated_call():
+        assert mock_func()

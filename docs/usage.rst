@@ -14,9 +14,10 @@ are met.
 Knowing the Implemented semver.org Version
 ------------------------------------------
 
-The semver.org is the authorative specification of how semantical versioning is
-definied. To know which version of semver.org is implemented in the semver
-libary, use the following constant::
+The semver.org page is the authorative specification of how semantical
+versioning is definied.
+To know which version of semver.org is implemented in the semver libary,
+use the following constant::
 
    >>> semver.SEMVER_SPEC_VERSION
    '2.0.0'
@@ -25,35 +26,81 @@ libary, use the following constant::
 Creating a Version
 ------------------
 
-A version can be created in different ways:
+Due to historical reasons, the semver project offers two ways of
+creating a version:
 
-* as a complete version string::
+* through an object oriented approach with the :class:`semver.VersionInfo`
+  class. This is the preferred method when using semver.
 
-    >>> semver.parse_version_info("3.4.5-pre.2+build.4")
-    VersionInfo(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')
+* through module level functions and builtin datatypes (usually strings
+  and dicts).
+  These method are still available for compatibility reasons, but are
+  marked as deprecated. Using one of these will emit a DeprecationWarning.
+
+
+.. warning:: **Deprecation Warning**
+
+    Module level functions are marked as *deprecated* in version 2.9.2 now.
+    These functions will be removed in semver 3.
+    For details, see the sections :ref:`sec_replace_deprecated_functions` and
+    :ref:`sec_display_deprecation_warnings`.
+
+
+A :class:`semver.VersionInfo` instance can be created in different ways:
+
+
+* From a string::
+
     >>> semver.VersionInfo.parse("3.4.5-pre.2+build.4")
     VersionInfo(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')
 
-* with individual parts::
+* From individual parts by a dictionary::
 
-    >>> semver.format_version(3, 4, 5, 'pre.2', 'build.4')
-    '3.4.5-pre.2+build.4'
-    >>> semver.VersionInfo(3, 5)
-    VersionInfo(major=3, minor=5, patch=0, prerelease=None, build=None)
+    >>> d = {'major': 3, 'minor': 4, 'patch': 5,  'prerelease': 'pre.2', 'build': 'build.4'}
+    >>> semver.VersionInfo(**d)
+    VersionInfo(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')
+
+  As a minimum requirement, your dictionary needs at least the ``major``
+  key, others can be omitted. You get a ``TypeError`` if your
+  dictionary contains invalid keys.
+  Only the keys ``major``, ``minor``, ``patch``, ``prerelease``, and ``build``
+  are allowed.
+
+* From a tuple::
+
+    >>> t = (3, 5, 6)
+    >>> semver.VersionInfo(*t)
+    VersionInfo(major=3, minor=5, patch=6, prerelease=None, build=None)
 
   You can pass either an integer or a string for ``major``, ``minor``, or
   ``patch``::
 
-    >>> semver.VersionInfo("3", "5")
-    VersionInfo(major=3, minor=5, patch=0, prerelease=None, build=None)
+    >>> semver.VersionInfo("3", "5", 6)
+    VersionInfo(major=3, minor=5, patch=6, prerelease=None, build=None)
 
-  In the simplest form, ``prerelease`` and ``build`` can also be
-  integers::
+The old, deprecated module level functions are still available. If you
+need them, they return different builtin objects (string and dictionary).
+Keep in mind, once you have converted a version into a string or dictionary,
+it's an ordinary builtin object. It's not a special version object like
+the :class:`semver.VersionInfo` class anymore.
 
-    >>> semver.VersionInfo(1, 2, 3, 4, 5)
-    VersionInfo(major=1, minor=2, patch=3, prerelease='4', build='5')
+Depending on your use case, the following methods are available:
 
-If you pass an invalid version string you will get a ``ValueError``::
+* From individual version parts into a string
+
+  In some cases you only need a string from your version data::
+
+    >>> semver.format_version(3, 4, 5, 'pre.2', 'build.4')
+    '3.4.5-pre.2+build.4'
+
+* From a string into a dictionary
+
+  To access individual parts, you can use the function :func:`semver.parse`::
+
+    >>> semver.parse("3.4.5-pre.2+build.4")
+    OrderedDict([('major', 3), ('minor', 4), ('patch', 5), ('prerelease', 'pre.2'), ('build', 'build.4')])
+
+  If you pass an invalid version string you will get a ``ValueError``::
 
     >>> semver.parse("1.2")
     Traceback (most recent call last):
@@ -172,45 +219,30 @@ If you pass invalid keys you get an exception::
 
 .. _sec.convert.versions:
 
-Converting Different Version Types
-----------------------------------
+Converting a VersionInfo instance into Different Types
+------------------------------------------------------
 
-Depending which function you call, you get different types
-(as explained in the beginning of this chapter).
+Sometimes it is needed to convert a :class:`semver.VersionInfo` instance into
+a different type. For example, for displaying or to access all parts.
 
-* From a string into :class:`semver.VersionInfo`::
+It is possible to convert a :class:`semver.VersionInfo` instance:
 
-    >>> semver.VersionInfo.parse("3.4.5-pre.2+build.4")
-    VersionInfo(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')
-
-* From :class:`semver.VersionInfo` into a string::
+* Into a string with the builtin function :func:`str`::
 
     >>> str(semver.VersionInfo.parse("3.4.5-pre.2+build.4"))
     '3.4.5-pre.2+build.4'
 
-* From a dictionary into :class:`semver.VersionInfo`::
-
-    >>> d = {'major': 3, 'minor': 4, 'patch': 5,  'prerelease': 'pre.2', 'build': 'build.4'}
-    >>> semver.VersionInfo(**d)
-    VersionInfo(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')
-
-  As a minimum requirement, your dictionary needs at least the ``major``
-  key, others can be omitted. You get a ``TypeError`` if your
-  dictionary contains invalid keys.
-  Only ``major``, ``minor``, ``patch``, ``prerelease``, and ``build``
-  are allowed.
-
-* From a tuple into :class:`semver.VersionInfo`::
-
-    >>> t = (3, 5, 6)
-    >>> semver.VersionInfo(*t)
-    VersionInfo(major=3, minor=5, patch=6, prerelease=None, build=None)
-
-* From a  :class:`semver.VersionInfo` into a dictionary::
+* Into a dictionary with :func:`semver.VersionInfo.to_dict`::
 
     >>> v = semver.VersionInfo(major=3, minor=4, patch=5)
-    >>> semver.parse(str(v)) == {'major': 3, 'minor': 4, 'patch': 5, 'prerelease': None, 'build': None}
-    True
+    >>> v.to_dict()
+    OrderedDict([('major', 3), ('minor', 4), ('patch', 5), ('prerelease', None), ('build', None)])
+
+* Into a tuple with :func:`semver.VersionInfo.to_tuple`::
+
+    >>> v = semver.VersionInfo(major=5, minor=4, patch=2)
+    >>> v.to_tuple()
+    (5, 4, 2, None, None)
 
 
 Increasing Parts of a Version
@@ -362,8 +394,132 @@ For example:
 
 .. code-block:: python
 
-    >>> coerce("v1.2")                                                                                                                                       
+    >>> coerce("v1.2")
     (VersionInfo(major=1, minor=2, patch=0, prerelease=None, build=None), '')
     >>> coerce("v2.5.2-bla")
     (VersionInfo(major=2, minor=5, patch=2, prerelease=None, build=None), '-bla')
 
+
+.. _sec_replace_deprecated_functions:
+
+Replacing Deprecated Functions
+------------------------------
+
+The development team of semver has decided to deprecate certain functions on
+the module level. The preferred way of using semver is through the
+:class:`semver.VersionInfo` class.
+
+The deprecated functions can still be used in version 2.x.y. In version 3 of
+semver, the deprecated functions will be removed.
+
+The following list shows the deprecated functions and how you can replace
+them with code which is compatible for future versions:
+
+
+* :func:`semver.bump_major`, :func:`semver.bump_minor`, :func:`semver.bump_patch`, :func:`semver.bump_prerelease`, :func:`semver.bump_build`
+
+  Replace them with the respective methods of the :class:`semver.VersionInfo`
+  class.
+  For example, the function :func:`semver.bump_major` is replaced by
+  :func:`semver.VersionInfo.bump_major` and calling the ``str(versionobject)``:
+
+  .. code-block:: python
+
+     >>> s1 = semver.bump_major("3.4.5")
+     >>> s2 = str(semver.VersionInfo.parse("3.4.5").bump_major())
+     >>> s1 == s2
+     True
+
+  Likewise with the other module level functions.
+
+* :func:`semver.finalize_version`
+
+  Replace it with :func:`semver.VersionInfo.finalize_version`:
+
+  .. code-block:: python
+
+     >>> s1 = semver.finalize_version('1.2.3-rc.5')
+     >>> s2 = str(semver.VersionInfo.parse('1.2.3-rc.5').finalize_version())
+     >>> s1 == s2
+     True
+
+* :func:`semver.format_version`
+
+  Replace it with ``str(versionobject)``:
+
+  .. code-block:: python
+
+     >>> s1 = semver.format_version(5, 4, 3, 'pre.2', 'build.1')
+     >>> s2 = str(semver.VersionInfo(5, 4, 3, 'pre.2', 'build.1'))
+     >>> s1 == s2
+     True
+
+* :func:`semver.parse`
+
+  Replace it with :func:`semver.VersionInfo.parse` and
+  :func:`semver.VersionInfo.to_dict`:
+
+  .. code-block:: python
+
+     >>> v1 = semver.parse("1.2.3")
+     >>> v2 = semver.VersionInfo.parse("1.2.3").to_dict()
+     >>> v1 == v2
+     True
+
+* :func:`semver.parse_version_info`
+
+  Replace it with :func:`semver.VersionInfo.parse`:
+
+  .. code-block:: python
+
+     >>> v1 = semver.parse_version_info("3.4.5")
+     >>> v2 = semver.VersionInfo.parse("3.4.5")
+     >>> v1 == v2
+     True
+
+* :func:`semver.replace`
+
+  Replace it with :func:`semver.VersionInfo.replace`:
+
+  .. code-block:: python
+
+     >>> s1 = semver.replace("1.2.3", major=2, patch=10)
+     >>> s2 = str(semver.VersionInfo.parse('1.2.3').replace(major=2, patch=10))
+     >>> s1 == s2
+     True
+
+
+.. _sec_display_deprecation_warnings:
+
+Displaying Deprecation Warnings
+-------------------------------
+
+By default,  deprecation warnings are `ignored in Python <https://docs.python.org/3/library/warnings.html#warning-categories>`_.
+This also affects semver's own warnings.
+
+It is recommended that you turn on deprecation warnings in your scripts. Use one of
+the following methods:
+
+* Use the option `-Wd <https://docs.python.org/3/using/cmdline.html#cmdoption-w>`_
+  to enable default warnings:
+
+  * Directly running the Python command::
+
+       $ python3 -Wd scriptname.py
+
+  * Add the option in the shebang line (something like ``#!/usr/bin/python3``)
+    after the command::
+
+       #!/usr/bin/python3 -Wd
+
+* In your own scripts add a filter to ensure that *all* warnings are displayed:
+
+   .. code-block:: python
+
+       import warnings
+       warnings.simplefilter("default")
+       # Call your semver code
+
+   For further details, see the section
+   `Overriding the default filter <https://docs.python.org/3/library/warnings.html#overriding-the-default-filter>`_
+   of the Python documentation.

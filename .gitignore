@@ -1,12 +1,12 @@
-# Files
+# Patch/Diff Files
 *.patch
 *.diff
-*.kate-swp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 .pytest_cache/
+*$py.class
 
 # Distribution / packaging
 .cache
@@ -72,3 +72,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Backup files
+*~
+*.kate-swp
