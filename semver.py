@@ -307,8 +307,12 @@ prerelease='pre.2', build='build.4')
         return parse_version_info(version)
 
     def replace(self, **parts):
-        """Replace one or more parts of a version and return a new
-          :class:`semver.VersionInfo` object, but leave self untouched
+        """
+        Replace one or more parts of a version and return a new
+        :class:`semver.VersionInfo` object, but leave self untouched
+
+        .. versionadded:: 2.9.0
+           Added :func:`VersionInfo.replace`
 
         :param dict parts: the parts to be updated. Valid keys are:
           ``major``, ``minor``, ``patch``, ``prerelease``, or ``build``
@@ -333,6 +337,8 @@ prerelease='pre.2', build='build.4')
         """
         Check if the string is a valid semver version.
 
+        .. versionadded:: 2.9.1
+
         :param str version: the version string to check
         :return: True if the version string is a valid semver version, False
                  otherwise.
@@ -356,6 +362,9 @@ def _to_dict(obj):
 def parse_version_info(version):
     """
     Parse version string to a VersionInfo instance.
+
+    .. versionadded:: 2.7.2
+       Added :func:`parse_version_info`
 
     :param version: version string
     :return: a :class:`VersionInfo` instance
@@ -433,7 +442,7 @@ def _compare_by_keys(d1, d2):
 
 def compare(ver1, ver2):
     """
-    Compare two versions.
+    Compare two versions strings.
 
     :param ver1: version string 1
     :param ver2: version string 2
@@ -456,7 +465,7 @@ def compare(ver1, ver2):
 
 def match(version, match_expr):
     """
-    Compare two versions through a comparison.
+    Compare two versions strings through a comparison.
 
     :param str version: a version string
     :param str match_expr: operator and version; valid operators are
@@ -505,7 +514,7 @@ def match(version, match_expr):
 
 def max_ver(ver1, ver2):
     """
-    Returns the greater version of two versions.
+    Returns the greater version of two versions strings.
 
     :param ver1: version string 1
     :param ver2: version string 2
@@ -524,7 +533,7 @@ def max_ver(ver1, ver2):
 
 def min_ver(ver1, ver2):
     """
-    Returns the smaller version of two versions.
+    Returns the smaller version of two versions strings.
 
     :param ver1: version string 1
     :param ver2: version string 2
@@ -543,7 +552,7 @@ def min_ver(ver1, ver2):
 
 def format_version(major, minor, patch, prerelease=None, build=None):
     """
-    Format a version according to the Semantic Versioning specification.
+    Format a version string according to the Semantic Versioning specification.
 
     :param int major: the required major part of a version
     :param int minor: the required minor part of a version
@@ -582,7 +591,7 @@ def _increment_string(string):
 
 def bump_major(version):
     """
-    Raise the major part of the version.
+    Raise the major part of the version string.
 
     :param: version string
     :return: the raised version string
@@ -597,7 +606,7 @@ def bump_major(version):
 
 def bump_minor(version):
     """
-    Raise the minor part of the version.
+    Raise the minor part of the version string.
 
     :param: version string
     :return: the raised version string
@@ -612,7 +621,7 @@ def bump_minor(version):
 
 def bump_patch(version):
     """
-    Raise the patch part of the version.
+    Raise the patch part of the version string.
 
     :param: version string
     :return: the raised version string
@@ -627,7 +636,7 @@ def bump_patch(version):
 
 def bump_prerelease(version, token="rc"):
     """
-    Raise the prerelease part of the version.
+    Raise the prerelease part of the version string.
 
     :param version: version string
     :param token: defaults to 'rc'
@@ -648,7 +657,7 @@ def bump_prerelease(version, token="rc"):
 
 def bump_build(version, token="build"):
     """
-    Raise the build part of the version.
+    Raise the build part of the version string.
 
     :param version: version string
     :param token: defaults to 'build'
@@ -671,7 +680,10 @@ def bump_build(version, token="build"):
 
 def finalize_version(version):
     """
-    Remove any prerelease and build metadata from the version.
+    Remove any prerelease and build metadata from the version string.
+
+    .. versionadded:: 2.7.9
+       Added :func:`finalize_version`
 
     :param version: version string
     :return: the finalized version string
@@ -829,6 +841,9 @@ def main(cliargs=None):
 def replace(version, **parts):
     """
     Replace one or more parts of a version and return the new string.
+
+    .. versionadded:: 2.9.0
+       Added :func:`replace`
 
     :param str version: the version string to replace
     :param dict parts: the parts to be updated. Valid keys are:
