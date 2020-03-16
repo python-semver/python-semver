@@ -18,9 +18,14 @@ Features
 Bug Fixes
 ---------
 
-* :gh:`224` (:pr:`226`): Replaced in class ``clean``, ``super(CleanCommand, self).run()`` with  
-   ``CleanCommand.run(self)``
+* :gh:`224` (:pr:`226`): In ``setup.py``, replaced in class ``clean``,
+  ``super(CleanCommand, self).run()`` with ``CleanCommand.run(self)``
 
+
+Additions
+---------
+
+* :pr:`228`: Added better doctest integration
 
 Removals
 --------

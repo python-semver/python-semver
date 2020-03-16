@@ -51,12 +51,12 @@ A version can be created in different ways:
   integers::
 
     >>> semver.VersionInfo(1, 2, 3, 4, 5)
-    VersionInfo(major=1, minor=2, patch=3, prerelease=4, build=5)
+    VersionInfo(major=1, minor=2, patch=3, prerelease='4', build='5')
 
 If you pass an invalid version string you will get a ``ValueError``::
 
     >>> semver.parse("1.2")
-    Traceback (most recent call last)
+    Traceback (most recent call last):
     ...
     ValueError: 1.2 is not valid SemVer string
 
@@ -80,8 +80,8 @@ Parsing a Version String
 
 * With :func:`semver.parse`::
 
-    >>> semver.parse("3.4.5-pre.2+build.4")
-    {'major': 3, 'minor': 4, 'patch': 5,  'prerelease': 'pre.2', 'build': 'build.4'}
+    >>> semver.parse("3.4.5-pre.2+build.4") == {'major': 3, 'minor': 4, 'patch': 5, 'prerelease': 'pre.2', 'build': 'build.4'}
+    True
 
 
 Checking for a Valid Semver Version
@@ -92,9 +92,9 @@ classmethod :func:`semver.VersionInfo.isvalid`:
 
 .. code-block:: python
 
-    >>> VersionInfo.isvalid("1.0.0")
+    >>> semver.VersionInfo.isvalid("1.0.0")
     True
-    >>> VersionInfo.isvalid("invalid")
+    >>> semver.VersionInfo.isvalid("invalid")
     False
 
 
@@ -106,7 +106,7 @@ parts of a version:
 
 .. code-block:: python
 
-    >>> v = VersionInfo.parse("3.4.5-pre.2+build.4")
+    >>> v = semver.VersionInfo.parse("3.4.5-pre.2+build.4")
     >>> v.major
     3
     >>> v.minor
@@ -122,20 +122,20 @@ However, the attributes are read-only. You cannot change an attribute.
 If you do, you get an ``AttributeError``::
 
     >>> v.minor = 5
-    Traceback (most recent call last)
+    Traceback (most recent call last):
     ...
     AttributeError: attribute 'minor' is readonly
 
 In case you need the different parts of a version stepwise, iterate over the :class:`semver.VersionInfo` instance::
 
-    >>> for item in VersionInfo.parse("3.4.5-pre.2+build.4"):
+    >>> for item in semver.VersionInfo.parse("3.4.5-pre.2+build.4"):
     ...     print(item)
     3
     4
     5
     pre.2
     build.4
-    >>> list(VersionInfo.parse("3.4.5-pre.2+build.4"))
+    >>> list(semver.VersionInfo.parse("3.4.5-pre.2+build.4"))
     [3, 4, 5, 'pre.2', 'build.4']
 
 
@@ -160,12 +160,12 @@ unmodified, use one of the functions :func:`semver.replace` or
 If you pass invalid keys you get an exception::
 
    >>> semver.replace("1.2.3", invalidkey=2)
-   Traceback (most recent call last)
+   Traceback (most recent call last):
    ...
    TypeError: replace() got 1 unexpected keyword argument(s): invalidkey
    >>> version = semver.VersionInfo.parse("1.4.5-pre.1+build.6")
    >>> version.replace(invalidkey=2)
-   Traceback (most recent call last)
+   Traceback (most recent call last):
    ...
    TypeError: replace() got 1 unexpected keyword argument(s): invalidkey
 
@@ -209,8 +209,8 @@ Depending which function you call, you get different types
 * From a  :class:`semver.VersionInfo` into a dictionary::
 
     >>> v = semver.VersionInfo(major=3, minor=4, patch=5)
-    >>> semver.parse(str(v))
-    {'major': 3, 'minor': 4, 'patch': 5, 'prerelease': None, 'build': None}
+    >>> semver.parse(str(v)) == {'major': 3, 'minor': 4, 'patch': 5, 'prerelease': None, 'build': None}
+    True
 
 
 Increasing Parts of a Version
@@ -267,8 +267,8 @@ To compare two versions depends on your type:
   Use the specific operator. Currently, the operators ``<``,
   ``<=``, ``>``, ``>=``, ``==``, and ``!=`` are supported::
 
-    >>> v1 = VersionInfo.parse("3.4.5")
-    >>> v2 = VersionInfo.parse("3.5.1")
+    >>> v1 = semver.VersionInfo.parse("3.4.5")
+    >>> v2 = semver.VersionInfo.parse("3.5.1")
     >>> v1 < v2
     True
     >>> v1 > v2
@@ -278,7 +278,7 @@ To compare two versions depends on your type:
 
   Use the operator as with two :class:`semver.VersionInfo` types::
 
-    >>> v = VersionInfo.parse("3.4.5")
+    >>> v = semver.VersionInfo.parse("3.4.5")
     >>> v > (1, 0)
     True
     >>> v < (3, 5)
@@ -350,48 +350,9 @@ However, "basic" version strings consisting of major, minor,
 and patch part, can be easy to convert. The following function extract this
 information and returns a tuple with two items:
 
-.. code-block:: python
+.. literalinclude:: coerce.py
+   :language: python
 
-    import re
-
-    BASEVERSION = re.compile(
-        r"""[vV]?
-            (?P<major>0|[1-9]\d*)
-            (\.
-            (?P<minor>0|[1-9]\d*)
-            (\.
-                (?P<patch>0|[1-9]\d*)
-            )?
-            )?
-        """,
-        re.VERBOSE,
-    )
-    def coerce(version):
-        """
-        Convert an incomplete version string into a semver-compatible VersionInfo
-        object
-
-        * Tries to detect a "basic" version string (``major.minor.patch``).
-        * If not enough components can be found, missing components are
-            set to zero to obtain a valid semver version.
-
-        :param str version: the version string to convert
-        :return: a tuple with a :class:`VersionInfo` instance (or ``None``
-            if it's not a version) and the rest of the string which doesn't
-            belong to a basic version.
-        :rtype: tuple(:class:`VersionInfo` | None, str)
-        """
-        match = BASEVERSION.search(version)
-        if not match:
-            return (None, version)
-
-        ver = {
-            key: 0 if value is None else value
-            for key, value in match.groupdict().items()
-        }
-        ver = semver.VersionInfo(**ver)
-        rest = match.string[match.end() :]
-        return ver, rest
 
 The function returns a *tuple*, containing a :class:`VersionInfo`
 instance or None as the first element and the rest as the second element.
