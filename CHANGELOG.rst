@@ -27,8 +27,24 @@ Additions
 
 * :pr:`228`: Added better doctest integration
 
+
 Removals
 --------
+* :gh:`225` (:pr:`229`): Output a DeprecationWarning for the following functions:
+
+  - ``semver.parse``
+  - ``semver.parse_version_info``
+  - ``semver.format_version``
+  - ``semver.bump_{major,minor,patch,prerelease,build}``
+  - ``semver.finalize_version``
+  - ``semver.replace``
+  - ``semver.VersionInfo._asdict`` (use the new, public available
+    function ``semver.VersionInfo.to_dict()``)
+  - ``semver.VersionInfo._astuple`` (use the new, public available
+    function ``semver.VersionInfo.to_tuple()``)
+
+  These deprecated functions will be removed in semver 3.
+
 
 
 Version 2.9.1
