@@ -9,18 +9,23 @@ A Python module for `semantic versioning`_. Simplifies comparing versions.
 
 .. teaser-end
 
-.. note::
+.. warning::
 
-   With version 2.9.0 we've moved the GitHub project. The project is now
-   located under the organization ``python-semver``.
-   The complete URL is::
+   As anything comes to an end, this project will focus on Python 3.x only.
+   New features and bugfixes will be integrated into the 3.x.y branch only.
 
-       https://github.com/python-semver/python-semver
+   Major version 3 of semver will contain some incompatible changes:
 
-   If you still have an old repository, correct your upstream URL to the new URL::
+   * removes support for Python 2.7 and 3.3
+   * removes deprecated functions (see :ref:`sec_replace_deprecated_functions` for
+     further information).
 
-       $ git remote set-url upstream git@github.com:python-semver/python-semver.git
+   The last version of semver which supports Python 2.7 and 3.4 will be
+   2.10.x. However, keep in mind, version 2.10.x is frozen: no new
+   features nor backports will be integrated.
 
+   We recommend to upgrade your workflow to Python 3.x to gain support,
+   bugfixes, and new features.
 
 The module follows the ``MAJOR.MINOR.PATCH`` style:
 
@@ -30,23 +35,6 @@ The module follows the ``MAJOR.MINOR.PATCH`` style:
 
 Additional labels for pre-release and build metadata are supported.
 
-
-.. warning::
-
-   Major version 3.0.0 of semver will remove support for Python 2.7 and 3.4.
-
-   As anything comes to an end, this project will focus on Python 3.x.
-   New features and bugfixes will be integrated only into the 3.x.y branch
-   of semver.
-
-   The last version of semver which supports Python 2.7 and 3.4 will be
-   2.9.x. However, keep in mind, version 2.9.x is frozen: no new
-   features nor backports will be integrated.
-
-   We recommend to upgrade your workflow to Python 3.x to gain support,
-   bugfixes, and new features.
-
-
 To import this library, use:
 
 .. code-block:: python
@@ -54,31 +42,29 @@ To import this library, use:
     >>> import semver
 
 Working with the library is quite straightforward. To turn a version string into the
-different parts, use the `semver.parse` function:
+different parts, use the ``semver.VersionInfo.parse`` function:
 
 .. code-block:: python
 
-    >>> ver = semver.parse('1.2.3-pre.2+build.4')
-    >>> ver['major']
+    >>> ver = semver.VersionInfo.parse('1.2.3-pre.2+build.4')
+    >>> ver.major
     1
-    >>> ver['minor']
+    >>> ver.minor
     2
-    >>> ver['patch']
+    >>> ver.patch
     3
-    >>> ver['prerelease']
+    >>> ver.prerelease
     'pre.2'
-    >>> ver['build']
+    >>> ver.build
     'build.4'
 
 To raise parts of a version, there are a couple of functions available for
-you. The `semver.parse_version_info` function converts a version string
-into a `semver.VersionInfo` class. The function
-`semver.VersionInfo.bump_major` leaves the original object untouched, but
-returns a new `semver.VersionInfo` instance with the raised major part:
+you. The function :func:`semver.VersionInfo.bump_major` leaves the original object untouched, but
+returns a new :class:`semver.VersionInfo` instance with the raised major part:
 
 .. code-block:: python
 
-    >>> ver = semver.parse_version_info("3.4.5")
+    >>> ver = semver.VersionInfo.parse("3.4.5")
     >>> ver.bump_major()
     VersionInfo(major=4, minor=0, patch=0, prerelease=None, build=None)
 

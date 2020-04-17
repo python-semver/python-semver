@@ -10,8 +10,7 @@ Synopsis
 
 .. code:: bash
 
-   pysemver compare <VERSION1> <VERSION2>
-   pysemver bump {major,minor,patch,prerelease,build} <VERSION>
+   pysemver <COMMAND> <OPTION>...
 
 
 Description
@@ -52,7 +51,7 @@ Bump a version.
 
 .. option:: <PART>
 
-    The part to bump. Valid strings can be ``major``, ``minor``,
+    The part to bump. Valid strings are ``major``, ``minor``,
     ``patch``, ``prerelease``, or ``build``. The part has the
     following effects:
 

@@ -6,7 +6,7 @@ Change Log
 All notable changes to this code base will be documented in this file,
 in every released version.
 
-Version 2.9.x (WIP)
+Version 2.10.0 (WIP)
 ===================
 
 :Released: 2020-xx-yy
@@ -14,6 +14,10 @@ Version 2.9.x (WIP)
 
 Features
 --------
+
+* :pr:`235`: Improved documentation and shift focus on ``semver.VersionInfo`` instead of advertising
+  the old and deprecated module-level functions.
+
 
 Bug Fixes
 ---------
