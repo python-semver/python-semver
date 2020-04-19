@@ -1,0 +1,6 @@
+Output a DeprecationWarning for the following functions:
+
+* ``semver.compare``
+* ``semver.match``
+* ``semver.max_ver``
+* ``semver.min_ver``

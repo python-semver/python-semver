@@ -6,6 +6,20 @@ Change Log
 All notable changes to this code base will be documented in this file,
 in every released version.
 
+Changes for the upcoming release can be found in
+the `"changelog.d" directory <https://github.com/python-semver/python-semver/tree/master/changelog.d>`_
+in our repository.
+
+..
+   Do *NOT* add changelog entries here!
+
+   This changelog is managed by towncrier and is compiled at release time.
+
+   See https://python-semver.rtd.io/en/latest/development.html#changelog
+   for details.
+
+.. towncrier release notes start
+
 
 Version 2.10.2
 ==============
@@ -32,11 +46,15 @@ Additions
 n/a
 
 Deprecations
---------
+------------
 
 * :gh:`160` (:pr:`264`):
     * :func:`semver.max_ver`
     * :func:`semver.min_ver`
+
+
+----
+
 
 
 Version 2.10.1
@@ -60,6 +78,9 @@ Bug Fixes
 
 * :gh:`251` (:pr:`254`): Fixed return type of ``semver.VersionInfo.next_version``
   to always return a ``VersionInfo`` instance.
+
+
+----
 
 
 Version 2.10.0
@@ -92,7 +113,7 @@ Additions
 
 
 Deprecations
---------
+------------
 * :gh:`225` (:pr:`229`): Output a DeprecationWarning for the following functions:
 
   - ``semver.parse``
@@ -108,6 +129,8 @@ Deprecations
 
   These deprecated functions will be removed in semver 3.
 
+
+----
 
 
 Version 2.9.1
@@ -134,6 +157,8 @@ Bug Fixes
 
 * :gh:`192` (:pr:`193`): Fixed "pysemver" and "pysemver bump" when called without arguments
 
+
+----
 
 Version 2.9.0
 =============
@@ -178,6 +203,8 @@ Removals
 * :gh:`148` (:pr:`149`): Removed and replaced ``python setup.py test``
 
 
+----
+
 Version 2.8.2
 =============
 :Released: 2019-05-19
@@ -185,6 +212,7 @@ Version 2.8.2
 
 Skipped, not released.
 
+----
 
 Version 2.8.1
 =============
@@ -205,6 +233,8 @@ Bug Fixes
 * :gh:`98` (:pr:`99`): Set prerelease and build to None by default
 * :gh:`96` (:pr:`97`): Made VersionInfo immutable
 
+
+----
 
 Version 2.8.0
 =============
@@ -230,6 +260,9 @@ Removals
 * :gh:`76` (:pr:`80`): Removed Python 2.6 compatibility
 
 
+----
+
+
 Version 2.7.9
 =============
 
@@ -243,6 +276,8 @@ Additions
 * :gh:`65` (:pr:`66`): Added :func:`semver.finalize_version` function.
 
 
+----
+
 Version 2.7.8
 =============
 
@@ -251,6 +286,8 @@ Version 2.7.8
 
 * :gh:`62`: Support custom default names for pre and build
 
+
+----
 
 Version 2.7.7
 =============
@@ -261,6 +298,8 @@ Version 2.7.7
 * :gh:`54` (:pr:`55`): Added comparision between VersionInfo objects
 * :pr:`56`: Added support for Python 3.6
 
+
+----
 
 Version 2.7.2
 =============
@@ -286,6 +325,8 @@ Bug Fixes
   the prerelease version.
 
 
+----
+
 Version 2.6.0
 =============
 
@@ -300,6 +341,8 @@ Removals
   SemVer 2.0.0 specification recommends that build component is
   ignored in comparisons.
 
+
+----
 
 Version 2.5.0
 =============
@@ -317,6 +360,8 @@ Changes
 
 * Made separate builds for tests on Travis CI.
 
+
+----
 
 Version 2.4.2
 =============
@@ -336,6 +381,8 @@ Changes
 * Added configuration for Tox test runner.
 
 
+----
+
 Version 2.4.1
 =============
 
@@ -347,6 +394,8 @@ Additions
 
 * :gh:`23`: Compared build component of a version.
 
+
+----
 
 Version 2.4.0
 =============
@@ -360,6 +409,8 @@ Bug Fixes
 * :gh:`21`: Compared alphanumeric components correctly.
 
 
+----
+
 Version 2.3.1
 =============
 
@@ -371,6 +422,8 @@ Additions
 
 * Declared granted license name in distribution metadata.
 
+
+----
 
 Version 2.3.0
 =============
@@ -385,6 +438,8 @@ Additions
   version.
 
 
+----
+
 Version 2.2.1
 =============
 
@@ -396,6 +451,8 @@ Bug Fixes
 
 * Corrected comparison when any component includes zero.
 
+
+----
 
 Version 2.2.0
 =============
@@ -411,6 +468,8 @@ Additions
 * Add code examples for recently-added functions.
 
 
+----
+
 Version 2.1.2
 =============
 
@@ -423,6 +482,8 @@ Bug Fixes
 * Restored current README document to distribution manifest.
 
 
+----
+
 Version 2.1.1
 =============
 
@@ -434,6 +495,8 @@ Bug Fixes
 
 * Removed absent document from distribution manifest.
 
+
+----
 
 Version 2.1.0
 =============
@@ -463,6 +526,8 @@ Bug Fixes
 * Corrected code examples in README document.
 
 
+----
+
 Version 2.0.2
 =============
 
@@ -477,6 +542,8 @@ Additions
 * Explicitly declared supported Python versions.
 
 
+----
+
 Version 2.0.1
 =============
 
@@ -488,6 +555,8 @@ Bug Fixes
 
 * :gh:`9`: Fixed comparison of equal version strings.
 
+
+----
 
 Version 2.0.0
 =============
@@ -508,6 +577,8 @@ Changes
 * Ignore build component for comparison.
 
 
+----
+
 Version 0.0.2
 =============
 
@@ -519,6 +590,8 @@ Changes
 
 * Use standard library Distutils for distribution management.
 
+
+----
 
 Version 0.0.1
 =============

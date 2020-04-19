@@ -1,3 +1,5 @@
+.. _contributing:
+
 Contributing to semver
 ======================
 
@@ -183,6 +185,15 @@ documentation includes:
     to use your new feature in our documentation. Here you can give your
     readers more examples, describe it in a broader context or show
     edge cases.
+
+
+.. _changelog:
+
+Changelog
+---------
+
+.. include:: ../changelog.d/README.rst
+    :start-after: -text-begin-
 
 
 .. _flake8: https://flake8.readthedocs.io

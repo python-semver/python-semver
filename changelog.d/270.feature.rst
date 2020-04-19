@@ -1,0 +1,2 @@
+:gh:`270`: Use towncrier to build ``CHANGELOG.rst`` file
+See ``changelog.d/README.rst`` for details.

@@ -1,0 +1,5 @@
+Add version information in some functions:
+    
+* Use ``.. versionadded::`` RST directive in docstrings to
+  make it more visible when something was added
+* Minor wording fix in docstrings (versions -> version strings)
