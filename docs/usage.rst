@@ -1,11 +1,8 @@
 Using semver
 ============
 
-The ``semver`` module can store a version in different types:
-
-* as a string.
-* as :class:`semver.VersionInfo`, a dedicated class for a version type.
-* as a dictionary.
+The ``semver`` module can store a version in the :class:`semver.VersionInfo` class.
+For historical reasons, a version can be also stored as a string or dictionary.
 
 Each type can be converted into the other, if the minimum requirements
 are met.
@@ -32,22 +29,21 @@ creating a version:
 * through an object oriented approach with the :class:`semver.VersionInfo`
   class. This is the preferred method when using semver.
 
-* through module level functions and builtin datatypes (usually strings
-  and dicts).
-  These method are still available for compatibility reasons, but are
-  marked as deprecated. Using one of these will emit a DeprecationWarning.
+* through module level functions and builtin datatypes (usually string
+  and dict).
+  This method is still available for compatibility reasons, but are
+  marked as deprecated. Using it will emit a :class:`DeprecationWarning`.
 
 
 .. warning:: **Deprecation Warning**
 
-    Module level functions are marked as *deprecated* in version 2.9.2 now.
+    Module level functions are marked as *deprecated* in version 2.10.0 now.
     These functions will be removed in semver 3.
     For details, see the sections :ref:`sec_replace_deprecated_functions` and
     :ref:`sec_display_deprecation_warnings`.
 
 
 A :class:`semver.VersionInfo` instance can be created in different ways:
-
 
 * From a string::
 
@@ -173,6 +169,8 @@ If you do, you get an ``AttributeError``::
     ...
     AttributeError: attribute 'minor' is readonly
 
+If you need to replace different parts of a version, refer to section :ref:`sec.replace.parts`.
+
 In case you need the different parts of a version stepwise, iterate over the :class:`semver.VersionInfo` instance::
 
     >>> for item in semver.VersionInfo.parse("3.4.5-pre.2+build.4"):
@@ -186,23 +184,24 @@ In case you need the different parts of a version stepwise, iterate over the :cl
     [3, 4, 5, 'pre.2', 'build.4']
 
 
+.. _sec.replace.parts:
+
 Replacing Parts of a Version
 ----------------------------
 
 If you want to replace different parts of a version, but leave other parts
-unmodified, use one of the functions :func:`semver.replace` or
-:func:`semver.VersionInfo.replace`:
-
-* From a version string::
-
-   >>> semver.replace("1.4.5-pre.1+build.6", major=2)
-   '2.4.5-pre.1+build.6'
+unmodified, use the function :func:`semver.VersionInfo.replace` or :func:`semver.replace`:
 
 * From a :class:`semver.VersionInfo` instance::
 
    >>> version = semver.VersionInfo.parse("1.4.5-pre.1+build.6")
    >>> version.replace(major=2, minor=2)
    VersionInfo(major=2, minor=2, patch=5, prerelease='pre.1', build='build.6')
+
+* From a version string::
+
+   >>> semver.replace("1.4.5-pre.1+build.6", major=2)
+   '2.4.5-pre.1+build.6'
 
 If you pass invalid keys you get an exception::
 
@@ -251,28 +250,30 @@ Increasing Parts of a Version
 The ``semver`` module contains the following functions to raise parts of
 a version:
 
-* :func:`semver.bump_major`: raises the major part and set all other parts to
+* :func:`semver.VersionInfo.bump_major`: raises the major part and set all other parts to
   zero. Set ``prerelease`` and ``build`` to ``None``.
-* :func:`semver.bump_minor`: raises the minor part and sets ``patch`` to zero.
+* :func:`semver.VersionInfo.bump_minor`: raises the minor part and sets ``patch`` to zero.
   Set ``prerelease`` and ``build`` to ``None``.
-* :func:`semver.bump_patch`: raises the patch part. Set ``prerelease`` and
+* :func:`semver.VersionInfo.bump_patch`: raises the patch part. Set ``prerelease`` and
   ``build`` to ``None``.
-* :func:`semver.bump_prerelease`: raises the prerelease part and set
+* :func:`semver.VersionInfo.bump_prerelease`: raises the prerelease part and set
   ``build`` to ``None``.
-* :func:`semver.bump_build`: raises the build part.
+* :func:`semver.VersionInfo.bump_build`: raises the build part.
 
 .. code-block:: python
 
-    >>> semver.bump_major("3.4.5-pre.2+build.4")
+    >>> str(semver.VersionInfo.parse("3.4.5-pre.2+build.4").bump_major())
     '4.0.0'
-    >>> semver.bump_minor("3.4.5-pre.2+build.4")
+    >>> str(semver.VersionInfo.parse("3.4.5-pre.2+build.4").bump_minor())
     '3.5.0'
-    >>> semver.bump_patch("3.4.5-pre.2+build.4")
+    >>> str(semver.VersionInfo.parse("3.4.5-pre.2+build.4").bump_patch())
     '3.4.6'
-    >>> semver.bump_prerelease("3.4.5-pre.2+build.4")
+    >>> str(semver.VersionInfo.parse("3.4.5-pre.2+build.4").bump_prerelease())
     '3.4.5-pre.3'
-    >>> semver.bump_build("3.4.5-pre.2+build.4")
+    >>> str(semver.VersionInfo.parse("3.4.5-pre.2+build.4").bump_build())
     '3.4.5-pre.2+build.5'
+
+Likewise the module level functions :func:`semver.bump_major`.
 
 
 Comparing Versions
@@ -405,11 +406,12 @@ For example:
 Replacing Deprecated Functions
 ------------------------------
 
-The development team of semver has decided to deprecate certain functions on
-the module level. The preferred way of using semver is through the
-:class:`semver.VersionInfo` class.
+.. versionchanged:: 2.10.0
+   The development team of semver has decided to deprecate certain functions on
+   the module level. The preferred way of using semver is through the
+   :class:`semver.VersionInfo` class.
 
-The deprecated functions can still be used in version 2.x.y. In version 3 of
+The deprecated functions can still be used in version 2.10.0 and above. In version 3 of
 semver, the deprecated functions will be removed.
 
 The following list shows the deprecated functions and how you can replace
