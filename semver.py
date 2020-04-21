@@ -371,6 +371,50 @@ build='build.10')
         build = cls._increment_string(self._build or (token or "build") + ".0")
         return cls(self._major, self._minor, self._patch, self._prerelease, build)
 
+    def compare(self, other):
+        """
+        Compare self with other.
+
+        :param other: second version (can be string or a VersionInfo instance)
+        :return: The return value is negative if ver1 < ver2,
+             zero if ver1 == ver2 and strictly positive if ver1 > ver2
+        :rtype: int
+
+        >>> semver.VersionInfo.parse("1.0.0").compare("2.0.0")
+        -1
+        >>> semver.VersionInfo.parse("2.0.0").compare("1.0.0")
+        1
+        >>> semver.VersionInfo.parse("2.0.0").compare("2.0.0")
+        0
+        """
+        cls = type(self)
+        if isinstance(other, str):
+            other = cls.parse(other)
+        elif not isinstance(other, cls):
+            raise TypeError(
+                "Expected str or {} instance, but got {}".format(
+                    cls.__name__, type(other)
+                )
+            )
+
+        v1 = self.to_tuple()[:3]
+        v2 = other.to_tuple()[:3]
+        x = cmp(v1, v2)
+        if x:
+            return x
+
+        rc1, rc2 = self.prerelease, other.prerelease
+        rccmp = _nat_cmp(rc1, rc2)
+
+        if not rccmp:
+            return 0
+        if not rc1:
+            return 1
+        elif not rc2:
+            return -1
+
+        return rccmp
+
     @comparator
     def __eq__(self, other):
         return _compare_by_keys(self.to_dict(), _to_dict(other)) == 0
@@ -423,6 +467,53 @@ build='build.10')
         """
         cls = type(self)
         return cls(self.major, self.minor, self.patch)
+
+    def match(self, match_expr):
+        """
+        Compare self to match a match expression.
+
+        :param str match_expr: operator and version; valid operators are
+              <   smaller than
+              >   greater than
+              >=  greator or equal than
+              <=  smaller or equal than
+              ==  equal
+              !=  not equal
+        :return: True if the expression matches the version, otherwise False
+        :rtype: bool
+
+        >>> semver.VersionInfo.parse("2.0.0").match(">=1.0.0")
+        True
+        >>> semver.VersionInfo.parse("1.0.0").match(">1.0.0")
+        False
+        """
+        prefix = match_expr[:2]
+        if prefix in (">=", "<=", "==", "!="):
+            match_version = match_expr[2:]
+        elif prefix and prefix[0] in (">", "<"):
+            prefix = prefix[0]
+            match_version = match_expr[1:]
+        else:
+            raise ValueError(
+                "match_expr parameter should be in format <op><ver>, "
+                "where <op> is one of "
+                "['<', '>', '==', '<=', '>=', '!=']. "
+                "You provided: %r" % match_expr
+            )
+
+        possibilities_dict = {
+            ">": (1,),
+            "<": (-1,),
+            "==": (0,),
+            "!=": (-1, 1),
+            ">=": (0, 1),
+            "<=": (-1, 0),
+        }
+
+        possibilities = possibilities_dict[prefix]
+        cmp_res = self.compare(match_version)
+
+        return cmp_res in possibilities
 
     @staticmethod
     def parse(version):
@@ -579,6 +670,7 @@ def _compare_by_keys(d1, d2):
     return rccmp
 
 
+@deprecated(version="2.10.0")
 def compare(ver1, ver2):
     """
     Compare two versions strings.
@@ -596,13 +688,13 @@ def compare(ver1, ver2):
     >>> semver.compare("2.0.0", "2.0.0")
     0
     """
+    v1 = VersionInfo.parse(ver1)
+    # v2 = VersionInfo.parse(ver2)
+    return v1.compare(ver2)
+    # return _compare_by_keys(v1, v2)
 
-    v1 = VersionInfo.parse(ver1).to_dict()
-    v2 = VersionInfo.parse(ver2).to_dict()
 
-    return _compare_by_keys(v1, v2)
-
-
+@deprecated(version="2.10.0")
 def match(version, match_expr):
     """
     Compare two versions strings through a comparison.
@@ -623,33 +715,8 @@ def match(version, match_expr):
     >>> semver.match("1.0.0", ">1.0.0")
     False
     """
-    prefix = match_expr[:2]
-    if prefix in (">=", "<=", "==", "!="):
-        match_version = match_expr[2:]
-    elif prefix and prefix[0] in (">", "<"):
-        prefix = prefix[0]
-        match_version = match_expr[1:]
-    else:
-        raise ValueError(
-            "match_expr parameter should be in format <op><ver>, "
-            "where <op> is one of "
-            "['<', '>', '==', '<=', '>=', '!=']. "
-            "You provided: %r" % match_expr
-        )
-
-    possibilities_dict = {
-        ">": (1,),
-        "<": (-1,),
-        "==": (0,),
-        "!=": (-1, 1),
-        ">=": (0, 1),
-        "<=": (-1, 0),
-    }
-
-    possibilities = possibilities_dict[prefix]
-    cmp_res = compare(version, match_version)
-
-    return cmp_res in possibilities
+    ver = VersionInfo.parse(version)
+    return ver.match(match_expr)
 
 
 def max_ver(ver1, ver2):
@@ -664,9 +731,10 @@ def max_ver(ver1, ver2):
     >>> semver.max_ver("1.0.0", "2.0.0")
     '2.0.0'
     """
-    cmp_res = compare(ver1, ver2)
-    if cmp_res == 0 or cmp_res == 1:
-        return ver1
+    ver1 = VersionInfo.parse(ver1)
+    cmp_res = ver1.compare(ver2)
+    if cmp_res >= 0:
+        return str(ver1)
     else:
         return ver2
 
@@ -683,9 +751,10 @@ def min_ver(ver1, ver2):
     >>> semver.min_ver("1.0.0", "2.0.0")
     '1.0.0'
     """
-    cmp_res = compare(ver1, ver2)
-    if cmp_res == 0 or cmp_res == -1:
-        return ver1
+    ver1 = VersionInfo.parse(ver1)
+    cmp_res = ver1.compare(ver2)
+    if cmp_res <= 0:
+        return str(ver1)
     else:
         return ver2
 
