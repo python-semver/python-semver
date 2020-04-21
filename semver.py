@@ -375,7 +375,8 @@ build='build.10')
         """
         Compare self with other.
 
-        :param other: second version (can be string or a VersionInfo instance)
+        :param other: the second version (can be string, a dict, tuple/list, or
+             a VersionInfo instance)
         :return: The return value is negative if ver1 < ver2,
              zero if ver1 == ver2 and strictly positive if ver1 > ver2
         :rtype: int
@@ -386,10 +387,16 @@ build='build.10')
         1
         >>> semver.VersionInfo.parse("2.0.0").compare("2.0.0")
         0
+        >>> semver.VersionInfo.parse("2.0.0").compare(dict(major=2, minor=0, patch=0))
+        0
         """
         cls = type(self)
         if isinstance(other, str):
             other = cls.parse(other)
+        elif isinstance(other, dict):
+            other = cls(**other)
+        elif isinstance(other, (tuple, list)):
+            other = cls(*other)
         elif not isinstance(other, cls):
             raise TypeError(
                 "Expected str or {} instance, but got {}".format(
@@ -417,27 +424,27 @@ build='build.10')
 
     @comparator
     def __eq__(self, other):
-        return _compare_by_keys(self.to_dict(), _to_dict(other)) == 0
+        return self.compare(other) == 0
 
     @comparator
     def __ne__(self, other):
-        return _compare_by_keys(self.to_dict(), _to_dict(other)) != 0
+        return self.compare(other) != 0
 
     @comparator
     def __lt__(self, other):
-        return _compare_by_keys(self.to_dict(), _to_dict(other)) < 0
+        return self.compare(other) < 0
 
     @comparator
     def __le__(self, other):
-        return _compare_by_keys(self.to_dict(), _to_dict(other)) <= 0
+        return self.compare(other) <= 0
 
     @comparator
     def __gt__(self, other):
-        return _compare_by_keys(self.to_dict(), _to_dict(other)) > 0
+        return self.compare(other) > 0
 
     @comparator
     def __ge__(self, other):
-        return _compare_by_keys(self.to_dict(), _to_dict(other)) >= 0
+        return self.compare(other) >= 0
 
     def __repr__(self):
         s = ", ".join("%s=%r" % (key, val) for key, val in self.to_dict().items())
@@ -651,25 +658,6 @@ def _nat_cmp(a, b):
         return cmp(len(a), len(b))
 
 
-def _compare_by_keys(d1, d2):
-    for key in ["major", "minor", "patch"]:
-        v = cmp(d1.get(key), d2.get(key))
-        if v:
-            return v
-
-    rc1, rc2 = d1.get("prerelease"), d2.get("prerelease")
-    rccmp = _nat_cmp(rc1, rc2)
-
-    if not rccmp:
-        return 0
-    if not rc1:
-        return 1
-    elif not rc2:
-        return -1
-
-    return rccmp
-
-
 @deprecated(version="2.10.0")
 def compare(ver1, ver2):
     """
@@ -689,9 +677,7 @@ def compare(ver1, ver2):
     0
     """
     v1 = VersionInfo.parse(ver1)
-    # v2 = VersionInfo.parse(ver2)
     return v1.compare(ver2)
-    # return _compare_by_keys(v1, v2)
 
 
 @deprecated(version="2.10.0")
