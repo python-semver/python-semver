@@ -593,14 +593,6 @@ prerelease='pre.2', build='build.4')
             return False
 
 
-def _to_dict(obj):
-    if isinstance(obj, VersionInfo):
-        return obj.to_dict()
-    elif isinstance(obj, tuple):
-        return VersionInfo(*obj).to_dict()
-    return obj
-
-
 @deprecated(replace="semver.VersionInfo.parse", version="2.10.0")
 def parse_version_info(version):
     """
