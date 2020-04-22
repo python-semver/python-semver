@@ -5,7 +5,7 @@ Quickstart
 
 A Python module for `semantic versioning`_. Simplifies comparing versions.
 
-|build-status| |python-support| |downloads| |license| |docs| |black|
+|ci-status| |build-status| |python-support| |downloads| |license| |docs| |black|
 
 .. teaser-end
 
@@ -91,7 +91,9 @@ version:
 
 There are other functions to discover. Read on!
 
-
+.. |ci-status| image:: https://github.com/python-semver/python-semver/workflows/Black%20Formatting/badge.svg?branch=master
+   :target: https://github.com/python-semver/python-semver/actions?workflow=Black%20Formatting
+   :alt: CI Status
 .. |latest-version| image:: https://img.shields.io/pypi/v/semver.svg
    :alt: Latest version on PyPI
    :target: https://pypi.org/project/semver
