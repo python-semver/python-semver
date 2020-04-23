@@ -6,11 +6,11 @@ Change Log
 All notable changes to this code base will be documented in this file,
 in every released version.
 
-Version 2.10.0 (WIP)
-===================
+Version 2.10.0
+==============
 
-:Released: 2020-xx-yy
-:Maintainer:
+:Released: 2020-05-05
+:Maintainer: Tom Schraitle
 
 Features
 --------

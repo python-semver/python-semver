@@ -17,8 +17,7 @@ A Python module for `semantic versioning`_. Simplifies comparing versions.
    Major version 3 of semver will contain some incompatible changes:
 
    * removes support for Python 2.7 and 3.3
-   * removes deprecated functions (see :ref:`sec_replace_deprecated_functions` for
-     further information).
+   * removes deprecated functions.
 
    The last version of semver which supports Python 2.7 and 3.4 will be
    2.10.x. However, keep in mind, version 2.10.x is frozen: no new
@@ -59,8 +58,8 @@ different parts, use the ``semver.VersionInfo.parse`` function:
     'build.4'
 
 To raise parts of a version, there are a couple of functions available for
-you. The function :func:`semver.VersionInfo.bump_major` leaves the original object untouched, but
-returns a new :class:`semver.VersionInfo` instance with the raised major part:
+you. The function ``semver.VersionInfo.bump_major`` leaves the original object untouched, but
+returns a new ``semver.VersionInfo`` instance with the raised major part:
 
 .. code-block:: python
 
@@ -75,7 +74,7 @@ It is allowed to concatenate different "bump functions":
     >>> ver.bump_major().bump_minor()
     VersionInfo(major=4, minor=1, patch=0, prerelease=None, build=None)
 
-To compare two versions, semver provides the `semver.compare` function.
+To compare two versions, semver provides the ``semver.compare`` function.
 The return value indicates the relationship between the first and second
 version:
 
