@@ -10,12 +10,44 @@ import sys
 import warnings
 
 
-__version__ = "2.10.0"
+__version__ = "2.10.1"
 __author__ = "Kostiantyn Rybnikov"
 __author_email__ = "k-bx@k-bx.com"
 __maintainer__ = ["Sebastien Celles", "Tom Schraitle"]
 __maintainer_email__ = "s.celles@gmail.com"
 
+#: Our public interface
+__all__ = (
+    #
+    # Module level function:
+    "bump_build",
+    "bump_major",
+    "bump_minor",
+    "bump_patch",
+    "bump_prerelease",
+    "compare",
+    "deprecated",
+    "finalize_version",
+    "format_version",
+    "match",
+    "max_ver",
+    "min_ver",
+    "parse",
+    "parse_version_info",
+    "replace",
+    #
+    # CLI interface
+    "cmd_bump",
+    "cmd_check",
+    "cmd_compare",
+    "createparser",
+    "main",
+    "process",
+    #
+    # Constants and classes
+    "SEMVER_SPEC_VERSION",
+    "VersionInfo",
+)
 
 #: Contains the implemented semver.org version of the spec
 SEMVER_SPEC_VERSION = "2.0.0"
