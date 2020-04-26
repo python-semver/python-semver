@@ -15,6 +15,8 @@ Version 2.10.0 (WIP)
 Features
 --------
 
+* :pr:`138`: Added ``__getitem__`` magic method to ``semver.VersionInfo`` class.
+  Allows to access a version like ``version[1]``.
 * :pr:`235`: Improved documentation and shift focus on ``semver.VersionInfo`` instead of advertising
   the old and deprecated module-level functions.
 

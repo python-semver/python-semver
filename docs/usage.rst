@@ -141,8 +141,10 @@ classmethod :func:`semver.VersionInfo.isvalid`:
     False
 
 
-Accessing Parts of a Version
-----------------------------
+.. _sec.properties.parts:
+
+Accessing Parts of a Version Through Names
+------------------------------------------
 
 The :class:`semver.VersionInfo` contains attributes to access the different
 parts of a version:
@@ -183,6 +185,55 @@ In case you need the different parts of a version stepwise, iterate over the :cl
     >>> list(semver.VersionInfo.parse("3.4.5-pre.2+build.4"))
     [3, 4, 5, 'pre.2', 'build.4']
 
+
+.. _sec.getitem.parts:
+
+Accessing Parts Through Index Numbers
+-------------------------------------
+
+.. versionadded:: 2.10.0
+
+Another way to access parts of a version is to use an index notation. The underlying
+:class:`VersionInfo <semver.VersionInfo>` object allows to access its data through
+the magic method :func:`__getitem__ <semver.VersionInfo.__getitem__>`.
+
+For example, the ``major`` part can be accessed by index number 0 (zero).
+Likewise the other parts:
+
+.. code-block:: python
+
+    >>> ver = semver.VersionInfo.parse("10.3.2-pre.5+build.10")
+    >>> ver[0], ver[1], ver[2], ver[3], ver[4]
+    (10, 3, 2, 'pre.5', 'build.10')
+
+If you need more than one part at the same time, use the slice notation:
+
+.. code-block:: python
+
+    >>> ver[0:3]
+    (10, 3, 2)
+
+Or, as an alternative, you can pass a :func:`slice` object:
+
+.. code-block:: python
+
+    >>> sl = slice(0,3)
+    >>> ver[sl]
+    (10, 3, 2)
+
+Negative numbers or undefined parts raise an :class:`IndexError` exception:
+
+.. code-block:: python
+
+    >>> ver = semver.VersionInfo.parse("10.3.2")
+    >>> ver[3]
+    Traceback (most recent call last):
+    ...
+    IndexError: Version part undefined
+    >>> ver[-2]
+    Traceback (most recent call last):
+    ...
+    IndexError: Version index cannot be negative
 
 .. _sec.replace.parts:
 
