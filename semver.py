@@ -112,7 +112,7 @@ def comparator(operator):
 
     @wraps(operator)
     def wrapper(self, other):
-        comparable_types = (VersionInfo, dict, tuple)
+        comparable_types = (VersionInfo, dict, tuple, list, str)
         if not isinstance(other, comparable_types):
             raise TypeError(
                 "other type %r must be in %r" % (type(other), comparable_types)

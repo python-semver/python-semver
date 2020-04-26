@@ -24,6 +24,7 @@ Bug Fixes
 
 * :gh:`224` (:pr:`226`): In ``setup.py``, replaced in class ``clean``,
   ``super(CleanCommand, self).run()`` with ``CleanCommand.run(self)``
+* :gh:`244` (:pr:`245`): Allow comparison with ``VersionInfo``, tuple/list, dict, and string.
 
 
 Additions

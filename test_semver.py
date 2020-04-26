@@ -557,37 +557,100 @@ def test_should_compare_version_dictionaries():
     assert not (v1 == v4)
 
 
-def test_should_compare_version_tuples():
-    v0 = VersionInfo(major=0, minor=4, patch=5, prerelease="pre.2", build="build.4")
-    v1 = VersionInfo(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
-    for t in (
+@pytest.mark.parametrize(
+    "t",  # fmt: off
+    (
         (1, 0, 0),
         (1, 0),
         (1,),
         (1, 0, 0, "pre.2"),
         (1, 0, 0, "pre.2", "build.4"),
-    ):
-        assert v0 < t
-        assert v0 <= t
-        assert v0 != t
-        assert not v0 == t
-        assert v1 > t
-        assert v1 >= t
-        # Symmetric
-        assert t > v0
-        assert t >= v0
-        assert t < v1
-        assert t <= v1
-        assert t != v0
-        assert not t == v0
-
-
-def test_should_not_allow_to_compare_version_with_string():
+    ),  # fmt: on
+)
+def test_should_compare_version_tuples(t):
+    v0 = VersionInfo(major=0, minor=4, patch=5, prerelease="pre.2", build="build.4")
     v1 = VersionInfo(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
-    with pytest.raises(TypeError):
-        v1 > "1.0.0"
-    with pytest.raises(TypeError):
-        "1.0.0" > v1
+
+    assert v0 < t
+    assert v0 <= t
+    assert v0 != t
+    assert not v0 == t
+    assert v1 > t
+    assert v1 >= t
+    # Symmetric
+    assert t > v0
+    assert t >= v0
+    assert t < v1
+    assert t <= v1
+    assert t != v0
+    assert not t == v0
+
+
+@pytest.mark.parametrize(
+    "lst",  # fmt: off
+    (
+        [1, 0, 0],
+        [1, 0],
+        [1],
+        [1, 0, 0, "pre.2"],
+        [1, 0, 0, "pre.2", "build.4"],
+    ),  # fmt: on
+)
+def test_should_compare_version_list(lst):
+    v0 = VersionInfo(major=0, minor=4, patch=5, prerelease="pre.2", build="build.4")
+    v1 = VersionInfo(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
+
+    assert v0 < lst
+    assert v0 <= lst
+    assert v0 != lst
+    assert not v0 == lst
+    assert v1 > lst
+    assert v1 >= lst
+    # Symmetric
+    assert lst > v0
+    assert lst >= v0
+    assert lst < v1
+    assert lst <= v1
+    assert lst != v0
+    assert not lst == v0
+
+
+@pytest.mark.parametrize(
+    "s",  # fmt: off
+    (
+        "1.0.0",
+        # "1.0",
+        # "1",
+        "1.0.0-pre.2",
+        "1.0.0-pre.2+build.4",
+    ),  # fmt: on
+)
+def test_should_compare_version_string(s):
+    v0 = VersionInfo(major=0, minor=4, patch=5, prerelease="pre.2", build="build.4")
+    v1 = VersionInfo(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
+
+    assert v0 < s
+    assert v0 <= s
+    assert v0 != s
+    assert not v0 == s
+    assert v1 > s
+    assert v1 >= s
+    # Symmetric
+    assert s > v0
+    assert s >= v0
+    assert s < v1
+    assert s <= v1
+    assert s != v0
+    assert not s == v0
+
+
+@pytest.mark.parametrize("s", ("1", "1.0", "1.0.x"))
+def test_should_not_allow_to_compare_invalid_versionstring(s):
+    v = VersionInfo(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
+    with pytest.raises(ValueError):
+        v < s
+    with pytest.raises(ValueError):
+        s > v
 
 
 def test_should_not_allow_to_compare_version_with_int():
