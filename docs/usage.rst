@@ -244,8 +244,8 @@ It is possible to convert a :class:`semver.VersionInfo` instance:
     (5, 4, 2, None, None)
 
 
-Increasing Parts of a Version
------------------------------
+Raising Parts of a Version
+--------------------------
 
 The ``semver`` module contains the following functions to raise parts of
 a version:
@@ -274,6 +274,30 @@ a version:
     '3.4.5-pre.2+build.5'
 
 Likewise the module level functions :func:`semver.bump_major`.
+
+
+Increasing Parts of a Version Taking into Account Prereleases
+-------------------------------------------------------------
+
+.. versionadded:: 2.10.0
+   Added :func:`semver.VersionInfo.next_version`.
+
+If you want to raise your version and take prereleases into account,
+the function :func:`semver.VersionInfo.next_version` would perhaps a
+better fit.
+
+
+.. code-block:: python
+
+    >>> v = semver.VersionInfo.parse("3.4.5-pre.2+build.4")
+    >>> str(v.next_version(part="prerelease"))
+    '3.4.5-pre.3'
+    >>> str(semver.VersionInfo.parse("3.4.5-pre.2+build.4").next_version(part="patch"))
+    '3.4.5'
+    >>> str(semver.VersionInfo.parse("3.4.5+build.4").next_version(part="patch"))
+    '3.4.5'
+    >>> str(semver.VersionInfo.parse("0.1.4").next_version("prerelease"))
+    '0.1.5-rc.1'
 
 
 Comparing Versions

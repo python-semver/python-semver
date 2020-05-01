@@ -881,3 +881,39 @@ def test_deprecated_deco_without_argument():
 
     with pytest.deprecated_call():
         assert mock_func()
+
+
+def test_next_version_with_invalid_parts():
+    version = VersionInfo.parse("1.0.1")
+    with pytest.raises(ValueError):
+        version.next_version("invalid")
+
+
+@pytest.mark.parametrize(
+    "version, part, expected",
+    [
+        # major
+        ("1.0.4-rc.1", "major", "2.0.0"),
+        ("1.1.0-rc.1", "major", "2.0.0"),
+        ("1.1.4-rc.1", "major", "2.0.0"),
+        ("1.2.3", "major", "2.0.0"),
+        ("1.0.0-rc.1", "major", "1.0.0"),
+        # minor
+        ("0.2.0-rc.1", "minor", "0.2.0"),
+        ("0.2.5-rc.1", "minor", "0.3.0"),
+        ("1.3.1", "minor", "1.4.0"),
+        # patch
+        ("1.3.2", "patch", "1.3.3"),
+        ("0.1.5-rc.2", "patch", "0.1.5"),
+        # prerelease
+        ("0.1.4", "prerelease", "0.1.5-rc.1"),
+        ("0.1.5-rc.1", "prerelease", "0.1.5-rc.2"),
+        # special cases
+        ("0.2.0-rc.1", "patch", "0.2.0"),  # same as "minor"
+        ("1.0.0-rc.1", "patch", "1.0.0"),  # same as "major"
+        ("1.0.0-rc.1", "minor", "1.0.0"),  # same as "major"
+    ],
+)
+def test_next_version_with_versioninfo(version, part, expected):
+    ver = VersionInfo.parse(version)
+    assert str(ver.next_version(part)) == expected
