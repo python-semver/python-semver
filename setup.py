@@ -1,68 +1,17 @@
 #!/usr/bin/env python
-import semver as package
-from glob import glob
-from os import remove
 from os.path import dirname, join
 from setuptools import setup
-from setuptools.command.test import test as TestCommand
 
-try:
-    from setuptools.command.clean import clean as CleanCommand
-except ImportError:
-    from distutils.command.clean import clean as CleanCommand
-from shlex import split
-from shutil import rmtree
-
-
-class Tox(TestCommand):
-    user_options = [("tox-args=", "a", "Arguments to pass to tox")]
-
-    def initialize_options(self):
-        TestCommand.initialize_options(self)
-        self.tox_args = None
-
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = []
-        self.test_suite = True
-
-    def run_tests(self):
-        from tox import cmdline
-
-        args = self.tox_args
-        if args:
-            args = split(self.tox_args)
-        errno = cmdline(args=args)
-        exit(errno)
-
-
-class Clean(CleanCommand):
-    def run(self):
-        CleanCommand.run(self)
-        delete_in_root = ["build", ".cache", "dist", ".eggs", "*.egg-info", ".tox"]
-        delete_everywhere = ["__pycache__", "*.pyc"]
-        for candidate in delete_in_root:
-            rmtree_glob(candidate)
-        for visible_dir in glob("[A-Za-z0-9]*"):
-            for candidate in delete_everywhere:
-                rmtree_glob(join(visible_dir, candidate))
-                rmtree_glob(join(visible_dir, "*", candidate))
-
-
-def rmtree_glob(file_glob):
-    for fobj in glob(file_glob):
-        try:
-            rmtree(fobj)
-            print("%s/ removed ..." % fobj)
-        except OSError:
-            try:
-                remove(fobj)
-                print("%s removed ..." % fobj)
-            except OSError:
-                pass
+import semver as package
 
 
 def read_file(filename):
+    """
+    Read RST file and return content
+
+    :param filename: the RST file
+    :return: content of the RST file
+    """
     with open(join(dirname(__file__), filename)) as f:
         return f.read()
 
@@ -98,10 +47,10 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: Implementation :: PyPy",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     python_requires=">=3.5.*",
     tests_require=["tox", "virtualenv"],
-    cmdclass={"clean": Clean, "test": Tox},
     entry_points={"console_scripts": ["pysemver = semver:main"]},
 )
