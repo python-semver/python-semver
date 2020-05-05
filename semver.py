@@ -10,7 +10,7 @@ import sys
 import warnings
 
 
-__version__ = "2.9.1"
+__version__ = "2.10.0"
 __author__ = "Kostiantyn Rybnikov"
 __author_email__ = "k-bx@k-bx.com"
 __maintainer__ = ["Sebastien Celles", "Tom Schraitle"]

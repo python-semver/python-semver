@@ -17,6 +17,14 @@ For Python 3:
 
     pip3 install semver
 
+If you want to install this specific version, you can use the command :command:`pip`
+with an URL:
+
+.. parsed-literal::
+
+    pip3 install git+https://github.com/python-semver/python-semver.git@|version|
+
+
 Linux Distributions
 -------------------
 
