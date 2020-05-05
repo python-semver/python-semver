@@ -370,7 +370,7 @@ To compare two versions depends on your type:
   The return value is negative if ``version1 < version2``, zero if
   ``version1 == version2`` and strictly positive if ``version1 > version2``.
 
-* **Two** :class:`semver.VersionInfo` **types**
+* **Two** :class:`semver.VersionInfo` **instances**
 
   Use the specific operator. Currently, the operators ``<``,
   ``<=``, ``>``, ``>=``, ``==``, and ``!=`` are supported::
@@ -382,24 +382,68 @@ To compare two versions depends on your type:
     >>> v1 > v2
     False
 
-* **A** :class:`semver.VersionInfo` **type and a** ``tuple``
+* **A** :class:`semver.VersionInfo` **type and a** :func:`tuple` **or** :func:`list`
 
   Use the operator as with two :class:`semver.VersionInfo` types::
 
     >>> v = semver.VersionInfo.parse("3.4.5")
     >>> v > (1, 0)
     True
-    >>> v < (3, 5)
+    >>> v < [3, 5]
     True
 
   The opposite does also work::
 
     >>> (1, 0) < v
     True
-    >>> (3, 5) > v
+    >>> [3, 5] > v
     True
 
-Other types cannot be compared (like dictionaries, lists etc).
+* **A** :class:`semver.VersionInfo` **type and a** :func:`str`
+
+  You can use also raw strings to compare::
+
+    >>> v > "1.0.0"
+    True
+    >>> v < "3.5.0"
+    True
+
+  The opposite does also work::
+
+    >>> "1.0.0" < v
+    True
+    >>> "3.5.0" > v
+    True
+
+  However, if you compare incomplete strings, you get a :class:`ValueError` exception::
+
+    >>> v > "1.0"
+    Traceback (most recent call last):
+    ...
+    ValueError: 1.0 is not valid SemVer string
+
+* **A** :class:`semver.VersionInfo` **type and a** :func:`dict`
+
+  You can also use a dictionary. In contrast to strings, you can have an "incomplete"
+  version (as the other parts are set to zero)::
+
+   >>> v > dict(major=1)
+   True
+
+  The opposite does also work::
+
+   >>> dict(major=1) < v
+   True
+
+  If the dictionary contains unknown keys, you get a :class:`TypeError` exception::
+
+    >>> v > dict(major=1, unknown=42)
+    Traceback (most recent call last):
+    ...
+    TypeError: __init__() got an unexpected keyword argument 'unknown'
+
+
+Other types cannot be compared.
 
 If you need to convert some types into other, refer to :ref:`sec.convert.versions`.
 
