@@ -10,7 +10,7 @@ import sys
 import warnings
 
 
-__version__ = "2.10.1"
+__version__ = "3.0.0-dev1"
 __author__ = "Kostiantyn Rybnikov"
 __author_email__ = "k-bx@k-bx.com"
 __maintainer__ = ["Sebastien Celles", "Tom Schraitle"]
@@ -53,11 +53,9 @@ __all__ = (
 SEMVER_SPEC_VERSION = "2.0.0"
 
 
-if not hasattr(__builtins__, "cmp"):
-
-    def cmp(a, b):
-        """Return negative if a<b, zero if a==b, positive if a>b."""
-        return (a > b) - (a < b)
+def cmp(a, b):
+    """Return negative if a<b, zero if a==b, positive if a>b."""
+    return (a > b) - (a < b)
 
 
 def deprecated(func=None, replace=None, version=None, category=DeprecationWarning):
@@ -88,10 +86,8 @@ def deprecated(func=None, replace=None, version=None, category=DeprecationWarnin
         else:
             msg.append("Use the respective 'semver.VersionInfo.{r}' instead.")
 
-        # hasattr is needed for Python2 compatibility:
-        f = func.__qualname__ if hasattr(func, "__qualname__") else func.__name__
+        f = func.__qualname__
         r = replace or f
-
         frame = inspect.currentframe().f_back
 
         msg = " ".join(msg)
@@ -300,9 +296,7 @@ class VersionInfo(object):
 
     def __iter__(self):
         """Implement iter(self)."""
-        # As long as we support Py2.7, we can't use the "yield from" syntax
-        for v in self.to_tuple():
-            yield v
+        yield from self.to_tuple()
 
     @staticmethod
     def _increment_string(string):

@@ -7,6 +7,26 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 3.0.0-dev1
+==================
+
+Features
+--------
+
+
+Bug Fixes
+---------
+
+
+Additions
+---------
+
+
+Removals
+--------
+
+
+
 Version 2.10.1
 ==============
 
@@ -23,6 +43,7 @@ Features
 * :pr:`256`: Made docstrings consistent
 
 
+
 Bug Fixes
 ---------
 
@@ -36,6 +57,7 @@ Additions
 
 Removals
 --------
+
 
 
 Version 2.10.0
