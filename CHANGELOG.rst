@@ -7,8 +7,8 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
-Version 3.0.0-dev1
-==================
+Version 3.0.0-dev.1
+===================
 
 Features
 --------
