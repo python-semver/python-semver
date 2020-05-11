@@ -84,9 +84,9 @@ FreeBSD
 openSUSE
 ^^^^^^^^
 
-1. Enable the the ``devel:languages:python`` repository on the Open Build Service (replace ``<VERSION>`` with the preferred openSUSE release)::
+1. Enable the ``devel:languages:python`` repository of the Open Build Service::
 
-    $ zypper addrepo https://download.opensuse.org/repositories/devel:/languages:/python/openSUSE_Leap_<VERSION>/devel:languages:python.repo
+    $ zypper addrepo --refresh obs://devel:languages:python devel_languages_python
 
 2. Install the package::
 
