@@ -6,6 +6,32 @@ Change Log
 All notable changes to this code base will be documented in this file,
 in every released version.
 
+Version 2.10.1 (WIP)
+====================
+
+:Released: 2020-0x-0y
+:Maintainer:
+
+
+Features
+--------
+
+
+Bug Fixes
+---------
+
+* :gh:`251` (:pr:`000`): Fixed return type of ``semver.VersionInfo.next_version``
+  to always return a ``VersionInfo`` instance.
+
+
+Additions
+---------
+
+
+Removals
+--------
+
+
 Version 2.10.0
 ==============
 
