@@ -471,7 +471,8 @@ build='build.10')
 
         :param part: One of "major", "minor", "patch", or "prerelease"
         :param prerelease_token: prefix string of prerelease, defaults to 'rc'
-        :return:
+        :return: new object with the appropriate part raised
+        :rtype: :class:`VersionInfo`
         """
         validparts = {
             "major",
@@ -495,7 +496,7 @@ build='build.10')
             return version.replace(prerelease=None, build=None)
 
         if part in ("major", "minor", "patch"):
-            return str(getattr(version, "bump_" + part)())
+            return getattr(version, "bump_" + part)()
 
         if not version.prerelease:
             version = version.bump_patch()
