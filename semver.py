@@ -374,7 +374,7 @@ class VersionInfo(object):
 
         :param token: defaults to 'rc'
         :return: new object with the raised prerelease part
-        :rtype: str
+        :rtype: :class:`VersionInfo`
 
         >>> ver = semver.VersionInfo.parse("3.4.5-rc.1")
         >>> ver.bump_prerelease()
@@ -392,7 +392,7 @@ build=None)
 
         :param token: defaults to 'build'
         :return: new object with the raised build part
-        :rtype: str
+        :rtype: :class:`VersionInfo`
 
         >>> ver = semver.VersionInfo.parse("3.4.5-rc.1+build.9")
         >>> ver.bump_build()
