@@ -328,7 +328,7 @@ class VersionInfo(object):
         untouched.
 
         :return: new object with the raised major part
-        :rtype: VersionInfo
+        :rtype: :class:`VersionInfo`
 
         >>> ver = semver.VersionInfo.parse("3.4.5")
         >>> ver.bump_major()
@@ -343,7 +343,7 @@ class VersionInfo(object):
         untouched.
 
         :return: new object with the raised minor part
-        :rtype: VersionInfo
+        :rtype: :class:`VersionInfo`
 
         >>> ver = semver.VersionInfo.parse("3.4.5")
         >>> ver.bump_minor()
@@ -358,7 +358,7 @@ class VersionInfo(object):
         untouched.
 
         :return: new object with the raised patch part
-        :rtype: VersionInfo
+        :rtype: :class:`VersionInfo`
 
         >>> ver = semver.VersionInfo.parse("3.4.5")
         >>> ver.bump_patch()
