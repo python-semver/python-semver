@@ -20,7 +20,7 @@ Features
 Bug Fixes
 ---------
 
-* :gh:`251` (:pr:`000`): Fixed return type of ``semver.VersionInfo.next_version``
+* :gh:`251` (:pr:`251`): Fixed return type of ``semver.VersionInfo.next_version``
   to always return a ``VersionInfo`` instance.
 
 
