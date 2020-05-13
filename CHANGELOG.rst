@@ -6,15 +6,21 @@ Change Log
 All notable changes to this code base will be documented in this file,
 in every released version.
 
-Version 2.10.1 (WIP)
-====================
 
-:Released: 2020-0x-0y
-:Maintainer:
+Version 2.10.1
+==============
+
+:Released: 2020-05-13
+:Maintainer: Tom Schraitle
 
 
 Features
 --------
+
+* :pr:`249`: Added release policy and version restriction in documentation to
+  help our users which would like to stay on the major 2 release.
+* :pr:`250`: Simplified installation semver on openSUSE with ``obs://``.
+* :pr:`256`: Made docstrings consistent
 
 
 Bug Fixes
