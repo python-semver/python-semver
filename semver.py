@@ -495,7 +495,7 @@ build='build.10')
             return version.replace(prerelease=None, build=None)
 
         if part in ("major", "minor", "patch"):
-            return str(getattr(version, "bump_" + part)())
+            return getattr(version, "bump_" + part)()
 
         if not version.prerelease:
             version = version.bump_patch()
