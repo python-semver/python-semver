@@ -1050,4 +1050,6 @@ def test_next_version_with_invalid_parts():
 )
 def test_next_version_with_versioninfo(version, part, expected):
     ver = VersionInfo.parse(version)
-    assert str(ver.next_version(part)) == expected
+    next_version = ver.next_version(part)
+    assert isinstance(next_version, VersionInfo)
+    assert str(next_version) == expected
