@@ -644,9 +644,9 @@ build='build.10')
         Parse version string to a VersionInfo instance.
 
         :param version: version string
-        :return: a :class:`semver.VersionInfo` instance
+        :return: a :class:`VersionInfo` instance
         :raises: :class:`ValueError`
-        :rtype: :class:`semver.VersionInfo`
+        :rtype: :class:`VersionInfo`
 
         >>> semver.VersionInfo.parse('3.4.5-pre.2+build.4')
         VersionInfo(major=3, minor=4, patch=5, \
@@ -667,14 +667,14 @@ prerelease='pre.2', build='build.4')
     def replace(self, **parts):
         """
         Replace one or more parts of a version and return a new
-        :class:`semver.VersionInfo` object, but leave self untouched
+        :class:`VersionInfo` object, but leave self untouched
 
         .. versionadded:: 2.9.0
            Added :func:`VersionInfo.replace`
 
         :param dict parts: the parts to be updated. Valid keys are:
           ``major``, ``minor``, ``patch``, ``prerelease``, or ``build``
-        :return: the new :class:`semver.VersionInfo` object with the changed
+        :return: the new :class:`VersionInfo` object with the changed
           parts
         :raises: :class:`TypeError`, if ``parts`` contains invalid keys
         """
@@ -975,11 +975,11 @@ def finalize_version(version):
     """
     Remove any prerelease and build metadata from the version string.
 
-    .. versionadded:: 2.7.9
-       Added :func:`finalize_version`
-
     .. deprecated:: 2.10.0
        Use :func:`semver.VersionInfo.finalize_version` instead.
+
+    .. versionadded:: 2.7.9
+       Added :func:`finalize_version`
 
     :param version: version string
     :return: the finalized version string
@@ -997,11 +997,11 @@ def replace(version, **parts):
     """
     Replace one or more parts of a version and return the new string.
 
-    .. versionadded:: 2.9.0
-       Added :func:`replace`
-
     .. deprecated:: 2.10.0
        Use :func:`semver.VersionInfo.replace` instead.
+
+    .. versionadded:: 2.9.0
+       Added :func:`replace`
 
     :param str version: the version string to replace
     :param dict parts: the parts to be updated. Valid keys are:
