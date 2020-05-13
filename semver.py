@@ -471,8 +471,8 @@ build='build.10')
 
         :param part: One of "major", "minor", "patch", or "prerelease"
         :param prerelease_token: prefix string of prerelease, defaults to 'rc'
-        :return: new object with the appropriate raised part
-        :rtype: VersionInfo
+        :return: new object with the appropriate part raised
+        :rtype: :class:`VersionInfo`
         """
         validparts = {
             "major",
