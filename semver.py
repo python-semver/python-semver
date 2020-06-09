@@ -555,7 +555,6 @@ build='build.10')
         ):
             raise IndexError("Version index cannot be negative")
 
-        # Could raise IndexError:
         part = tuple(filter(lambda p: p is not None, self.to_tuple()[index]))
 
         if len(part) == 1:
