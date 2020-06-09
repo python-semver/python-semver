@@ -544,14 +544,12 @@ build='build.10')
         (3, 4, 5)
         """
         if isinstance(index, int):
-            if index < 0:
-                raise IndexError("Version index cannot be negative")
             index = slice(index, index + 1)
 
         if (
             isinstance(index, slice)
-            and (index.start is None or index.start < 0)
-            and (index.stop is None or index.stop < 0)
+            and (index.start is not None and index.start < 0)
+            or (index.stop is not None and index.stop < 0)
         ):
             raise IndexError("Version index cannot be negative")
 

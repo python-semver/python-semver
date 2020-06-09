@@ -816,19 +816,37 @@ def test_version_info_should_be_accessed_with_slice_object(
 @pytest.mark.parametrize(
     "version, index",
     [
-        ("1.2.3-rc.0+build.0", -1),
-        ("1.2.3-rc.0", -1),
-        ("1.2.3-rc.0", 4),
-        ("1.2.3", -1),
         ("1.2.3", 3),
+        ("1.2.3", slice(3, 4)),
         ("1.2.3", 4),
-        ("1.2.3", 10),
-        ("1.2.3", slice(-3)),
+        ("1.2.3", slice(4, 5)),
+        ("1.2.3", 5),
+        ("1.2.3", slice(5, 6)),
+        ("1.2.3-rc.0", 5),
+        ("1.2.3-rc.0", slice(5, 6)),
+        ("1.2.3-rc.0", 6),
+        ("1.2.3-rc.0", slice(6, 7)),
     ],
 )
 def test_version_info_should_throw_index_error(version, index):
     version_info = VersionInfo.parse(version)
-    with pytest.raises(IndexError):
+    with pytest.raises(IndexError, match=r"Version part undefined"):
+        version_info[index]
+
+
+@pytest.mark.parametrize(
+    "version, index",
+    [
+        ("1.2.3", -1),
+        ("1.2.3", -2),
+        ("1.2.3", slice(-2, 2)),
+        ("1.2.3", slice(2, -2)),
+        ("1.2.3", slice(-2, -2)),
+    ],
+)
+def test_version_info_should_throw_index_error_when_negative_index(version, index):
+    version_info = VersionInfo.parse(version)
+    with pytest.raises(IndexError, match=r"Version index cannot be negative"):
         version_info[index]
 
 
