@@ -557,10 +557,7 @@ build='build.10')
 
         if len(part) == 1:
             part = part[0]
-        elif len(part) == 0:
-            raise IndexError("Version part undefined")
-
-        if part is None:
+        elif not part:
             raise IndexError("Version part undefined")
         return part
 
