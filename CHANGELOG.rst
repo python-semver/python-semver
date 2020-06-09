@@ -7,6 +7,34 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.10.2 (WIP)
+====================
+
+:Released: 2020-xx-yy
+:Maintainer:
+
+Features
+--------
+
+n/a
+
+Bug Fixes
+---------
+
+:gh:`260` (:pr:`261`): Fixed ``__getitem__`` returning None on wrong parts
+
+
+Additions
+---------
+
+n/a
+
+Removals
+--------
+
+n/a
+
+
 Version 2.10.1
 ==============
 
