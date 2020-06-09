@@ -544,6 +544,8 @@ build='build.10')
         (3, 4, 5)
         """
         if isinstance(index, int):
+            if index < 0:
+                raise IndexError("Version index cannot be negative")
             index = slice(index, index + 1)
 
         if (
@@ -554,11 +556,14 @@ build='build.10')
             raise IndexError("Version index cannot be negative")
 
         # Could raise IndexError:
-        part = tuple(filter(None, self.to_tuple()[index]))
+        part = tuple(filter(lambda p: p is not None, self.to_tuple()[index]))
 
         if len(part) == 1:
             part = part[0]
-        if not part:
+        elif len(part) == 0:
+            raise IndexError("Version part undefined")
+
+        if part is None:
             raise IndexError("Version part undefined")
         return part
 

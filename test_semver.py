@@ -774,6 +774,8 @@ def test_should_be_able_to_use_integers_as_prerelease_build():
         ("1.2.3", 0, 1),
         ("1.2.3", 1, 2),
         ("1.2.3", 2, 3),
+        # Special cases
+        ("1.0.2", 1, 0),
     ],
 )
 def test_version_info_should_be_accessed_with_index(version, index, expected):
@@ -801,6 +803,7 @@ def test_version_info_should_be_accessed_with_index(version, index, expected):
         ("1.2.3-rc.0+build.0", slice(0, 5, 2), (1, 3, "build.0")),
         ("1.2.3-rc.0+build.0", slice(None, 5, 2), (1, 3, "build.0")),
         ("1.2.3-rc.0+build.0", slice(5, 0, -2), ("build.0", 3)),
+        ("1.2.0-rc.0+build.0", slice(3), (1, 2, 0)),
     ],
 )
 def test_version_info_should_be_accessed_with_slice_object(
