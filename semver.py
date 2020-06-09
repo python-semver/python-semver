@@ -328,7 +328,7 @@ class VersionInfo(object):
         untouched.
 
         :return: new object with the raised major part
-        :rtype: VersionInfo
+        :rtype: :class:`VersionInfo`
 
         >>> ver = semver.VersionInfo.parse("3.4.5")
         >>> ver.bump_major()
@@ -343,7 +343,7 @@ class VersionInfo(object):
         untouched.
 
         :return: new object with the raised minor part
-        :rtype: VersionInfo
+        :rtype: :class:`VersionInfo`
 
         >>> ver = semver.VersionInfo.parse("3.4.5")
         >>> ver.bump_minor()
@@ -358,7 +358,7 @@ class VersionInfo(object):
         untouched.
 
         :return: new object with the raised patch part
-        :rtype: VersionInfo
+        :rtype: :class:`VersionInfo`
 
         >>> ver = semver.VersionInfo.parse("3.4.5")
         >>> ver.bump_patch()
@@ -374,7 +374,7 @@ class VersionInfo(object):
 
         :param token: defaults to 'rc'
         :return: new object with the raised prerelease part
-        :rtype: str
+        :rtype: :class:`VersionInfo`
 
         >>> ver = semver.VersionInfo.parse("3.4.5-rc.1")
         >>> ver.bump_prerelease()
@@ -392,7 +392,7 @@ build=None)
 
         :param token: defaults to 'build'
         :return: new object with the raised build part
-        :rtype: str
+        :rtype: :class:`VersionInfo`
 
         >>> ver = semver.VersionInfo.parse("3.4.5-rc.1+build.9")
         >>> ver.bump_build()
@@ -649,9 +649,9 @@ build='build.10')
         Parse version string to a VersionInfo instance.
 
         :param version: version string
-        :return: a :class:`semver.VersionInfo` instance
+        :return: a :class:`VersionInfo` instance
         :raises: :class:`ValueError`
-        :rtype: :class:`semver.VersionInfo`
+        :rtype: :class:`VersionInfo`
 
         >>> semver.VersionInfo.parse('3.4.5-pre.2+build.4')
         VersionInfo(major=3, minor=4, patch=5, \
@@ -672,14 +672,14 @@ prerelease='pre.2', build='build.4')
     def replace(self, **parts):
         """
         Replace one or more parts of a version and return a new
-        :class:`semver.VersionInfo` object, but leave self untouched
+        :class:`VersionInfo` object, but leave self untouched
 
         .. versionadded:: 2.9.0
            Added :func:`VersionInfo.replace`
 
         :param dict parts: the parts to be updated. Valid keys are:
           ``major``, ``minor``, ``patch``, ``prerelease``, or ``build``
-        :return: the new :class:`semver.VersionInfo` object with the changed
+        :return: the new :class:`VersionInfo` object with the changed
           parts
         :raises: :class:`TypeError`, if ``parts`` contains invalid keys
         """
@@ -980,11 +980,11 @@ def finalize_version(version):
     """
     Remove any prerelease and build metadata from the version string.
 
-    .. versionadded:: 2.7.9
-       Added :func:`finalize_version`
-
     .. deprecated:: 2.10.0
        Use :func:`semver.VersionInfo.finalize_version` instead.
+
+    .. versionadded:: 2.7.9
+       Added :func:`finalize_version`
 
     :param version: version string
     :return: the finalized version string
@@ -1002,11 +1002,11 @@ def replace(version, **parts):
     """
     Replace one or more parts of a version and return the new string.
 
-    .. versionadded:: 2.9.0
-       Added :func:`replace`
-
     .. deprecated:: 2.10.0
        Use :func:`semver.VersionInfo.replace` instead.
+
+    .. versionadded:: 2.9.0
+       Added :func:`replace`
 
     :param str version: the version string to replace
     :param dict parts: the parts to be updated. Valid keys are:
