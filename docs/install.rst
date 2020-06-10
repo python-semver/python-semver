@@ -105,11 +105,11 @@ openSUSE
 
 1. Enable the ``devel:languages:python`` repository of the Open Build Service::
 
-    $ zypper addrepo --refresh obs://devel:languages:python devel_languages_python
+    $ sudo zypper addrepo --refresh obs://devel:languages:python devel_languages_python
 
 2. Install the package::
 
-    $ zypper --repo devel_languages_python python3-semver
+    $ sudo zypper install --repo devel_languages_python python3-semver
 
 
 Ubuntu
