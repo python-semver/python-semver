@@ -812,6 +812,7 @@ def match(version, match_expr):
     return ver.match(match_expr)
 
 
+@deprecated(replace="__builtin__.max", version="2.10.2")
 def max_ver(ver1, ver2):
     """
     Returns the greater version of two versions strings.
@@ -835,6 +836,7 @@ def max_ver(ver1, ver2):
         return ver2
 
 
+@deprecated(replace="__builtin__.min", version="2.10.2")
 def min_ver(ver1, ver2):
     """
     Returns the smaller version of two versions strings.
