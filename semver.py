@@ -548,17 +548,16 @@ build='build.10')
 
         if (
             isinstance(index, slice)
-            and (index.start is None or index.start < 0)
-            and (index.stop is None or index.stop < 0)
+            and (index.start is not None and index.start < 0)
+            or (index.stop is not None and index.stop < 0)
         ):
             raise IndexError("Version index cannot be negative")
 
-        # Could raise IndexError:
-        part = tuple(filter(None, self.to_tuple()[index]))
+        part = tuple(filter(lambda p: p is not None, self.to_tuple()[index]))
 
         if len(part) == 1:
             part = part[0]
-        if not part:
+        elif not part:
             raise IndexError("Version part undefined")
         return part
 
