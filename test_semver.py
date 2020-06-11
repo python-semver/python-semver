@@ -1092,3 +1092,35 @@ def test_next_version_with_versioninfo(version, part, expected):
     next_version = ver.next_version(part)
     assert isinstance(next_version, VersionInfo)
     assert str(next_version) == expected
+
+@pytest.mark.parametrize(
+    "version, expected",
+    [
+        (
+                VersionInfo(major=1, minor=2, patch=3, prerelease=None, build=None),
+                "VersionInfo(major=1, minor=2, patch=3, prerelease=None, build=None)"
+        ),
+        (
+                VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build=None),
+                "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build=None)"
+        ),
+        (
+                VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build=None),
+                "VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build=None)"
+        ),
+        (
+                VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build='b.1'),
+                "VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build='b.1')"
+        ),
+        (
+                VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='b.1'),
+                "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='b.1')"
+        ),
+        (
+                VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='build.1'),
+                "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='build.1')"
+        ),
+    ],
+)
+def test_repr(version, expected):
+    assert repr(version) == expected
