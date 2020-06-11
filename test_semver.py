@@ -24,7 +24,7 @@ from semver import (
     parse,
     parse_version_info,
     process,
-    replace,
+    replace, cmd_nextver,
 )
 
 SEMVERFUNCS = [
@@ -913,6 +913,10 @@ def test_should_parse_cli_arguments(cli, expected):
         # check subcommand
         (cmd_check, Namespace(version="1.2.3"), does_not_raise(None)),
         (cmd_check, Namespace(version="1.2"), pytest.raises(ValueError)),
+        # nextver subcommand
+        (cmd_nextver, Namespace(version="1.2.3", part="major"), does_not_raise("2.0.0")),
+        (cmd_nextver, Namespace(version="1.2", part="major"), pytest.raises(ValueError)),
+        (cmd_nextver, Namespace(version="1.2.3", part="nope"), pytest.raises(ValueError)),
     ],
 )
 def test_should_process_parsed_cli_arguments(func, args, expectation):
