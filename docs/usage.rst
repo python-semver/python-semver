@@ -447,6 +447,10 @@ Other types cannot be compared.
 
 If you need to convert some types into others, refer to :ref:`sec.convert.versions`.
 
+The use of these comparison operators also implies that you can also use builtin
+functions that leverage this capability; builtins including but not limited to: :func:`max`, :func:`min`
+(refer to :ref:`sec_max_min` for examples) and :func:`sorted`.
+
 
 
 Comparing Versions through an Expression
@@ -476,16 +480,28 @@ That gives you the following possibilities to express your condition:
     >>> semver.match("1.0.0", ">1.0.0")
     False
 
+.. _sec_max_min
 
 Getting Minimum and Maximum of two Versions
 -------------------------------------------
+*Changed in version 2.10.2:* :func:`semver.max_ver` and :func:`semver.min_ver` functions are deprecated in favor of their builtin counterparts
+:func:`max` and :func:`min`.
+
+Since :class:`semver.VersionInfo` implements :func:`__gt__()` and :func:`__lt__()`, it can be used with builtins requiring
 
 .. code-block:: python
 
-    >>> semver.max_ver("1.0.0", "2.0.0")
+    >>> str(max(semver.VersionInfo.parse("1.0.0"), semver.VersionInfo.parse("2.0.0")))
     '2.0.0'
-    >>> semver.min_ver("1.0.0", "2.0.0")
+    >>> str(min(semver.VersionInfo.parse("1.0.0"), semver.VersionInfo.parse("2.0.0")))
     '1.0.0'
+
+.. code-block:: python
+
+    >>> max([semver.VersionInfo(0, 1, 0), semver.VersionInfo(0, 2, 0), semver.VersionInfo(0, 1, 3)])
+    VersionInfo(major=0, minor=2, patch=0, prerelease=None, build=None)
+    >>> min([semver.VersionInfo(0, 1, 0), semver.VersionInfo(0, 2, 0), semver.VersionInfo(0, 1, 3)])
+    VersionInfo(major=0, minor=1, patch=0, prerelease=None, build=None)
 
 
 Dealing with Invalid Versions
