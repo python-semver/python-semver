@@ -659,6 +659,8 @@ def test_should_not_allow_to_compare_version_with_int():
         v1 > 1
     with pytest.raises(TypeError):
         1 > v1
+    with pytest.raises(TypeError):
+        v1.compare(1)
 
 
 def test_should_compare_prerelease_with_numbers_and_letters():
