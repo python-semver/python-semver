@@ -480,9 +480,9 @@ That gives you the following possibilities to express your condition:
     >>> semver.match("1.0.0", ">1.0.0")
     False
 
-.. _sec_max_min
+.. _sec_max_min:
 
-Getting Minimum and Maximum of two Versions
+Getting Minimum and Maximum of multiple Versions
 -------------------------------------------
 *Changed in version 2.10.2:* :func:`semver.max_ver` and :func:`semver.min_ver` functions are deprecated in favor of their builtin counterparts
 :func:`max` and :func:`min`.
