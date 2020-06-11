@@ -534,8 +534,9 @@ build='build.10')
         range requested is undefined, it will throw an index error.
         Negative indices are not supported
 
-        :param Union[int, slice] index: a positive integer indicating the
-               offset or a :func:`slice` object
+        :param Union[int, slice, string] index: a positive integer indicating the
+               offset or a :func:`slice` object or a string that is a key of the
+               :func:`semver.VersionInfo.to_dict` dictionary.
         :raises: IndexError, if index is beyond the range or a part is None
         :return: the requested part of the version at position index
 
@@ -543,23 +544,26 @@ build='build.10')
         >>> ver[0], ver[1], ver[2]
         (3, 4, 5)
         """
-        if isinstance(index, int):
-            index = slice(index, index + 1)
+        if isinstance(index, str):
+            return self.to_dict()[index]
+        else:
+            if isinstance(index, int):
+                index = slice(index, index + 1)
 
-        if (
-            isinstance(index, slice)
-            and (index.start is not None and index.start < 0)
-            or (index.stop is not None and index.stop < 0)
-        ):
-            raise IndexError("Version index cannot be negative")
+            if (
+                isinstance(index, slice)
+                and (index.start is not None and index.start < 0)
+                or (index.stop is not None and index.stop < 0)
+            ):
+                raise IndexError("Version index cannot be negative")
 
-        part = tuple(filter(lambda p: p is not None, self.to_tuple()[index]))
+            part = tuple(filter(lambda p: p is not None, self.to_tuple()[index]))
 
-        if len(part) == 1:
-            part = part[0]
-        elif not part:
-            raise IndexError("Version part undefined")
-        return part
+            if len(part) == 1:
+                part = part[0]
+            elif not part:
+                raise IndexError("Version part undefined")
+            return part
 
     def __repr__(self):
         s = ", ".join("%s=%r" % (key, val) for key, val in self.to_dict().items())

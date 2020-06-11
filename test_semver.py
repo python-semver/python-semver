@@ -776,6 +776,22 @@ def test_should_be_able_to_use_integers_as_prerelease_build():
         ("1.2.3", 2, 3),
         # Special cases
         ("1.0.2", 1, 0),
+        # String indices
+        ("1.2.3-rc.0+build.0", "major", 1),
+        ("1.2.3-rc.0+build.0", "minor", 2),
+        ("1.2.3-rc.0+build.0", "patch", 3),
+        ("1.2.3-rc.0+build.0", "prerelease", "rc.0"),
+        ("1.2.3-rc.0+build.0", "build", "build.0"),
+        ("1.2.3-rc.0", "major", 1),
+        ("1.2.3-rc.0", "minor", 2),
+        ("1.2.3-rc.0", "patch", 3),
+        ("1.2.3-rc.0", "prerelease", "rc.0"),
+        ("1.2.3-rc.0", "build", None),
+        ("1.2.3", "major", 1),
+        ("1.2.3", "minor", 2),
+        ("1.2.3", "patch", 3),
+        ("1.2.3", "prerelease", None),
+        ("1.2.3", "build", None),
     ],
 )
 def test_version_info_should_be_accessed_with_index(version, index, expected):
