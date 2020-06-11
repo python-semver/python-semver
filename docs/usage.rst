@@ -447,7 +447,7 @@ Other types cannot be compared.
 
 If you need to convert some types into others, refer to :ref:`sec.convert.versions`.
 
-The use of these comparison operators also implies that you can also use builtin
+The use of these comparison operators also implies that you can use builtin
 functions that leverage this capability; builtins including but not limited to: :func:`max`, :func:`min`
 (refer to :ref:`sec_max_min` for examples) and :func:`sorted`.
 
@@ -482,10 +482,11 @@ That gives you the following possibilities to express your condition:
 
 .. _sec_max_min:
 
-Getting Minimum and Maximum of multiple Versions
+Getting Minimum and Maximum of Multiple Versions
 -------------------------------------------
-*Changed in version 2.10.2:* :func:`semver.max_ver` and :func:`semver.min_ver` functions are deprecated in favor of their builtin counterparts
-:func:`max` and :func:`min`.
+.. versionchanged:: 2.10.2
+   The functions :func:`semver.max_ver` and :func:`semver.min_ver` are deprecated in
+   favor of their builtin counterparts :func:`max` and :func:`min`.
 
 Since :class:`semver.VersionInfo` implements :func:`__gt__()` and :func:`__lt__()`, it can be used with builtins requiring
 
