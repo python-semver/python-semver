@@ -11,9 +11,9 @@ are met.
 Knowing the Implemented semver.org Version
 ------------------------------------------
 
-The semver.org page is the authorative specification of how semantical
-versioning is definied.
-To know which version of semver.org is implemented in the semver libary,
+The semver.org page is the authoritative specification of how semantic
+versioning is defined.
+To know which version of semver.org is implemented in the semver library,
 use the following constant::
 
    >>> semver.SEMVER_SPEC_VERSION
@@ -445,7 +445,7 @@ To compare two versions depends on your type:
 
 Other types cannot be compared.
 
-If you need to convert some types into other, refer to :ref:`sec.convert.versions`.
+If you need to convert some types into others, refer to :ref:`sec.convert.versions`.
 
 
 
