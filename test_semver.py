@@ -24,7 +24,8 @@ from semver import (
     parse,
     parse_version_info,
     process,
-    replace, cmd_nextver,
+    replace,
+    cmd_nextver,
 )
 
 SEMVERFUNCS = [
@@ -930,9 +931,21 @@ def test_should_parse_cli_arguments(cli, expected):
         (cmd_check, Namespace(version="1.2.3"), does_not_raise(None)),
         (cmd_check, Namespace(version="1.2"), pytest.raises(ValueError)),
         # nextver subcommand
-        (cmd_nextver, Namespace(version="1.2.3", part="major"), does_not_raise("2.0.0")),
-        (cmd_nextver, Namespace(version="1.2", part="major"), pytest.raises(ValueError)),
-        (cmd_nextver, Namespace(version="1.2.3", part="nope"), pytest.raises(ValueError)),
+        (
+            cmd_nextver,
+            Namespace(version="1.2.3", part="major"),
+            does_not_raise("2.0.0"),
+        ),
+        (
+            cmd_nextver,
+            Namespace(version="1.2", part="major"),
+            pytest.raises(ValueError),
+        ),
+        (
+            cmd_nextver,
+            Namespace(version="1.2.3", part="nope"),
+            pytest.raises(ValueError),
+        ),
     ],
 )
 def test_should_process_parsed_cli_arguments(func, args, expectation):
@@ -1097,32 +1110,33 @@ def test_next_version_with_versioninfo(version, part, expected):
     assert isinstance(next_version, VersionInfo)
     assert str(next_version) == expected
 
+
 @pytest.mark.parametrize(
     "version, expected",
     [
         (
-                VersionInfo(major=1, minor=2, patch=3, prerelease=None, build=None),
-                "VersionInfo(major=1, minor=2, patch=3, prerelease=None, build=None)"
+            VersionInfo(major=1, minor=2, patch=3, prerelease=None, build=None),
+            "VersionInfo(major=1, minor=2, patch=3, prerelease=None, build=None)",
         ),
         (
-                VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build=None),
-                "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build=None)"
+            VersionInfo(major=1, minor=2, patch=3, prerelease="r.1", build=None),
+            "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build=None)",
         ),
         (
-                VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build=None),
-                "VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build=None)"
+            VersionInfo(major=1, minor=2, patch=3, prerelease="dev.1", build=None),
+            "VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build=None)",
         ),
         (
-                VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build='b.1'),
-                "VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build='b.1')"
+            VersionInfo(major=1, minor=2, patch=3, prerelease="dev.1", build="b.1"),
+            "VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build='b.1')",
         ),
         (
-                VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='b.1'),
-                "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='b.1')"
+            VersionInfo(major=1, minor=2, patch=3, prerelease="r.1", build="b.1"),
+            "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='b.1')",
         ),
         (
-                VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='build.1'),
-                "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='build.1')"
+            VersionInfo(major=1, minor=2, patch=3, prerelease="r.1", build="build.1"),
+            "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='build.1')",
         ),
     ],
 )
