@@ -448,8 +448,8 @@ Other types cannot be compared.
 If you need to convert some types into others, refer to :ref:`sec.convert.versions`.
 
 The use of these comparison operators also implies that you can use builtin
-functions that leverage this capability; builtins including but not limited to: :func:`max`, :func:`min`
-(refer to :ref:`sec_max_min` for examples) and :func:`sorted`.
+functions that leverage this capability; builtins including, but not limited to: :func:`max`, :func:`min`
+(for examples, see :ref:`sec_max_min`) and :func:`sorted`.
 
 
 
