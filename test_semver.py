@@ -493,10 +493,6 @@ def test_max_ver_and_min_ver(func, args, expected):
     assert result == expected[func.__name__]
 
 
-def test_should_get_min():
-    assert min_ver("3.4.5", "4.0.2") == "3.4.5"
-
-
 def test_should_get_more_rc1():
     assert compare("1.0.0-rc1", "1.0.0-rc0") == 1
 
