@@ -483,7 +483,7 @@ That gives you the following possibilities to express your condition:
 .. _sec_max_min:
 
 Getting Minimum and Maximum of Multiple Versions
--------------------------------------------
+------------------------------------------------
 .. versionchanged:: 2.10.2
    The functions :func:`semver.max_ver` and :func:`semver.min_ver` are deprecated in
    favor of their builtin counterparts :func:`max` and :func:`min`.
@@ -492,17 +492,43 @@ Since :class:`semver.VersionInfo` implements :func:`__gt__()` and :func:`__lt__(
 
 .. code-block:: python
 
-    >>> str(max(semver.VersionInfo.parse("1.0.0"), semver.VersionInfo.parse("2.0.0")))
-    '2.0.0'
-    >>> str(min(semver.VersionInfo.parse("1.0.0"), semver.VersionInfo.parse("2.0.0")))
-    '1.0.0'
-
-.. code-block:: python
-
     >>> max([semver.VersionInfo(0, 1, 0), semver.VersionInfo(0, 2, 0), semver.VersionInfo(0, 1, 3)])
     VersionInfo(major=0, minor=2, patch=0, prerelease=None, build=None)
     >>> min([semver.VersionInfo(0, 1, 0), semver.VersionInfo(0, 2, 0), semver.VersionInfo(0, 1, 3)])
     VersionInfo(major=0, minor=1, patch=0, prerelease=None, build=None)
+
+Incidentally, using :func:`map`, you can get the min or max version of any number of versions of the same type
+(convertible to :class:`semver.VersionInfo`).
+
+For example, here are the maximum and minimum versions of a list of version strings:
+
+.. code-block:: python
+
+    >>> str(max(map(semver.VersionInfo.parse, ['1.1.0', '1.2.0', '2.1.0', '0.5.10', '0.4.99'])))
+    '2.1.0'
+    >>> str(min(map(semver.VersionInfo.parse, ['1.1.0', '1.2.0', '2.1.0', '0.5.10', '0.4.99'])))
+    '0.4.99'
+
+And the same can be done with tuples:
+
+.. code-block:: python
+
+    >>> max(map(lambda v: semver.VersionInfo(*v), [(1, 1, 0), (1, 2, 0), (2, 1, 0), (0, 5, 10), (0, 4, 99)]))).to_tuple()
+    (2, 1, 0)
+    >>> min(map(lambda v: semver.VersionInfo(*v), [(1, 1, 0), (1, 2, 0), (2, 1, 0), (0, 5, 10), (0, 4, 99)]))).to_tuple()
+    (0, 4, 99)
+
+For dictionaries, it is very similar to finding the max version tuple: see :ref:`_sec.convert.versions`.
+
+The Old Way
+^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> semver.max_ver("1.0.0", "2.0.0")
+    '2.0.0'
+    >>> semver.min_ver("1.0.0", "2.0.0")
+    '1.0.0'
 
 
 Dealing with Invalid Versions
