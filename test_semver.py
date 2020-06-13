@@ -78,43 +78,43 @@ def test_fordocstrings(func):
     [
         # no. 1
         (
-                "1.2.3-alpha.1.2+build.11.e0f985a",
-                {
-                    "major": 1,
-                    "minor": 2,
-                    "patch": 3,
-                    "prerelease": "alpha.1.2",
-                    "build": "build.11.e0f985a",
-                },
+            "1.2.3-alpha.1.2+build.11.e0f985a",
+            {
+                "major": 1,
+                "minor": 2,
+                "patch": 3,
+                "prerelease": "alpha.1.2",
+                "build": "build.11.e0f985a",
+            },
         ),
         # no. 2
         (
-                "1.2.3-alpha-1+build.11.e0f985a",
-                {
-                    "major": 1,
-                    "minor": 2,
-                    "patch": 3,
-                    "prerelease": "alpha-1",
-                    "build": "build.11.e0f985a",
-                },
+            "1.2.3-alpha-1+build.11.e0f985a",
+            {
+                "major": 1,
+                "minor": 2,
+                "patch": 3,
+                "prerelease": "alpha-1",
+                "build": "build.11.e0f985a",
+            },
         ),
         (
-                "0.1.0-0f",
-                {"major": 0, "minor": 1, "patch": 0, "prerelease": "0f", "build": None},
+            "0.1.0-0f",
+            {"major": 0, "minor": 1, "patch": 0, "prerelease": "0f", "build": None},
         ),
         (
-                "0.0.0-0foo.1",
-                {"major": 0, "minor": 0, "patch": 0, "prerelease": "0foo.1", "build": None},
+            "0.0.0-0foo.1",
+            {"major": 0, "minor": 0, "patch": 0, "prerelease": "0foo.1", "build": None},
         ),
         (
-                "0.0.0-0foo.1+build.1",
-                {
-                    "major": 0,
-                    "minor": 0,
-                    "patch": 0,
-                    "prerelease": "0foo.1",
-                    "build": "build.1",
-                },
+            "0.0.0-0foo.1+build.1",
+            {
+                "major": 0,
+                "minor": 0,
+                "patch": 0,
+                "prerelease": "0foo.1",
+                "build": "build.1",
+            },
         ),
     ],
 )
@@ -128,25 +128,25 @@ def test_should_parse_version(version, expected):
     [
         # no. 1
         (
-                "1.2.3-rc.0+build.0",
-                {
-                    "major": 1,
-                    "minor": 2,
-                    "patch": 3,
-                    "prerelease": "rc.0",
-                    "build": "build.0",
-                },
+            "1.2.3-rc.0+build.0",
+            {
+                "major": 1,
+                "minor": 2,
+                "patch": 3,
+                "prerelease": "rc.0",
+                "build": "build.0",
+            },
         ),
         # no. 2
         (
-                "1.2.3-rc.0.0+build.0",
-                {
-                    "major": 1,
-                    "minor": 2,
-                    "patch": 3,
-                    "prerelease": "rc.0.0",
-                    "build": "build.0",
-                },
+            "1.2.3-rc.0.0+build.0",
+            {
+                "major": 1,
+                "minor": 2,
+                "patch": 3,
+                "prerelease": "rc.0.0",
+                "build": "build.0",
+            },
         ),
     ],
 )
@@ -221,7 +221,7 @@ def test_should_match_not_equal(left, right, expected):
     ],
 )
 def test_should_not_raise_value_error_for_expected_match_expression(
-        left, right, expected
+    left, right, expected
 ):
     assert match(left, right) is expected
 
@@ -276,10 +276,10 @@ def test_should_follow_specification_comparison():
     versions = zip(chain[:-1], chain[1:])
     for low_version, high_version in versions:
         assert (
-                compare(low_version, high_version) == -1
+            compare(low_version, high_version) == -1
         ), "%s should be lesser than %s" % (low_version, high_version)
         assert (
-                compare(high_version, low_version) == 1
+            compare(high_version, low_version) == 1
         ), "%s should be higher than %s" % (high_version, low_version)
 
 
@@ -414,68 +414,78 @@ def test_should_ignore_extensions_for_bump():
     "args, expected",
     [
         pytest.param(
-                ("1.2.3", "1.2.4"),
-                {"max_ver": "1.2.4",
-                 "min_ver": "1.2.3"},
-            marks=[pytest.mark.xfail]
+            ("1.2.3", "1.2.4"),
+            {"max_ver": "1.2.4", "min_ver": "1.2.3"},
+            marks=[pytest.mark.xfail],
         ),
         pytest.param(
-                ({"major": 1, "minor": 2, "patch": 3}, {"major": 1, "minor": 2, "patch": 4}),
-                {"max_ver": {"major": 1, "minor": 2, "patch": 4},
-                 "min_ver": {"major": 1, "minor": 2, "patch": 3}},
-            marks=[pytest.mark.xfail]
+            (
+                {"major": 1, "minor": 2, "patch": 3},
+                {"major": 1, "minor": 2, "patch": 4},
+            ),
+            {
+                "max_ver": {"major": 1, "minor": 2, "patch": 4},
+                "min_ver": {"major": 1, "minor": 2, "patch": 3},
+            },
+            marks=[pytest.mark.xfail],
         ),
         pytest.param(
-                ((1, 2, 3), (1, 2, 4)),
-                {"max_ver": (1, 2, 4),
-                 "min_ver": (1, 2, 3)},
-            marks=[pytest.mark.xfail]
+            ((1, 2, 3), (1, 2, 4)),
+            {"max_ver": (1, 2, 4), "min_ver": (1, 2, 3)},
+            marks=[pytest.mark.xfail],
         ),
         pytest.param(
-                ("1.2.3", "1.2.4", "1.2.5"),
-                {"max_ver": "1.2.5",
-                 "min_ver": "1.2.3"},
-            marks=[pytest.mark.xfail]
+            ("1.2.3", "1.2.4", "1.2.5"),
+            {"max_ver": "1.2.5", "min_ver": "1.2.3"},
+            marks=[pytest.mark.xfail],
         ),
         pytest.param(
-                ({"major": 1, "minor": 2, "patch": 3}, {"major": 1, "minor": 2, "patch": 4}, {"major": 1, "minor": 2,
-                                                                                              "patch": 5}),
-                {"max_ver": {"major": 1, "minor": 2, "patch": 5},
-                 "min_ver": {"major": 1, "minor": 2, "patch": 3}},
-            marks=[pytest.mark.xfail]
+            (
+                {"major": 1, "minor": 2, "patch": 3},
+                {"major": 1, "minor": 2, "patch": 4},
+                {"major": 1, "minor": 2, "patch": 5},
+            ),
+            {
+                "max_ver": {"major": 1, "minor": 2, "patch": 5},
+                "min_ver": {"major": 1, "minor": 2, "patch": 3},
+            },
+            marks=[pytest.mark.xfail],
         ),
         pytest.param(
-                ((1, 2, 3), (1, 2, 4), (1, 2, 5)),
-                {"max_ver": (1, 2, 5),
-                 "min_ver": (1, 2, 3)},
-            marks=[pytest.mark.xfail]
+            ((1, 2, 3), (1, 2, 4), (1, 2, 5)),
+            {"max_ver": (1, 2, 5), "min_ver": (1, 2, 3)},
+            marks=[pytest.mark.xfail],
         ),
         pytest.param(
-                ((1, 2, 3), (1, 2, 4)),
-                {"max_ver": (1, 2, 4),
-                 "min_ver": (1, 2, 3)},
-            marks=[pytest.mark.xfail]
+            ((1, 2, 3), (1, 2, 4)),
+            {"max_ver": (1, 2, 4), "min_ver": (1, 2, 3)},
+            marks=[pytest.mark.xfail],
         ),
         pytest.param(
-                (("1.2.3", "1.2.4", "1.2.5"),),
-                {"max_ver": "1.2.5",
-                 "min_ver": "1.2.3"},
-            marks=[pytest.mark.xfail]
+            (("1.2.3", "1.2.4", "1.2.5"),),
+            {"max_ver": "1.2.5", "min_ver": "1.2.3"},
+            marks=[pytest.mark.xfail],
         ),
         pytest.param(
-                (({"major": 1, "minor": 2, "patch": 3}, {"major": 1, "minor": 2, "patch": 4}, {"major": 1, "minor": 2,
-                                                                                               "patch": 5}),),
-                {"max_ver": {"major": 1, "minor": 2, "patch": 5},
-                 "min_ver": {"major": 1, "minor": 2, "patch": 3}},
-            marks=[pytest.mark.xfail]
+            (
+                (
+                    {"major": 1, "minor": 2, "patch": 3},
+                    {"major": 1, "minor": 2, "patch": 4},
+                    {"major": 1, "minor": 2, "patch": 5},
+                ),
+            ),
+            {
+                "max_ver": {"major": 1, "minor": 2, "patch": 5},
+                "min_ver": {"major": 1, "minor": 2, "patch": 3},
+            },
+            marks=[pytest.mark.xfail],
         ),
         pytest.param(
-                (((1, 2, 3), (1, 2, 4), (1, 2, 5)),),
-                {"max_ver": (1, 2, 5),
-                 "min_ver": (1, 2, 3)},
-            marks=[pytest.mark.xfail]
+            (((1, 2, 3), (1, 2, 4), (1, 2, 5)),),
+            {"max_ver": (1, 2, 5), "min_ver": (1, 2, 3)},
+            marks=[pytest.mark.xfail],
         ),
-    ]
+    ],
 )
 def test_max_ver_and_min_ver(func, args, expected):
     result = func(*args)
@@ -623,11 +633,11 @@ def test_should_compare_version_dictionaries():
 @pytest.mark.parametrize(
     "t",  # fmt: off
     (
-            (1, 0, 0),
-            (1, 0),
-            (1,),
-            (1, 0, 0, "pre.2"),
-            (1, 0, 0, "pre.2", "build.4"),
+        (1, 0, 0),
+        (1, 0),
+        (1,),
+        (1, 0, 0, "pre.2"),
+        (1, 0, 0, "pre.2", "build.4"),
     ),  # fmt: on
 )
 def test_should_compare_version_tuples(t):
@@ -652,11 +662,11 @@ def test_should_compare_version_tuples(t):
 @pytest.mark.parametrize(
     "lst",  # fmt: off
     (
-            [1, 0, 0],
-            [1, 0],
-            [1],
-            [1, 0, 0, "pre.2"],
-            [1, 0, 0, "pre.2", "build.4"],
+        [1, 0, 0],
+        [1, 0],
+        [1],
+        [1, 0, 0, "pre.2"],
+        [1, 0, 0, "pre.2", "build.4"],
     ),  # fmt: on
 )
 def test_should_compare_version_list(lst):
@@ -681,11 +691,11 @@ def test_should_compare_version_list(lst):
 @pytest.mark.parametrize(
     "s",  # fmt: off
     (
-            "1.0.0",
-            # "1.0",
-            # "1",
-            "1.0.0-pre.2",
-            "1.0.0-pre.2+build.4",
+        "1.0.0",
+        # "1.0",
+        # "1",
+        "1.0.0-pre.2",
+        "1.0.0-pre.2+build.4",
     ),  # fmt: on
 )
 def test_should_compare_version_string(s):
@@ -872,7 +882,7 @@ def test_version_info_should_be_accessed_with_index(version, index, expected):
     ],
 )
 def test_version_info_should_be_accessed_with_slice_object(
-        version, slice_object, expected
+    version, slice_object, expected
 ):
     version_info = VersionInfo.parse(version)
     assert version_info[slice_object] == expected
@@ -922,8 +932,8 @@ def test_version_info_should_throw_index_error_when_negative_index(version, inde
         (["bump", "minor", "1.2.3"], Namespace(bump="minor", version="1.2.3")),
         (["bump", "patch", "1.2.3"], Namespace(bump="patch", version="1.2.3")),
         (
-                ["bump", "prerelease", "1.2.3"],
-                Namespace(bump="prerelease", version="1.2.3"),
+            ["bump", "prerelease", "1.2.3"],
+            Namespace(bump="prerelease", version="1.2.3"),
         ),
         (["bump", "build", "1.2.3"], Namespace(bump="build", version="1.2.3")),
         # ---
@@ -948,49 +958,49 @@ def test_should_parse_cli_arguments(cli, expected):
         (cmd_bump, Namespace(bump="minor", version="1.2.3"), does_not_raise("1.3.0")),
         (cmd_bump, Namespace(bump="patch", version="1.2.3"), does_not_raise("1.2.4")),
         (
-                cmd_bump,
-                Namespace(bump="prerelease", version="1.2.3-rc1"),
-                does_not_raise("1.2.3-rc2"),
+            cmd_bump,
+            Namespace(bump="prerelease", version="1.2.3-rc1"),
+            does_not_raise("1.2.3-rc2"),
         ),
         (
-                cmd_bump,
-                Namespace(bump="build", version="1.2.3+build.13"),
-                does_not_raise("1.2.3+build.14"),
+            cmd_bump,
+            Namespace(bump="build", version="1.2.3+build.13"),
+            does_not_raise("1.2.3+build.14"),
         ),
         # compare subcommand
         (
-                cmd_compare,
-                Namespace(version1="1.2.3", version2="2.1.3"),
-                does_not_raise("-1"),
+            cmd_compare,
+            Namespace(version1="1.2.3", version2="2.1.3"),
+            does_not_raise("-1"),
         ),
         (
-                cmd_compare,
-                Namespace(version1="1.2.3", version2="1.2.3"),
-                does_not_raise("0"),
+            cmd_compare,
+            Namespace(version1="1.2.3", version2="1.2.3"),
+            does_not_raise("0"),
         ),
         (
-                cmd_compare,
-                Namespace(version1="2.4.0", version2="2.1.3"),
-                does_not_raise("1"),
+            cmd_compare,
+            Namespace(version1="2.4.0", version2="2.1.3"),
+            does_not_raise("1"),
         ),
         # check subcommand
         (cmd_check, Namespace(version="1.2.3"), does_not_raise(None)),
         (cmd_check, Namespace(version="1.2"), pytest.raises(ValueError)),
         # nextver subcommand
         (
-                cmd_nextver,
-                Namespace(version="1.2.3", part="major"),
-                does_not_raise("2.0.0"),
+            cmd_nextver,
+            Namespace(version="1.2.3", part="major"),
+            does_not_raise("2.0.0"),
         ),
         (
-                cmd_nextver,
-                Namespace(version="1.2", part="major"),
-                pytest.raises(ValueError),
+            cmd_nextver,
+            Namespace(version="1.2", part="major"),
+            pytest.raises(ValueError),
         ),
         (
-                cmd_nextver,
-                Namespace(version="1.2.3", part="nope"),
-                pytest.raises(ValueError),
+            cmd_nextver,
+            Namespace(version="1.2.3", part="nope"),
+            pytest.raises(ValueError),
         ),
     ],
 )
@@ -1041,9 +1051,9 @@ def test_should_process_check_iscalled_with_valid_version(capsys):
         ("3.4.5", dict(major=2, minor=5, patch=10), "2.5.10"),
         ("3.4.5", dict(major=2, minor=5, patch=10, prerelease="rc1"), "2.5.10-rc1"),
         (
-                "3.4.5",
-                dict(major=2, minor=5, patch=10, prerelease="rc1", build="b1"),
-                "2.5.10-rc1+b1",
+            "3.4.5",
+            dict(major=2, minor=5, patch=10, prerelease="rc1", build="b1"),
+            "2.5.10-rc1+b1",
         ),
         ("3.4.5-alpha.1.2", dict(major=2), "2.4.5-alpha.1.2"),
         ("3.4.5-alpha.1.2", dict(build="x1"), "3.4.5-alpha.1.2+x1"),
@@ -1102,7 +1112,7 @@ def test_should_versioninfo_isvalid():
 )
 def test_should_raise_deprecation_warnings(func, args, kwargs):
     with pytest.warns(
-            DeprecationWarning, match=r"Function 'semver.[_a-zA-Z]+' is deprecated."
+        DeprecationWarning, match=r"Function 'semver.[_a-zA-Z]+' is deprecated."
     ) as record:
         func(*args, **kwargs)
         if not record:
@@ -1161,28 +1171,28 @@ def test_next_version_with_versioninfo(version, part, expected):
     "version, expected",
     [
         (
-                VersionInfo(major=1, minor=2, patch=3, prerelease=None, build=None),
-                "VersionInfo(major=1, minor=2, patch=3, prerelease=None, build=None)",
+            VersionInfo(major=1, minor=2, patch=3, prerelease=None, build=None),
+            "VersionInfo(major=1, minor=2, patch=3, prerelease=None, build=None)",
         ),
         (
-                VersionInfo(major=1, minor=2, patch=3, prerelease="r.1", build=None),
-                "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build=None)",
+            VersionInfo(major=1, minor=2, patch=3, prerelease="r.1", build=None),
+            "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build=None)",
         ),
         (
-                VersionInfo(major=1, minor=2, patch=3, prerelease="dev.1", build=None),
-                "VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build=None)",
+            VersionInfo(major=1, minor=2, patch=3, prerelease="dev.1", build=None),
+            "VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build=None)",
         ),
         (
-                VersionInfo(major=1, minor=2, patch=3, prerelease="dev.1", build="b.1"),
-                "VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build='b.1')",
+            VersionInfo(major=1, minor=2, patch=3, prerelease="dev.1", build="b.1"),
+            "VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build='b.1')",
         ),
         (
-                VersionInfo(major=1, minor=2, patch=3, prerelease="r.1", build="b.1"),
-                "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='b.1')",
+            VersionInfo(major=1, minor=2, patch=3, prerelease="r.1", build="b.1"),
+            "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='b.1')",
         ),
         (
-                VersionInfo(major=1, minor=2, patch=3, prerelease="r.1", build="build.1"),
-                "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='build.1')",
+            VersionInfo(major=1, minor=2, patch=3, prerelease="r.1", build="build.1"),
+            "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='build.1')",
         ),
     ],
 )
