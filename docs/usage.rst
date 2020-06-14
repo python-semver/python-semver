@@ -513,10 +513,10 @@ And the same can be done with tuples:
 
 .. code-block:: python
 
-    >>> max(map(lambda v: semver.VersionInfo(*v), [(1, 1, 0), (1, 2, 0), (2, 1, 0), (0, 5, 10), (0, 4, 99)]))).to_tuple()
-    (2, 1, 0)
-    >>> min(map(lambda v: semver.VersionInfo(*v), [(1, 1, 0), (1, 2, 0), (2, 1, 0), (0, 5, 10), (0, 4, 99)]))).to_tuple()
-    (0, 4, 99)
+    >>> max(map(lambda v: semver.VersionInfo(*v), [(1, 1, 0), (1, 2, 0), (2, 1, 0), (0, 5, 10), (0, 4, 99)])).to_tuple()
+    (2, 1, 0, None, None)
+    >>> min(map(lambda v: semver.VersionInfo(*v), [(1, 1, 0), (1, 2, 0), (2, 1, 0), (0, 5, 10), (0, 4, 99)])).to_tuple()
+    (0, 4, 99, None, None)
 
 For dictionaries, it is very similar to finding the max version tuple: see :ref:`_sec.convert.versions`.
 
