@@ -29,10 +29,12 @@ Additions
 
 n/a
 
-Removals
+Deprecations
 --------
 
-n/a
+* :gh:`160` (:pr:`264`):
+    * :func:`semver.max_ver`
+    * :func:`semver.min_ver`
 
 
 Version 2.10.1
@@ -56,14 +58,6 @@ Bug Fixes
 
 * :gh:`251` (:pr:`254`): Fixed return type of ``semver.VersionInfo.next_version``
   to always return a ``VersionInfo`` instance.
-
-
-Additions
----------
-
-
-Removals
---------
 
 
 Version 2.10.0
@@ -95,7 +89,7 @@ Additions
 * :pr:`228`: Added better doctest integration
 
 
-Removals
+Deprecations
 --------
 * :gh:`225` (:pr:`229`): Output a DeprecationWarning for the following functions:
 
@@ -139,12 +133,6 @@ Bug Fixes
 * :gh:`192` (:pr:`193`): Fixed "pysemver" and "pysemver bump" when called without arguments
 
 
-Removals
---------
-
-not available
-
-
 Version 2.9.0
 =============
 :Released: 2019-10-30
@@ -184,7 +172,7 @@ Bug Fixes
 Removals
 --------
 
-* :gh:`111` (:pr:`110`): Droped Python 3.3
+* :gh:`111` (:pr:`110`): Dropped Python 3.3
 * :gh:`148` (:pr:`149`): Removed and replaced ``python setup.py test``
 
 

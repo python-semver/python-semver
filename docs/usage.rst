@@ -11,9 +11,9 @@ are met.
 Knowing the Implemented semver.org Version
 ------------------------------------------
 
-The semver.org page is the authorative specification of how semantical
-versioning is definied.
-To know which version of semver.org is implemented in the semver libary,
+The semver.org page is the authoritative specification of how semantic
+versioning is defined.
+To know which version of semver.org is implemented in the semver library,
 use the following constant::
 
    >>> semver.SEMVER_SPEC_VERSION
@@ -445,7 +445,11 @@ To compare two versions depends on your type:
 
 Other types cannot be compared.
 
-If you need to convert some types into other, refer to :ref:`sec.convert.versions`.
+If you need to convert some types into others, refer to :ref:`sec.convert.versions`.
+
+The use of these comparison operators also implies that you can use builtin
+functions that leverage this capability; builtins including, but not limited to: :func:`max`, :func:`min`
+(for examples, see :ref:`sec_max_min`) and :func:`sorted`.
 
 
 
@@ -476,9 +480,47 @@ That gives you the following possibilities to express your condition:
     >>> semver.match("1.0.0", ">1.0.0")
     False
 
+.. _sec_max_min:
 
-Getting Minimum and Maximum of two Versions
--------------------------------------------
+Getting Minimum and Maximum of Multiple Versions
+------------------------------------------------
+.. versionchanged:: 2.10.2
+   The functions :func:`semver.max_ver` and :func:`semver.min_ver` are deprecated in
+   favor of their builtin counterparts :func:`max` and :func:`min`.
+
+Since :class:`semver.VersionInfo` implements :func:`__gt__()` and :func:`__lt__()`, it can be used with builtins requiring
+
+.. code-block:: python
+
+    >>> max([semver.VersionInfo(0, 1, 0), semver.VersionInfo(0, 2, 0), semver.VersionInfo(0, 1, 3)])
+    VersionInfo(major=0, minor=2, patch=0, prerelease=None, build=None)
+    >>> min([semver.VersionInfo(0, 1, 0), semver.VersionInfo(0, 2, 0), semver.VersionInfo(0, 1, 3)])
+    VersionInfo(major=0, minor=1, patch=0, prerelease=None, build=None)
+
+Incidentally, using :func:`map`, you can get the min or max version of any number of versions of the same type
+(convertible to :class:`semver.VersionInfo`).
+
+For example, here are the maximum and minimum versions of a list of version strings:
+
+.. code-block:: python
+
+    >>> str(max(map(semver.VersionInfo.parse, ['1.1.0', '1.2.0', '2.1.0', '0.5.10', '0.4.99'])))
+    '2.1.0'
+    >>> str(min(map(semver.VersionInfo.parse, ['1.1.0', '1.2.0', '2.1.0', '0.5.10', '0.4.99'])))
+    '0.4.99'
+
+And the same can be done with tuples:
+
+.. code-block:: python
+
+    >>> max(map(lambda v: semver.VersionInfo(*v), [(1, 1, 0), (1, 2, 0), (2, 1, 0), (0, 5, 10), (0, 4, 99)])).to_tuple()
+    (2, 1, 0, None, None)
+    >>> min(map(lambda v: semver.VersionInfo(*v), [(1, 1, 0), (1, 2, 0), (2, 1, 0), (0, 5, 10), (0, 4, 99)])).to_tuple()
+    (0, 4, 99, None, None)
+
+For dictionaries, it is very similar to finding the max version tuple: see :ref:`sec.convert.versions`.
+
+The "old way" with :func:`semver.max_ver` or :func:`semver.min_ver` is still available, but not recommended:
 
 .. code-block:: python
 
@@ -572,6 +614,28 @@ them with code which is compatible for future versions:
 
      >>> s1 = semver.format_version(5, 4, 3, 'pre.2', 'build.1')
      >>> s2 = str(semver.VersionInfo(5, 4, 3, 'pre.2', 'build.1'))
+     >>> s1 == s2
+     True
+
+* :func:`semver.max_ver`
+
+  Replace it with ``max(version1, version2, ...)`` or ``max([version1, version2, ...])``:
+
+  .. code-block:: python
+
+     >>> s1 = semver.max_ver("1.2.3", "1.2.4")
+     >>> s2 = str(max(map(semver.VersionInfo.parse, ("1.2.3", "1.2.4"))))
+     >>> s1 == s2
+     True
+
+* :func:`semver.min_ver`
+
+  Replace it with ``min(version1, version2, ...)`` or ``min([version1, version2, ...])``:
+
+  .. code-block:: python
+
+     >>> s1 = semver.min_ver("1.2.3", "1.2.4")
+     >>> s2 = str(min(map(semver.VersionInfo.parse, ("1.2.3", "1.2.4"))))
      >>> s1 == s2
      True
 
