@@ -7,21 +7,23 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
-Version 2.10.2 (WIP)
-====================
+Version 2.10.2
+==============
 
-:Released: 2020-xx-yy
-:Maintainer:
+:Released: 2020-06-15
+:Maintainer: Tom Schraitle
 
 Features
 --------
 
-n/a
+:gh:`268`: Increase coverage
+
 
 Bug Fixes
 ---------
 
 :gh:`260` (:pr:`261`): Fixed ``__getitem__`` returning None on wrong parts
+:pr:`263`: Doc: Add missing "install" subcommand for openSUSE
 
 
 Additions
