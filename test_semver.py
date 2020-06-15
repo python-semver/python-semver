@@ -1036,6 +1036,8 @@ def test_should_versioninfo_isvalid():
         (parse, ("1.2.3",), {}),
         (parse_version_info, ("1.2.3",), {}),
         (replace, ("1.2.3",), dict(major=2, patch=10)),
+        (max_ver, ("1.2.3", "1.2.4"), {}),
+        (min_ver, ("1.2.3", "1.2.4"), {}),
     ],
 )
 def test_should_raise_deprecation_warnings(func, args, kwargs):
