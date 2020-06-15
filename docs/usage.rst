@@ -520,8 +520,7 @@ And the same can be done with tuples:
 
 For dictionaries, it is very similar to finding the max version tuple: see :ref:`_sec.convert.versions`.
 
-The Old Way
-^^^^^^^^^^^
+The "old way" with :func:`semver.max_ver` or :func:`semver.min_ver` is still available, but not recommended:
 
 .. code-block:: python
 
