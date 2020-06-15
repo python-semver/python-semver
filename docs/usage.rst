@@ -518,7 +518,7 @@ And the same can be done with tuples:
     >>> min(map(lambda v: semver.VersionInfo(*v), [(1, 1, 0), (1, 2, 0), (2, 1, 0), (0, 5, 10), (0, 4, 99)])).to_tuple()
     (0, 4, 99, None, None)
 
-For dictionaries, it is very similar to finding the max version tuple: see :ref:`_sec.convert.versions`.
+For dictionaries, it is very similar to finding the max version tuple: see :ref:`sec.convert.versions`.
 
 The "old way" with :func:`semver.max_ver` or :func:`semver.min_ver` is still available, but not recommended:
 
