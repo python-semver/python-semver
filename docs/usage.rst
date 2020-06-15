@@ -617,6 +617,28 @@ them with code which is compatible for future versions:
      >>> s1 == s2
      True
 
+* :func:`semver.max_ver`
+
+  Replace it with ``max(version1, version2, ...)`` or ``max([version1, version2, ...])``:
+
+  .. code-block:: python
+
+     >>> s1 = semver.max_ver("1.2.3", "1.2.4")
+     >>> s2 = str(max(map(semver.VersionInfo.parse, ("1.2.3", "1.2.4"))))
+     >>> s1 == s2
+     True
+
+* :func:`semver.min_ver`
+
+  Replace it with ``min(version1, version2, ...)`` or ``min([version1, version2, ...])``:
+
+  .. code-block:: python
+
+     >>> s1 = semver.min_ver("1.2.3", "1.2.4")
+     >>> s2 = str(min(map(semver.VersionInfo.parse, ("1.2.3", "1.2.4"))))
+     >>> s1 == s2
+     True
+
 * :func:`semver.parse`
 
   Replace it with :func:`semver.VersionInfo.parse` and
