@@ -32,7 +32,7 @@ n/a
 Removals
 --------
 
-n/a
+:gh:`160` (:pr:`264`): Deprecate :func:`semver.max_ver` and :func:`semver.min_ver`:w
 
 
 Version 2.10.1
