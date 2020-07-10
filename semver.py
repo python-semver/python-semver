@@ -10,6 +10,10 @@ import sys
 import warnings
 
 
+PY2 = sys.version_info[0] == 2
+PY3 = sys.version_info[0] == 3
+
+
 __version__ = "2.10.2"
 __author__ = "Kostiantyn Rybnikov"
 __author_email__ = "k-bx@k-bx.com"
@@ -58,6 +62,53 @@ if not hasattr(__builtins__, "cmp"):
     def cmp(a, b):
         """Return negative if a<b, zero if a==b, positive if a>b."""
         return (a > b) - (a < b)
+
+
+if PY3:  # pragma: no cover
+    string_types = str, bytes
+    text_type = str
+    binary_type = bytes
+
+    def b(s):
+        return s.encode("latin-1")
+
+    def u(s):
+        return s
+
+
+else:  # pragma: no cover
+    string_types = unicode, str
+    text_type = unicode
+    binary_type = str
+
+    def b(s):
+        return s
+
+    # Workaround for standalone backslash
+    def u(s):
+        return unicode(s.replace(r"\\", r"\\\\"), "unicode_escape")
+
+
+def ensure_str(s, encoding="utf-8", errors="strict"):
+    # Taken from six project
+    """
+    Coerce *s* to `str`.
+
+    For Python 2:
+      - `unicode` -> encoded to `str`
+      - `str` -> `str`
+
+    For Python 3:
+      - `str` -> `str`
+      - `bytes` -> decoded to `str`
+    """
+    if not isinstance(s, (text_type, binary_type)):
+        raise TypeError("not expecting type '%s'" % type(s))
+    if PY2 and isinstance(s, text_type):
+        s = s.encode(encoding, errors)
+    elif PY3 and isinstance(s, binary_type):
+        s = s.decode(encoding, errors)
+    return s
 
 
 def deprecated(func=None, replace=None, version=None, category=DeprecationWarning):
@@ -144,7 +195,7 @@ def comparator(operator):
 
     @wraps(operator)
     def wrapper(self, other):
-        comparable_types = (VersionInfo, dict, tuple, list, str)
+        comparable_types = (VersionInfo, dict, tuple, list, text_type, binary_type)
         if not isinstance(other, comparable_types):
             raise TypeError(
                 "other type %r must be in %r" % (type(other), comparable_types)
@@ -423,7 +474,7 @@ build='build.10')
         0
         """
         cls = type(self)
-        if isinstance(other, str):
+        if isinstance(other, string_types):
             other = cls.parse(other)
         elif isinstance(other, dict):
             other = cls(**other)
@@ -651,7 +702,7 @@ build='build.10')
         VersionInfo(major=3, minor=4, patch=5, \
 prerelease='pre.2', build='build.4')
         """
-        match = cls._REGEX.match(version)
+        match = cls._REGEX.match(ensure_str(version))
         if match is None:
             raise ValueError("%s is not valid SemVer string" % version)
 
@@ -825,7 +876,7 @@ def max_ver(ver1, ver2):
     >>> semver.max_ver("1.0.0", "2.0.0")
     '2.0.0'
     """
-    if isinstance(ver1, str):
+    if isinstance(ver1, string_types):
         ver1 = VersionInfo.parse(ver1)
     elif not isinstance(ver1, VersionInfo):
         raise TypeError()

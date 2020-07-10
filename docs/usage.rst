@@ -45,10 +45,17 @@ creating a version:
 
 A :class:`semver.VersionInfo` instance can be created in different ways:
 
-* From a string::
+* From a string (a Unicode string in Python 2)::
 
     >>> semver.VersionInfo.parse("3.4.5-pre.2+build.4")
     VersionInfo(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')
+    >>> semver.VersionInfo.parse(u"5.3.1")
+    VersionInfo(major=5, minor=3, patch=1, prerelease=None, build=None)
+
+* From a byte string::
+
+    >>> semver.VersionInfo.parse(b"2.3.4")
+    VersionInfo(major=2, minor=3, patch=4, prerelease=None, build=None)
 
 * From individual parts by a dictionary::
 
