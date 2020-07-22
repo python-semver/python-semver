@@ -154,8 +154,9 @@ documentation includes:
 
   * **A docstring**
 
-    Each docstring contains a summary line, a linebreak, the description
-    of its arguments in `Sphinx style`_, and an optional doctest.
+    Each docstring contains a summary line, a linebreak, an optional
+    directive (see next item), the description of its arguments in
+    `Sphinx style`_, and an optional doctest.
     The docstring is extracted and reused in the :ref:`api` section.
     An appropriate docstring should look like this::
 
@@ -175,6 +176,43 @@ documentation includes:
             >>> semver.compare("2.0.0", "2.0.0")
             0
 
+            """
+
+  * **An optional directive**
+
+    If you introduce a new feature, change a function/method, or remove something,
+    it is a good practice to introduce Sphinx directives into the docstring.
+    This gives the reader an idea what version is affected by this change.
+
+    The first required argument, ``VERSION``, defines the version when this change
+    was introduced. You can choose from:
+
+    * ``.. versionadded:: VERSION``
+
+      Use this directive to describe a new feature.
+
+    * ``.. versionchanged:: VERSION``
+
+      Use this directive to describe when something has changed, for example,
+      new parameters were added, changed side effects, different return values, etc.
+
+    * ``.. deprecated:: VERSION``
+
+      Use this directive when a feature is deprecated. Describe what should
+      be used instead, if appropriate.
+
+
+    Add such a directive *after* the summary line, if needed.
+    An appropriate directive could look like this::
+
+        def to_tuple(self):
+            """
+            Convert the VersionInfo object to a tuple.
+
+            .. versionadded:: 2.10.0
+               Renamed ``VersionInfo._astuple`` to ``VersionInfo.to_tuple`` to
+               make this function available in the public API.
+            [...]
             """
 
   * **The documentation**
