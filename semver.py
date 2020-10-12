@@ -50,8 +50,8 @@ __all__ = (
 
 from types import FrameType
 
-from typing import Callable, TypeVar, SupportsInt, Protocol, Optional, Tuple, Dict, Union, Generator, cast, Iterable, \
-    List, AnyStr
+from typing import Callable, TypeVar, SupportsInt, Optional, Tuple, Dict, Union, Generator, cast, Iterable, \
+    List
 
 #: Contains the implemented semver.org version of the spec
 SEMVER_SPEC_VERSION = "2.0.0"
@@ -167,11 +167,6 @@ def comparator(operator: Comparator) -> Comparator:
     return wrapper
 
 
-class SupportsString(Protocol):
-    def __str__(self):
-        ...
-
-
 class VersionInfo:
     """
     A semver compatible version class.
@@ -210,7 +205,7 @@ class VersionInfo:
     )
 
     def __init__(self, major: SupportsInt, minor: SupportsInt = 0, patch: SupportsInt = 0,
-                 prerelease: SupportsString = None, build: SupportsString = None):
+                 prerelease: Union[str, int] = None, build: Union[str, int] = None):
         self._major = int(major)
         self._minor = int(minor)
         self._patch = int(patch)
