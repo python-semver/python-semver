@@ -575,7 +575,7 @@ build='build.10')
         return version
 
     def __hash__(self):
-        return hash(self.to_tuple())
+        return hash(self.to_tuple()[:4])
 
     def finalize_version(self):
         """

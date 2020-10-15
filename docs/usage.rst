@@ -452,6 +452,30 @@ functions that leverage this capability; builtins including, but not limited to:
 (for examples, see :ref:`sec_max_min`) and :func:`sorted`.
 
 
+Version Equality
+----------------
+
+Note that when comparing two versions, the ``build`` part is ignored::
+
+    >>> v = semver.VersionInfo.parse("1.2.3-rc4+1e4664d")
+    >>> v == "1.2.3-rc4+dedbeef"
+    True
+
+This also applies when a :class:`semver.VersionInfo` is a member of a set, or a
+dictionary key::
+
+    >>> d = {}
+    >>> v1 = semver.VersionInfo.parse("1.2.3-rc4+1e4664d")
+    >>> v2 = semver.VersionInfo.parse("1.2.3-rc4+dedbeef")
+    >>> d[v1] = 1
+    >>> d[v2]
+    1
+    >>> s = set()
+    >>> s.add(v1)
+    >>> v2 in s
+    True
+
+
 
 Comparing Versions through an Expression
 ----------------------------------------
