@@ -637,8 +637,8 @@ build='build.10')
 
         return cmp_res in possibilities
 
-    @staticmethod
-    def parse(version):
+    @classmethod
+    def parse(cls, version):
         """
         Parse version string to a VersionInfo instance.
 
@@ -651,7 +651,7 @@ build='build.10')
         VersionInfo(major=3, minor=4, patch=5, \
 prerelease='pre.2', build='build.4')
         """
-        match = VersionInfo._REGEX.match(version)
+        match = cls._REGEX.match(version)
         if match is None:
             raise ValueError("%s is not valid SemVer string" % version)
 
@@ -661,7 +661,7 @@ prerelease='pre.2', build='build.4')
         version_parts["minor"] = int(version_parts["minor"])
         version_parts["patch"] = int(version_parts["patch"])
 
-        return VersionInfo(**version_parts)
+        return cls(**version_parts)
 
     def replace(self, **parts):
         """

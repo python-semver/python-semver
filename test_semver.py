@@ -1128,3 +1128,21 @@ def test_next_version_with_versioninfo(version, part, expected):
 )
 def test_repr(version, expected):
     assert repr(version) == expected
+
+
+def test_subclass_from_versioninfo():
+    class SemVerWithVPrefix(VersionInfo):
+        @classmethod
+        def parse(cls, version):
+            if not version.startswith("v"):
+                raise ValueError(
+                    "{v}: not a valid semantic version tag".format(v=version)
+                )
+            return super(SemVerWithVPrefix, cls).parse(version[1:])
+
+        def __str__(self):
+            # Reconstruct the tag.
+            return "v" + super(SemVerWithVPrefix, self).__str__()
+
+    v = SemVerWithVPrefix.parse("v1.2.3")
+    assert str(v) == "v1.2.3"
