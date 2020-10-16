@@ -7,6 +7,36 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
+Version 2.11.0 (WIP)
+====================
+
+:Released: n/a
+:Maintainer: n/a
+
+Features
+--------
+
+n/a
+
+
+Bug Fixes
+---------
+
+* :gh:`276` (:pr:`277`): VersionInfo.parse should be a class method
+
+
+Additions
+---------
+
+n/a
+
+
+Deprecations
+------------
+
+n/a
+
+
 Version 2.10.2
 ==============
 
@@ -22,8 +52,8 @@ Features
 Bug Fixes
 ---------
 
-:gh:`260` (:pr:`261`): Fixed ``__getitem__`` returning None on wrong parts
-:pr:`263`: Doc: Add missing "install" subcommand for openSUSE
+* :gh:`260` (:pr:`261`): Fixed ``__getitem__`` returning None on wrong parts
+* :pr:`263`: Doc: Add missing "install" subcommand for openSUSE
 
 
 Additions
@@ -32,7 +62,7 @@ Additions
 n/a
 
 Deprecations
---------
+------------
 
 * :gh:`160` (:pr:`264`):
     * :func:`semver.max_ver`
