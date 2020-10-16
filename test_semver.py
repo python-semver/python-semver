@@ -1134,9 +1134,9 @@ def test_subclass_from_versioninfo():
     class SemVerWithVPrefix(VersionInfo):
         @classmethod
         def parse(cls, version):
-            if not version.startswith("v"):
+            if not version[0] in ("v", "V"):
                 raise ValueError(
-                    "{v}: not a valid semantic version tag".format(v=version)
+                    "{v!r}: version must start with 'v' or 'V'".format(v=version)
                 )
             return super(SemVerWithVPrefix, cls).parse(version[1:])
 
