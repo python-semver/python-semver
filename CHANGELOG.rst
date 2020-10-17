@@ -23,6 +23,7 @@ Bug Fixes
 ---------
 
 * :gh:`276` (:pr:`277`): VersionInfo.parse should be a class method
+* :gh:`274` (:pr:`275`): Py2 vs. Py3 incompatibility TypeError
 
 
 Additions
