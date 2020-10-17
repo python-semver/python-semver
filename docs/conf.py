@@ -23,6 +23,7 @@ sys.path.insert(0, os.path.abspath(".."))
 
 from semver import __version__  # noqa: E402
 
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -94,38 +95,74 @@ extlinks = {
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-# html_theme = 'alabaster'
-html_theme = "sphinx_rtd_theme"
+html_theme = "alabaster"
+templates_path = ["_templates"]
 
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-#
-# html_theme_options = {}
+GITHUB_URL = "https://github.com/python-semver/python-semver"
 
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
-
-html_css_files = ["css/default.css"]
-
-# Custom sidebar templates, must be a dictionary that maps document names
-# to template names.
-#
-# This is required for the alabaster theme
-# refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
-html_sidebars = {
-    "**": [
-        "about.html",
-        "navigation.html",
-        "relations.html",  # needs 'show_related': True theme option to display
-        "searchbox.html",
-        "donate.html",
-    ]
+html_theme_options = {
+    # -- Basics
+    #: Text blurb about your project to appear under the logo:
+    # "description": "Semantic versioning",
+    #: Makes the sidebar "fixed" or pinned in place:
+    "fixed_sidebar": True,
+    #: Relative path to $PROJECT/_static to logo image:
+    # "logo": "logo.svg",
+    #: Set to true to insert your site's project name under
+    #: the logo:
+    # "logo_name": True,
+    #: CSS width specifier controller default sidebar width:
+    "sidebar_width": "25%",
+    #: CSS width specifier controlling default content/page width:
+    "page_width": "auto",
+    #: CSS width specifier controlling default body text width:
+    "body_max_width": "auto",
+    #
+    # -- Service Links and Badges
+    #: Contains project name and user of GitHub:
+    "github_user": "python-semver",
+    "github_repo": "python-semver",
+    #: whether to link to your GitHub:
+    "github_button": True,
+    #:
+    "github_type": "star",
+    #: whether to apply a ‘Fork me on Github’ banner
+    #: in the top right corner of the page:
+    # "github_banner": True,
+    #
+    # -- Non-service sidebar control
+    #: Dictionary mapping link names to link targets:
+    "extra_nav_links": {
+        "PyPI": "https://pypi.org/project/semver/",
+        "Libraries.io": "https://libraries.io/pypi/semver",
+    },
+    #: Boolean determining whether all TOC entries that
+    #: are not ancestors of the current page are collapsed:
+    "sidebar_collapse": True,
+    #
+    # -- Header/footer options
+    #: used to display next and previous links above and
+    #: below the main page content
+    "show_relbars": True,
+    "show_relbar_top": True,
+    #
+    # -- Style colors
+    # "anchor": "",
+    # "anchor_hover_bg": "",
+    # "anchor_hover_fg": "",
+    "narrow_sidebar_fg": "lightgray",
+    #
+    # -- Fonts
+    # "code_font_size": "",
+    "font_family": "",
+    "head_font_family": "",
+    "font_size": "1.25rem",
 }
 
-html_logo = "logo.svg"
+html_static_path = ["_static"]
+html_css_files = ["css/semver.css"]
+
+# html_logo = "logo.svg"
 
 # -- Options for HTMLHelp output ------------------------------------------
 

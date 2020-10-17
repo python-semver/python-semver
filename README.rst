@@ -9,22 +9,21 @@ A Python module for `semantic versioning`_. Simplifies comparing versions.
 
 .. teaser-end
 
-.. warning::
+.. note::
 
-   As anything comes to an end, this project will focus on Python 3.x only.
-   New features and bugfixes will be integrated into the 3.x.y branch only.
+   This project works for Python 3.6 and greater only. If you are
+   looking for a compatible version for Python 2, use the
+   maintenance branch |MAINT|_.
 
-   Major version 3 of semver will contain some incompatible changes:
-
-   * removes support for Python 2.7 and 3.3
-   * removes deprecated functions.
-
-   The last version of semver which supports Python 2.7 and 3.4 will be
-   2.10.x. However, keep in mind, version 2.10.x is frozen: no new
+   The last version of semver which supports Python 2.7 to 3.5 will be
+   2.11.x. However, keep in mind, version 2.11.x is frozen: no new
    features nor backports will be integrated.
 
    We recommend to upgrade your workflow to Python 3.x to gain support,
    bugfixes, and new features.
+
+.. |MAINT| replace:: ``maint/v2``
+.. _MAINT: https://github.com/python-semver/python-semver/tree/maint/v2
 
 The module follows the ``MAJOR.MINOR.PATCH`` style:
 

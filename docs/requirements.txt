@@ -1,4 +1,5 @@
 # requirements file for documentation
 sphinx
-sphinx_rtd_theme
 sphinx-argparse
+# sphinx_rtd_theme
+guzzle_sphinx_theme
