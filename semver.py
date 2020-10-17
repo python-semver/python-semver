@@ -14,7 +14,7 @@ PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
 
 
-__version__ = "2.10.2"
+__version__ = "2.11.0"
 __author__ = "Kostiantyn Rybnikov"
 __author_email__ = "k-bx@k-bx.com"
 __maintainer__ = ["Sebastien Celles", "Tom Schraitle"]
@@ -697,6 +697,10 @@ build='build.10')
         :return: a :class:`VersionInfo` instance
         :raises: :class:`ValueError`
         :rtype: :class:`VersionInfo`
+
+        .. versionchanged:: 2.11.0
+           Changed method from static to classmethod to
+           allow subclasses.
 
         >>> semver.VersionInfo.parse('3.4.5-pre.2+build.4')
         VersionInfo(major=3, minor=4, patch=5, \

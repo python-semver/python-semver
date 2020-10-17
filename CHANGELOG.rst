@@ -7,11 +7,11 @@ All notable changes to this code base will be documented in this file,
 in every released version.
 
 
-Version 2.11.0 (WIP)
-====================
+Version 2.11.0
+==============
 
-:Released: n/a
-:Maintainer: n/a
+:Released: 2020-10-17
+:Maintainer: Tom Schraitle
 
 Features
 --------
@@ -23,6 +23,7 @@ Bug Fixes
 ---------
 
 * :gh:`276` (:pr:`277`): VersionInfo.parse should be a class method
+   Also add authors and update changelog in :gh:`286`
 * :gh:`274` (:pr:`275`): Py2 vs. Py3 incompatibility TypeError
 
 
@@ -123,7 +124,7 @@ Additions
 
 
 Deprecations
---------
+------------
 * :gh:`225` (:pr:`229`): Output a DeprecationWarning for the following functions:
 
   - ``semver.parse``
