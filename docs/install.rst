@@ -5,7 +5,7 @@ Release Policy
 --------------
 
 As semver uses `Semantic Versioning`_, breaking changes are only introduced in major
-releases (incremented X in "X.Y.Z").
+releases (incremented ``X`` in "X.Y.Z").
 
 For users who want to stay with major 2 releases only, add the following version
 restriction::
@@ -13,7 +13,7 @@ restriction::
     semver>=2,<3
 
 This line avoids surprises. You will get any updates within the major 2 release like
-2.9.1, 2.10.0, or above. However, you will never get an update for semver 3.0.0.
+2.11.0 or above. However, you will never get an update for semver 3.0.0.
 
 Keep in mind, as this line avoids any major version updates, you also will never
 get new exciting features or bug fixes.
@@ -24,14 +24,6 @@ file that lists your dependencies.
 Pip
 ---
 
-For Python 2:
-
-.. code-block:: bash
-
-    pip install semver
-
-For Python 3:
-
 .. code-block:: bash
 
     pip3 install semver
@@ -41,7 +33,7 @@ with an URL and its version:
 
 .. parsed-literal::
 
-    pip3 install git+https://github.com/python-semver/python-semver.git@2.10.0
+    pip3 install git+https://github.com/python-semver/python-semver.git@2.11.0
 
 
 Linux Distributions

@@ -35,6 +35,7 @@ from semver import __version__  # noqa: E402
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx_autodoc_typehints",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
     "sphinx.ext.extlinks",
@@ -107,7 +108,7 @@ html_theme_options = {
     #: Makes the sidebar "fixed" or pinned in place:
     "fixed_sidebar": True,
     #: Relative path to $PROJECT/_static to logo image:
-    # "logo": "logo.svg",
+    "logo": "logo.svg",
     #: Set to true to insert your site's project name under
     #: the logo:
     # "logo_name": True,
@@ -154,13 +155,14 @@ html_theme_options = {
     #
     # -- Fonts
     # "code_font_size": "",
-    "font_family": "",
-    "head_font_family": "",
-    "font_size": "1.25rem",
+    "font_family": "'Roboto',sans-serif",
+    "head_font_family": "'Roboto Slab',serif",
+    "code_font_family": "'Roboto Mono',monospace",
+    "font_size": "1.20rem",
 }
 
 html_static_path = ["_static"]
-html_css_files = ["css/semver.css"]
+html_css_files = ["css/custom.css"]
 
 # html_logo = "logo.svg"
 

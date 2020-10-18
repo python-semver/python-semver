@@ -1,0 +1,74 @@
+/*
+https://github.com/bitprophet/alabaster
+*/
+
+/* Roboto (Sans), Roboto Slab ("serif"), Roboto Mono*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,600;1,400&family=Roboto+Slab:wght@700&family=Roboto:ital@0;1&display=swap');
+
+.logo {
+    font-family: "Roboto Slab";
+}
+
+img.logo {
+  width: 80%;
+}
+
+div.document {
+  margin-top: 0pt;
+}
+
+div.related.top {
+    margin-top: -1em;
+}
+
+div.related.top nav {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+}
+
+.section h1 {
+    font-weight: 700;
+}
+
+.py.method {
+    padding-top: 0.25em;
+    padding-bottom: 1.25em;
+    border-top: 1px solid #EEE;
+}
+
+.py.function{
+    padding-top: 1.25em;
+}
+
+.related.bottom {
+    margin-top: 1em;
+}
+
+body {
+    font-weight: 400;
+}
+
+nav#rellinks {
+    float: left;
+    width: 100%;
+}
+
+nav#rellinks li:first-child {
+    float: left;
+    text-align: left;
+    width: 50%;
+}
+
+nav#rellinks li:last-child {
+    float: right;
+    text-align: right;
+    width: 50%;
+}
+
+nav#rellinks li+li:before {
+    content: "";
+}
+
+div.related.top nav::after {
+    float: none;
+}
