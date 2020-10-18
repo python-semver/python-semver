@@ -63,6 +63,14 @@ A :class:`semver.VersionInfo` instance can be created in different ways:
     >>> semver.VersionInfo(**d)
     VersionInfo(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')
 
+  Keep in mind, the ``major``, ``minor``, ``patch`` parts has to
+  be positive.
+
+    >>> semver.VersionInfo(-1)
+    Traceback (most recent call last):
+    ...
+    ValueError: 'major' is negative. A version can only be positive.
+
   As a minimum requirement, your dictionary needs at least the ``major``
   key, others can be omitted. You get a ``TypeError`` if your
   dictionary contains invalid keys.

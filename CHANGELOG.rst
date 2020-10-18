@@ -6,6 +6,36 @@ Change Log
 All notable changes to this code base will be documented in this file,
 in every released version.
 
+Version 2.12.0
+==============
+
+:Released:
+:Maintainer: Tom Schraitle
+
+Features
+--------
+
+n/a
+
+
+Bug Fixes
+---------
+
+* :gh:`291` (:pr:`292`): Disallow negative numbers of
+  major, minor, and patch for ``semver.VersionInfo``
+
+
+Additions
+---------
+
+n/a
+
+
+Deprecations
+------------
+
+n/a
+
 
 Version 2.11.0
 ==============

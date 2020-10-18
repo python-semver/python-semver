@@ -74,6 +74,20 @@ def test_fordocstrings(func):
 
 
 @pytest.mark.parametrize(
+    "ver",
+    [
+        {"major": -1},
+        {"major": 1, "minor": -2},
+        {"major": 1, "minor": 2, "patch": -3},
+        {"major": 1, "minor": -2, "patch": 3},
+    ],
+)
+def test_should_not_allow_negative_numbers(ver):
+    with pytest.raises(ValueError, match=".* is negative. .*"):
+        VersionInfo(**ver)
+
+
+@pytest.mark.parametrize(
     "version,expected",
     [
         # no. 1
