@@ -5,16 +5,25 @@ Semver |version| -- Semantic Versioning
 .. toctree::
    :maxdepth: 2
    :caption: Contents
-   :numbered:
 
    readme
    install
    usage
-   pysemver
    development
    api
-   changelog
 
+.. toctree::
+   :maxdepth: 2
+   :caption: CLI
+
+   pysemver
+
+
+.. toctree::
+   :maxdepth: 1
+
+   changelog
+   changelog-2.7.9-and-before
 
 Indices and Tables
 ==================

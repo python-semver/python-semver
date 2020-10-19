@@ -1,0 +1,13 @@
+Configure Towncrier (:pr:`273`:)
+
+* Add :file:`changelog.d/.gitignore` to keep this directory
+* Create :file:`changelog.d/README.rst` with some descriptions
+* Add :file:`changelog.d/_template.rst` as Towncrier template
+* Add ``[tool.towncrier]`` section in :file:`pyproject.toml`
+* Add "changelog" target into :file:`tox.ini`. Use it like
+  :command:`tox -e changelog -- CMD` whereas ``CMD`` is a
+  Towncrier command. The default :command:`tox -e changelog`
+  calls Towncrier to create a draft of the changelog file
+  and output it to stdout.
+* Update documentation and add include a new section
+  "Changelog" included from :file:`changelog.d/README.rst`.

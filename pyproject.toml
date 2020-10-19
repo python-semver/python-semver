@@ -1,3 +1,12 @@
+[build-system]
+requires = [
+  # sync with setup.py until we discard non-pep-517/518
+  "setuptools>=40.0",
+  "setuptools-scm",
+  "wheel",
+]
+build-backend = "setuptools.build_meta"
+
 [tool.black]
 line-length = 88
 target-version = ['py36', 'py37', 'py38']
@@ -18,3 +27,53 @@ exclude = '''
   )/
 )
 '''
+
+[tool.towncrier]
+package = "semver"
+# package_dir = "src"
+filename = "CHANGELOG.rst"
+directory = "changelog.d/"
+title_format = "Version {version}"
+template = "changelog.d/_template.rst"
+# issue_format = "`#{issue} <https://github.com/python-attrs/attrs/issues/{issue}>`_"
+# issue_format = ":gh:`{issue}`"
+
+  # [[tool.towncrier.type]]
+  # directory = "breaking"
+  # name = "Breaking Changes"
+  # showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "deprecation"
+  name = "Deprecations"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "feature"
+  name = "Features"
+  showcontent = true
+
+  # [[tool.towncrier.type]]
+  # directory = "improvement"
+  # name = "Improvements"
+  # showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "bugfix"
+  name = "Bug Fixes"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "doc"
+  name = "Improved Documentation"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "trivial"
+  name = "Trivial/Internal Changes"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "removal"
+  name = "Removals"
+  showcontent = true

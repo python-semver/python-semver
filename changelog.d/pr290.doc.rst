@@ -1,0 +1,7 @@
+Several improvements in the documentation:
+
+* New layout to distinguish from the semver2 development line.
+* Create new logo.
+* Remove any occurances of Python2.
+* Describe changelog process with Towncrier.
+* Update the release process.

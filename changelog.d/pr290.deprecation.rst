@@ -1,0 +1,10 @@
+For semver 3.0.0-alpha0:
+
+* Remove anything related to Python2
+* In :file:`tox.ini` and :file:`.travis.yml`
+  Remove targets py27, py34, py35, and pypy.
+  Add py38, py39, and nightly (allow to fail)
+* In :file:`setup.py` simplified file and remove
+  ``Tox`` and ``Clean`` classes
+* Remove old Python versions (2.7, 3.4, 3.5, and pypy)
+  from Travis
