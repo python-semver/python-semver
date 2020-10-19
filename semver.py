@@ -14,7 +14,7 @@ PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
 
 
-__version__ = "2.11.0"
+__version__ = "2.12.0"
 __author__ = "Kostiantyn Rybnikov"
 __author_email__ = "k-bx@k-bx.com"
 __maintainer__ = ["Sebastien Celles", "Tom Schraitle"]
