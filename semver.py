@@ -243,9 +243,24 @@ class VersionInfo(object):
     )
 
     def __init__(self, major, minor=0, patch=0, prerelease=None, build=None):
-        self._major = int(major)
-        self._minor = int(minor)
-        self._patch = int(patch)
+        # Build a dictionary of the arguments except prerelease and build
+        version_parts = {
+            "major": major,
+            "minor": minor,
+            "patch": patch,
+        }
+
+        for name, value in version_parts.items():
+            value = int(value)
+            version_parts[name] = value
+            if value < 0:
+                raise ValueError(
+                    "{!r} is negative. A version can only be positive.".format(name)
+                )
+
+        self._major = version_parts["major"]
+        self._minor = version_parts["minor"]
+        self._patch = version_parts["patch"]
         self._prerelease = None if prerelease is None else str(prerelease)
         self._build = None if build is None else str(build)
 
