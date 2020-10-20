@@ -6,10 +6,32 @@ Change Log
 All notable changes to this code base will be documented in this file,
 in every released version.
 
+Version 2.13.0
+==============
+
+:Released: 2020-10-20
+:Maintainer: Tom Schraitle
+
+Features
+--------
+
+* :pr:`287`: Document how to create subclass from ``VersionInfo``
+
+
+Bug Fixes
+---------
+
+* :pr:`283`: Ensure equal versions have equal hashes.
+  Version equality means for semver, that ``major``,
+  ``minor``, ``patch``, and ``prerelease`` parts are
+  equal in both versions you compare. The ``build`` part
+  is ignored.
+
+
 Version 2.12.0
 ==============
 
-:Released:
+:Released: 2020-10-19
 :Maintainer: Tom Schraitle
 
 Features
