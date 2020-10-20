@@ -453,7 +453,7 @@ functions that leverage this capability; builtins including, but not limited to:
 
 
 Determining Version Equality
-----------------
+----------------------------
 
 Version equality means for semver, that major, minor, patch, and prerelease
 parts are equal in both versions you compare. The build part is ignored.
