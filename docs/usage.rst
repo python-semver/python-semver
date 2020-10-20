@@ -452,10 +452,12 @@ functions that leverage this capability; builtins including, but not limited to:
 (for examples, see :ref:`sec_max_min`) and :func:`sorted`.
 
 
-Version Equality
+Determining Version Equality
 ----------------
 
-Note that when comparing two versions, the ``build`` part is ignored::
+Version equality means for semver, that major, minor, patch, and prerelease
+parts are equal in both versions you compare. The build part is ignored.
+For example::
 
     >>> v = semver.VersionInfo.parse("1.2.3-rc4+1e4664d")
     >>> v == "1.2.3-rc4+dedbeef"
