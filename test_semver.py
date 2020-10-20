@@ -693,6 +693,20 @@ def test_parse_version_info_str_hash():
     d[v] = ""  # to ensure that VersionInfo are hashable
 
 
+def test_equal_versions_have_equal_hashes():
+    v1 = parse_version_info("1.2.3-alpha.1.2+build.11.e0f985a")
+    v2 = parse_version_info("1.2.3-alpha.1.2+build.22.a589f0e")
+    assert v1 == v2
+    assert hash(v1) == hash(v2)
+    d = {}
+    d[v1] = 1
+    d[v2] = 2
+    assert d[v1] == 2
+    s = set()
+    s.add(v1)
+    assert v2 in s
+
+
 def test_parse_method_for_version_info():
     s_version = "1.2.3-alpha.1.2+build.11.e0f985a"
     v = VersionInfo.parse(s_version)
