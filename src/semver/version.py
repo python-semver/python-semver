@@ -1,86 +1,33 @@
-"""Python helper for Semantic Versioning (http://semver.org)"""
-from __future__ import print_function
-
-import argparse
 import collections
-import inspect
 import re
-import sys
-import warnings
-from functools import partial, wraps
-from types import FrameType
+from functools import wraps
 from typing import (
     Any,
-    Callable,
-    Collection,
     Dict,
     Iterable,
-    Iterator,
-    List,
     Optional,
     SupportsInt,
     Tuple,
-    TypeVar,
     Union,
     cast,
+    Callable,
+    Collection,
 )
 
-__version__ = "3.0.0-dev.1"
-__author__ = "Kostiantyn Rybnikov"
-__author_email__ = "k-bx@k-bx.com"
-__maintainer__ = ["Sebastien Celles", "Tom Schraitle"]
-__maintainer_email__ = "s.celles@gmail.com"
-__description__ = "Python helper for Semantic Versioning (http://semver.org)"
-
-#: Our public interface
-__all__ = (
-    #
-    # Module level function:
-    "bump_build",
-    "bump_major",
-    "bump_minor",
-    "bump_patch",
-    "bump_prerelease",
-    "compare",
-    "deprecated",
-    "finalize_version",
-    "format_version",
-    "match",
-    "max_ver",
-    "min_ver",
-    "parse",
-    "parse_version_info",
-    "replace",
-    #
-    # CLI interface
-    "cmd_bump",
-    "cmd_check",
-    "cmd_compare",
-    "createparser",
-    "main",
-    "process",
-    #
-    # Constants and classes
-    "SEMVER_SPEC_VERSION",
-    "VersionInfo",
+from ._types import (
+    VersionTuple,
+    VersionDict,
+    VersionIterator,
+    String,
+    VersionPart,
 )
 
-
-#: Contains the implemented semver.org version of the spec
-SEMVER_SPEC_VERSION = "2.0.0"
-
-
-# Types
-VersionPart = Union[int, Optional[str]]
+# These types are required here because of circular imports
 Comparable = Union["VersionInfo", Dict[str, VersionPart], Collection[VersionPart], str]
 Comparator = Callable[["VersionInfo", Comparable], bool]
-String = Union[str, bytes]
-VersionTuple = Tuple[int, int, int, Optional[str], Optional[str]]
-VersionDict = Dict[str, VersionPart]
-VersionIterator = Iterator[VersionPart]
 
 
-def cmp(a, b):
+def cmp(a, b):  # TODO: type hints
     """Return negative if a<b, zero if a==b, positive if a>b."""
     return (a > b) - (a < b)
 
@@ -114,92 +61,6 @@ def ensure_str(s: String, encoding="utf-8", errors="strict") -> str:
     return s
 
 
-F = TypeVar("F", bound=Callable)
-
-
-def deprecated(
-    func: F = None,
-    replace: str = None,
-    version: str = None,
-    category=DeprecationWarning,
-) -> Union[Callable[..., F], partial]:
-    """
-    Decorates a function to output a deprecation warning.
-
-    :param func: the function to decorate
-    :param replace: the function to replace (use the full qualified
-        name like ``semver.VersionInfo.bump_major``.
-    :param version: the first version when this function was deprecated.
-    :param category: allow you to specify the deprecation warning class
-        of your choice. By default, it's  :class:`DeprecationWarning`, but
-        you can choose :class:`PendingDeprecationWarning` or a custom class.
-    :return: decorated function which is marked as deprecated
-    """
-
-    if func is None:
-        return partial(deprecated, replace=replace, version=version, category=category)
-
-    @wraps(func)
-    def wrapper(*args, **kwargs) -> Callable[..., F]:
-        msg_list = ["Function '{m}.{f}' is deprecated."]
-
-        if version:
-            msg_list.append("Deprecated since version {v}. ")
-        msg_list.append("This function will be removed in semver 3.")
-        if replace:
-            msg_list.append("Use {r!r} instead.")
-        else:
-            msg_list.append("Use the respective 'semver.VersionInfo.{r}' instead.")
-
-        f = cast(F, func).__qualname__
-        r = replace or f
-
-        frame = cast(FrameType, cast(FrameType, inspect.currentframe()).f_back)
-
-        msg = " ".join(msg_list)
-        warnings.warn_explicit(
-            msg.format(m=func.__module__, f=f, r=r, v=version),
-            category=category,
-            filename=inspect.getfile(frame.f_code),
-            lineno=frame.f_lineno,
-        )
-        # As recommended in the Python documentation
-        # https://docs.python.org/3/library/inspect.html#the-interpreter-stack
-        # better remove the interpreter stack:
-        del frame
-        return func(*args, **kwargs)  # type: ignore
-
-    return wrapper
-
-
-@deprecated(version="2.10.0")
-def parse(version):
-    """
-    Parse version to major, minor, patch, pre-release, build parts.
-
-    .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.parse` instead.
-
-    :param version: version string
-    :return: dictionary with the keys 'build', 'major', 'minor', 'patch',
-             and 'prerelease'. The prerelease or build keys can be None
-             if not provided
-
-    >>> ver = semver.parse('3.4.5-pre.2+build.4')
-    >>> ver['major']
-    3
-    >>> ver['minor']
-    4
-    >>> ver['patch']
-    5
-    >>> ver['prerelease']
-    'pre.2'
-    >>> ver['build']
-    'build.4'
-    """
-    return VersionInfo.parse(version).to_dict()
-
-
 def comparator(operator: Comparator) -> Comparator:
     """Wrap a VersionInfo binary op method in a type-check."""
 
@@ -219,6 +80,33 @@ def comparator(operator: Comparator) -> Comparator:
         return operator(self, other)
 
     return wrapper
+
+
+def _nat_cmp(a, b):  # TODO: type hints
+    def convert(text):
+        return int(text) if re.match("^[0-9]+$", text) else text
+
+    def split_key(key):
+        return [convert(c) for c in key.split(".")]
+
+    def cmp_prerelease_tag(a, b):
+        if isinstance(a, int) and isinstance(b, int):
+            return cmp(a, b)
+        elif isinstance(a, int):
+            return -1
+        elif isinstance(b, int):
+            return 1
+        else:
+            return cmp(a, b)
+
+    a, b = a or "", b or ""
+    a_parts, b_parts = split_key(a), split_key(b)
+    for sub_a, sub_b in zip(a_parts, b_parts):
+        cmp_result = cmp_prerelease_tag(sub_a, sub_b)
+        if cmp_result != 0:
+            return cmp_result
+    else:
+        return cmp(len(a), len(b))
 
 
 class VersionInfo:
@@ -395,7 +283,8 @@ class VersionInfo:
 
         :return: new object with the raised major part
 
-        >>> ver = semver.VersionInfo.parse("3.4.5")
+
+        >>> ver = semver.parse("3.4.5")
         >>> ver.bump_major()
         VersionInfo(major=4, minor=0, patch=0, prerelease=None, build=None)
         """
@@ -409,7 +298,8 @@ class VersionInfo:
 
         :return: new object with the raised minor part
 
-        >>> ver = semver.VersionInfo.parse("3.4.5")
+
+        >>> ver = semver.parse("3.4.5")
         >>> ver.bump_minor()
         VersionInfo(major=3, minor=5, patch=0, prerelease=None, build=None)
         """
@@ -421,9 +311,10 @@ class VersionInfo:
         Raise the patch part of the version, return a new object but leave self
         untouched.
 
-        :return: new object with the raised patch part
+                :return: new object with the raised patch part
 
-        >>> ver = semver.VersionInfo.parse("3.4.5")
+
+        >>> ver = semver.parse("3.4.5")
         >>> ver.bump_patch()
         VersionInfo(major=3, minor=4, patch=6, prerelease=None, build=None)
         """
@@ -438,7 +329,7 @@ class VersionInfo:
         :param token: defaults to 'rc'
         :return: new object with the raised prerelease part
 
-        >>> ver = semver.VersionInfo.parse("3.4.5-rc.1")
+        >>> ver = semver.parse("3.4.5")
         >>> ver.bump_prerelease()
         VersionInfo(major=3, minor=4, patch=5, prerelease='rc.2', \
 build=None)
@@ -455,7 +346,7 @@ build=None)
         :param token: defaults to 'build'
         :return: new object with the raised build part
 
-        >>> ver = semver.VersionInfo.parse("3.4.5-rc.1+build.9")
+        >>> ver = semver.parse("3.4.5-rc.1+build.9")
         >>> ver.bump_build()
         VersionInfo(major=3, minor=4, patch=5, prerelease='rc.1', \
 build='build.10')
@@ -472,13 +363,14 @@ build='build.10')
         :return: The return value is negative if ver1 < ver2,
              zero if ver1 == ver2 and strictly positive if ver1 > ver2
 
-        >>> semver.VersionInfo.parse("1.0.0").compare("2.0.0")
+
+        >>> semver.compare("2.0.0")
         -1
-        >>> semver.VersionInfo.parse("2.0.0").compare("1.0.0")
+        >>> semver.compare("1.0.0")
         1
-        >>> semver.VersionInfo.parse("2.0.0").compare("2.0.0")
+        >>> semver.compare("2.0.0")
         0
-        >>> semver.VersionInfo.parse("2.0.0").compare(dict(major=2, minor=0, patch=0))
+        >>> semver.compare(dict(major=2, minor=0, patch=0))
         0
         """
         cls = type(self)
@@ -521,10 +413,10 @@ build='build.10')
         This function is taking prereleases into account.
         The "major", "minor", and "patch" raises the respective parts like
         the ``bump_*`` functions. The real difference is using the
-        "preprelease" part. It gives you the next patch version of the prerelease,
-        for example:
+        "preprelease" part. It gives you the next patch version of the
+         prerelease, for example:
 
-        >>> str(semver.VersionInfo.parse("0.1.4").next_version("prerelease"))
+        >>> str(semver.parse("0.1.4").next_version("prerelease"))
         '0.1.5-rc.1'
 
         :param part: One of "major", "minor", "patch", or "prerelease"
@@ -587,17 +479,14 @@ build='build.10')
         self, index: Union[int, slice]
     ) -> Union[int, Optional[str], Tuple[Union[int, str], ...]]:
         """
-        self.__getitem__(index) <==> self[index]
-
-        Implement getitem. If the part requested is undefined, or a part of the
-        range requested is undefined, it will throw an index error.
-        Negative indices are not supported
+        self.__getitem__(index) <==> self[index] Implement getitem. If the part
+        requested is undefined, or a part of the range requested is undefined,
+        it will throw an index error. Negative indices are not supported.
 
         :param Union[int, slice] index: a positive integer indicating the
                offset or a :func:`slice` object
         :raises IndexError: if index is beyond the range or a part is None
         :return: the requested part of the version at position index
-
         >>> ver = semver.VersionInfo.parse("3.4.5")
         >>> ver[0], ver[1], ver[2]
         (3, 4, 5)
@@ -642,9 +531,7 @@ build='build.10')
     def finalize_version(self) -> "VersionInfo":
         """
         Remove any prerelease and build metadata from the version.
-
         :return: a new instance with the finalized version string
-
         >>> str(semver.VersionInfo.parse('1.2.3-rc.5').finalize_version())
         '1.2.3'
         """
@@ -663,7 +550,6 @@ build='build.10')
               ==  equal
               !=  not equal
         :return: True if the expression matches the version, otherwise False
-
         >>> semver.VersionInfo.parse("2.0.0").match(">=1.0.0")
         True
         >>> semver.VersionInfo.parse("1.0.0").match(">1.0.0")
@@ -705,11 +591,9 @@ build='build.10')
         .. versionchanged:: 2.11.0
            Changed method from static to classmethod to
            allow subclasses.
-
         :param version: version string
         :return: a :class:`VersionInfo` instance
         :raises ValueError: if version is invalid
-
         >>> semver.VersionInfo.parse('3.4.5-pre.2+build.4')
         VersionInfo(major=3, minor=4, patch=5, \
 prerelease='pre.2', build='build.4')
@@ -765,462 +649,3 @@ prerelease='pre.2', build='build.4')
             return True
         except ValueError:
             return False
-
-
-@deprecated(replace="semver.VersionInfo.parse", version="2.10.0")
-def parse_version_info(version):
-    """
-    Parse version string to a VersionInfo instance.
-
-    .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.parse` instead.
-
-    .. versionadded:: 2.7.2
-       Added :func:`semver.parse_version_info`
-
-    :param version: version string
-    :return: a :class:`VersionInfo` instance
-
-    >>> version_info = semver.VersionInfo.parse("3.4.5-pre.2+build.4")
-    >>> version_info.major
-    3
-    >>> version_info.minor
-    4
-    >>> version_info.patch
-    5
-    >>> version_info.prerelease
-    'pre.2'
-    >>> version_info.build
-    'build.4'
-    """
-    return VersionInfo.parse(version)
-
-
-def _nat_cmp(a: Optional[str], b: Optional[str]) -> int:
-    def convert(text: str) -> Union[int, str]:
-        return int(text) if re.match("^[0-9]+$", text) else text  # type: ignore
-
-    def split_key(key: str) -> List[Union[int, str]]:
-        return [convert(c) for c in key.split(".")]
-
-    def cmp_prerelease_tag(a: Union[int, str], b: Union[int, str]) -> int:
-        if isinstance(a, int) and isinstance(b, int):
-            return cmp(a, b)
-        elif isinstance(a, int):
-            return -1
-        elif isinstance(b, int):
-            return 1
-        else:
-            return cmp(a, b)
-
-    a, b = a or "", b or ""
-    a_parts, b_parts = split_key(a), split_key(b)
-    for sub_a, sub_b in zip(a_parts, b_parts):
-        cmp_result = cmp_prerelease_tag(sub_a, sub_b)
-        if cmp_result != 0:
-            return cmp_result
-    else:
-        return cmp(len(a), len(b))
-
-
-@deprecated(version="2.10.0")
-def compare(ver1, ver2):
-    """
-    Compare two versions strings.
-
-    :param ver1: version string 1
-    :param ver2: version string 2
-    :return: The return value is negative if ver1 < ver2,
-             zero if ver1 == ver2 and strictly positive if ver1 > ver2
-
-    >>> semver.compare("1.0.0", "2.0.0")
-    -1
-    >>> semver.compare("2.0.0", "1.0.0")
-    1
-    >>> semver.compare("2.0.0", "2.0.0")
-    0
-    """
-    v1 = VersionInfo.parse(ver1)
-    return v1.compare(ver2)
-
-
-@deprecated(version="2.10.0")
-def match(version, match_expr):
-    """
-    Compare two versions strings through a comparison.
-
-    :param version: a version string
-    :param match_expr: operator and version; valid operators are
-          <   smaller than
-          >   greater than
-          >=  greator or equal than
-          <=  smaller or equal than
-          ==  equal
-          !=  not equal
-    :return: True if the expression matches the version, otherwise False
-
-    >>> semver.match("2.0.0", ">=1.0.0")
-    True
-    >>> semver.match("1.0.0", ">1.0.0")
-    False
-    """
-    ver = VersionInfo.parse(version)
-    return ver.match(match_expr)
-
-
-@deprecated(replace="max", version="2.10.2")
-def max_ver(ver1, ver2):
-    """
-    Returns the greater version of two versions strings.
-
-    :param ver1: version string 1
-    :param ver2: version string 2
-    :return: the greater version of the two
-
-    >>> semver.max_ver("1.0.0", "2.0.0")
-    '2.0.0'
-    """
-    if isinstance(ver1, String.__args__):
-        ver1 = VersionInfo.parse(ver1)
-    elif not isinstance(ver1, VersionInfo):
-        raise TypeError()
-    cmp_res = ver1.compare(ver2)
-    if cmp_res >= 0:
-        return str(ver1)
-    else:
-        return ver2
-
-
-@deprecated(replace="min", version="2.10.2")
-def min_ver(ver1, ver2):
-    """
-    Returns the smaller version of two versions strings.
-
-    :param ver1: version string 1
-    :param ver2: version string 2
-    :return: the smaller version of the two
-
-    >>> semver.min_ver("1.0.0", "2.0.0")
-    '1.0.0'
-    """
-    ver1 = VersionInfo.parse(ver1)
-    cmp_res = ver1.compare(ver2)
-    if cmp_res <= 0:
-        return str(ver1)
-    else:
-        return ver2
-
-
-@deprecated(replace="str(versionobject)", version="2.10.0")
-def format_version(major, minor, patch, prerelease=None, build=None):
-    """
-    Format a version string according to the Semantic Versioning specification.
-
-    .. deprecated:: 2.10.0
-       Use ``str(VersionInfo(VERSION)`` instead.
-
-    :param major: the required major part of a version
-    :param minor: the required minor part of a version
-    :param patch: the required patch part of a version
-    :param prerelease: the optional prerelease part of a version
-    :param build: the optional build part of a version
-    :return: the formatted string
-
-    >>> semver.format_version(3, 4, 5, 'pre.2', 'build.4')
-    '3.4.5-pre.2+build.4'
-    """
-    return str(VersionInfo(major, minor, patch, prerelease, build))
-
-
-@deprecated(version="2.10.0")
-def bump_major(version):
-    """
-    Raise the major part of the version string.
-
-    .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.bump_major` instead.
-
-    :param: version string
-    :return: the raised version string
-
-    >>> semver.bump_major("3.4.5")
-    '4.0.0'
-    """
-    return str(VersionInfo.parse(version).bump_major())
-
-
-@deprecated(version="2.10.0")
-def bump_minor(version):
-    """
-    Raise the minor part of the version string.
-
-    .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.bump_minor` instead.
-
-    :param: version string
-    :return: the raised version string
-
-    >>> semver.bump_minor("3.4.5")
-    '3.5.0'
-    """
-    return str(VersionInfo.parse(version).bump_minor())
-
-
-@deprecated(version="2.10.0")
-def bump_patch(version):
-    """
-    Raise the patch part of the version string.
-
-    .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.bump_patch` instead.
-
-    :param: version string
-    :return: the raised version string
-
-    >>> semver.bump_patch("3.4.5")
-    '3.4.6'
-    """
-    return str(VersionInfo.parse(version).bump_patch())
-
-
-@deprecated(version="2.10.0")
-def bump_prerelease(version, token="rc"):
-    """
-    Raise the prerelease part of the version string.
-
-    .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.bump_prerelease` instead.
-
-    :param version: version string
-    :param token: defaults to 'rc'
-    :return: the raised version string
-
-    >>> semver.bump_prerelease('3.4.5', 'dev')
-    '3.4.5-dev.1'
-    """
-    return str(VersionInfo.parse(version).bump_prerelease(token))
-
-
-@deprecated(version="2.10.0")
-def bump_build(version, token="build"):
-    """
-    Raise the build part of the version string.
-
-    .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.bump_build` instead.
-
-    :param version: version string
-    :param token: defaults to 'build'
-    :return: the raised version string
-
-    >>> semver.bump_build('3.4.5-rc.1+build.9')
-    '3.4.5-rc.1+build.10'
-    """
-    return str(VersionInfo.parse(version).bump_build(token))
-
-
-@deprecated(version="2.10.0")
-def finalize_version(version):
-    """
-    Remove any prerelease and build metadata from the version string.
-
-    .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.finalize_version` instead.
-
-    .. versionadded:: 2.7.9
-       Added :func:`finalize_version`
-
-    :param version: version string
-    :return: the finalized version string
-
-    >>> semver.finalize_version('1.2.3-rc.5')
-    '1.2.3'
-    """
-    verinfo = VersionInfo.parse(version)
-    return str(verinfo.finalize_version())
-
-
-@deprecated(version="2.10.0")
-def replace(version, **parts):
-    """
-    Replace one or more parts of a version and return the new string.
-
-    .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.replace` instead.
-
-    .. versionadded:: 2.9.0
-       Added :func:`replace`
-
-    :param version: the version string to replace
-    :param parts: the parts to be updated. Valid keys are:
-      ``major``, ``minor``, ``patch``, ``prerelease``, or ``build``
-    :return: the replaced version string
-    :raises TypeError: if ``parts`` contains invalid keys
-
-    >>> import semver
-    >>> semver.replace("1.2.3", major=2, patch=10)
-    '2.2.10'
-    """
-    return str(VersionInfo.parse(version).replace(**parts))
-
-
-# ---- CLI
-def cmd_bump(args: argparse.Namespace) -> str:
-    """
-    Subcommand: Bumps a version.
-
-    Synopsis: bump <PART> <VERSION>
-    <PART> can be major, minor, patch, prerelease, or build
-
-    :param args: The parsed arguments
-    :return: the new, bumped version
-    """
-    maptable = {
-        "major": "bump_major",
-        "minor": "bump_minor",
-        "patch": "bump_patch",
-        "prerelease": "bump_prerelease",
-        "build": "bump_build",
-    }
-    if args.bump is None:
-        # When bump is called without arguments,
-        # print the help and exit
-        args.parser.parse_args(["bump", "-h"])
-
-    ver = VersionInfo.parse(args.version)
-    # get the respective method and call it
-    func = getattr(ver, maptable[cast(str, args.bump)])
-    return str(func())
-
-
-def cmd_check(args: argparse.Namespace) -> None:
-    """
-    Subcommand: Checks if a string is a valid semver version.
-
-    Synopsis: check <VERSION>
-
-    :param args: The parsed arguments
-    """
-    if VersionInfo.isvalid(args.version):
-        return None
-    raise ValueError("Invalid version %r" % args.version)
-
-
-def cmd_compare(args: argparse.Namespace) -> str:
-    """
-    Subcommand: Compare two versions
-
-    Synopsis: compare <VERSION1> <VERSION2>
-
-    :param args: The parsed arguments
-    """
-    return str(compare(args.version1, args.version2))
-
-
-def cmd_nextver(args: argparse.Namespace) -> str:
-    """
-    Subcommand: Determines the next version, taking prereleases into account.
-
-    Synopsis: nextver <VERSION> <PART>
-
-    :param args: The parsed arguments
-    """
-    version = VersionInfo.parse(args.version)
-    return str(version.next_version(args.part))
-
-
-def createparser() -> argparse.ArgumentParser:
-    """
-    Create an :class:`argparse.ArgumentParser` instance.
-
-    :return: parser instance
-    """
-    parser = argparse.ArgumentParser(prog=__package__, description=__doc__)
-
-    parser.add_argument(
-        "--version", action="version", version="%(prog)s " + __version__
-    )
-
-    s = parser.add_subparsers()
-    # create compare subcommand
-    parser_compare = s.add_parser("compare", help="Compare two versions")
-    parser_compare.set_defaults(func=cmd_compare)
-    parser_compare.add_argument("version1", help="First version")
-    parser_compare.add_argument("version2", help="Second version")
-
-    # create bump subcommand
-    parser_bump = s.add_parser("bump", help="Bumps a version")
-    parser_bump.set_defaults(func=cmd_bump)
-    sb = parser_bump.add_subparsers(title="Bump commands", dest="bump")
-
-    # Create subparsers for the bump subparser:
-    for p in (
-        sb.add_parser("major", help="Bump the major part of the version"),
-        sb.add_parser("minor", help="Bump the minor part of the version"),
-        sb.add_parser("patch", help="Bump the patch part of the version"),
-        sb.add_parser("prerelease", help="Bump the prerelease part of the version"),
-        sb.add_parser("build", help="Bump the build part of the version"),
-    ):
-        p.add_argument("version", help="Version to raise")
-
-    # Create the check subcommand
-    parser_check = s.add_parser(
-        "check", help="Checks if a string is a valid semver version"
-    )
-    parser_check.set_defaults(func=cmd_check)
-    parser_check.add_argument("version", help="Version to check")
-
-    # Create the nextver subcommand
-    parser_nextver = s.add_parser(
-        "nextver", help="Determines the next version, taking prereleases into account."
-    )
-    parser_nextver.set_defaults(func=cmd_nextver)
-    parser_nextver.add_argument("version", help="Version to raise")
-    parser_nextver.add_argument(
-        "part", help="One of 'major', 'minor', 'patch', or 'prerelease'"
-    )
-    return parser
-
-
-def process(args: argparse.Namespace) -> str:
-    """
-    Process the input from the CLI.
-
-    :param args: The parsed arguments
-    :param parser: the parser instance
-    :return: result of the selected action
-    """
-    if not hasattr(args, "func"):
-        args.parser.print_help()
-        raise SystemExit()
-
-    # Call the respective function object:
-    return args.func(args)
-
-
-def main(cliargs: List[str] = None) -> int:
-    """
-    Entry point for the application script.
-
-    :param list cliargs: Arguments to parse or None (=use :class:`sys.argv`)
-    :return: error code
-    """
-    try:
-        parser = createparser()
-        args = parser.parse_args(args=cliargs)
-        # Save parser instance:
-        args.parser = parser
-        result = process(args)
-        if result is not None:
-            print(result)
-        return 0
-
-    except (ValueError, TypeError) as err:
-        print("ERROR", err, file=sys.stderr)
-        return 2
-
-
-if __name__ == "__main__":
-    import doctest
-
-    doctest.testmod()

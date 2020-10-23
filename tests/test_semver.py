@@ -75,3 +75,8 @@ def test_should_be_able_to_use_integers_as_prerelease_build():
 def test_should_versioninfo_isvalid():
     assert VersionInfo.isvalid("1.0.0") is True
     assert VersionInfo.isvalid("foo") is False
+
+
+def test_versioninfo_compare_should_raise_when_passed_invalid_value():
+    with pytest.raises(TypeError):
+        VersionInfo(1, 2, 3).compare(4)
