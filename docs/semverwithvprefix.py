@@ -1,15 +1,15 @@
-from semver import VersionInfo
+from semver import Version
 
 
-class SemVerWithVPrefix(VersionInfo):
+class SemVerWithVPrefix(Version):
     """
-    A subclass of VersionInfo which allows a "v" prefix
+    A subclass of Version which allows a "v" prefix
     """
 
     @classmethod
     def parse(cls, version):
         """
-        Parse version string to a VersionInfo instance.
+        Parse version string to a Version instance.
 
         :param version: version string with "v" or "V" prefix
         :type version: str

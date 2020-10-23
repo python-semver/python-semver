@@ -1,0 +1,10 @@
+Create semver package and split code among different modules in the packages.
+
+* Remove :file:`semver.py`
+* Create :file:`src/semver/__init__.py`
+* Create :file:`src/semver/cli.py` for all CLI methods
+* Create :file:`src/semver/_deprecated.py` for the ``deprecated`` decorator and other deprecated functions
+* Create :file:`src/semver/__main__.py` to allow calling the CLI using :command:`python -m semver`
+* Create :file:`src/semver/_types.py` to hold type aliases
+* Create :file:`src/semver/version.py` to hold the :class:`Version` class (old name :class:`VersionInfo`) and its utility functions
+* Create :file:`src/semver/__about__.py` for all the metadata variables

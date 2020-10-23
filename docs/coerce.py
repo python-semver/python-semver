@@ -17,7 +17,7 @@ BASEVERSION = re.compile(
 
 def coerce(version):
     """
-    Convert an incomplete version string into a semver-compatible VersionInfo
+    Convert an incomplete version string into a semver-compatible Version
     object
 
     * Tries to detect a "basic" version string (``major.minor.patch``).
@@ -25,10 +25,10 @@ def coerce(version):
         set to zero to obtain a valid semver version.
 
     :param str version: the version string to convert
-    :return: a tuple with a :class:`VersionInfo` instance (or ``None``
+    :return: a tuple with a :class:`Version` instance (or ``None``
         if it's not a version) and the rest of the string which doesn't
         belong to a basic version.
-    :rtype: tuple(:class:`VersionInfo` | None, str)
+    :rtype: tuple(:class:`Version` | None, str)
     """
     match = BASEVERSION.search(version)
     if not match:
@@ -37,6 +37,6 @@ def coerce(version):
     ver = {
         key: 0 if value is None else value for key, value in match.groupdict().items()
     }
-    ver = semver.VersionInfo(**ver)
+    ver = semver.Version(**ver)
     rest = match.string[match.end() :]  # noqa:E203
     return ver, rest

@@ -3,6 +3,7 @@ import sys
 import pytest
 
 import semver
+import semver.version
 
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
@@ -52,7 +53,7 @@ class TestEnsure:
 
     def test_ensure_binary_raise_type_error(self):
         with pytest.raises(TypeError):
-            semver.ensure_str(8)
+            semver.version.ensure_str(8)
 
     def test_errors_and_encoding(self):
         ensure_binary(self.UNICODE_EMOJI, encoding="latin-1", errors="ignore")
@@ -77,10 +78,10 @@ class TestEnsure:
         )
 
     def test_ensure_str(self):
-        converted_unicode = semver.ensure_str(
+        converted_unicode = semver.version.ensure_str(
             self.UNICODE_EMOJI, encoding="utf-8", errors="strict"
         )
-        converted_binary = semver.ensure_str(
+        converted_binary = semver.version.ensure_str(
             self.BINARY_EMOJI, encoding="utf-8", errors="strict"
         )
 

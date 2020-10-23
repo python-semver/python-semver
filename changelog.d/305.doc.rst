@@ -1,0 +1,1 @@
+Add note about :class:`Version` rename.

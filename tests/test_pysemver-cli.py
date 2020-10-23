@@ -1,9 +1,18 @@
 from argparse import Namespace
 from contextlib import contextmanager
+from unittest.mock import patch
 
 import pytest
 
-from semver import cmd_bump, cmd_check, cmd_compare, cmd_nextver, createparser, main
+from semver import (
+    cmd_bump,
+    cmd_check,
+    cmd_compare,
+    cmd_nextver,
+    createparser,
+    main,
+    __main__,
+)
 
 
 @contextmanager
@@ -125,3 +134,11 @@ def test_should_process_check_iscalled_with_valid_version(capsys):
     assert not result
     captured = capsys.readouterr()
     assert not captured.out
+
+
+@pytest.mark.parametrize("package_name", ["", "semver"])
+def test_main_file_should_call_cli_main(package_name):
+    with patch("semver.__main__.cli.main") as mocked_main:
+        with patch("semver.__main__.__package__", package_name):
+            __main__.main()
+            mocked_main.assert_called_once()

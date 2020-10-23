@@ -1,6 +1,7 @@
 import pytest
 
-from semver import VersionInfo, compare
+import semver
+from semver import Version, compare
 
 
 @pytest.mark.parametrize(
@@ -123,15 +124,15 @@ def test_should_get_more_rc1():
 
 
 def test_should_compare_prerelease_with_numbers_and_letters():
-    v1 = VersionInfo(major=1, minor=9, patch=1, prerelease="1unms", build=None)
-    v2 = VersionInfo(major=1, minor=9, patch=1, prerelease=None, build="1asd")
+    v1 = Version(major=1, minor=9, patch=1, prerelease="1unms", build=None)
+    v2 = Version(major=1, minor=9, patch=1, prerelease=None, build="1asd")
     assert v1 < v2
     assert compare("1.9.1-1unms", "1.9.1+1") == -1
 
 
 def test_should_compare_version_info_objects():
-    v1 = VersionInfo(major=0, minor=10, patch=4)
-    v2 = VersionInfo(major=0, minor=10, patch=4, prerelease="beta.1", build=None)
+    v1 = Version(major=0, minor=10, patch=4)
+    v2 = Version(major=0, minor=10, patch=4, prerelease="beta.1", build=None)
 
     # use `not` to enforce using comparision operators
     assert v1 != v2
@@ -141,7 +142,7 @@ def test_should_compare_version_info_objects():
     assert not (v1 <= v2)
     assert not (v1 == v2)
 
-    v3 = VersionInfo(major=0, minor=10, patch=4)
+    v3 = Version(major=0, minor=10, patch=4)
 
     assert not (v1 != v3)
     assert not (v1 > v3)
@@ -150,7 +151,7 @@ def test_should_compare_version_info_objects():
     assert v1 <= v3
     assert v1 == v3
 
-    v4 = VersionInfo(major=0, minor=10, patch=5)
+    v4 = Version(major=0, minor=10, patch=5)
     assert v1 != v4
     assert not (v1 > v4)
     assert not (v1 >= v4)
@@ -160,7 +161,7 @@ def test_should_compare_version_info_objects():
 
 
 def test_should_compare_version_dictionaries():
-    v1 = VersionInfo(major=0, minor=10, patch=4)
+    v1 = Version(major=0, minor=10, patch=4)
     v2 = dict(major=0, minor=10, patch=4, prerelease="beta.1", build=None)
 
     assert v1 != v2
@@ -199,8 +200,8 @@ def test_should_compare_version_dictionaries():
     ),  # fmt: on
 )
 def test_should_compare_version_tuples(t):
-    v0 = VersionInfo(major=0, minor=4, patch=5, prerelease="pre.2", build="build.4")
-    v1 = VersionInfo(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
+    v0 = Version(major=0, minor=4, patch=5, prerelease="pre.2", build="build.4")
+    v1 = Version(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
 
     assert v0 < t
     assert v0 <= t
@@ -228,8 +229,8 @@ def test_should_compare_version_tuples(t):
     ),  # fmt: on
 )
 def test_should_compare_version_list(lst):
-    v0 = VersionInfo(major=0, minor=4, patch=5, prerelease="pre.2", build="build.4")
-    v1 = VersionInfo(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
+    v0 = Version(major=0, minor=4, patch=5, prerelease="pre.2", build="build.4")
+    v1 = Version(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
 
     assert v0 < lst
     assert v0 <= lst
@@ -257,8 +258,8 @@ def test_should_compare_version_list(lst):
     ),  # fmt: on
 )
 def test_should_compare_version_string(s):
-    v0 = VersionInfo(major=0, minor=4, patch=5, prerelease="pre.2", build="build.4")
-    v1 = VersionInfo(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
+    v0 = Version(major=0, minor=4, patch=5, prerelease="pre.2", build="build.4")
+    v1 = Version(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
 
     assert v0 < s
     assert v0 <= s
@@ -277,7 +278,7 @@ def test_should_compare_version_string(s):
 
 @pytest.mark.parametrize("s", ("1", "1.0", "1.0.x"))
 def test_should_not_allow_to_compare_invalid_versionstring(s):
-    v = VersionInfo(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
+    v = Version(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
     with pytest.raises(ValueError):
         v < s
     with pytest.raises(ValueError):
@@ -285,19 +286,19 @@ def test_should_not_allow_to_compare_invalid_versionstring(s):
 
 
 def test_should_not_allow_to_compare_version_with_int():
-    v1 = VersionInfo(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
+    v1 = Version(major=3, minor=4, patch=5, prerelease="pre.2", build="build.4")
     with pytest.raises(TypeError):
         v1 > 1
     with pytest.raises(TypeError):
         1 > v1
     with pytest.raises(TypeError):
-        v1.compare(1)
+        semver.compare(1)
 
 
 def test_should_compare_prerelease_and_build_with_numbers():
-    assert VersionInfo(major=1, minor=9, patch=1, prerelease=1, build=1) < VersionInfo(
+    assert Version(major=1, minor=9, patch=1, prerelease=1, build=1) < Version(
         major=1, minor=9, patch=1, prerelease=2, build=1
     )
-    assert VersionInfo(1, 9, 1, 1, 1) < VersionInfo(1, 9, 1, 2, 1)
-    assert VersionInfo("2") < VersionInfo(10)
-    assert VersionInfo("2") < VersionInfo("10")
+    assert Version(1, 9, 1, 1, 1) < Version(1, 9, 1, 2, 1)
+    assert Version("2") < Version(10)
+    assert Version("2") < Version("10")

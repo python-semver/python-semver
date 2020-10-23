@@ -1,22 +1,31 @@
+from argparse import Namespace
+
 import pytest
 
 from semver import (
-    bump_build,
+    parse,
+    parse_version_info,
+    compare,
+    match,
+    max_ver,
+    min_ver,
+    format_version,
     bump_major,
     bump_minor,
     bump_patch,
     bump_prerelease,
-    compare,
-    deprecated,
+    bump_build,
     finalize_version,
-    format_version,
-    match,
-    max_ver,
-    min_ver,
-    parse,
-    parse_version_info,
     replace,
+    cmd_bump,
+    cmd_compare,
+    cmd_check,
+    cmd_nextver,
+    createparser,
+    process,
+    main,
 )
+from semver._deprecated import deprecated
 
 
 @pytest.mark.parametrize(
@@ -36,6 +45,17 @@ from semver import (
         (replace, ("1.2.3",), dict(major=2, patch=10)),
         (max_ver, ("1.2.3", "1.2.4"), {}),
         (min_ver, ("1.2.3", "1.2.4"), {}),
+        (cmd_bump, (Namespace(bump="major", version="1.2.3"),), {}),
+        (cmd_compare, (Namespace(version1="1.2.3", version2="2.1.3"),), {}),
+        (cmd_check, (Namespace(version="1.2.3"),), {}),
+        (cmd_nextver, (Namespace(version="1.2.3", part="major"),), {}),
+        (createparser, (), {}),
+        (
+            process,
+            (Namespace(func=cmd_compare, version1="1.2.3", version2="2.1.3"),),
+            {},
+        ),
+        (main, (["bump", "major", "1.2.3"],), {}),
     ],
 )
 def test_should_raise_deprecation_warnings(func, args, kwargs):

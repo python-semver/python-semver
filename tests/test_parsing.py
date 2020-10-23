@@ -1,6 +1,6 @@
 import pytest
 
-from semver import VersionInfo, parse, parse_version_info
+from semver import Version, parse, parse_version_info
 
 
 @pytest.mark.parametrize(
@@ -58,7 +58,7 @@ def test_parse_version_info_str_hash():
     v = parse_version_info(s_version)
     assert v.__str__() == s_version
     d = {}
-    d[v] = ""  # to ensure that VersionInfo are hashable
+    d[v] = ""  # to ensure that Version are hashable
 
 
 @pytest.mark.parametrize(
@@ -115,12 +115,12 @@ def test_equal_versions_have_equal_hashes():
 
 def test_parse_method_for_version_info():
     s_version = "1.2.3-alpha.1.2+build.11.e0f985a"
-    v = VersionInfo.parse(s_version)
+    v = Version.parse(s_version)
     assert str(v) == s_version
 
 
 def test_next_version_with_invalid_parts():
-    version = VersionInfo.parse("1.0.1")
+    version = Version.parse("1.0.1")
     with pytest.raises(ValueError):
         version.next_version("invalid")
 
@@ -151,7 +151,7 @@ def test_next_version_with_invalid_parts():
     ],
 )
 def test_next_version_with_versioninfo(version, part, expected):
-    ver = VersionInfo.parse(version)
+    ver = Version.parse(version)
     next_version = ver.next_version(part)
-    assert isinstance(next_version, VersionInfo)
+    assert isinstance(next_version, Version)
     assert str(next_version) == expected

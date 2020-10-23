@@ -1,0 +1,1 @@
+Deprecate CLI functions not imported from ``semver.cli``.

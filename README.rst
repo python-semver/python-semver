@@ -30,6 +30,12 @@ A Python module for `semantic versioning`_. Simplifies comparing versions.
 .. |MAINT| replace:: ``maint/v2``
 .. _MAINT: https://github.com/python-semver/python-semver/tree/maint/v2
 
+.. note::
+
+    The :class:`VersionInfo` has been renamed to :class:`Version`. An
+    alias has been created to preserve compatibility but the use of the old
+    name has been deprecated.
+
 The module follows the ``MAJOR.MINOR.PATCH`` style:
 
 * ``MAJOR`` version when you make incompatible API changes,
@@ -45,11 +51,11 @@ To import this library, use:
     >>> import semver
 
 Working with the library is quite straightforward. To turn a version string into the
-different parts, use the ``semver.VersionInfo.parse`` function:
+different parts, use the ``semver.Version.parse`` function:
 
 .. code-block:: python
 
-    >>> ver = semver.VersionInfo.parse('1.2.3-pre.2+build.4')
+    >>> ver = semver.Version.parse('1.2.3-pre.2+build.4')
     >>> ver.major
     1
     >>> ver.minor
@@ -62,21 +68,21 @@ different parts, use the ``semver.VersionInfo.parse`` function:
     'build.4'
 
 To raise parts of a version, there are a couple of functions available for
-you. The function ``semver.VersionInfo.bump_major`` leaves the original object untouched, but
-returns a new ``semver.VersionInfo`` instance with the raised major part:
+you. The function ``semver.Version.bump_major`` leaves the original object untouched, but
+returns a new ``semver.Version`` instance with the raised major part:
 
 .. code-block:: python
 
-    >>> ver = semver.VersionInfo.parse("3.4.5")
+    >>> ver = semver.Version.parse("3.4.5")
     >>> ver.bump_major()
-    VersionInfo(major=4, minor=0, patch=0, prerelease=None, build=None)
+    Version(major=4, minor=0, patch=0, prerelease=None, build=None)
 
 It is allowed to concatenate different "bump functions":
 
 .. code-block:: python
 
     >>> ver.bump_major().bump_minor()
-    VersionInfo(major=4, minor=1, patch=0, prerelease=None, build=None)
+    Version(major=4, minor=1, patch=0, prerelease=None, build=None)
 
 To compare two versions, semver provides the ``semver.compare`` function.
 The return value indicates the relationship between the first and second
