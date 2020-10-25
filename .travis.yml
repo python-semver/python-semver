@@ -32,5 +32,13 @@ matrix:
     dist: xenial
     env: TOXENV=py37
 
+  - python: "3.8"
+    dist: xenial
+    env: TOXENV=py38
+
+  - python: "3.9-dev"
+    dist: bionic
+    env: TOXENV=py39
+
   - python: "pypy"
     env: TOXENV=pypy
