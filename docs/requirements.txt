@@ -1,4 +1,4 @@
 # requirements file for documentation
-sphinx
-# sphinx-argparse
+# sphinx
+sphinx-argparse
 sphinx-autodoc-typehints
