@@ -1,2 +1,0 @@
-In :file:`setup.py` simplified file and remove
-``Tox`` and ``Clean`` classes
