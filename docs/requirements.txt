@@ -1,4 +1,6 @@
 # requirements file for documentation
-sphinx
+# try to stick with sphinx<2 to build on RTD
+# See #299
+sphinx<2
 # sphinx-argparse
 sphinx-autodoc-typehints
