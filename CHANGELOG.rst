@@ -2,15 +2,28 @@
 Change Log
 ##########
 
+Changes for the upcoming release can be found in
+the `"changelog.d" directory <https://github.com/python-semver/python-semver/tree/master/changelog.d>`_
+in our repository.
 
-All notable changes to this code base will be documented in this file,
-in every released version.
+..
+   Do *NOT* add changelog entries here!
+
+   This changelog is managed by towncrier and is compiled at release time.
+
+   See https://python-semver.rtd.io/en/latest/development.html#changelog
+   for details.
+
+.. towncrier release notes start
+
+
 
 Version 2.13.0
 ==============
 
 :Released: 2020-10-20
 :Maintainer: Tom Schraitle
+
 
 Features
 --------
@@ -28,25 +41,6 @@ Bug Fixes
   is ignored.
 
 
-Version 2.12.0
-==============
-
-:Released: 2020-10-19
-:Maintainer: Tom Schraitle
-
-Features
---------
-
-n/a
-
-
-Bug Fixes
----------
-
-* :gh:`291` (:pr:`292`): Disallow negative numbers of
-  major, minor, and patch for ``semver.VersionInfo``
-
-
 Additions
 ---------
 
@@ -57,6 +51,26 @@ Deprecations
 ------------
 
 n/a
+
+
+----
+
+
+Version 2.12.0
+==============
+
+:Released: 2020-10-19
+:Maintainer: Tom Schraitle
+
+
+Bug Fixes
+---------
+
+* :gh:`291` (:pr:`292`): Disallow negative numbers of
+  ``major``, ``minor``, and ``patch`` for :class:`semver.VersionInfo`
+
+
+----
 
 
 Version 2.11.0
@@ -65,30 +79,16 @@ Version 2.11.0
 :Released: 2020-10-17
 :Maintainer: Tom Schraitle
 
-Features
---------
-
-n/a
-
 
 Bug Fixes
 ---------
 
-* :gh:`276` (:pr:`277`): VersionInfo.parse should be a class method
+* :gh:`276` (:pr:`277`): ``VersionInfo.parse`` should be a class method
    Also add authors and update changelog in :gh:`286`
 * :gh:`274` (:pr:`275`): Py2 vs. Py3 incompatibility TypeError
 
 
-Additions
----------
-
-n/a
-
-
-Deprecations
-------------
-
-n/a
+----
 
 
 Version 2.10.2
@@ -110,17 +110,15 @@ Bug Fixes
 * :pr:`263`: Doc: Add missing "install" subcommand for openSUSE
 
 
-Additions
----------
-
-n/a
-
 Deprecations
 ------------
 
 * :gh:`160` (:pr:`264`):
     * :func:`semver.max_ver`
     * :func:`semver.min_ver`
+
+
+----
 
 
 Version 2.10.1
@@ -139,11 +137,16 @@ Features
 * :pr:`256`: Made docstrings consistent
 
 
+
 Bug Fixes
 ---------
 
 * :gh:`251` (:pr:`254`): Fixed return type of ``semver.VersionInfo.next_version``
   to always return a ``VersionInfo`` instance.
+
+
+----
+
 
 
 Version 2.10.0
@@ -159,6 +162,11 @@ Features
   Allows to access a version like ``version[1]``.
 * :pr:`235`: Improved documentation and shift focus on ``semver.VersionInfo`` instead of advertising
   the old and deprecated module-level functions.
+* :pr:`230`: Add version information in some functions:
+
+  * Use ``.. versionadded::`` RST directive in docstrings to
+    make it more visible when something was added
+  * Minor wording fix in docstrings (versions -> version strings)
 
 
 Bug Fixes
@@ -193,6 +201,8 @@ Deprecations
   These deprecated functions will be removed in semver 3.
 
 
+----
+
 
 Version 2.9.1
 =============
@@ -218,6 +228,8 @@ Bug Fixes
 
 * :gh:`192` (:pr:`193`): Fixed "pysemver" and "pysemver bump" when called without arguments
 
+
+----
 
 Version 2.9.0
 =============
@@ -262,6 +274,8 @@ Removals
 * :gh:`148` (:pr:`149`): Removed and replaced ``python setup.py test``
 
 
+----
+
 Version 2.8.2
 =============
 :Released: 2019-05-19
@@ -269,6 +283,7 @@ Version 2.8.2
 
 Skipped, not released.
 
+----
 
 Version 2.8.1
 =============
@@ -289,6 +304,8 @@ Bug Fixes
 * :gh:`98` (:pr:`99`): Set prerelease and build to None by default
 * :gh:`96` (:pr:`97`): Made VersionInfo immutable
 
+
+----
 
 Version 2.8.0
 =============
@@ -312,305 +329,6 @@ Removals
 --------
 
 * :gh:`76` (:pr:`80`): Removed Python 2.6 compatibility
-
-
-Version 2.7.9
-=============
-
-:Released: 2017-09-23
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-
-Additions
----------
-
-* :gh:`65` (:pr:`66`): Added :func:`semver.finalize_version` function.
-
-
-Version 2.7.8
-=============
-
-:Released: 2017-08-25
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-* :gh:`62`: Support custom default names for pre and build
-
-
-Version 2.7.7
-=============
-
-:Released: 2017-05-25
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-* :gh:`54` (:pr:`55`): Added comparision between VersionInfo objects
-* :pr:`56`: Added support for Python 3.6
-
-
-Version 2.7.2
-=============
-
-:Released: 2016-11-08
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-Additions
----------
-
-* Added :func:`semver.parse_version_info` to parse a version string to a
-  version info tuple.
-
-Bug Fixes
----------
-
-* :gh:`37`: Removed trailing zeros from prelease doesn't allow to
-  parse 0 pre-release version
-
-* Refine parsing to conform more strictly to SemVer 2.0.0.
-
-  SemVer 2.0.0 specification §9 forbids leading zero on identifiers in
-  the prerelease version.
-
-
-Version 2.6.0
-=============
-
-:Released: 2016-06-08
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-Removals
---------
-
-* Remove comparison of build component.
-
-  SemVer 2.0.0 specification recommends that build component is
-  ignored in comparisons.
-
-
-Version 2.5.0
-=============
-
-:Released: 2016-05-25
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-Additions
----------
-
-* Support matching 'not equal' with “!=”.
-
-Changes
--------
-
-* Made separate builds for tests on Travis CI.
-
-
-Version 2.4.2
-=============
-
-:Released: 2016-05-16
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-Changes
--------
-
-* Migrated README document to reStructuredText format.
-
-* Used Setuptools for distribution management.
-
-* Migrated test cases to Py.test.
-
-* Added configuration for Tox test runner.
-
-
-Version 2.4.1
-=============
-
-:Released: 2016-03-04
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-Additions
----------
-
-* :gh:`23`: Compared build component of a version.
-
-
-Version 2.4.0
-=============
-
-:Released: 2016-02-12
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-Bug Fixes
----------
-
-* :gh:`21`: Compared alphanumeric components correctly.
-
-
-Version 2.3.1
-=============
-
-:Released: 2016-01-30
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-Additions
----------
-
-* Declared granted license name in distribution metadata.
-
-
-Version 2.3.0
-=============
-
-:Released: 2016-01-29
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-Additions
----------
-
-* Added functions to increment prerelease and build components in a
-  version.
-
-
-Version 2.2.1
-=============
-
-:Released: 2015-08-04
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-Bug Fixes
----------
-
-* Corrected comparison when any component includes zero.
-
-
-Version 2.2.0
-=============
-
-:Released: 2015-06-21
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-Additions
----------
-
-* Add functions to determined minimum and maximum version.
-
-* Add code examples for recently-added functions.
-
-
-Version 2.1.2
-=============
-
-:Released: 2015-05-23
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-Bug Fixes
----------
-
-* Restored current README document to distribution manifest.
-
-
-Version 2.1.1
-=============
-
-:Released: 2015-05-23
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-Bug Fixes
----------
-
-* Removed absent document from distribution manifest.
-
-
-Version 2.1.0
-=============
-
-:Released: 2015-05-22
-:Maintainer: Kostiantyn Rybnikov <k-bx@k-bx.com>
-
-Additions
----------
-
-* Documented installation instructions.
-
-* Documented project home page.
-
-* Added function to format a version string from components.
-
-* Added functions to increment specific components in a version.
-
-Changes
--------
-
-* Migrated README document to Markdown format.
-
-Bug Fixes
----------
-
-* Corrected code examples in README document.
-
-
-Version 2.0.2
-=============
-
-:Released: 2015-04-14
-:Maintainer: Konstantine Rybnikov <k-bx@k-bx.com>
-
-Additions
----------
-
-* Added configuration for Travis continuous integration.
-
-* Explicitly declared supported Python versions.
-
-
-Version 2.0.1
-=============
-
-:Released: 2014-09-24
-:Maintainer: Konstantine Rybnikov <k-bx@k-bx.com>
-
-Bug Fixes
----------
-
-* :gh:`9`: Fixed comparison of equal version strings.
-
-
-Version 2.0.0
-=============
-
-:Released: 2014-05-24
-:Maintainer: Konstantine Rybnikov <k-bx@k-bx.com>
-
-Additions
----------
-
-* Grant license in this code base under BSD 3-clause license terms.
-
-Changes
--------
-
-* Update parser to SemVer standard 2.0.0.
-
-* Ignore build component for comparison.
-
-
-Version 0.0.2
-=============
-
-:Released: 2012-05-10
-:Maintainer: Konstantine Rybnikov <k-bx@k-bx.com>
-
-Changes
--------
-
-* Use standard library Distutils for distribution management.
-
-
-Version 0.0.1
-=============
-
-:Released: 2012-04-28
-:Maintainer: Konstantine Rybnikov <kost-bebix@yandex.ru>
-
-* Initial release.
 
 
 ..

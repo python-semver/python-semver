@@ -1,0 +1,11 @@
+Create semver 3.0.0-alpha0
+
+* Update :file:`README.rst`, mention maintenance
+  branch ``maint/v2``.
+* Remove old code mainly used for Python2 compatibility,
+  adjusted code to support Python3 features.
+* Split test suite into separate files under :file:`tests/`
+  directory
+* Adjust and update :file:`setup.py`. Requires Python >=3.6.*
+  Extract metadata directly from source (affects all the ``__version__``,
+  ``__author__`` etc. variables)

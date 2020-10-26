@@ -1,0 +1,1 @@
+Document how to create a sublass from :class:`VersionInfo` class

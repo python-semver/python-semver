@@ -1,0 +1,1 @@
+Add supported Python versions to :command:`black`.

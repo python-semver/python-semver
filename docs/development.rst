@@ -1,3 +1,5 @@
+.. _contributing:
+
 Contributing to semver
 ======================
 
@@ -16,8 +18,8 @@ First, take the time to look into our GitHub `issues`_ tracker if
 this already covered. If not, changes are good that we avoid double work.
 
 
-Fixing Bugs and Implementing New Features
------------------------------------------
+Prerequisites
+-------------
 
 Before you make changes to the code, we would highly appreciate if you
 consider the following general requirements:
@@ -27,12 +29,6 @@ consider the following general requirements:
 * Check if your feature is covered by the Semantic Versioning specification.
   If not, ask on its GitHub project https://github.com/semver/semver.
 
-* Write test cases if you implement a new feature.
-
-* Test also for side effects of your new feature and run the complete
-  test suite.
-
-* Document the new feature, see :ref:`doc` for details.
 
 
 Modifying the Code
@@ -59,20 +55,23 @@ We recommend the following workflow:
 
    $ git checkout -b feature/NAME_OF_YOUR_FEATURE
 
-#. Work on your branch. Commit your work.
+#. Work on your branch and create a pull request:
 
-#. Write test cases and run the test suite, see :ref:`testsuite` for details.
+   a. Write test cases and run the complete test suite, see :ref:`testsuite`
+      for details.
 
-#. Create a `pull request`_. Describe in the pull request what you did
-   and why. If you have open questions, ask.
+   b. Write a changelog entry, see section :ref:`changelog`.
+
+   c. If you have implemented a new feature, document it into our
+      documentation to help our reader. See section :ref:`doc` for
+      further details.
+
+   d. Create a `pull request`_. Describe in the pull request what you did
+      and why. If you have open questions, ask.
 
 #. Wait for feedback. If you receive any comments, address these.
 
 #. After your pull request got accepted, delete your branch.
-
-#. Use the ``clean`` command to remove build and test files and folders::
-
-   $ python setup.py clean
 
 
 .. _testsuite:
@@ -223,6 +222,15 @@ documentation includes:
     edge cases.
 
 
+.. _changelog:
+
+Adding a Changelog Entry
+------------------------
+
+.. include:: ../changelog.d/README.rst
+    :start-after: -text-begin-
+
+
 .. _flake8: https://flake8.readthedocs.io
 .. _issues:  https://github.com/python-semver/python-semver/issues
 .. _pull request: https://github.com/python-semver/python-semver/pulls
@@ -230,3 +238,4 @@ documentation includes:
 .. _Semantic Versioning: https://semver.org
 .. _Sphinx style: https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html
 .. _tox: https://tox.readthedocs.org/
+

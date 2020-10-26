@@ -1,4 +1,4 @@
 # requirements file for documentation
 sphinx
-sphinx_rtd_theme
 sphinx-argparse
+sphinx-autodoc-typehints

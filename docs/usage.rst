@@ -8,7 +8,7 @@ Each type can be converted into the other, if the minimum requirements
 are met.
 
 
-Knowing the Implemented semver.org Version
+Getting the Implemented semver.org Version
 ------------------------------------------
 
 The semver.org page is the authoritative specification of how semantic
@@ -18,6 +18,15 @@ use the following constant::
 
    >>> semver.SEMVER_SPEC_VERSION
    '2.0.0'
+
+
+Getting the Version of semver
+-----------------------------
+
+To know the version of semver itself, use the following construct::
+
+   >>> semver.__version__
+   '3.0.0-dev.1'
 
 
 Creating a Version
@@ -37,7 +46,7 @@ creating a version:
 
 .. warning:: **Deprecation Warning**
 
-    Module level functions are marked as *deprecated* in version 2.10.0 now.
+    Module level functions are marked as *deprecated* in version 2.x.y now.
     These functions will be removed in semver 3.
     For details, see the sections :ref:`sec_replace_deprecated_functions` and
     :ref:`sec_display_deprecation_warnings`.
@@ -455,7 +464,7 @@ To compare two versions depends on your type:
     >>> v > dict(major=1, unknown=42)
     Traceback (most recent call last):
     ...
-    TypeError: __init__() got an unexpected keyword argument 'unknown'
+    TypeError: ... got an unexpected keyword argument 'unknown'
 
 
 Other types cannot be compared.
