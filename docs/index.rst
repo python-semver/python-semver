@@ -1,12 +1,14 @@
 Semver |version| -- Semantic Versioning
 =======================================
 
+.. include:: readme.rst
+
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents
+   :hidden:
 
-   readme
    install
    usage
    development
@@ -15,12 +17,15 @@ Semver |version| -- Semantic Versioning
 .. toctree::
    :maxdepth: 2
    :caption: CLI
+   :hidden:
 
    pysemver
 
 
 .. toctree::
    :maxdepth: 1
+   :caption: Changelogs
+   :hidden:
 
    changelog
    changelog-2.7.9-and-before

@@ -1,2 +1,0 @@
-Disallow negative numbers in VersionInfo arguments
-for ``major``, ``minor``, and ``patch``.
