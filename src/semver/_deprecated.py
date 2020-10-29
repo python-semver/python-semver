@@ -5,7 +5,7 @@ from types import FrameType
 from typing import Type, Union, Callable, cast
 
 from . import cli
-from .version import VersionInfo
+from .version import Version
 from ._types import F, String
 
 
@@ -20,7 +20,7 @@ def deprecated(
 
     :param func: the function to decorate
     :param replace: the function to replace (use the full qualified
-        name like ``semver.VersionInfo.bump_major``.
+        name like ``semver.Version.bump_major``.
     :param version: the first version when this function was deprecated.
     :param category: allow you to specify the deprecation warning class
         of your choice. By default, it's  :class:`DeprecationWarning`, but
@@ -41,7 +41,7 @@ def deprecated(
         if replace:
             msg_list.append("Use {r!r} instead.")
         else:
-            msg_list.append("Use the respective 'semver.VersionInfo.{r}' instead.")
+            msg_list.append("Use the respective 'semver.Version.{r}' instead.")
 
         f = cast(F, func).__qualname__
         r = replace or f
@@ -70,7 +70,7 @@ def parse(version):
     Parse version to major, minor, patch, pre-release, build parts.
 
     .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.parse` instead.
+       Use :func:`semver.Version.parse` instead.
 
     :param version: version string
     :return: dictionary with the keys 'build', 'major', 'minor', 'patch',
@@ -90,10 +90,10 @@ def parse(version):
     >>> ver['build']
     'build.4'
     """
-    return VersionInfo.parse(version).to_dict()
+    return Version.parse(version).to_dict()
 
 
-@deprecated(replace="semver.VersionInfo.parse", version="2.10.0")
+@deprecated(replace="semver.Version.parse", version="2.10.0")
 def parse_version_info(version):
     """
     Parse version string to a VersionInfo instance.
@@ -104,7 +104,7 @@ def parse_version_info(version):
        Added :func:`semver.parse_version_info`
     :param version: version string
     :return: a :class:`VersionInfo` instance
-    >>> version_info = semver.VersionInfo.parse("3.4.5-pre.2+build.4")
+    >>> version_info = semver.Version.parse("3.4.5-pre.2+build.4")
     >>> version_info.major
     3
     >>> version_info.minor
@@ -116,7 +116,7 @@ def parse_version_info(version):
     >>> version_info.build
     'build.4'
     """
-    return VersionInfo.parse(version)
+    return Version.parse(version)
 
 
 @deprecated(version="2.10.0")
@@ -137,7 +137,7 @@ def compare(ver1, ver2):
     >>> semver.compare("2.0.0", "2.0.0")
     0
     """
-    v1 = VersionInfo.parse(ver1)
+    v1 = Version.parse(ver1)
     return v1.compare(ver2)
 
 
@@ -162,7 +162,7 @@ def match(version, match_expr):
     >>> semver.match("1.0.0", ">1.0.0")
     False
     """
-    ver = VersionInfo.parse(version)
+    ver = Version.parse(version)
     return ver.match(match_expr)
 
 
@@ -174,14 +174,14 @@ def max_ver(ver1, ver2):
     :param ver1: version string 1
     :param ver2: version string 2
     :return: the greater version of the two
-    :rtype: :class:`VersionInfo`
+    :rtype: :class:`Version`
 
     >>> semver.max_ver("1.0.0", "2.0.0")
     '2.0.0'
     """
     if isinstance(ver1, String.__args__):  # type: ignore
-        ver1 = VersionInfo.parse(ver1)
-    elif not isinstance(ver1, VersionInfo):
+        ver1 = Version.parse(ver1)
+    elif not isinstance(ver1, Version):
         raise TypeError()
     cmp_res = ver1.compare(ver2)
     if cmp_res >= 0:
@@ -198,12 +198,12 @@ def min_ver(ver1, ver2):
     :param ver1: version string 1
     :param ver2: version string 2
     :return: the smaller version of the two
-    :rtype: :class:`VersionInfo`
+    :rtype: :class:`Version`
 
     >>> semver.min_ver("1.0.0", "2.0.0")
     '1.0.0'
     """
-    ver1 = VersionInfo.parse(ver1)
+    ver1 = Version.parse(ver1)
     cmp_res = ver1.compare(ver2)
     if cmp_res <= 0:
         return str(ver1)
@@ -217,7 +217,7 @@ def format_version(major, minor, patch, prerelease=None, build=None):
     Format a version string according to the Semantic Versioning specification.
 
     .. deprecated:: 2.10.0
-       Use ``str(VersionInfo(VERSION)`` instead.
+       Use ``str(Version(VERSION)`` instead.
 
     :param int major: the required major part of a version
     :param int minor: the required minor part of a version
@@ -230,7 +230,7 @@ def format_version(major, minor, patch, prerelease=None, build=None):
     >>> semver.format_version(3, 4, 5, 'pre.2', 'build.4')
     '3.4.5-pre.2+build.4'
     """
-    return str(VersionInfo(major, minor, patch, prerelease, build))
+    return str(Version(major, minor, patch, prerelease, build))
 
 
 @deprecated(version="2.10.0")
@@ -239,7 +239,7 @@ def bump_major(version):
     Raise the major part of the version string.
 
     .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.bump_major` instead.
+       Use :func:`semver.Version.bump_major` instead.
 
     :param: version string
     :return: the raised version string
@@ -248,7 +248,7 @@ def bump_major(version):
     >>> semver.bump_major("3.4.5")
     '4.0.0'
     """
-    return str(VersionInfo.parse(version).bump_major())
+    return str(Version.parse(version).bump_major())
 
 
 @deprecated(version="2.10.0")
@@ -257,7 +257,7 @@ def bump_minor(version):
     Raise the minor part of the version string.
 
     .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.bump_minor` instead.
+       Use :func:`semver.Version.bump_minor` instead.
 
     :param: version string
     :return: the raised version string
@@ -266,7 +266,7 @@ def bump_minor(version):
     >>> semver.bump_minor("3.4.5")
     '3.5.0'
     """
-    return str(VersionInfo.parse(version).bump_minor())
+    return str(Version.parse(version).bump_minor())
 
 
 @deprecated(version="2.10.0")
@@ -275,7 +275,7 @@ def bump_patch(version):
     Raise the patch part of the version string.
 
     .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.bump_patch` instead.
+       Use :func:`semver.Version.bump_patch` instead.
 
     :param: version string
     :return: the raised version string
@@ -284,7 +284,7 @@ def bump_patch(version):
     >>> semver.bump_patch("3.4.5")
     '3.4.6'
     """
-    return str(VersionInfo.parse(version).bump_patch())
+    return str(Version.parse(version).bump_patch())
 
 
 @deprecated(version="2.10.0")
@@ -293,7 +293,7 @@ def bump_prerelease(version, token="rc"):
     Raise the prerelease part of the version string.
 
     .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.bump_prerelease` instead.
+       Use :func:`semver.Version.bump_prerelease` instead.
 
     :param version: version string
     :param token: defaults to 'rc'
@@ -303,7 +303,7 @@ def bump_prerelease(version, token="rc"):
     >>> semver.bump_prerelease('3.4.5', 'dev')
     '3.4.5-dev.1'
     """
-    return str(VersionInfo.parse(version).bump_prerelease(token))
+    return str(Version.parse(version).bump_prerelease(token))
 
 
 @deprecated(version="2.10.0")
@@ -312,7 +312,7 @@ def bump_build(version, token="build"):
     Raise the build part of the version string.
 
     .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.bump_build` instead.
+       Use :func:`semver.Version.bump_build` instead.
 
     :param version: version string
     :param token: defaults to 'build'
@@ -322,7 +322,7 @@ def bump_build(version, token="build"):
     >>> semver.bump_build('3.4.5-rc.1+build.9')
     '3.4.5-rc.1+build.10'
     """
-    return str(VersionInfo.parse(version).bump_build(token))
+    return str(Version.parse(version).bump_build(token))
 
 
 @deprecated(version="2.10.0")
@@ -331,7 +331,7 @@ def finalize_version(version):
     Remove any prerelease and build metadata from the version string.
 
     .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.finalize_version` instead.
+       Use :func:`semver.Version.finalize_version` instead.
 
     .. versionadded:: 2.7.9
        Added :func:`finalize_version`
@@ -343,7 +343,7 @@ def finalize_version(version):
     >>> semver.finalize_version('1.2.3-rc.5')
     '1.2.3'
     """
-    verinfo = VersionInfo.parse(version)
+    verinfo = Version.parse(version)
     return str(verinfo.finalize_version())
 
 
@@ -353,7 +353,7 @@ def replace(version, **parts):
     Replace one or more parts of a version and return the new string.
 
     .. deprecated:: 2.10.0
-       Use :func:`semver.VersionInfo.replace` instead.
+       Use :func:`semver.Version.replace` instead.
     .. versionadded:: 2.9.0
        Added :func:`replace`
     :param version: the version string to replace
@@ -365,7 +365,7 @@ def replace(version, **parts):
     >>> semver.replace("1.2.3", major=2, patch=10)
     '2.2.10'
     """
-    return str(VersionInfo.parse(version).replace(**parts))
+    return str(Version.parse(version).replace(**parts))
 
 
 # CLI

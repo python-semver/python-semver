@@ -2,7 +2,7 @@ import argparse
 import sys
 from typing import cast, List
 
-from .version import VersionInfo
+from .version import Version
 from .__about__ import __version__
 
 
@@ -28,7 +28,7 @@ def cmd_bump(args: argparse.Namespace) -> str:
         # print the help and exit
         args.parser.parse_args(["bump", "-h"])
 
-    ver = VersionInfo.parse(args.version)
+    ver = Version.parse(args.version)
     # get the respective method and call it
     func = getattr(ver, maptable[cast(str, args.bump)])
     return str(func())
@@ -42,7 +42,7 @@ def cmd_check(args: argparse.Namespace) -> None:
 
     :param args: The parsed arguments
     """
-    if VersionInfo.isvalid(args.version):
+    if Version.isvalid(args.version):
         return None
     raise ValueError("Invalid version %r" % args.version)
 
@@ -55,7 +55,7 @@ def cmd_compare(args: argparse.Namespace) -> str:
 
     :param args: The parsed arguments
     """
-    ver1 = VersionInfo.parse(args.version1)
+    ver1 = Version.parse(args.version1)
     return str(ver1.compare(args.version2))
 
 
@@ -67,7 +67,7 @@ def cmd_nextver(args: argparse.Namespace) -> str:
 
     :param args: The parsed arguments
     """
-    version = VersionInfo.parse(args.version)
+    version = Version.parse(args.version)
     return str(version.next_version(args.part))
 
 

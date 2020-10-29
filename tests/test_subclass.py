@@ -1,8 +1,8 @@
-from semver import VersionInfo
+from semver import Version
 
 
 def test_subclass_from_versioninfo():
-    class SemVerWithVPrefix(VersionInfo):
+    class SemVerWithVPrefix(Version):
         @classmethod
         def parse(cls, version):
             if not version[0] in ("v", "V"):

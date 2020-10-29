@@ -23,8 +23,8 @@ from ._types import (
 )
 
 # These types are required here because of circular imports
-Comparable = Union["VersionInfo", Dict[str, VersionPart], Collection[VersionPart], str]
-Comparator = Callable[["VersionInfo", Comparable], bool]
+Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], str]
+Comparator = Callable[["Version", Comparable], bool]
 
 
 def cmp(a, b):  # TODO: type hints
@@ -62,12 +62,12 @@ def ensure_str(s: String, encoding="utf-8", errors="strict") -> str:
 
 
 def comparator(operator: Comparator) -> Comparator:
-    """Wrap a VersionInfo binary op method in a type-check."""
+    """Wrap a Version binary op method in a type-check."""
 
     @wraps(operator)
-    def wrapper(self: "VersionInfo", other: Comparable) -> bool:
+    def wrapper(self: "Version", other: Comparable) -> bool:
         comparable_types = (
-            VersionInfo,
+            Version,
             dict,
             tuple,
             list,
@@ -109,7 +109,7 @@ def _nat_cmp(a, b):  # TODO: type hints
         return cmp(len(a), len(b))
 
 
-class VersionInfo:
+class Version:
     """
     A semver compatible version class.
 
@@ -224,7 +224,7 @@ class VersionInfo:
 
         :return: a tuple with all the parts
 
-        >>> semver.VersionInfo(5, 3, 1).to_tuple()
+        >>> semver.Version(5, 3, 1).to_tuple()
         (5, 3, 1, None, None)
         """
         return (self.major, self.minor, self.patch, self.prerelease, self.build)
@@ -240,7 +240,7 @@ class VersionInfo:
         :return: an OrderedDict with the keys in the order ``major``, ``minor``,
           ``patch``, ``prerelease``, and ``build``.
 
-        >>> semver.VersionInfo(3, 2, 1).to_dict()
+        >>> semver.Version(3, 2, 1).to_dict()
         OrderedDict([('major', 3), ('minor', 2), ('patch', 1), \
 ('prerelease', None), ('build', None)])
         """
@@ -269,14 +269,14 @@ class VersionInfo:
         Source:
         http://code.activestate.com/recipes/442460-increment-numbers-in-a-string/#c1
         """
-        match = VersionInfo._LAST_NUMBER.search(string)
+        match = Version._LAST_NUMBER.search(string)
         if match:
             next_ = str(int(match.group(1)) + 1)
             start, end = match.span(1)
             string = string[: max(end - len(next_), start)] + next_ + string[end:]
         return string
 
-    def bump_major(self) -> "VersionInfo":
+    def bump_major(self) -> "Version":
         """
         Raise the major part of the version, return a new object but leave self
         untouched.
@@ -286,12 +286,12 @@ class VersionInfo:
 
         >>> ver = semver.parse("3.4.5")
         >>> ver.bump_major()
-        VersionInfo(major=4, minor=0, patch=0, prerelease=None, build=None)
+        Version(major=4, minor=0, patch=0, prerelease=None, build=None)
         """
         cls = type(self)
         return cls(self._major + 1)
 
-    def bump_minor(self) -> "VersionInfo":
+    def bump_minor(self) -> "Version":
         """
         Raise the minor part of the version, return a new object but leave self
         untouched.
@@ -301,12 +301,12 @@ class VersionInfo:
 
         >>> ver = semver.parse("3.4.5")
         >>> ver.bump_minor()
-        VersionInfo(major=3, minor=5, patch=0, prerelease=None, build=None)
+        Version(major=3, minor=5, patch=0, prerelease=None, build=None)
         """
         cls = type(self)
         return cls(self._major, self._minor + 1)
 
-    def bump_patch(self) -> "VersionInfo":
+    def bump_patch(self) -> "Version":
         """
         Raise the patch part of the version, return a new object but leave self
         untouched.
@@ -316,12 +316,12 @@ class VersionInfo:
 
         >>> ver = semver.parse("3.4.5")
         >>> ver.bump_patch()
-        VersionInfo(major=3, minor=4, patch=6, prerelease=None, build=None)
+        Version(major=3, minor=4, patch=6, prerelease=None, build=None)
         """
         cls = type(self)
         return cls(self._major, self._minor, self._patch + 1)
 
-    def bump_prerelease(self, token: str = "rc") -> "VersionInfo":
+    def bump_prerelease(self, token: str = "rc") -> "Version":
         """
         Raise the prerelease part of the version, return a new object but leave
         self untouched.
@@ -331,14 +331,14 @@ class VersionInfo:
 
         >>> ver = semver.parse("3.4.5")
         >>> ver.bump_prerelease()
-        VersionInfo(major=3, minor=4, patch=5, prerelease='rc.2', \
+        Version(major=3, minor=4, patch=5, prerelease='rc.2', \
 build=None)
         """
         cls = type(self)
         prerelease = cls._increment_string(self._prerelease or (token or "rc") + ".0")
         return cls(self._major, self._minor, self._patch, prerelease)
 
-    def bump_build(self, token: str = "build") -> "VersionInfo":
+    def bump_build(self, token: str = "build") -> "Version":
         """
         Raise the build part of the version, return a new object but leave self
         untouched.
@@ -348,7 +348,7 @@ build=None)
 
         >>> ver = semver.parse("3.4.5-rc.1+build.9")
         >>> ver.bump_build()
-        VersionInfo(major=3, minor=4, patch=5, prerelease='rc.1', \
+        Version(major=3, minor=4, patch=5, prerelease='rc.1', \
 build='build.10')
         """
         cls = type(self)
@@ -404,7 +404,7 @@ build='build.10')
 
         return rccmp
 
-    def next_version(self, part: str, prerelease_token: str = "rc") -> "VersionInfo":
+    def next_version(self, part: str, prerelease_token: str = "rc") -> "Version":
         """
         Determines next version, preserving natural order.
 
@@ -487,7 +487,7 @@ build='build.10')
                offset or a :func:`slice` object
         :raises IndexError: if index is beyond the range or a part is None
         :return: the requested part of the version at position index
-        >>> ver = semver.VersionInfo.parse("3.4.5")
+        >>> ver = semver.Version.parse("3.4.5")
         >>> ver[0], ver[1], ver[2]
         (3, 4, 5)
         """
@@ -528,11 +528,11 @@ build='build.10')
     def __hash__(self) -> int:
         return hash(self.to_tuple()[:4])
 
-    def finalize_version(self) -> "VersionInfo":
+    def finalize_version(self) -> "Version":
         """
         Remove any prerelease and build metadata from the version.
         :return: a new instance with the finalized version string
-        >>> str(semver.VersionInfo.parse('1.2.3-rc.5').finalize_version())
+        >>> str(semver.Version.parse('1.2.3-rc.5').finalize_version())
         '1.2.3'
         """
         cls = type(self)
@@ -550,9 +550,9 @@ build='build.10')
               ==  equal
               !=  not equal
         :return: True if the expression matches the version, otherwise False
-        >>> semver.VersionInfo.parse("2.0.0").match(">=1.0.0")
+        >>> semver.Version.parse("2.0.0").match(">=1.0.0")
         True
-        >>> semver.VersionInfo.parse("1.0.0").match(">1.0.0")
+        >>> semver.Version.parse("1.0.0").match(">1.0.0")
         False
         """
         prefix = match_expr[:2]
@@ -584,7 +584,7 @@ build='build.10')
         return cmp_res in possibilities
 
     @classmethod
-    def parse(cls, version: String) -> "VersionInfo":
+    def parse(cls, version: String) -> "Version":
         """
         Parse version string to a VersionInfo instance.
 
@@ -594,7 +594,7 @@ build='build.10')
         :param version: version string
         :return: a :class:`VersionInfo` instance
         :raises ValueError: if version is invalid
-        >>> semver.VersionInfo.parse('3.4.5-pre.2+build.4')
+        >>> semver.Version.parse('3.4.5-pre.2+build.4')
         VersionInfo(major=3, minor=4, patch=5, \
 prerelease='pre.2', build='build.4')
         """
@@ -607,24 +607,24 @@ prerelease='pre.2', build='build.4')
 
         return cls(**matched_version_parts)
 
-    def replace(self, **parts: Union[int, Optional[str]]) -> "VersionInfo":
+    def replace(self, **parts: Union[int, Optional[str]]) -> "Version":
         """
         Replace one or more parts of a version and return a new
-        :class:`VersionInfo` object, but leave self untouched
+        :class:`Version` object, but leave self untouched
 
         .. versionadded:: 2.9.0
-           Added :func:`VersionInfo.replace`
+           Added :func:`Version.replace`
 
         :param parts: the parts to be updated. Valid keys are:
           ``major``, ``minor``, ``patch``, ``prerelease``, or ``build``
-        :return: the new :class:`VersionInfo` object with the changed
+        :return: the new :class:`Version` object with the changed
           parts
         :raises TypeError: if ``parts`` contains invalid keys
         """
         version = self.to_dict()
         version.update(parts)
         try:
-            return VersionInfo(**version)  # type: ignore
+            return Version(**version)  # type: ignore
         except TypeError:
             unknownkeys = set(parts) - set(self.to_dict())
             error = "replace() got %d unexpected keyword " "argument(s): %s" % (
@@ -649,3 +649,7 @@ prerelease='pre.2', build='build.4')
             return True
         except ValueError:
             return False
+
+
+# Keep the VersionInfo name for compatibility
+VersionInfo = Version

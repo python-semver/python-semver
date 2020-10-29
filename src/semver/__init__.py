@@ -21,7 +21,7 @@ from ._deprecated import (
     process,
     main,
 )
-from .version import VersionInfo
+from .version import Version, VersionInfo
 from .__about__ import (
     __version__,
     __author__,
