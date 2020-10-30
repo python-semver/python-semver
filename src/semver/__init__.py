@@ -1,3 +1,7 @@
+"""
+semver package
+"""
+
 from ._deprecated import (
     bump_build,
     bump_major,

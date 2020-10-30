@@ -1,3 +1,7 @@
+"""
+CLI parsing for :command:`pysemver` command.
+"""
+
 import argparse
 import sys
 from typing import cast, List

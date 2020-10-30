@@ -3,6 +3,10 @@
 API
 ===
 
-.. automodule:: semver
-   :members:
-   :undoc-members:
+
+.. autosummary::
+   :toctree: _api
+   :recursive:
+
+   semver.__about__
+   semver

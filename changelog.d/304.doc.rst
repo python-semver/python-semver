@@ -1,0 +1,5 @@
+Several improvements in documentation:
+
+* Reorganize API documentation.
+* Add migration chapter from semver2 to semver3.
+
