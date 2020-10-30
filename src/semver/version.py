@@ -1,3 +1,5 @@
+"""Version handling."""
+
 import collections
 import re
 from functools import wraps
@@ -414,7 +416,7 @@ build='build.10')
         The "major", "minor", and "patch" raises the respective parts like
         the ``bump_*`` functions. The real difference is using the
         "preprelease" part. It gives you the next patch version of the
-         prerelease, for example:
+        prerelease, for example:
 
         >>> str(semver.parse("0.1.4").next_version("prerelease"))
         '0.1.5-rc.1'
@@ -550,6 +552,7 @@ build='build.10')
               ==  equal
               !=  not equal
         :return: True if the expression matches the version, otherwise False
+
         >>> semver.Version.parse("2.0.0").match(">=1.0.0")
         True
         >>> semver.Version.parse("1.0.0").match(">1.0.0")
@@ -591,9 +594,11 @@ build='build.10')
         .. versionchanged:: 2.11.0
            Changed method from static to classmethod to
            allow subclasses.
+
         :param version: version string
         :return: a :class:`VersionInfo` instance
         :raises ValueError: if version is invalid
+
         >>> semver.Version.parse('3.4.5-pre.2+build.4')
         VersionInfo(major=3, minor=4, patch=5, \
 prerelease='pre.2', build='build.4')
@@ -651,5 +656,5 @@ prerelease='pre.2', build='build.4')
             return False
 
 
-# Keep the VersionInfo name for compatibility
+#: Keep the VersionInfo name for compatibility
 VersionInfo = Version

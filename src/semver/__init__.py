@@ -1,3 +1,9 @@
+"""
+semver package major release 3.
+
+A Python module for semantic versioning. Simplifies comparing versions.
+"""
+
 from ._deprecated import (
     bump_build,
     bump_major,

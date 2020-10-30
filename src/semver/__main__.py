@@ -1,8 +1,13 @@
 """
 Module to support call with :file:`__main__.py`. Used to support the following
-call:
+call::
 
-$ python3 -m semver ...
+    $ python3 -m semver ...
+
+This makes it also possible to "run" a wheel like in this command::
+
+    $ python3 semver-3*-py3-none-any.whl/semver -h
+
 """
 import os.path
 import sys
