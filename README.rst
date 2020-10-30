@@ -30,11 +30,6 @@ A Python module for `semantic versioning`_. Simplifies comparing versions.
 .. |MAINT| replace:: ``maint/v2``
 .. _MAINT: https://github.com/python-semver/python-semver/tree/maint/v2
 
-.. note::
-
-    The :class:`VersionInfo` has been renamed to :class:`Version`. An
-    alias has been created to preserve compatibility but the use of the old
-    name has been deprecated.
 
 The module follows the ``MAJOR.MINOR.PATCH`` style:
 

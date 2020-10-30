@@ -11,6 +11,7 @@ Semver |version| -- Semantic Versioning
 
    install
    usage
+   migratetosemver3
    development
    api
 
