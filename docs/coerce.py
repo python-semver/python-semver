@@ -1,5 +1,7 @@
 import re
-import semver
+from semver import Version
+from typing import Optional, Tuple
+
 
 BASEVERSION = re.compile(
     r"""[vV]?
@@ -15,7 +17,7 @@ BASEVERSION = re.compile(
 )
 
 
-def coerce(version: str) -> tuple[Version, Optional[str]]:
+def coerce(version: str) -> Tuple[Version, Optional[str]]:
     """
     Convert an incomplete version string into a semver-compatible Version
     object
@@ -37,6 +39,6 @@ def coerce(version: str) -> tuple[Version, Optional[str]]:
     ver = {
         key: 0 if value is None else value for key, value in match.groupdict().items()
     }
-    ver = semver.Version(**ver)
+    ver = Version(**ver)
     rest = match.string[match.end() :]  # noqa:E203
     return ver, rest
