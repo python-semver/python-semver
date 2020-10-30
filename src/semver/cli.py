@@ -1,6 +1,4 @@
-"""
-CLI parsing for :command:`pysemver` command.
-"""
+"""CLI parsing for :command:`pysemver` command."""
 
 import argparse
 import sys

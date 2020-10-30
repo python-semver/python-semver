@@ -1,6 +1,5 @@
-"""
-Version handling
-"""
+"""Version handling."""
+
 import collections
 import re
 from functools import wraps

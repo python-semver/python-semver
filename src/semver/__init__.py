@@ -1,6 +1,4 @@
-"""
-semver package
-"""
+"""semver package."""
 
 from ._deprecated import (
     bump_build,

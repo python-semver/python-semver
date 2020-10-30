@@ -41,9 +41,7 @@ def find_version(*file_paths):
     string inside.
     """
     version_file = read(*file_paths)
-    version_match = re.search(
-        r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M
-    )
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
     if version_match:
         return version_match.group(1)
     raise RuntimeError("Unable to find version string.")
@@ -67,16 +65,18 @@ extensions = [
 ]
 
 autosummary_generate = True
-apidoc_excluded_paths = ['tests']
+apidoc_excluded_paths = ["tests"]
 autoclass_content = "class"
 autodoc_default_options = {
-    "members": ("__version__,"
-                "__about__, "
-                "__author__, "
-                "__author_email__,"
-                "__maintainer__, "
-                "__maintainer_email__, "
-                "__description__"),
+    "members": (
+        "__version__,"
+        "__about__, "
+        "__author__, "
+        "__author_email__,"
+        "__maintainer__, "
+        "__maintainer_email__, "
+        "__description__"
+    ),
     # "members-order": "groupwise",  # alphabetical, groupwise, bysource
 }
 

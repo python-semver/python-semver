@@ -1,7 +1,4 @@
-"""
-Metadata for semver version, author, maintainers, and
-description.
-"""
+"""Metadata for semver version, author, maintainers, and description."""
 
 #: Semver version
 __version__ = "3.0.0-dev.2"
