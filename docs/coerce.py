@@ -15,7 +15,7 @@ BASEVERSION = re.compile(
 )
 
 
-def coerce(version):
+def coerce(version: str) -> tuple[Version, Optional[str]]:
     """
     Convert an incomplete version string into a semver-compatible Version
     object
