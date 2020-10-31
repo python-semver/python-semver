@@ -64,23 +64,10 @@ extensions = [
     "sphinx.ext.extlinks",
 ]
 
-# autosummary_generate = True
-# apidoc_excluded_paths = ["tests"]
 autoclass_content = "class"
-autosummary_imported_members = True
 autodoc_default_options = {
-    # "members": (
-    #    "__version__,"
-    #    "__about__, "
-    #    "__author__, "
-    #    "__author_email__,"
-    #    "__maintainer__, "
-    #    "__maintainer_email__, "
-    #    "__description__"
-    # ),
-    "ignore-module-all": True,
-    "special-members": "__version__",
 }
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
