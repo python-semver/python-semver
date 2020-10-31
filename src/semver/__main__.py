@@ -13,13 +13,14 @@ import os.path
 import sys
 from typing import List
 
+from semver import cli
+
 
 def main(cliargs: List[str] = None) -> int:
     if __package__ == "":
         path = os.path.dirname(os.path.dirname(__file__))
         sys.path[0:0] = [path]
 
-    from semver import cli
     return cli.main(cliargs)
 
 

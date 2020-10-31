@@ -64,20 +64,22 @@ extensions = [
     "sphinx.ext.extlinks",
 ]
 
-autosummary_generate = True
-apidoc_excluded_paths = ["tests"]
+# autosummary_generate = True
+# apidoc_excluded_paths = ["tests"]
 autoclass_content = "class"
+autosummary_imported_members = True
 autodoc_default_options = {
-    "members": (
-        "__version__,"
-        "__about__, "
-        "__author__, "
-        "__author_email__,"
-        "__maintainer__, "
-        "__maintainer_email__, "
-        "__description__"
-    ),
-    # "members-order": "groupwise",  # alphabetical, groupwise, bysource
+    # "members": (
+    #    "__version__,"
+    #    "__about__, "
+    #    "__author__, "
+    #    "__author_email__,"
+    #    "__maintainer__, "
+    #    "__maintainer_email__, "
+    #    "__description__"
+    # ),
+    "ignore-module-all": True,
+    "special-members": "__version__",
 }
 
 # Add any paths that contain templates here, relative to this directory.
@@ -110,7 +112,7 @@ version = release  # .rsplit(u".", 1)[0]
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

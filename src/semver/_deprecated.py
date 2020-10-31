@@ -2,7 +2,6 @@
 Contains all deprecated functions.
 
 .. autofunction: deprecated
-
 """
 import inspect
 import warnings
