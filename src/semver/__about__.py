@@ -1,4 +1,11 @@
-"""Metadata for semver version, author, maintainers, and description."""
+"""
+Metadata about semver.
+
+Contains information about semver's version, the implemented version
+of the semver specifictation, author, maintainers, and description.
+
+.. autodata:: __version__
+"""
 
 #: Semver version
 __version__ = "3.0.0-dev.2"

@@ -89,7 +89,7 @@ A :class:`semver.Version` instance can be created in different ways:
       ValueError: 'major' is negative. A version can only be positive.
 
     As a minimum requirement, your dictionary needs at least the
-  be positive.
+    be positive.
 
     >>> semver.Version(-1)
     Traceback (most recent call last):

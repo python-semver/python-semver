@@ -656,5 +656,5 @@ prerelease='pre.2', build='build.4')
             return False
 
 
-# Keep the VersionInfo name for compatibility
+#: Keep the VersionInfo name for compatibility
 VersionInfo = Version

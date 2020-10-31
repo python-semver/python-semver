@@ -1,3 +1,9 @@
+"""
+Contains all deprecated functions.
+
+.. autofunction: deprecated
+
+"""
 import inspect
 import warnings
 from functools import partial, wraps
@@ -102,8 +108,10 @@ def parse_version_info(version):
        Use :func:`semver.VersionInfo.parse` instead.
     .. versionadded:: 2.7.2
        Added :func:`semver.parse_version_info`
+
     :param version: version string
     :return: a :class:`VersionInfo` instance
+
     >>> version_info = semver.Version.parse("3.4.5-pre.2+build.4")
     >>> version_info.major
     3
@@ -356,11 +364,13 @@ def replace(version, **parts):
        Use :func:`semver.Version.replace` instead.
     .. versionadded:: 2.9.0
        Added :func:`replace`
+
     :param version: the version string to replace
     :param parts: the parts to be updated. Valid keys are:
       ``major``, ``minor``, ``patch``, ``prerelease``, or ``build``
     :return: the replaced version string
     :raises TypeError: if ``parts`` contains invalid keys
+
     >>> import semver
     >>> semver.replace("1.2.3", major=2, patch=10)
     '2.2.10'
