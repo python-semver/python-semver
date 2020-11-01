@@ -12,6 +12,7 @@ from semverwithvprefix import SemVerWithVPrefix  # noqa:E402
 
 @pytest.fixture(autouse=True)
 def add_semver(doctest_namespace):
+    doctest_namespace["Version"] = semver.Version
     doctest_namespace["semver"] = semver
     doctest_namespace["coerce"] = coerce
     doctest_namespace["SemVerWithVPrefix"] = SemVerWithVPrefix
@@ -23,8 +24,8 @@ def version():
     Creates a version
 
     :return: a version type
-    :rtype: VersionInfo
+    :rtype: Version
     """
-    return semver.VersionInfo(
+    return semver.Version(
         major=1, minor=2, patch=3, prerelease="alpha.1.2", build="build.11.e0f985a"
     )

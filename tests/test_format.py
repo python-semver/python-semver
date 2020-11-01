@@ -1,6 +1,6 @@
 import pytest
 
-from semver import VersionInfo, finalize_version, format_version
+from semver import Version, finalize_version, format_version
 
 
 @pytest.mark.parametrize(
@@ -28,7 +28,7 @@ def test_should_correctly_format_version():
 
 def test_parse_method_for_version_info():
     s_version = "1.2.3-alpha.1.2+build.11.e0f985a"
-    v = VersionInfo.parse(s_version)
+    v = Version.parse(s_version)
     assert str(v) == s_version
 
 
@@ -36,28 +36,28 @@ def test_parse_method_for_version_info():
     "version, expected",
     [
         (
-            VersionInfo(major=1, minor=2, patch=3, prerelease=None, build=None),
-            "VersionInfo(major=1, minor=2, patch=3, prerelease=None, build=None)",
+            Version(major=1, minor=2, patch=3, prerelease=None, build=None),
+            "Version(major=1, minor=2, patch=3, prerelease=None, build=None)",
         ),
         (
-            VersionInfo(major=1, minor=2, patch=3, prerelease="r.1", build=None),
-            "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build=None)",
+            Version(major=1, minor=2, patch=3, prerelease="r.1", build=None),
+            "Version(major=1, minor=2, patch=3, prerelease='r.1', build=None)",
         ),
         (
-            VersionInfo(major=1, minor=2, patch=3, prerelease="dev.1", build=None),
-            "VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build=None)",
+            Version(major=1, minor=2, patch=3, prerelease="dev.1", build=None),
+            "Version(major=1, minor=2, patch=3, prerelease='dev.1', build=None)",
         ),
         (
-            VersionInfo(major=1, minor=2, patch=3, prerelease="dev.1", build="b.1"),
-            "VersionInfo(major=1, minor=2, patch=3, prerelease='dev.1', build='b.1')",
+            Version(major=1, minor=2, patch=3, prerelease="dev.1", build="b.1"),
+            "Version(major=1, minor=2, patch=3, prerelease='dev.1', build='b.1')",
         ),
         (
-            VersionInfo(major=1, minor=2, patch=3, prerelease="r.1", build="b.1"),
-            "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='b.1')",
+            Version(major=1, minor=2, patch=3, prerelease="r.1", build="b.1"),
+            "Version(major=1, minor=2, patch=3, prerelease='r.1', build='b.1')",
         ),
         (
-            VersionInfo(major=1, minor=2, patch=3, prerelease="r.1", build="build.1"),
-            "VersionInfo(major=1, minor=2, patch=3, prerelease='r.1', build='build.1')",
+            Version(major=1, minor=2, patch=3, prerelease="r.1", build="build.1"),
+            "Version(major=1, minor=2, patch=3, prerelease='r.1', build='build.1')",
         ),
     ],
 )

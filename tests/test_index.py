@@ -1,6 +1,6 @@
 import pytest
 
-from semver import VersionInfo
+from semver import Version
 
 
 @pytest.mark.parametrize(
@@ -24,7 +24,7 @@ from semver import VersionInfo
     ],
 )
 def test_version_info_should_be_accessed_with_index(version, index, expected):
-    version_info = VersionInfo.parse(version)
+    version_info = Version.parse(version)
     assert version_info[index] == expected
 
 
@@ -54,7 +54,7 @@ def test_version_info_should_be_accessed_with_index(version, index, expected):
 def test_version_info_should_be_accessed_with_slice_object(
     version, slice_object, expected
 ):
-    version_info = VersionInfo.parse(version)
+    version_info = Version.parse(version)
     assert version_info[slice_object] == expected
 
 
@@ -74,7 +74,7 @@ def test_version_info_should_be_accessed_with_slice_object(
     ],
 )
 def test_version_info_should_throw_index_error(version, index):
-    version_info = VersionInfo.parse(version)
+    version_info = Version.parse(version)
     with pytest.raises(IndexError, match=r"Version part undefined"):
         version_info[index]
 
@@ -90,6 +90,6 @@ def test_version_info_should_throw_index_error(version, index):
     ],
 )
 def test_version_info_should_throw_index_error_when_negative_index(version, index):
-    version_info = VersionInfo.parse(version)
+    version_info = Version.parse(version)
     with pytest.raises(IndexError, match=r"Version index cannot be negative"):
         version_info[index]

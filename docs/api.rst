@@ -1,8 +1,10 @@
 .. _api:
 
+###
 API
-===
+###
 
-.. automodule:: semver
-   :members:
-   :undoc-members:
+.. toctree::
+   :maxdepth: 4
+
+   _api/semver

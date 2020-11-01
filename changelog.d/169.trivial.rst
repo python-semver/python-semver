@@ -1,0 +1,8 @@
+Adapted infrastructure code to the new project layout.
+
+* Replace :file:`setup.py` with :file:`setup.cfg` because the :file:`setup.cfg` is easier to use
+* Adapt documentation code snippets where needed
+* Adapt tests
+* Changed the ``deprecated`` to hardcode the ``semver`` package name in the warning.
+
+Increase coverage to 100% for all non-deprecated APIs

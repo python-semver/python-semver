@@ -10,7 +10,6 @@ build-backend = "setuptools.build_meta"
 [tool.black]
 line-length = 88
 target-version = ['py36', 'py37', 'py38']
-include = '\.pyi?$'
 # diff = true
 exclude = '''
 (

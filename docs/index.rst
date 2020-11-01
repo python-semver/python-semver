@@ -11,6 +11,7 @@ Semver |version| -- Semantic Versioning
 
    install
    usage
+   migratetosemver3
    development
    api
 
@@ -28,7 +29,7 @@ Semver |version| -- Semantic Versioning
    :hidden:
 
    changelog
-   changelog-2.7.9-and-before
+   changelog-semver2
 
 Indices and Tables
 ==================
