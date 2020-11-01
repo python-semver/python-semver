@@ -16,6 +16,79 @@ in our repository.
 
 .. towncrier release notes start
 
+Version 3.0.0-dev.2
+===================
+
+:Released: 2020-11-01
+:Maintainer: Tom Schraitle
+
+
+Deprecations
+------------
+
+* :gh:`169`: Deprecate CLI functions not imported from ``semver.cli``.
+
+
+
+Features
+--------
+
+* :gh:`169`: Create semver package and split code among different modules in the packages.
+
+  * Remove :file:`semver.py`
+  * Create :file:`src/semver/__init__.py`
+  * Create :file:`src/semver/cli.py` for all CLI methods
+  * Create :file:`src/semver/_deprecated.py` for the ``deprecated`` decorator and other deprecated functions
+  * Create :file:`src/semver/__main__.py` to allow calling the CLI using :command:`python -m semver`
+  * Create :file:`src/semver/_types.py` to hold type aliases
+  * Create :file:`src/semver/version.py` to hold the :class:`Version` class (old name :class:`VersionInfo`) and its utility functions
+  * Create :file:`src/semver/__about__.py` for all the metadata variables
+
+* :gh:`305`: Rename :class:`VersionInfo` to :class:`Version` but keep an alias for compatibility
+
+
+
+Improved Documentation
+----------------------
+
+* :gh:`304`: Several improvements in documentation:
+
+  * Reorganize API documentation.
+  * Add migration chapter from semver2 to semver3.
+  * Distinguish between changlog for version 2 and 3
+
+* :gh:`305`: Add note about :class:`Version` rename.
+
+
+
+Trivial/Internal Changes
+------------------------
+
+* :gh:`169`: Adapted infrastructure code to the new project layout.
+
+  * Replace :file:`setup.py` with :file:`setup.cfg` because the :file:`setup.cfg` is easier to use
+  * Adapt documentation code snippets where needed
+  * Adapt tests
+  * Changed the ``deprecated`` to hardcode the ``semver`` package name in the warning.
+
+  Increase coverage to 100% for all non-deprecated APIs
+
+* :gh:`304`: Support PEP-561 :file:`py.typed`.
+
+  According to the mentioned PEP:
+
+    "Package maintainers who wish to support type checking
+    of their code MUST add a marker file named :file:`py.typed`
+    to their package supporting typing."
+
+  Add package_data to :file:`setup.cfg` to include this marker in dist
+  and whl file.
+
+
+
+----
+
+
 Version 3.0.0-dev.1
 ===================
 
@@ -73,6 +146,7 @@ Features
 
 * :gh:`276`: Document how to create a sublass from :class:`VersionInfo` class
 
+* :gh:`213`: Add typing information
 
 
 Bug Fixes
