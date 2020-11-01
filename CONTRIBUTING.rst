@@ -94,40 +94,42 @@ You can decide to run the complete test suite or only part of it:
 
      $ tox --skip-missing-interpreters
 
-  It is possible to use only specific Python versions. Use the ``-e``
-  option and one or more abbreviations (``py27`` for Python 2.7, ``py34`` for
-  Python 3.4 etc.)::
+  It is possible to use one or more specific Python versions. Use the ``-e``
+  option and one or more abbreviations (``py36`` for Python 3.6, ``py37`` for
+  Python 3.7 etc.)::
 
-      $ tox -e py34
-      $ tox -e py27,py34
+      $ tox -e py36
+      $ tox -e py36,py37
 
-  To get a complete list, run::
+  To get a complete list and a short description, run::
 
-      $ tox -l
+      $ tox -av
 
 * To run only a specific test, pytest requires the syntax
   ``TEST_FILE::TEST_FUNCTION``.
 
   For example, the following line tests only the function
-  :func:`test_immutable_major` in the file :file:`test_semver.py` for all
+  :func:`test_immutable_major` in the file :file:`test_bump.py` for all
   Python versions::
 
-      $ tox test_semver.py::test_immutable_major
+      $ tox -e py36 -- tests/test_bump.py::test_should_bump_major
 
-  By default, pytest prints a dot for each test function only. To
+  By default, pytest prints only a dot for each test function. To
   reveal the executed test function, use the following syntax::
 
      $ tox -- -v
 
   You can combine the specific test function with the ``-e`` option, for
-  example, to limit the tests for Python 2.7 and 3.6 only::
+  example, to limit the tests for Python 3.6 and 3.7 only::
 
-      $ tox -e py27,py36 test_semver.py::test_immutable_major
+      $ tox -e py36,py37 -- tests/test_bump.py::test_should_bump_major
 
-Our code is checked against `flake8`_ for style guide issues. It is recommended
-to run your tests in combination with :command:`flake8`, for example::
+Our code is checked against formatting, style, type, and docstring issues
+(`black`_, `flake8`_, `mypy`_, and `docformatter`_).
+It is recommended to run your tests in combination with :command:`checks`,
+for example::
 
-   $ tox -e py27,py36,flake8
+   $ tox -e checks,py36,py37
 
 
 .. _doc:
@@ -145,7 +147,7 @@ used efficiently.
 
       $ tox -e docs
 
-    The built documentation is available in :file:`dist/docs`.
+    The built documentation is available in :file:`docs/_build/html`.
 
 
 A new feature is *not* complete if it isn't proberly documented. A good
@@ -159,22 +161,18 @@ documentation includes:
     The docstring is extracted and reused in the :ref:`api` section.
     An appropriate docstring should look like this::
 
-        def compare(ver1, ver2):
-            """Compare two versions
+         def to_tuple(self) -> VersionTuple:
+            """
+            Convert the Version object to a tuple.
 
-            :param ver1: version string 1
-            :param ver2: version string 2
-            :return: The return value is negative if ver1 < ver2,
-                    zero if ver1 == ver2 and strictly positive if ver1 > ver2
-            :rtype: int
+            .. versionadded:: 2.10.0
+               Renamed ``VersionInfo._astuple`` to ``VersionInfo.to_tuple`` to
+               make this function available in the public API.
 
-            >>> semver.compare("1.0.0", "2.0.0")
-            -1
-            >>> semver.compare("2.0.0", "1.0.0")
-            1
-            >>> semver.compare("2.0.0", "2.0.0")
-            0
+            :return: a tuple with all the parts
 
+            >>> semver.Version(5, 3, 1).to_tuple()
+            (5, 3, 1, None, None)
             """
 
   * **An optional directive**
@@ -201,22 +199,12 @@ documentation includes:
       be used instead, if appropriate.
 
 
-    Add such a directive *after* the summary line, if needed.
-    An appropriate directive could look like this::
-
-        def to_tuple(self):
-            """
-            Convert the VersionInfo object to a tuple.
-
-            .. versionadded:: 2.10.0
-               Renamed ``VersionInfo._astuple`` to ``VersionInfo.to_tuple`` to
-               make this function available in the public API.
-            [...]
-            """
+    Add such a directive *after* the summary line, as shown above.
 
   * **The documentation**
 
-    A docstring is good, but in most cases it's too dense. Describe how
+    A docstring is good, but in most cases it's too dense. API documentation
+    cannot replace a good user documentation. Describe how
     to use your new feature in our documentation. Here you can give your
     readers more examples, describe it in a broader context or show
     edge cases.
@@ -231,11 +219,14 @@ Adding a Changelog Entry
     :start-after: -text-begin-
 
 
-.. _flake8: https://flake8.readthedocs.io
+.. _black: https://black.rtfd.io
+.. _docformatter: https://pypi.org/project/docformatter/
+.. _flake8: https://flake8.rtfd.io
+.. _mypy: http://mypy-lang.org/
 .. _issues:  https://github.com/python-semver/python-semver/issues
 .. _pull request: https://github.com/python-semver/python-semver/pulls
 .. _pytest: http://pytest.org/
 .. _Semantic Versioning: https://semver.org
-.. _Sphinx style: https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html
-.. _tox: https://tox.readthedocs.org/
+.. _Sphinx style: https://sphinx-rtd-tutorial.rtfd.io/en/latest/docstrings.html
+.. _tox: https://tox.rtfd.org/
 
