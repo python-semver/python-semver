@@ -146,6 +146,7 @@ Features
 
 * :gh:`276`: Document how to create a sublass from :class:`VersionInfo` class
 
+* :gh:`213`: Add typing information
 
 
 Bug Fixes
