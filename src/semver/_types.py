@@ -1,3 +1,5 @@
+"""Typing for semver."""
+
 from typing import Union, Optional, Tuple, Dict, Iterable, Callable, TypeVar
 
 VersionPart = Union[int, Optional[str]]

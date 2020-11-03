@@ -4,7 +4,15 @@ Metadata about semver.
 Contains information about semver's version, the implemented version
 of the semver specifictation, author, maintainers, and description.
 
+.. autodata:: __author__
+
+.. autodata:: __description__
+
+.. autodata:: __maintainer__
+
 .. autodata:: __version__
+
+.. autodata:: SEMVER_SPEC_VERSION
 """
 
 #: Semver version

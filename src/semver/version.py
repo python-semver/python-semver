@@ -43,18 +43,14 @@ def ensure_str(s: String, encoding="utf-8", errors="strict") -> str:
     * `bytes` -> decoded to `str`
 
     :param s: the string to convert
-    :type s: str | bytes
     :param encoding: the encoding to apply, defaults to "utf-8"
-    :type encoding: str
     :param errors: set a different error handling scheme,
        defaults to "strict".
        Other possible values are `ignore`, `replace`, and
        `xmlcharrefreplace` as well as any other name
        registered with :func:`codecs.register_error`.
-    :type errors: str
     :raises TypeError: if ``s`` is not str or bytes type
     :return: the converted string
-    :rtype: str
     """
     if isinstance(s, bytes):
         s = s.decode(encoding, errors)
@@ -218,7 +214,7 @@ class Version:
 
     def to_tuple(self) -> VersionTuple:
         """
-        Convert the VersionInfo object to a tuple.
+        Convert the Version object to a tuple.
 
         .. versionadded:: 2.10.0
            Renamed ``VersionInfo._astuple`` to ``VersionInfo.to_tuple`` to
@@ -233,7 +229,7 @@ class Version:
 
     def to_dict(self) -> VersionDict:
         """
-        Convert the VersionInfo object to an OrderedDict.
+        Convert the Version object to an OrderedDict.
 
         .. versionadded:: 2.10.0
            Renamed ``VersionInfo._asdict`` to ``VersionInfo.to_dict`` to
@@ -257,7 +253,7 @@ class Version:
         )
 
     def __iter__(self) -> VersionIterator:
-        """Implement iter(self)."""
+        """Return iter(self)."""
         yield from self.to_tuple()
 
     @staticmethod
@@ -300,7 +296,6 @@ class Version:
 
         :return: new object with the raised minor part
 
-
         >>> ver = semver.parse("3.4.5")
         >>> ver.bump_minor()
         Version(major=3, minor=5, patch=0, prerelease=None, build=None)
@@ -313,8 +308,7 @@ class Version:
         Raise the patch part of the version, return a new object but leave self
         untouched.
 
-                :return: new object with the raised patch part
-
+        :return: new object with the raised patch part
 
         >>> ver = semver.parse("3.4.5")
         >>> ver.bump_patch()
@@ -328,7 +322,7 @@ class Version:
         Raise the prerelease part of the version, return a new object but leave
         self untouched.
 
-        :param token: defaults to 'rc'
+        :param token: defaults to ``rc``
         :return: new object with the raised prerelease part
 
         >>> ver = semver.parse("3.4.5")
@@ -345,7 +339,7 @@ build=None)
         Raise the build part of the version, return a new object but leave self
         untouched.
 
-        :param token: defaults to 'build'
+        :param token: defaults to ``build``
         :return: new object with the raised build part
 
         >>> ver = semver.parse("3.4.5-rc.1+build.9")
@@ -364,7 +358,6 @@ build='build.10')
         :param other: the second version
         :return: The return value is negative if ver1 < ver2,
              zero if ver1 == ver2 and strictly positive if ver1 > ver2
-
 
         >>> semver.compare("2.0.0")
         -1
@@ -481,14 +474,17 @@ build='build.10')
         self, index: Union[int, slice]
     ) -> Union[int, Optional[str], Tuple[Union[int, str], ...]]:
         """
-        self.__getitem__(index) <==> self[index] Implement getitem. If the part
-        requested is undefined, or a part of the range requested is undefined,
-        it will throw an index error. Negative indices are not supported.
+        self.__getitem__(index) <==> self[index] Implement getitem.
+
+        If the part  requested is undefined, or a part of the range requested
+        is undefined, it will throw an index error.
+        Negative indices are not supported.
 
         :param Union[int, slice] index: a positive integer indicating the
                offset or a :func:`slice` object
         :raises IndexError: if index is beyond the range or a part is None
         :return: the requested part of the version at position index
+
         >>> ver = semver.Version.parse("3.4.5")
         >>> ver[0], ver[1], ver[2]
         (3, 4, 5)
@@ -519,7 +515,6 @@ build='build.10')
         return "%s(%s)" % (type(self).__name__, s)
 
     def __str__(self) -> str:
-        """str(self)"""
         version = "%d.%d.%d" % (self.major, self.minor, self.patch)
         if self.prerelease:
             version += "-%s" % self.prerelease
@@ -533,7 +528,9 @@ build='build.10')
     def finalize_version(self) -> "Version":
         """
         Remove any prerelease and build metadata from the version.
+
         :return: a new instance with the finalized version string
+
         >>> str(semver.Version.parse('1.2.3-rc.5').finalize_version())
         '1.2.3'
         """
@@ -545,12 +542,12 @@ build='build.10')
         Compare self to match a match expression.
 
         :param match_expr: operator and version; valid operators are
-              <   smaller than
-              >   greater than
-              >=  greator or equal than
-              <=  smaller or equal than
-              ==  equal
-              !=  not equal
+              ``<```   smaller than
+              ``>``   greater than
+              ``>=``  greator or equal than
+              ``<=``  smaller or equal than
+              ``==``  equal
+              ``!=``  not equal
         :return: True if the expression matches the version, otherwise False
 
         >>> semver.Version.parse("2.0.0").match(">=1.0.0")
@@ -589,18 +586,18 @@ build='build.10')
     @classmethod
     def parse(cls, version: String) -> "Version":
         """
-        Parse version string to a VersionInfo instance.
+        Parse version string to a Version instance.
 
         .. versionchanged:: 2.11.0
            Changed method from static to classmethod to
            allow subclasses.
 
         :param version: version string
-        :return: a :class:`VersionInfo` instance
+        :return: a new :class:`Version` instance
         :raises ValueError: if version is invalid
 
         >>> semver.Version.parse('3.4.5-pre.2+build.4')
-        VersionInfo(major=3, minor=4, patch=5, \
+        Version(major=3, minor=4, patch=5, \
 prerelease='pre.2', build='build.4')
         """
         version_str = ensure_str(version)
@@ -624,7 +621,7 @@ prerelease='pre.2', build='build.4')
           ``major``, ``minor``, ``patch``, ``prerelease``, or ``build``
         :return: the new :class:`Version` object with the changed
           parts
-        :raises TypeError: if ``parts`` contains invalid keys
+        :raises TypeError: if ``parts`` contain invalid keys
         """
         version = self.to_dict()
         version.update(parts)
@@ -632,7 +629,7 @@ prerelease='pre.2', build='build.4')
             return Version(**version)  # type: ignore
         except TypeError:
             unknownkeys = set(parts) - set(self.to_dict())
-            error = "replace() got %d unexpected keyword " "argument(s): %s" % (
+            error = "replace() got %d unexpected keyword argument(s): %s" % (
                 len(unknownkeys),
                 ", ".join(unknownkeys),
             )
