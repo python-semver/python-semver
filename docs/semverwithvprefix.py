@@ -7,15 +7,13 @@ class SemVerWithVPrefix(Version):
     """
 
     @classmethod
-    def parse(cls, version):
+    def parse(cls, version: str) -> "SemVerWithVPrefix":
         """
         Parse version string to a Version instance.
 
         :param version: version string with "v" or "V" prefix
-        :type version: str
         :raises ValueError: when version does not start with "v" or "V"
         :return: a new instance
-        :rtype: :class:`SemVerWithVPrefix`
         """
         if not version[0] in ("v", "V"):
             raise ValueError(
@@ -23,9 +21,8 @@ class SemVerWithVPrefix(Version):
                     v=version
                 )
             )
-        self = super(SemVerWithVPrefix, cls).parse(version[1:])
-        return self
+        return super().parse(version[1:])
 
-    def __str__(self):
+    def __str__(self) -> str:
         # Reconstruct the tag
-        return "v" + super(SemVerWithVPrefix, self).__str__()
+        return "v" + super().__str__()
