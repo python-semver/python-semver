@@ -50,12 +50,6 @@ Version Handling :mod:`semver.version`
 
 .. automodule:: semver.version
 
-.. autofunction:: semver.version.cmp
-
-.. autofunction:: semver.version.ensure_str
-
-.. autofunction:: semver.version.comparator
-
 .. autoclass:: semver.version.VersionInfo
 
 .. autoclass:: semver.version.Version
