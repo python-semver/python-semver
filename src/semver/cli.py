@@ -1,4 +1,14 @@
-"""CLI parsing for :command:`pysemver` command."""
+"""
+CLI parsing for :command:`pysemver` command.
+
+Each command in :command:`pysemver` is mapped to a ``cmd_`` function.
+The :func:`main <semver.cli.main>` function calls
+:func:`createparser <semver.cli.createparser>` and
+:func:`process <semver.cli.process>` to parse and process
+all the commandline options.
+
+The result of each command is printed on stdout.
+"""
 
 import argparse
 import sys

@@ -21,7 +21,8 @@ import os
 import re
 import sys
 
-sys.path.insert(0, os.path.abspath("../src/"))
+SRC_DIR = os.path.abspath("../src/")
+sys.path.insert(0, SRC_DIR)
 # from semver import __version__  # noqa: E402
 
 
@@ -58,15 +59,16 @@ def find_version(*file_paths):
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
     "sphinx_autodoc_typehints",
     "sphinx.ext.intersphinx",
     "sphinx.ext.extlinks",
 ]
 
+# Autodoc configuration
 autoclass_content = "class"
-autodoc_default_options = {}
-
+autodoc_typehints = "signature"
+autodoc_member_order = "alphabetical"
+add_function_parentheses = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
