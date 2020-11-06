@@ -1,0 +1,2 @@
+Prefer :meth:`Version.__init__` over :meth:`Version.parse`
+and change examples accordingly.

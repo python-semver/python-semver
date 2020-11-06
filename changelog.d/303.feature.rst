@@ -1,0 +1,3 @@
+Extend :meth:`Version.__init__` initializer. It allows
+now to have positional and keyword arguments. The keyword
+arguments overwrites any positional arguments.
