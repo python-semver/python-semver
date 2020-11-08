@@ -34,10 +34,10 @@ jobs:
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
-          python-version: 3.6
+          python-version: 3.7
       - name: Install dependencies
         run: |
-          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade pip setuptools setuptools-scm
           pip install tox tox-gh-actions
       - name: Check
         run: |
@@ -49,7 +49,9 @@ jobs:
     strategy:
       max-parallel: 5
       matrix:
-        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10", "3.11.0-rc.2",
+                         # "3.12"
+                         ]
 
     steps:
       - uses: actions/checkout@v1
