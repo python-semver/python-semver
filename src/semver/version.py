@@ -72,9 +72,7 @@ def comparator(operator: Comparator) -> Comparator:
             *String.__args__,  # type: ignore
         )
         if not isinstance(other, comparable_types):
-            raise TypeError(
-                "other type %r must be in %r" % (type(other), comparable_types)
-            )
+            return NotImplemented
         return operator(self, other)
 
     return wrapper

@@ -1,0 +1,10 @@
+Comparisons of :class:`~semver.version.Version` class and other
+types return now a :py:const:`NotImplemented` constant instead
+of a :py:exc:`TypeError` exception.
+
+The `NotImplemented`_ section of the Python documentation recommends
+returning this constant when comparing with ``__gt__``, ``__lt__``,
+and other comparison operators to "to indicate that the operation is
+not implemented with respect to the other type".
+
+.. _NotImplemented: https://docs.python.org/3/library/constants.html#NotImplemented
