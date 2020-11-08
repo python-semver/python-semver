@@ -10,40 +10,43 @@ install:
   - pip install virtualenv tox wheel
   - tox --version
 
+stages:
+    - check
+    - test
+
 script: tox -v
 
 matrix:
   include:
-
-  - python: "3.6"
+  - stage: check
+    python: 3.6
     env: TOXENV=checks
 
-  - python: "3.8"
+  - stage: test
     dist: xenial
-    env: TOXENV=mypy
-
-  - python: "3.6"
+    python: "3.6"
     env: TOXENV=py36
 
-  - python: "3.7"
+  - stage: test
     dist: xenial
+    python: "3.7"
     env: TOXENV=py37
 
-  - python: "3.8"
+  - stage: test
     dist: xenial
+    python: "3.8"
     env: TOXENV=py38
 
-  - python: "3.9-dev"
+  - stage: test
     dist: bionic
+    python: "3.9-dev"
     env: TOXENV=py39
 
-  - python: "nightly"
+  - stage: test
     dist: bionic
+    python: "nightly"
     env: TOXENV=py310
 
-  - python: "3.8"
-    dist: xenial
-    env: TOXENV=mypy
 
 jobs:
   allow_failures:
