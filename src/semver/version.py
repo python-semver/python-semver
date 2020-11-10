@@ -29,37 +29,7 @@ Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], s
 Comparator = Callable[["Version", Comparable], bool]
 
 
-def cmp(a, b):  # TODO: type hints
-    """Return negative if a<b, zero if a==b, positive if a>b."""
-    return (a > b) - (a < b)
-
-
-def ensure_str(s: String, encoding="utf-8", errors="strict") -> str:
-    # Taken from six project
-    """
-    Coerce *s* to `str`.
-
-    * `str` -> `str`
-    * `bytes` -> decoded to `str`
-
-    :param s: the string to convert
-    :param encoding: the encoding to apply, defaults to "utf-8"
-    :param errors: set a different error handling scheme,
-       defaults to "strict".
-       Other possible values are `ignore`, `replace`, and
-       `xmlcharrefreplace` as well as any other name
-       registered with :func:`codecs.register_error`.
-    :raises TypeError: if ``s`` is not str or bytes type
-    :return: the converted string
-    """
-    if isinstance(s, bytes):
-        s = s.decode(encoding, errors)
-    elif not isinstance(s, String.__args__):  # type: ignore
-        raise TypeError("not expecting type '%s'" % type(s))
-    return s
-
-
-def comparator(operator: Comparator) -> Comparator:
+def _comparator(operator: Comparator) -> Comparator:
     """Wrap a Version binary op method in a type-check."""
 
     @wraps(operator)
@@ -78,31 +48,9 @@ def comparator(operator: Comparator) -> Comparator:
     return wrapper
 
 
-def _nat_cmp(a, b):  # TODO: type hints
-    def convert(text):
-        return int(text) if re.match("^[0-9]+$", text) else text
-
-    def split_key(key):
-        return [convert(c) for c in key.split(".")]
-
-    def cmp_prerelease_tag(a, b):
-        if isinstance(a, int) and isinstance(b, int):
-            return cmp(a, b)
-        elif isinstance(a, int):
-            return -1
-        elif isinstance(b, int):
-            return 1
-        else:
-            return cmp(a, b)
-
-    a, b = a or "", b or ""
-    a_parts, b_parts = split_key(a), split_key(b)
-    for sub_a, sub_b in zip(a_parts, b_parts):
-        cmp_result = cmp_prerelease_tag(sub_a, sub_b)
-        if cmp_result != 0:
-            return cmp_result
-    else:
-        return cmp(len(a), len(b))
+def _cmp(a, b):  # TODO: type hints
+    """Return negative if a<b, zero if a==b, positive if a>b."""
+    return (a > b) - (a < b)
 
 
 class Version:
@@ -164,6 +112,29 @@ class Version:
         self._patch = version_parts["patch"]
         self._prerelease = None if prerelease is None else str(prerelease)
         self._build = None if build is None else str(build)
+
+    @classmethod
+    def _nat_cmp(cls, a, b):  # TODO: type hints
+        def cmp_prerelease_tag(a, b):
+            if isinstance(a, int) and isinstance(b, int):
+                return _cmp(a, b)
+            elif isinstance(a, int):
+                return -1
+            elif isinstance(b, int):
+                return 1
+            else:
+                return _cmp(a, b)
+
+        a, b = a or "", b or ""
+        a_parts, b_parts = a.split("."), b.split(".")
+        a_parts = [int(x) if re.match(r"^\d+$", x) else x for x in a_parts]
+        b_parts = [int(x) if re.match(r"^\d+$", x) else x for x in b_parts]
+        for sub_a, sub_b in zip(a_parts, b_parts):
+            cmp_result = cmp_prerelease_tag(sub_a, sub_b)
+            if cmp_result != 0:
+                return cmp_result
+        else:
+            return _cmp(len(a), len(b))
 
     @property
     def major(self) -> int:
@@ -381,12 +352,12 @@ build='build.10')
 
         v1 = self.to_tuple()[:3]
         v2 = other.to_tuple()[:3]
-        x = cmp(v1, v2)
+        x = _cmp(v1, v2)
         if x:
             return x
 
         rc1, rc2 = self.prerelease, other.prerelease
-        rccmp = _nat_cmp(rc1, rc2)
+        rccmp = self._nat_cmp(rc1, rc2)
 
         if not rccmp:
             return 0
@@ -444,27 +415,27 @@ build='build.10')
             version = version.bump_patch()
         return version.bump_prerelease(prerelease_token)
 
-    @comparator
+    @_comparator
     def __eq__(self, other: Comparable) -> bool:  # type: ignore
         return self.compare(other) == 0
 
-    @comparator
+    @_comparator
     def __ne__(self, other: Comparable) -> bool:  # type: ignore
         return self.compare(other) != 0
 
-    @comparator
+    @_comparator
     def __lt__(self, other: Comparable) -> bool:
         return self.compare(other) < 0
 
-    @comparator
+    @_comparator
     def __le__(self, other: Comparable) -> bool:
         return self.compare(other) <= 0
 
-    @comparator
+    @_comparator
     def __gt__(self, other: Comparable) -> bool:
         return self.compare(other) > 0
 
-    @comparator
+    @_comparator
     def __ge__(self, other: Comparable) -> bool:
         return self.compare(other) >= 0
 
@@ -593,15 +564,20 @@ build='build.10')
         :param version: version string
         :return: a new :class:`Version` instance
         :raises ValueError: if version is invalid
+        :raises TypeError: if version contains the wrong type
 
         >>> semver.Version.parse('3.4.5-pre.2+build.4')
         Version(major=3, minor=4, patch=5, \
 prerelease='pre.2', build='build.4')
         """
-        version_str = ensure_str(version)
-        match = cls._REGEX.match(version_str)
+        if isinstance(version, bytes):
+            version = version.decode("UTF-8")
+        elif not isinstance(version, String.__args__):  # type: ignore
+            raise TypeError("not expecting type '%s'" % type(version))
+
+        match = cls._REGEX.match(version)
         if match is None:
-            raise ValueError(f"{version_str} is not valid SemVer string")
+            raise ValueError(f"{version} is not valid SemVer string")
 
         matched_version_parts: Dict[str, Any] = match.groupdict()
 

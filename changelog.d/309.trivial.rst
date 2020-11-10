@@ -1,0 +1,17 @@
+Some (private) functions from the :mod:`semver.version`
+module has been changed.
+
+The following functions got renamed:
+
+* function ``semver.version.comparator`` got renamed to
+  :func:`semver.version._comparator` as it is only useful
+  inside the :class:`~semver.version.Version` class.
+* function ``semver.version.cmp`` got renamed to
+  :func:`semver.version._cmp` as it is only useful
+  inside the :class:`~semver.version.Version` class.
+
+The following functions got integrated into the
+:class:`~semver.version.Version` class:
+
+* function ``semver.version._nat_cmd`` as a classmethod
+* function ``semver.version.ensure_str``
