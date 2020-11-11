@@ -1,15 +1,20 @@
-name: Black Formatting
+---
+name: Python
 
-on: [pull_request]
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v1
       - name: Output env variables
         run: |
+           echo "Default branch=${default-branch}"
            echo "GITHUB_WORKFLOW=${GITHUB_WORKFLOW}"
            echo "GITHUB_ACTION=$GITHUB_ACTION"
            echo "GITHUB_ACTIONS=$GITHUB_ACTIONS"
@@ -26,18 +31,36 @@ jobs:
            cat $GITHUB_EVENT_PATH
            echo "\n"
            echo "::debug::---end"
-
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.7
-
+          python-version: 3.6
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip black
-
-      - name: Run black
-        id: black
+          python3 -m pip install --upgrade pip
+          pip install tox tox-gh-actions
+      - name: Check
         run: |
-          black --check .
-          echo "::set-output name=rc::$?"
+          tox -e checks
+
+  tests:
+    needs: check
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install tox tox-gh-actions
+      - name: Test with tox
+        run: |
+          tox
