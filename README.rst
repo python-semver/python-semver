@@ -10,8 +10,8 @@ Quickstart
 
 A Python module for `semantic versioning`_. Simplifies comparing versions.
 
-|build-status| |python-support| |downloads| |license| |docs| |black|
-|Gitter|
+|GHAction| |python-support| |downloads| |license| |docs| |black|
+|Gitter| |openissues|
 
 .. teaser-end
 
@@ -100,9 +100,6 @@ There are other functions to discover. Read on!
 .. |latest-version| image:: https://img.shields.io/pypi/v/semver.svg
    :alt: Latest version on PyPI
    :target: https://pypi.org/project/semver
-.. |build-status| image:: https://travis-ci.com/python-semver/python-semver.svg?branch=master
-   :alt: Build status
-   :target: https://travis-ci.com/python-semver/python-semver
 .. |python-support| image:: https://img.shields.io/pypi/pyversions/semver.svg
    :target: https://pypi.org/project/semver
    :alt: Python versions
@@ -122,3 +119,8 @@ There are other functions to discover. Read on!
 .. |Gitter| image:: https://badges.gitter.im/python-semver/community.svg
     :target: https://gitter.im/python-semver/community
     :alt: Gitter
+.. |openissues| image:: http://isitmaintained.com/badge/open/python-semver/python-semver.svg
+    :target: http://isitmaintained.com/project/python-semver/python-semver
+    :alt: Percentage of open issues
+.. |GHAction| image:: https://github.com/python-semver/python-semver/workflows/Python/badge.svg
+    :alt: Python
