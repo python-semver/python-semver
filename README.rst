@@ -11,6 +11,7 @@ Quickstart
 A Python module for `semantic versioning`_. Simplifies comparing versions.
 
 |build-status| |python-support| |downloads| |license| |docs| |black|
+|Gitter|
 
 .. teaser-end
 
@@ -118,3 +119,6 @@ There are other functions to discover. Read on!
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
     :alt: Black Formatter
+.. |Gitter| image:: https://badges.gitter.im/python-semver/community.svg
+    :target: https://gitter.im/python-semver/community
+    :alt: Gitter
