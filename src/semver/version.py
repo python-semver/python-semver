@@ -199,20 +199,11 @@ class Version:
                     "{!r} is negative. A version can only be positive.".format(name)
                 )
 
-        if isinstance(prerelease, int):
-            self._prerelease = prerelease
-        else:
-            self._prerelease = cls._ensure_str(prerelease or verlist[3])
-        if isinstance(build, int):
-            self._build = build
-        else:
-            self._build = cls._ensure_str(build or verlist[4])
-
         self._major = version_parts["major"]
         self._minor = version_parts["minor"]
         self._patch = version_parts["patch"]
-        self._prerelease = None if prerelease is None else str(prerelease)
-        self._build = None if build is None else str(build)
+        self._prerelease = cls._enforce_str(prerelease or verlist[3])
+        self._build = cls._enforce_str(build or verlist[4])
 
     @classmethod
     def _nat_cmp(cls, a, b):  # TODO: type hints
@@ -236,6 +227,18 @@ class Version:
                 return cmp_result
         else:
             return _cmp(len(a), len(b))
+
+    @classmethod
+    def _enforce_str(cls, s: Optional[StringOrInt]) -> Optional[str]:
+        """
+        Forces input to be string, regardless of int, bytes, or string.
+
+        :param s: a string, integer or None
+        :return: a Unicode string (or None)
+        """
+        if isinstance(s, int):
+            return str(s)
+        return cls._ensure_str(s)
 
     @classmethod
     def _ensure_str(cls, s: Optional[String], encoding="UTF-8") -> Optional[str]:
