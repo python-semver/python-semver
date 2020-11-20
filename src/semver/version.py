@@ -151,12 +151,12 @@ class Version:
                 (int, str, bytes),  # major
                 (int, str, bytes),  # minor
                 (int, str, bytes),  # patch
-                (str, bytes, int, type(None)),  # prerelease
-                (str, bytes, int, type(None)),  # build
+                (int, str, bytes, type(None)),  # prerelease
+                (int, str, bytes, type(None)),  # build
             )
             return [
-                isinstance(item, allowed_types_in_args[i])
-                for i, item in enumerate(args)
+                isinstance(item, expected_type)
+                for item, expected_type in zip(args, allowed_types_in_args)
             ]
 
         cls = self.__class__
