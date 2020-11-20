@@ -199,8 +199,14 @@ class Version:
                     "{!r} is negative. A version can only be positive.".format(name)
                 )
 
-        prerelease = cls._ensure_str(prerelease or verlist[3])  # type: ignore
-        build = cls._ensure_str(build or verlist[4])  # type: ignore
+        if isinstance(prerelease, int):
+            self._prerelease = prerelease
+        else:
+            self._prerelease = cls._ensure_str(prerelease or verlist[3])
+        if isinstance(build, int):
+            self._build = build
+        else:
+            self._build = cls._ensure_str(build or verlist[4])
 
         self._major = version_parts["major"]
         self._minor = version_parts["minor"]
@@ -232,9 +238,7 @@ class Version:
             return _cmp(len(a), len(b))
 
     @classmethod
-    def _ensure_str(
-        cls, s: Optional[StringOrInt], encoding="UTF-8"
-    ) -> Optional[StringOrInt]:
+    def _ensure_str(cls, s: Optional[String], encoding="UTF-8") -> Optional[str]:
         """
         Ensures string type regardless if argument type is str or bytes.
 
