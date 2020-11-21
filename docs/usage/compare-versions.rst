@@ -67,7 +67,7 @@ To compare two versions depends on your type:
     >>> v > "1.0"
     Traceback (most recent call last):
     ...
-    ValueError: 1.0 is not valid SemVer string
+    ValueError: '1.0' is not valid SemVer string
 
 * **A** :class:`Version <semver.version.Version>` **type and a** :func:`dict`
 

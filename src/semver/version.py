@@ -27,7 +27,7 @@ from ._types import (
 )
 
 # These types are required here because of circular imports
-Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], str]
+Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], String]
 Comparator = Callable[["Version", Comparable], bool]
 
 T = TypeVar("T", bound="Version")
@@ -65,7 +65,7 @@ class Version:
 
         * a maximum length of 5 items that comprehend the major,
           minor, patch, prerelease, or build parts.
-        * a str or bytes string that contains a valid semver
+        * a str or bytes string at first position that contains a valid semver
           version string.
     :param major: version when you make incompatible API changes.
     :param minor: version when you add functionality in
@@ -84,6 +84,21 @@ class Version:
     >>> Version(major=2, minor=3, patch=4, build="build.2")
     Version(major=2, minor=3, patch=4, prerelease=None, build="build.2")
     """
+
+    #: The name of the version parts
+    VERSIONPARTS: Tuple[str, str, str, str, str] = (
+        "major", "minor", "patch", "prerelease", "build"
+    )
+    #: The default values for each part (position match with ``VERSIONPARTS``):
+    VERSIONPARTDEFAULTS: VersionTuple = (0, 0, 0, None, None)
+    #: The allowed types for each part (position match with ``VERSIONPARTS``):
+    ALLOWED_TYPES = (
+        (int, str, bytes),  # major
+        (int, str, bytes),  # minor
+        (int, str, bytes),  # patch
+        (int, str, bytes, type(None)),  # prerelease
+        (int, str, bytes, type(None)),  # build
+    )
 
     __slots__ = ("_major", "_minor", "_patch", "_prerelease", "_build")
 
@@ -125,6 +140,45 @@ class Version:
         re.VERBOSE,
     )
 
+    def _check_types(self, *args: Tuple) -> List[bool]:
+        """
+        Check if the given arguments conform to the types in ``ALLOWED_TYPES``.
+
+        :return: bool for each position
+        """
+        cls = self.__class__
+        return [
+            isinstance(item, expected_type)
+            for item, expected_type in zip(args, cls.ALLOWED_TYPES)
+        ]
+
+    def _raise_if_args_are_invalid(self, *args):
+        """
+        Checks conditions for positional arguments. For example:
+
+        * No more than 5 arguments.
+        * If first argument  is a string, contains a dot, and there
+          are more arguments.
+        * Arguments have invalid types.
+
+        :raises ValueError: if more arguments than 5 or if first argument
+           is a string, contains a dot, and there are more arguments.
+        :raises TypeError: if there are invalid types.
+        """
+        if args and len(args) > 5:
+            raise ValueError("You cannot pass more than 5 arguments to Version")
+        elif len(args) > 1 and "." in str(args[0]):
+            raise ValueError(
+                "You cannot pass a string and additional positional arguments"
+            )
+        types_in_args = self._check_types(*args)
+        if not all(types_in_args):
+            pos = types_in_args.index(False)
+            raise TypeError(
+                "not expecting type in argument position "
+                f"{pos} (type: {type(args[pos])})"
+            )
+
     def __init__(
         self,
         *args: Tuple[
@@ -140,70 +194,75 @@ class Version:
         prerelease: Optional[Union[String, int]] = None,
         build: Optional[Union[String, int]] = None,
     ):
-        def _check_types(*args):
-            if args and len(args) > 5:
-                raise ValueError("You cannot pass more than 5 arguments to Version")
-            elif len(args) > 1 and "." in str(args[0]):
-                raise ValueError(
-                    "You cannot pass a string and additional positional arguments"
-                )
-            allowed_types_in_args = (
-                (int, str, bytes),  # major
-                (int, str, bytes),  # minor
-                (int, str, bytes),  # patch
-                (int, str, bytes, type(None)),  # prerelease
-                (int, str, bytes, type(None)),  # build
-            )
-            return [
-                isinstance(item, expected_type)
-                for item, expected_type in zip(args, allowed_types_in_args)
-            ]
+        #
+        # The algorithm to support different Version calls is this:
+        #
+        # 1. Check first, if there are invalid calls. For example
+        #    more than 5 items in args or a unsupported combination
+        #    of args and version part arguments (major, minor, etc.)
+        #    If yes, raise an exception.
+        #
+        # 2. Create a dictargs dict:
+        #    a. If the first argument is a version string which contains
+        #       a dot it's likely it's a semver string. Try to convert
+        #       them into a dict and save it to dictargs.
+        #    b. If the first argument is not a version string, try to
+        #       create the dictargs from the args argument.
+        #
+        # 3. Create a versiondict from the version part arguments.
+        #    This contains only items if the argument is not None.
+        #
+        # 4. Merge the two dicts, versiondict overwrites dictargs.
+        #    In other words, if the user specifies Version(1, major=2)
+        #    the major=2 has precedence over the 1.
+        #
+        # 5. Set all version components from versiondict. If the key
+        #    doesn't exist, set a default value.
 
         cls = self.__class__
-        verlist: List[Optional[StringOrInt]] = [None, None, None, None, None]
+        # (1) check combinations and types
+        self._raise_if_args_are_invalid(*args)
 
-        types_in_args = _check_types(*args)
-        if not all(types_in_args):
-            pos = types_in_args.index(False)
-            raise TypeError(
-                "not expecting type in argument position "
-                f"{pos} (type: {type(args[pos])})"
-            )
-        elif args and "." in str(args[0]):
-            # we have a version string as first argument
-            v = cls._parse(args[0])  # type: ignore
-            for idx, key in enumerate(
-                ("major", "minor", "patch", "prerelease", "build")
-            ):
-                verlist[idx] = v[key]
+        # (2) First argument was a string
+        if args and args[0] and "." in cls._enforce_str(args[0]):  # type: ignore
+            dictargs = cls._parse(cast(String, args[0]))
         else:
-            for index, item in enumerate(args):
-                verlist[index] = args[index]  # type: ignore
+            dictargs = dict(zip(cls.VERSIONPARTS, args))
 
-        # Build a dictionary of the arguments except prerelease and build
-        try:
-            version_parts = {
-                # Prefer major, minor, and patch arguments over args
-                "major": int(major or verlist[0] or 0),
-                "minor": int(minor or verlist[1] or 0),
-                "patch": int(patch or verlist[2] or 0),
-            }
-        except ValueError:
-            raise ValueError(
-                "Expected integer or integer string for major, minor, or patch"
+        # (3) Only include part in versiondict if value is not None
+        versiondict = {
+            part: value
+            for part, value in zip(
+                cls.VERSIONPARTS, (major, minor, patch, prerelease, build)
             )
+            if value is not None
+        }
 
-        for name, value in version_parts.items():
-            if value < 0:
-                raise ValueError(
-                    "{!r} is negative. A version can only be positive.".format(name)
-                )
+        # (4) Order here is important: versiondict overwrites dictargs
+        versiondict = {**dictargs, **versiondict}  # type: ignore
 
-        self._major = version_parts["major"]
-        self._minor = version_parts["minor"]
-        self._patch = version_parts["patch"]
-        self._prerelease = cls._enforce_str(prerelease or verlist[3])
-        self._build = cls._enforce_str(build or verlist[4])
+        # (5) Set all version components:
+        self._major = cls._ensure_int(
+            cast(StringOrInt, versiondict.get("major", cls.VERSIONPARTDEFAULTS[0]))
+        )
+        self._minor = cls._ensure_int(
+            cast(StringOrInt, versiondict.get("minor", cls.VERSIONPARTDEFAULTS[1]))
+        )
+        self._patch = cls._ensure_int(
+            cast(StringOrInt, versiondict.get("patch", cls.VERSIONPARTDEFAULTS[2]))
+        )
+        self._prerelease = cls._enforce_str(
+            cast(
+                Optional[StringOrInt],
+                versiondict.get("prerelease", cls.VERSIONPARTDEFAULTS[3]),
+            )
+        )
+        self._build = cls._enforce_str(
+            cast(
+                Optional[StringOrInt],
+                versiondict.get("build", cls.VERSIONPARTDEFAULTS[4]),
+            )
+        )
 
     @classmethod
     def _nat_cmp(cls, a, b):  # TODO: type hints
@@ -227,6 +286,31 @@ class Version:
                 return cmp_result
         else:
             return _cmp(len(a), len(b))
+
+    @classmethod
+    def _ensure_int(cls, value: StringOrInt) -> int:
+        """
+        Ensures integer value type regardless if argument type is str or bytes.
+        Otherwise raise ValueError.
+
+        :param value:
+        :raises ValueError: Two conditions:
+          * If value is not an integer or cannot be converted.
+          * If value is negative.
+        :return: the converted value as integer
+        """
+        try:
+            value = int(value)
+        except ValueError:
+            raise ValueError(
+                "Expected integer or integer string for major, minor, or patch"
+            )
+
+        if value < 0:
+            raise ValueError(
+                f"Argument {value} is negative. A version can only be positive."
+            )
+        return value
 
     @classmethod
     def _enforce_str(cls, s: Optional[StringOrInt]) -> Optional[str]:
@@ -486,8 +570,12 @@ class Version:
         0
         """
         cls = type(self)
+
+        # See https://github.com/python/mypy/issues/4019
         if isinstance(other, String.__args__):  # type: ignore
-            other = cls.parse(other)
+            if "." not in cast(str, cls._ensure_str(other)):
+                raise ValueError("Expected semver version string.")
+            other = cls(other)
         elif isinstance(other, dict):
             other = cls(**other)
         elif isinstance(other, (tuple, list)):

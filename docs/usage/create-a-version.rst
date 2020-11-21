@@ -93,6 +93,9 @@ arguments:
     ValueError: You cannot pass a string and additional positional arguments
 
 
+Using Deprecated Functions to Create a Version
+----------------------------------------------
+
 The old, deprecated module level functions are still available but
 using them are discoraged. They are available to convert old code
 to semver3.
@@ -123,4 +126,4 @@ Depending on your use case, the following methods are available:
     >>> semver.parse("1.2")
     Traceback (most recent call last):
     ...
-    ValueError: 1.2 is not valid SemVer string
+    ValueError: '1.2' is not valid SemVer string
