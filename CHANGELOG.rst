@@ -16,58 +16,6 @@ in our repository.
 
 .. towncrier release notes start
 
-Version 3.0.0-dev.2
-===================
-
-:Released: 2020-11-04
-:Maintainer:
-
-
-Improved Documentation
-----------------------
-
-* :gh:`312`: Rework "Usage" section.
-
-  * Mention the rename of :class:`~semver.version.VersionInfo` to
-    :class:`~semver.version.Version` class
-  * Remove semver. prefix in doctests to make examples shorter
-  * Correct some references to dunder methods like
-    :func:`~.semver.version.Version.__getitem__`,
-    :func:`~.semver.version.Version.__gt__` etc.
-  * Remove inconsistencies and mention module level function as
-    deprecated and discouraged from using
-  * Make empty :py:func:`super` call in :file:`semverwithvprefix.py` example
-
-
-
-----
-
-
-Version 3.0.0-dev.2
-===================
-
-:Released: 2020-11-04
-:Maintainer:
-
-
-Improved Documentation
-----------------------
-
-* :gh:`312`: Rework "Usage" section.
-
-  * Mention the rename of :class:`~semver.version.VersionInfo` to
-    :class:`~semver.version.Version` class
-  * Remove semver. prefix in doctests to make examples shorter
-  * Correct some references to dunder methods like :func:`__getitem__`,
-    :func:`__gt__` etc.
-  * Remove inconsistencies and mention module level function as
-    deprecated and discouraged from using
-  * Make empty :py:func:`super` call in :file:`semverwithvprefix.py` example
-
-
-
-----
-
 
 Version 3.0.0-dev.2
 ===================
