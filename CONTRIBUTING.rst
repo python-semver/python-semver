@@ -8,14 +8,18 @@ The semver source code is managed using Git and is hosted on GitHub::
    git clone git://github.com/python-semver/python-semver
 
 
-Reporting Bugs and Feedback
----------------------------
+Reporting Bugs and Asking Questions
+-----------------------------------
 
 If you think you have encountered a bug in semver or have an idea for a new
-feature? Great! We like to hear from you.
+feature? Great! We like to hear from you!
 
-First, take the time to look into our GitHub `issues`_ tracker if
-this already covered. If not, changes are good that we avoid double work.
+There are several options to participate:
+
+* Open a new topic on our `GitHub discussion <gh_discussions>`_ page.
+  Tell us our ideas or ask your questions.
+
+* Look into our GitHub `issues`_ tracker or open a new issue.
 
 
 Prerequisites
@@ -229,4 +233,4 @@ Adding a Changelog Entry
 .. _Semantic Versioning: https://semver.org
 .. _Sphinx style: https://sphinx-rtd-tutorial.rtfd.io/en/latest/docstrings.html
 .. _tox: https://tox.rtfd.org/
-
+.. _gh_discussions: https://github.com/python-semver/python-semver/discussions
