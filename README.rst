@@ -5,7 +5,8 @@ Quickstart
 
 A Python module for `semantic versioning`_. Simplifies comparing versions.
 
-|build-status| |python-support| |downloads| |license| |docs| |black|
+|GHAction| |python-support| |downloads| |license| |docs| |black|
+|openissues| |GHDiscussion|
 
 .. teaser-end
 
@@ -113,3 +114,11 @@ There are other functions to discover. Read on!
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
     :alt: Black Formatter
+.. |openissues| image:: http://isitmaintained.com/badge/open/python-semver/python-semver.svg
+    :target: http://isitmaintained.com/project/python-semver/python-semver
+    :alt: Percentage of open issues
+.. |GHAction| image:: https://github.com/python-semver/python-semver/workflows/Python/badge.svg
+    :alt: Python
+.. |GHDiscussion| image:: https://shields.io/badge/GitHub-%20Discussions-green?logo=github
+    :target: https://github.com/python-semver/python-semver/discussions
+    :alt: GitHub Discussion
