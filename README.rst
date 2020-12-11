@@ -11,7 +11,7 @@ Quickstart
 A Python module for `semantic versioning`_. Simplifies comparing versions.
 
 |GHAction| |python-support| |downloads| |license| |docs| |black|
-|Gitter| |openissues|
+|openissues| |GHDiscussion|
 
 .. teaser-end
 
@@ -124,3 +124,6 @@ There are other functions to discover. Read on!
     :alt: Percentage of open issues
 .. |GHAction| image:: https://github.com/python-semver/python-semver/workflows/Python/badge.svg
     :alt: Python
+.. |GHDiscussion| image:: https://shields.io/badge/GitHub-%20Discussions-green?logo=github
+    :target: https://github.com/python-semver/python-semver/discussions
+    :alt: GitHub Discussion
