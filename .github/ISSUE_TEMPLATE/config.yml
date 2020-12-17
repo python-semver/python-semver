@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Community Support
+    url: https://github.com/python-semver/python-semver/discussions
+    about: Ask and answer questions in our discussion forum.
+  - name: Documentation
+    url: https://python-semver.readthedocs.io/
+    about: Find more information in our documentation.
