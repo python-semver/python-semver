@@ -455,7 +455,7 @@ To compare two versions depends on your type:
     >>> v > dict(major=1, unknown=42)
     Traceback (most recent call last):
     ...
-    TypeError: __init__() got an unexpected keyword argument 'unknown'
+    TypeError: ... got an unexpected keyword argument 'unknown'
 
 
 Other types cannot be compared.
@@ -786,4 +786,3 @@ the original class:
      Traceback (most recent call last):
      ...
      ValueError: '1.2.4': not a valid semantic version tag. Must start with 'v' or 'V'
-
