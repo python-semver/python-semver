@@ -546,9 +546,9 @@ For example, here are the maximum and minimum versions of a list of version stri
 
 .. code-block:: python
 
-    >>> str(max(map(Version.parse, ['1.1.0', '1.2.0', '2.1.0', '0.5.10', '0.4.99'])))
+    >>> max(['1.1.0', '1.2.0', '2.1.0', '0.5.10', '0.4.99'], key=Version.parse)
     '2.1.0'
-    >>> str(min(map(Version.parse, ['1.1.0', '1.2.0', '2.1.0', '0.5.10', '0.4.99'])))
+    >>> min(['1.1.0', '1.2.0', '2.1.0', '0.5.10', '0.4.99'], key=Version.parse)
     '0.4.99'
 
 And the same can be done with tuples:
