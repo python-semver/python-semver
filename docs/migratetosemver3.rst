@@ -20,7 +20,7 @@ Use Version instead of VersionInfo
 The :class:`VersionInfo` has been renamed to :class:`Version`
 to have a more succinct name.
 An alias has been created to preserve compatibility but
-using old name has been deprecated.
+using the old name has been deprecated.
 
 If you still need the old version, use this line:
 

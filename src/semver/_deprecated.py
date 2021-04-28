@@ -7,11 +7,11 @@ import inspect
 import warnings
 from functools import partial, wraps
 from types import FrameType
-from typing import Type, Union, Callable, cast
+from typing import Type, Callable, cast
 
 from . import cli
 from .version import Version
-from ._types import F, String
+from ._types import Decorator, F, String
 
 
 def deprecated(
@@ -19,7 +19,7 @@ def deprecated(
     replace: str = None,
     version: str = None,
     category: Type[Warning] = DeprecationWarning,
-) -> Union[Callable[..., F], partial]:
+) -> Decorator:
     """
     Decorates a function to output a deprecation warning.
 
