@@ -1,28 +1,22 @@
 """Version handling."""
 
-import collections
 import re
-from functools import wraps
+import collections
 from typing import (
     Any,
     Dict,
-    Iterable,
-    Optional,
-    SupportsInt,
     Tuple,
     Union,
-    cast,
     Callable,
+    Iterable,
+    Optional,
     Collection,
+    SupportsInt,
+    cast,
 )
+from functools import wraps
 
-from ._types import (
-    VersionTuple,
-    VersionDict,
-    VersionIterator,
-    String,
-    VersionPart,
-)
+from ._types import String, VersionDict, VersionPart, VersionTuple, VersionIterator
 
 # These types are required here because of circular imports
 Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], str]
@@ -551,6 +545,18 @@ build='build.10')
         cmp_res = self.compare(match_version)
 
         return cmp_res in possibilities
+
+    @classmethod
+    def __get_validators__(cls):
+        """Return a list of validator methods for pydantic models."""
+
+        yield cls.parse
+
+    @classmethod
+    def __modify_schema__(cls, field_schema):
+        """Inject/mutate the pydantic field schema in-place."""
+
+        field_schema.update(examples=["1.0.2", "2.15.3-alpha", "21.3.15-beta+12345"])
 
     @classmethod
     def parse(cls, version: String) -> "Version":

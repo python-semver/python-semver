@@ -787,3 +787,18 @@ the original class:
      Traceback (most recent call last):
      ...
      ValueError: '1.2.4': not a valid semantic version tag. Must start with 'v' or 'V'
+
+Integrating with Pydantic
+-------------------------------------
+
+If you are building a Pydantic model, you can use :class:`~semver.version.Version` directly.
+An appropriate :class:`pydantic.ValidationError` will be raised for invalid version numbers.
+
+.. code-block:: python
+
+    >>> from semver.version import Version
+    >>> from pydantic import create_model
+    >>> Model = create_model('Model', version=(Version, ...))
+    >>> model = Model(version="3.4.5-pre.2+build.4")
+    >>> model.version
+    Version(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')
