@@ -1,3 +1,0 @@
-Rework API documentation.
-Follow a more "semi-manual" attempt and add auto directives
-into :file:`docs/api.rst`.

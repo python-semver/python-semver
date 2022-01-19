@@ -1,3 +1,0 @@
-Correct :file:`tox.ini` for ``changelog`` entry to skip
-installation for semver. This should speed up the execution
-of towncrier.

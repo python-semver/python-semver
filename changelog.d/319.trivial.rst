@@ -1,4 +1,0 @@
-Introduce stages in :file:`.travis.yml`
-The config file contains now two stages: check and test. If
-check fails, the test stage won't be executed. This could
-speed up things when some checks fails.

@@ -1,1 +1,0 @@
-Switch from Travis CI to GitHub Actions.
