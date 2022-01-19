@@ -5,22 +5,31 @@ create a new release.
 
 ## Prepare the Release
 
-1. Verify that issues about new release are closed https://github.com/python-semver/python-semver/issues.
+1. Verify:
 
-1. Verify that no pull requests that should be included in this release haven't been left out https://github.com/python-semver/python-semver/pulls.
+   * all issues for a new release are closed: <https://github.com/python-semver/python-semver/issues>.
 
-1. Verify that continuous integration for latest build was passing https://travis-ci.com/python-semver/python-semver.
+   * that all pull requests that should be included in this release are merged: <https://github.com/python-semver/python-semver/pulls>.
 
-1. Create a new branch `release/VERSION`.
+   * that continuous integration for latest build was passing: <https://github.com/python-semver/python-semver/actions>.
+
+1. Create a new branch `release/<VERSION>`.
 
 1. If one or several supported Python versions have been removed or added, verify that the 3 following files have been updated:
-   * [setup.py](https://github.com/python-semver/python-semver/blob/master/setup.py)
-   * [tox.ini](https://github.com/python-semver/python-semver/blob/master/tox.ini)
-   * [.travis.yml](https://github.com/python-semver/python-semver/blob/master/.travis.yml)
+   * `setup.cfg`
+   * `tox.ini`
+   * `.git/workflows/pythonpackage.yml`
+
+1. Verify that the version has been updated and follow
+   <https://semver.org>:
+
+   * `src/semver/__about__.py`
+   * `docs/usage.rst`
 
 1. Add eventually new contributor(s) to [CONTRIBUTORS](https://github.com/python-semver/python-semver/blob/master/CONTRIBUTORS).
 
-1. Verify that `__version__` in [semver.py](https://github.com/python-semver/python-semver/blob/master/semver.py) have been updated and follow https://semver.org.
+
+1. Check if all changelog entries are created. If some are missing, [create them](https://python-semver.readthedocs.io/en/latest/development.html#adding-a-changelog-entry).
 
 1. Show the new draft [CHANGELOG](https://github.com/python-semver/python-semver/blob/master/CHANGELOG.rst) entry for the latest release with:
 
@@ -36,32 +45,47 @@ create a new release.
 
        $ tox -e docs
 
+1. Commit all changes, push, and create a pull request.
+
 
 ## Create the New Release
 
-1. Ensure that long description (ie [README.rst](https://github.com/python-semver/python-semver/blob/master/README.rst)) can be correctly rendered by Pypi using `restview --long-description`
+1. Ensure that long description ([README.rst](https://github.com/python-semver/python-semver/blob/master/README.rst)) can be correctly rendered by Pypi using `restview --long-description`
+
+1. Clean up your local Git repository. Be careful,
+   as it **will remove all files** which are not
+   versioned by Git:
+
+       $ git clean -xfd
+
+   Before you create your distribution files, clean
+   the directory too:
+
+       $ rm dist/*
+
+1. Create the distribution files (wheel and source):
+
+       $ tox -e prepare-dist
 
 1. Upload the wheel and source to TestPyPI first:
 
-    ```bash
-    $ git clean -xfd
-    $ rm dist/*
-    $ python3 setup.py sdist bdist_wheel
+    ```bash    
     $ twine upload --repository-url https://test.pypi.org/legacy/  dist/*
     ```
 
-   If you have a `~/.pypirc` with a `testpyi` section, the upload can be
+   If you have a `~/.pypirc` with a `testpypi` section, the upload can be
    simplified:
 
-       $ twine upload --repository testpyi dist/*
+       $ twine upload --repository testpypi dist/*
 
 1. Check if everything is okay with the wheel.
+   Check also the web site `https://test.pypi.org/project/<VERSION>/`
 
 1. Upload to PyPI:
 
     ```bash
     $ git clean -xfd
-    $ python setup.py register sdist bdist_wheel
+    $ tox -e prepare-dist
     $ twine upload dist/*
     ```
 
@@ -77,5 +101,7 @@ create a new release.
 1. In [GitHub Release page](https://github.com/python-semver/python-semver/release)
    document the new release.
    Usually it's enough to take it from a commit message or the tag description.
+
+1. Announce it in <https://github.com/python-semver/python-semver/discussions/categories/announcements>.
 
 You're done! Celebrate!

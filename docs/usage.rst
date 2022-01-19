@@ -26,7 +26,7 @@ Getting the Version of semver
 To know the version of semver itself, use the following construct::
 
    >>> semver.__version__
-   '3.0.0-dev.2'
+   '3.0.0-dev.3'
 
 
 Creating a Version
