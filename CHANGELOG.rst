@@ -17,6 +17,91 @@ in our repository.
 .. towncrier release notes start
 
 
+Version 3.0.0-dev.3
+===================
+
+:Released: 2022-01-19
+:Maintainer: Tom Schraitle
+
+
+Bug Fixes
+---------
+
+* :gh:`310`: Rework API documentation.
+  Follow a more "semi-manual" attempt and add auto directives
+  into :file:`docs/api.rst`.
+
+
+
+Improved Documentation
+----------------------
+
+* :gh:`312`: Rework "Usage" section.
+
+  * Mention the rename of :class:`~semver.version.VersionInfo` to
+    :class:`~semver.version.Version` class
+  * Remove semver. prefix in doctests to make examples shorter
+  * Correct some references to dunder methods like
+    :func:`~.semver.version.Version.__getitem__`,
+    :func:`~.semver.version.Version.__gt__` etc.
+  * Remove inconsistencies and mention module level function as
+    deprecated and discouraged from using
+  * Make empty :py:func:`super` call in :file:`semverwithvprefix.py` example
+
+* :gh:`315`: Improve release procedure text
+
+
+
+Trivial/Internal Changes
+------------------------
+
+* :gh:`309`: Some (private) functions from the :mod:`semver.version`
+  module has been changed.
+
+  The following functions got renamed:
+
+  * function ``semver.version.comparator`` got renamed to
+    :func:`semver.version._comparator` as it is only useful
+    inside the :class:`~semver.version.Version` class.
+  * function ``semver.version.cmp`` got renamed to
+    :func:`semver.version._cmp` as it is only useful
+    inside the :class:`~semver.version.Version` class.
+
+  The following functions got integrated into the
+  :class:`~semver.version.Version` class:
+
+  * function ``semver.version._nat_cmd`` as a classmethod
+  * function ``semver.version.ensure_str``
+
+* :gh:`313`: Correct :file:`tox.ini` for ``changelog`` entry to skip
+  installation for semver. This should speed up the execution
+  of towncrier.
+
+* :gh:`316`: Comparisons of :class:`~semver.version.Version` class and other
+  types return now a :py:const:`NotImplemented` constant instead
+  of a :py:exc:`TypeError` exception.
+
+  The `NotImplemented`_ section of the Python documentation recommends
+  returning this constant when comparing with ``__gt__``, ``__lt__``,
+  and other comparison operators to "to indicate that the operation is
+  not implemented with respect to the other type".
+
+  .. _NotImplemented: https://docs.python.org/3/library/constants.html#NotImplemented
+
+* :gh:`319`: Introduce stages in :file:`.travis.yml`
+  The config file contains now two stages: check and test. If
+  check fails, the test stage won't be executed. This could
+  speed up things when some checks fails.
+
+* :gh:`322`: Switch from Travis CI to GitHub Actions.
+
+* :gh:`347`: Support Python 3.10 in GitHub Action and other config files.
+
+
+
+----
+
+
 Version 3.0.0-dev.2
 ===================
 

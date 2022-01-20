@@ -11,20 +11,13 @@ build-backend = "setuptools.build_meta"
 line-length = 88
 target-version = ['py36', 'py37', 'py38', 'py39', 'py310']
 # diff = true
-exclude = '''
-(
-  /(
-    \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | \.env
-    | _build
-    | build
-    | dist
-  )/
-)
+extend-exclude = '''
+# A regex preceded with ^/ will apply only to files and directories
+# in the root of the project.
+^/*.py
+'''
+include = '''
+^/setup.py
 '''
 
 [tool.towncrier]
