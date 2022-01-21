@@ -11,7 +11,8 @@ create a new release.
 
    * that all pull requests that should be included in this release are merged: <https://github.com/python-semver/python-semver/pulls>.
 
-   * that continuous integration for latest build was passing: <https://github.com/python-semver/python-semver/actions>.
+   * that continuous integration for latest build was passing:
+     <https://github.com/python-semver/python-semver/actions>.
 
 1. Create a new branch `release/<VERSION>`.
 
@@ -81,6 +82,8 @@ create a new release.
 1. Check if everything is okay with the wheel.
    Check also the web site `https://test.pypi.org/project/<VERSION>/`
 
+1. If everything looks fine, merge the pull request.
+
 1. Upload to PyPI:
 
     ```bash
@@ -91,16 +94,24 @@ create a new release.
 
 1. Go to https://pypi.org/project/semver/ to verify that new version is online and the page is rendered correctly.
 
-1. Tag commit and push to GitHub using command line interface:
+# Finish the release
 
-    ```bash
-    $ git tag -a x.x.x -m 'Version x.x.x'
-    $ git push python-semver master --tags
-    ```
+1. Create a tag:
+
+    $ git tag -a x.x.x
+
+   It's recommended to use the generated Tox output
+   from the Changelog.
+
+1. Push the tag:
+
+    $ git push --tags
 
 1. In [GitHub Release page](https://github.com/python-semver/python-semver/release)
    document the new release.
-   Usually it's enough to take it from a commit message or the tag description.
+   Select the tag from the last step and copy the
+   content of the tag description into the release
+   description.
 
 1. Announce it in <https://github.com/python-semver/python-semver/discussions/categories/announcements>.
 
