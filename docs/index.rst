@@ -10,7 +10,7 @@ Semver |version| -- Semantic Versioning
    :hidden:
 
    install
-   usage
+   usage/index
    migratetosemver3
    development
    api
