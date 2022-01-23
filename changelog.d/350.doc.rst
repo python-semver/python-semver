@@ -1,0 +1,2 @@
+Restructure usage section. Create subdirectory "usage/" and splitted
+all section into different files.
