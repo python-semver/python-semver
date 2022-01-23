@@ -11,7 +11,8 @@ Semver |version| -- Semantic Versioning
 
    install
    usage/index
-   migratetosemver3
+   migration/index
+   advanced/index
    development
    api
 
@@ -30,6 +31,7 @@ Semver |version| -- Semantic Versioning
 
    changelog
    changelog-semver2
+
 
 Indices and Tables
 ==================

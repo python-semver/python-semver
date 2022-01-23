@@ -17,7 +17,8 @@ class SemVerWithVPrefix(Version):
         """
         if not version[0] in ("v", "V"):
             raise ValueError(
-                "{v!r}: not a valid semantic version tag. Must start with 'v' or 'V'".format(
+                "{v!r}: not a valid semantic version tag. "
+                "Must start with 'v' or 'V'".format(
                     v=version
                 )
             )

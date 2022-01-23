@@ -3,7 +3,7 @@
 Migrating from semver2 to semver3
 =================================
 
-This chapter describes the visible differences for
+This document describes the visible differences for
 users and how your code stays compatible for semver3.
 
 Although the development team tries to make the transition
@@ -11,7 +11,7 @@ to semver3 as smooth as possible, at some point change
 is inevitable.
 
 For a more detailed overview of all the changes, refer
-to our :ref:`changelog`.
+to our :ref:`change-log`.
 
 
 Use Version instead of VersionInfo

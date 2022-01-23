@@ -18,7 +18,3 @@ Using semver
    determine-version-equality
    compare-versions-through-expression
    get-min-and-max-of-multiple-versions
-   deal-with-invalid-versions
-   replace-deprecated-functions
-   display-deprecation-warnings
-   create-subclasses-from-version

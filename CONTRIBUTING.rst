@@ -64,7 +64,7 @@ We recommend the following workflow:
    a. Write test cases and run the complete test suite, see :ref:`testsuite`
       for details.
 
-   b. Write a changelog entry, see section :ref:`changelog`.
+   b. Write a changelog entry, see section :ref:`add-changelog`.
 
    c. If you have implemented a new feature, document it into our
       documentation to help our reader. See section :ref:`doc` for
@@ -214,7 +214,7 @@ documentation includes:
     edge cases.
 
 
-.. _changelog:
+.. _add-changelog:
 
 Adding a Changelog Entry
 ------------------------
