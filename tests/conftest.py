@@ -8,6 +8,7 @@ import semver
 
 from coerce import coerce  # noqa:E402
 from semverwithvprefix import SemVerWithVPrefix  # noqa:E402
+import packaging.version
 
 
 @pytest.fixture(autouse=True)
@@ -16,6 +17,7 @@ def add_semver(doctest_namespace):
     doctest_namespace["semver"] = semver
     doctest_namespace["coerce"] = coerce
     doctest_namespace["SemVerWithVPrefix"] = SemVerWithVPrefix
+    doctest_namespace["PyPIVersion"] = packaging.version.Version
 
 
 @pytest.fixture

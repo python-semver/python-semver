@@ -18,8 +18,13 @@ This line avoids surprises. You will get any updates within the major 2 release 
 Keep in mind, as this line avoids any major version updates, you also will never
 get new exciting features or bug fixes.
 
-You can add this line in your file :file:`setup.py`, :file:`requirements.txt`, or any other
-file that lists your dependencies.
+Same applies for semver v3, if you want to get all updates for the semver v3
+development line, but not a major update to semver v4::
+
+    semver>=3,<4
+
+You can add this line in your file :file:`setup.py`, :file:`requirements.txt`,
+:file:`pyproject.toml`, or any other file that lists your dependencies.
 
 Pip
 ---
@@ -28,12 +33,12 @@ Pip
 
     pip3 install semver
 
-If you want to install this specific version (for example, 2.10.0), use the command :command:`pip`
+If you want to install this specific version (for example, 3.0.0), use the command :command:`pip`
 with an URL and its version:
 
 .. parsed-literal::
 
-    pip3 install git+https://github.com/python-semver/python-semver.git@2.11.0
+    pip3 install git+https://github.com/python-semver/python-semver.git@3.0.0
 
 
 Linux Distributions

@@ -17,6 +17,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import codecs
+from datetime import date
 import os
 import re
 import sys
@@ -24,6 +25,7 @@ import sys
 SRC_DIR = os.path.abspath("../src/")
 sys.path.insert(0, SRC_DIR)
 # from semver import __version__  # noqa: E402
+YEAR = date.today().year
 
 
 def read(*parts):
@@ -83,7 +85,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "python-semver"
-copyright = "2018, Kostiantyn Rybnikov and all"
+copyright = f"{YEAR}, Kostiantyn Rybnikov and all"
 author = "Kostiantyn Rybnikov and all"
 
 # The version info for the project you're documenting, acts as replacement for
