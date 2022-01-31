@@ -60,7 +60,7 @@ them with code which is compatible for future versions:
   .. code-block:: python
 
      >>> s1 = semver.max_ver("1.2.3", "1.2.4")
-     >>> s2 = str(max(map(Version.parse, ("1.2.3", "1.2.4"))))
+     >>> s2 = max("1.2.3", "1.2.4", key=Version.parse)
      >>> s1 == s2
      True
 
@@ -71,7 +71,7 @@ them with code which is compatible for future versions:
   .. code-block:: python
 
      >>> s1 = semver.min_ver("1.2.3", "1.2.4")
-     >>> s2 = str(min(map(Version.parse, ("1.2.3", "1.2.4"))))
+     >>> s2 = min("1.2.3", "1.2.4", key=Version.parse)
      >>> s1 == s2
      True
 

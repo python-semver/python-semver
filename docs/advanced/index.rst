@@ -8,3 +8,4 @@ Advanced topics
     create-subclasses-from-version
     display-deprecation-warnings
     combine-pydantic-and-semver
+    convert-pypi-to-semver
