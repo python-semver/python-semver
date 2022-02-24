@@ -31,7 +31,7 @@ __maintainer__ = ["Sebastien Celles", "Tom Schraitle"]
 __maintainer_email__ = "s.celles@gmail.com"
 
 #: Short description about semver
-__description__ = "Python helper for Semantic Versioning (http://semver.org)"
+__description__ = "Python helper for Semantic Versioning (https://semver.org)"
 
 #: Supported semver specification
 SEMVER_SPEC_VERSION = "2.0.0"

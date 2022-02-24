@@ -121,4 +121,4 @@ Ubuntu
     $ sudo apt-get install python3-semver
 
 
-.. _semantic versioning: http://semver.org/
+.. _semantic versioning: https://semver.org/

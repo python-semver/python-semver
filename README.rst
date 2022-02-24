@@ -112,7 +112,7 @@ There are other functions to discover. Read on!
 .. |docs| image:: https://readthedocs.org/projects/python-semver/badge/?version=latest
    :target: http://python-semver.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
-.. _semantic versioning: http://semver.org/
+.. _semantic versioning: https://semver.org/
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
     :alt: Black Formatter
