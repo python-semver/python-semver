@@ -9,3 +9,4 @@ Advanced topics
     display-deprecation-warnings
     combine-pydantic-and-semver
     convert-pypi-to-semver
+    version-from-file
