@@ -89,6 +89,31 @@ class Version:
         """,
         re.VERBOSE,
     )
+    #: Regex for a semver version that might be shorter
+    _REGEX_ALLOW_SHORT = re.compile(
+        r"""
+            ^
+            (?P<major>0|[1-9]\d*)
+            (?:
+                \.
+                (?P<minor>0|[1-9]\d*)
+                (?:
+                    \.
+                    (?P<patch>0|[1-9]\d*)
+                )?
+            )?
+            (?:-(?P<prerelease>
+                (?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)
+                (?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*
+            ))?
+            (?:\+(?P<build>
+                [0-9a-zA-Z-]+
+                (?:\.[0-9a-zA-Z-]+)*
+            ))?
+            $
+        """,
+        re.VERBOSE,
+    )
 
     def __init__(
         self,
@@ -553,7 +578,7 @@ build='build.10')
         return cmp_res in possibilities
 
     @classmethod
-    def parse(cls, version: String) -> "Version":
+    def parse(cls, version: String, allowShorterVersion: bool = False) -> "Version":
         """
         Parse version string to a Version instance.
 
@@ -575,11 +600,18 @@ prerelease='pre.2', build='build.4')
         elif not isinstance(version, String.__args__):  # type: ignore
             raise TypeError("not expecting type '%s'" % type(version))
 
-        match = cls._REGEX.match(version)
+        if allowShorterVersion:
+            match = cls._REGEX_ALLOW_SHORT.match(version)
+        else:
+            match = cls._REGEX.match(version)
         if match is None:
             raise ValueError(f"{version} is not valid SemVer string")
 
         matched_version_parts: Dict[str, Any] = match.groupdict()
+        if not matched_version_parts['minor']:
+            matched_version_parts['minor'] = 0
+        if not matched_version_parts['patch']:
+            matched_version_parts['patch'] = 0
 
         return cls(**matched_version_parts)
 
