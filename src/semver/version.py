@@ -68,29 +68,8 @@ class Version:
     __slots__ = ("_major", "_minor", "_patch", "_prerelease", "_build")
     #: Regex for number in a prerelease
     _LAST_NUMBER = re.compile(r"(?:[^\d]*(\d+)[^\d]*)+")
-    #: Regex for a semver version
-    _REGEX = re.compile(
-        r"""
-            ^
-            (?P<major>0|[1-9]\d*)
-            \.
-            (?P<minor>0|[1-9]\d*)
-            \.
-            (?P<patch>0|[1-9]\d*)
-            (?:-(?P<prerelease>
-                (?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)
-                (?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*
-            ))?
-            (?:\+(?P<build>
-                [0-9a-zA-Z-]+
-                (?:\.[0-9a-zA-Z-]+)*
-            ))?
-            $
-        """,
-        re.VERBOSE,
-    )
-    #: Regex for a semver version that might be shorter
-    _REGEX_ALLOW_SHORT = re.compile(
+    #: Regex template for a semver version
+    _REGEX_TEMPLATE = \
         r"""
             ^
             (?P<major>0|[1-9]\d*)
@@ -100,8 +79,8 @@ class Version:
                 (?:
                     \.
                     (?P<patch>0|[1-9]\d*)
-                )?
-            )?
+                ){}
+            ){}
             (?:-(?P<prerelease>
                 (?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)
                 (?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*
@@ -111,7 +90,15 @@ class Version:
                 (?:\.[0-9a-zA-Z-]+)*
             ))?
             $
-        """,
+        """
+    #: Regex for a semver version
+    _REGEX = re.compile(
+        _REGEX_TEMPLATE.format('', ''),
+        re.VERBOSE,
+    )
+    #: Regex for a semver version that might be shorter
+    _REGEX_OPTIONAL_MINOR_AND_PATCH = re.compile(
+        _REGEX_TEMPLATE.format('?', '?'),
         re.VERBOSE,
     )
 
@@ -578,7 +565,7 @@ build='build.10')
         return cmp_res in possibilities
 
     @classmethod
-    def parse(cls, version: String, allowShorterVersion: bool = False) -> "Version":
+    def parse(cls, version: String, optional_minor_and_patch: bool = False) -> "Version":
         """
         Parse version string to a Version instance.
 
@@ -587,6 +574,7 @@ build='build.10')
            allow subclasses.
 
         :param version: version string
+        :param optional_minor_and_patch: if set to true, the minor and patch version digits are optional, but this will deviate from the semver spec
         :return: a new :class:`Version` instance
         :raises ValueError: if version is invalid
         :raises TypeError: if version contains the wrong type
@@ -600,8 +588,8 @@ prerelease='pre.2', build='build.4')
         elif not isinstance(version, String.__args__):  # type: ignore
             raise TypeError("not expecting type '%s'" % type(version))
 
-        if allowShorterVersion:
-            match = cls._REGEX_ALLOW_SHORT.match(version)
+        if optional_minor_and_patch:
+            match = cls._REGEX_OPTIONAL_MINOR_AND_PATCH.match(version)
         else:
             match = cls._REGEX.match(version)
         if match is None:
