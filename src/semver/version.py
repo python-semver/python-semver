@@ -576,6 +576,9 @@ build='build.10')
         .. versionchanged:: 2.11.0
            Changed method from static to classmethod to
            allow subclasses.
+        .. versionchanged:: 3.0.0
+           Added optional parameter optional_minor_and_patch to allow optional
+           minor and patch parts.
 
         :param version: version string
         :param optional_minor_and_patch: if set to true, the version string to parse \
