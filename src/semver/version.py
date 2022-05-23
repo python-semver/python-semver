@@ -79,8 +79,8 @@ class Version:
                 (?:
                     \.
                     (?P<patch>0|[1-9]\d*)
-                ){}
-            ){}
+                ){opt_patch}
+            ){opt_minor}
             (?:-(?P<prerelease>
                 (?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)
                 (?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*
@@ -93,12 +93,12 @@ class Version:
         """
     #: Regex for a semver version
     _REGEX = re.compile(
-        _REGEX_TEMPLATE.format('', ''),
+        _REGEX_TEMPLATE.format(opt_patch='', opt_minor=''),
         re.VERBOSE,
     )
     #: Regex for a semver version that might be shorter
     _REGEX_OPTIONAL_MINOR_AND_PATCH = re.compile(
-        _REGEX_TEMPLATE.format('?', '?'),
+        _REGEX_TEMPLATE.format(opt_patch='?', opt_minor='?'),
         re.VERBOSE,
     )
 
