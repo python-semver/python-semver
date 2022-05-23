@@ -565,7 +565,11 @@ build='build.10')
         return cmp_res in possibilities
 
     @classmethod
-    def parse(cls, version: String, optional_minor_and_patch: bool = False) -> "Version":
+    def parse(
+        cls,
+        version: String,
+        optional_minor_and_patch: bool = False
+    ) -> "Version":
         """
         Parse version string to a Version instance.
 
@@ -574,9 +578,10 @@ build='build.10')
            allow subclasses.
 
         :param version: version string
-        :param optional_minor_and_patch: if set to true, the version string to parse can contain
-           optional minor and patch parts. Optional parts are set to zero.
-           By default (False), the version string to parse has to follow the semver specification.
+        :param optional_minor_and_patch: if set to true, the version string to parse \
+           can contain optional minor and patch parts. Optional parts are set to zero.
+           By default (False), the version string to parse has to follow the semver
+           specification.
         :return: a new :class:`Version` instance
         :raises ValueError: if version is invalid
         :raises TypeError: if version contains the wrong type
