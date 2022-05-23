@@ -574,7 +574,9 @@ build='build.10')
            allow subclasses.
 
         :param version: version string
-        :param optional_minor_and_patch: if set to true, the minor and patch version digits are optional, but this will deviate from the semver spec
+        :param optional_minor_and_patch: if set to true, the version string to parse can contain
+           optional minor and patch parts. Optional parts are set to zero.
+           By default (False), the version string to parse has to follow the semver specification.
         :return: a new :class:`Version` instance
         :raises ValueError: if version is invalid
         :raises TypeError: if version contains the wrong type
