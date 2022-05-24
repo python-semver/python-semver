@@ -53,6 +53,56 @@ def test_should_parse_version(version, expected):
     assert result == expected
 
 
+@pytest.mark.parametrize(
+    "version,expected",
+    [
+        # no. 1
+        (
+            "1.2-alpha.1.2+build.11.e0f985a",
+            {
+                "major": 1,
+                "minor": 2,
+                "patch": 0,
+                "prerelease": "alpha.1.2",
+                "build": "build.11.e0f985a",
+            },
+        ),
+        # no. 2
+        (
+            "1-alpha-1+build.11.e0f985a",
+            {
+                "major": 1,
+                "minor": 0,
+                "patch": 0,
+                "prerelease": "alpha-1",
+                "build": "build.11.e0f985a",
+            },
+        ),
+        (
+            "0.1-0f",
+            {"major": 0, "minor": 1, "patch": 0, "prerelease": "0f", "build": None},
+        ),
+        (
+            "0-0foo.1",
+            {"major": 0, "minor": 0, "patch": 0, "prerelease": "0foo.1", "build": None},
+        ),
+        (
+            "0-0foo.1+build.1",
+            {
+                "major": 0,
+                "minor": 0,
+                "patch": 0,
+                "prerelease": "0foo.1",
+                "build": "build.1",
+            },
+        ),
+    ],
+)
+def test_should_parse_version_with_optional_minor_and_patch(version, expected):
+    result = Version.parse(version, optional_minor_and_patch=True)
+    assert result == expected
+
+
 def test_parse_version_info_str_hash():
     s_version = "1.2.3-alpha.1.2+build.11.e0f985a"
     v = parse_version_info(s_version)

@@ -1,0 +1,2 @@
+Add optional parameter ``optional_minor_and_patch`` in :meth:`.Version.parse`  to allow optional
+minor and patch parts.
