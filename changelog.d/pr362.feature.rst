@@ -1,0 +1,2 @@
+Make :meth:`.Version.match` accept a bare version string as match expression, defaulting to
+equality testing.
