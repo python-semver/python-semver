@@ -522,7 +522,7 @@ build='build.10')
         """
         Compare self to match a match expression.
 
-        :param match_expr: operator and version; valid operators are
+        :param match_expr: optional operator and version; valid operators are
               ``<```   smaller than
               ``>``   greater than
               ``>=``  greator or equal than
@@ -535,6 +535,8 @@ build='build.10')
         True
         >>> semver.Version.parse("1.0.0").match(">1.0.0")
         False
+        >>> semver.Version.parse("4.0.4").match("4.0.4")
+        True
         """
         prefix = match_expr[:2]
         if prefix in (">=", "<=", "==", "!="):
@@ -542,6 +544,9 @@ build='build.10')
         elif prefix and prefix[0] in (">", "<"):
             prefix = prefix[0]
             match_version = match_expr[1:]
+        elif match_expr and match_expr[0] in "0123456789":
+            prefix = "=="
+            match_version = match_expr
         else:
             raise ValueError(
                 "match_expr parameter should be in format <op><ver>, "
