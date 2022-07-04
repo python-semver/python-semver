@@ -24,3 +24,16 @@ That gives you the following possibilities to express your condition:
     True
     >>> semver.match("1.0.0", ">1.0.0")
     False
+
+If no operator is specified, the match expression is interpreted as a
+version to be compared for equality. This allows handling the common
+case of version compatibility checking through either an exact version
+or a match expression very easy to implement, as the same code will
+handle both cases:
+
+.. code-block:: python
+
+    >>> semver.match("2.0.0", "2.0.0")
+    True
+    >>> semver.match("1.0.0", "3.5.1")
+    False
