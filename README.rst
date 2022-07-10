@@ -47,11 +47,11 @@ To import this library, use:
     >>> import semver
 
 Working with the library is quite straightforward. To turn a version string into the
-different parts, use the ``semver.Version.parse`` function:
+different parts, use the ``semver.VersionInfo.parse`` function:
 
 .. code-block:: python
 
-    >>> ver = semver.Version.parse('1.2.3-pre.2+build.4')
+    >>> ver = semver.VersionInfo.parse('1.2.3-pre.2+build.4')
     >>> ver.major
     1
     >>> ver.minor
@@ -64,21 +64,21 @@ different parts, use the ``semver.Version.parse`` function:
     'build.4'
 
 To raise parts of a version, there are a couple of functions available for
-you. The function ``semver.Version.bump_major`` leaves the original object untouched, but
-returns a new ``semver.Version`` instance with the raised major part:
+you. The function ``semver.VersionInfo.bump_major`` leaves the original object untouched, but
+returns a new ``semver.VersionInfo`` instance with the raised major part:
 
 .. code-block:: python
 
-    >>> ver = semver.Version.parse("3.4.5")
+    >>> ver = semver.VersionInfo.parse("3.4.5")
     >>> ver.bump_major()
-    Version(major=4, minor=0, patch=0, prerelease=None, build=None)
+    VersionInfo(major=4, minor=0, patch=0, prerelease=None, build=None)
 
 It is allowed to concatenate different "bump functions":
 
 .. code-block:: python
 
     >>> ver.bump_major().bump_minor()
-    Version(major=4, minor=1, patch=0, prerelease=None, build=None)
+    VersionInfo(major=4, minor=1, patch=0, prerelease=None, build=None)
 
 To compare two versions, semver provides the ``semver.compare`` function.
 The return value indicates the relationship between the first and second
