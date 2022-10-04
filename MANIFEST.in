@@ -1,8 +1,7 @@
 include *.rst
 include *.txt
-include test_*.py
+include tests/test_*.py
 
-exclude .travis.yml
 prune docs/_build
 recursive-exclude .github  *
 

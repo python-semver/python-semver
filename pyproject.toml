@@ -1,11 +1,21 @@
+#
+#
+# See also https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+#
+# General idea taken from
+# https://godatadriven.com/blog/a-practical-guide-to-setuptools-and-pyproject-toml/
+
 [build-system]
 requires = [
   # sync with setup.py until we discard non-pep-517/518
-  "setuptools>=40.0",
+  "setuptools",
   "setuptools-scm",
   "wheel",
+  "build",
 ]
 build-backend = "setuptools.build_meta"
+
+
 
 [tool.black]
 line-length = 88
@@ -22,7 +32,7 @@ include = '''
 
 [tool.towncrier]
 package = "semver"
-# package_dir = "src"
+package_dir = "src"
 filename = "CHANGELOG.rst"
 directory = "changelog.d/"
 title_format = "Version {version}"

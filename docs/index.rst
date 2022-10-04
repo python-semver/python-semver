@@ -9,6 +9,7 @@ Semver |version| -- Semantic Versioning
    :caption: Contents
    :hidden:
 
+   build
    install
    usage/index
    migration/index
