@@ -66,6 +66,30 @@ def test_should_versioninfo_bump_multiple():
     assert v.bump_prerelease().bump_build().bump_build().bump_prerelease() == expected
 
 
+def test_should_versioninfo_bump_prerelease_with_empty_str():
+    v = parse_version_info("3.4.5")
+    expected = parse_version_info("3.4.5-1")
+    assert v.bump_prerelease("") == expected
+
+
+def test_should_versioninfo_bump_prerelease_with_none():
+    v = parse_version_info("3.4.5")
+    expected = parse_version_info("3.4.5-rc.1")
+    assert v.bump_prerelease(None) == expected
+
+
+def test_should_versioninfo_bump_build_with_empty_str():
+    v = parse_version_info("3.4.5")
+    expected = parse_version_info("3.4.5+1")
+    assert v.bump_build("") == expected
+
+
+def test_should_versioninfo_bump_build_with_none():
+    v = parse_version_info("3.4.5")
+    expected = parse_version_info("3.4.5+build.1")
+    assert v.bump_build(None) == expected
+
+
 def test_should_ignore_extensions_for_bump():
     assert bump_patch("3.4.5-rc1+build4") == "3.4.6"
 

@@ -305,30 +305,44 @@ class Version:
         cls = type(self)
         return cls(self._major, self._minor, self._patch + 1)
 
-    def bump_prerelease(self, token: str = "rc") -> "Version":
+    def bump_prerelease(self, token: Optional[str] = "rc") -> "Version":
         """
         Raise the prerelease part of the version, return a new object but leave
         self untouched.
 
-        :param token: defaults to ``rc``
-        :return: new object with the raised prerelease part
+        :param token: defaults to ``'rc'``
+        :return: new :class:`Version` object with the raised prerelease part.
+            The original object is not modified.
 
         >>> ver = semver.parse("3.4.5")
-        >>> ver.bump_prerelease()
-        Version(major=3, minor=4, patch=5, prerelease='rc.2', \
-build=None)
+        >>> ver.bump_prerelease().prerelease
+        'rc.2'
+        >>> ver.bump_prerelease('').prerelease
+        '1'
+        >>> ver.bump_prerelease(None).prerelease
+        'rc.1'
         """
         cls = type(self)
-        prerelease = cls._increment_string(self._prerelease or (token or "rc") + ".0")
+        if self._prerelease is not None:
+            prerelease = self._prerelease
+        elif token == "":
+            prerelease = "0"
+        elif token is None:
+            prerelease = "rc.0"
+        else:
+            prerelease = str(token) + ".0"
+
+        prerelease = cls._increment_string(prerelease)
         return cls(self._major, self._minor, self._patch, prerelease)
 
-    def bump_build(self, token: str = "build") -> "Version":
+    def bump_build(self, token: Optional[str] = "build") -> "Version":
         """
         Raise the build part of the version, return a new object but leave self
         untouched.
 
-        :param token: defaults to ``build``
-        :return: new object with the raised build part
+        :param token: defaults to ``'build'``
+        :return: new :class:`Version` object with the raised build part.
+            The original object is not modified.
 
         >>> ver = semver.parse("3.4.5-rc.1+build.9")
         >>> ver.bump_build()
@@ -336,7 +350,28 @@ build=None)
 build='build.10')
         """
         cls = type(self)
-        build = cls._increment_string(self._build or (token or "build") + ".0")
+        if self._build is not None:
+            build = self._build
+        elif token == "":
+            build = "0"
+        elif token is None:
+            build = "build.0"
+        else:
+            build = str(token) + ".0"
+
+        # self._build or (token or "build") + ".0"
+        build = cls._increment_string(build)
+        if self._build is not None:
+            build = self._build
+        elif token == "":
+            build = "0"
+        elif token is None:
+            build = "build.0"
+        else:
+            build = str(token) + ".0"
+
+        # self._build or (token or "build") + ".0"
+        build = cls._increment_string(build)
         return cls(self._major, self._minor, self._patch, self._prerelease, build)
 
     def compare(self, other: Comparable) -> int:
