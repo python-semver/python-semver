@@ -1,14 +1,18 @@
 import pytest
 
-from semver import match
+from semver import match, Version
 
 
 def test_should_match_simple():
-    assert match("2.3.7", ">=2.3.6") is True
+    left, right = ("2.3.7", ">=2.3.6")
+    assert match(left, right) is True
+    assert Version.parse(left).match(right) is True
 
 
 def test_should_no_match_simple():
-    assert match("2.3.7", ">=2.3.8") is False
+    left, right = ("2.3.7", ">=2.3.8")
+    assert match(left, right) is False
+    assert Version.parse(left).match(right) is False
 
 
 @pytest.mark.parametrize(
@@ -21,6 +25,7 @@ def test_should_no_match_simple():
 )
 def test_should_match_not_equal(left, right, expected):
     assert match(left, right) is expected
+    assert Version.parse(left).match(right) is expected
 
 
 @pytest.mark.parametrize(
@@ -33,6 +38,7 @@ def test_should_match_not_equal(left, right, expected):
 )
 def test_should_match_equal_by_default(left, right, expected):
     assert match(left, right) is expected
+    assert Version.parse(left).match(right) is expected
 
 
 @pytest.mark.parametrize(
@@ -50,6 +56,7 @@ def test_should_not_raise_value_error_for_expected_match_expression(
     left, right, expected
 ):
     assert match(left, right) is expected
+    assert Version.parse(left).match(right) is expected
 
 
 @pytest.mark.parametrize(
@@ -58,9 +65,27 @@ def test_should_not_raise_value_error_for_expected_match_expression(
 def test_should_raise_value_error_for_unexpected_match_expression(left, right):
     with pytest.raises(ValueError):
         match(left, right)
+    with pytest.raises(ValueError):
+        Version.parse(left).match(right)
 
 
 @pytest.mark.parametrize("left,right", [("1.0.0", ""), ("1.0.0", "!")])
 def test_should_raise_value_error_for_invalid_match_expression(left, right):
     with pytest.raises(ValueError):
         match(left, right)
+    with pytest.raises(ValueError):
+        Version.parse(left).match(right)
+
+
+@pytest.mark.parametrize(
+    "left,right,expected",
+    [
+        ("2.3.7", "<2.4.*", True),
+        ("2.3.7", ">2.3.5", True),
+        ("2.3.7", "<=2.3.9", True),
+        ("2.3.7", ">=2.3.5", True),
+        ("2.3.7", "==2.3.7", True),
+        ("2.3.7", "!=2.3.7", False),
+    ],
+)
+def test_should_match_with_asterisk(left, right, expected):
