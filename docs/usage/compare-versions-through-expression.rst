@@ -24,9 +24,10 @@ That gives you the following possibilities to express your condition:
 
 .. code-block:: python
 
-    >>> Version.parse("2.0.0").match(">=1.0.0")
+    >>> version = Version(2, 0, 0)
+    >>> version.match(">=1.0.0")
     True
-    >>> Version.parse("1.0.0").match(">1.0.0")
+    >>> version.match("<1.0.0")
     False
 
 If no operator is specified, the match expression is interpreted as a
@@ -37,7 +38,8 @@ handle both cases:
 
 .. code-block:: python
 
-    >>> Version.parse("2.0.0").match("2.0.0")
+    >>> version = Version(2, 0, 0)
+    >>> version.match("2.0.0")
     True
-    >>> Version.parse("1.0.0").match("3.5.1")
+    >>> version.match("3.5.1")
     False
