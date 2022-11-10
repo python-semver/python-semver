@@ -107,8 +107,8 @@ class Version:
         major: SupportsInt,
         minor: SupportsInt = 0,
         patch: SupportsInt = 0,
-        prerelease: Union[String, int] = None,
-        build: Union[String, int] = None,
+        prerelease: Optional[Union[String, int]] = None,
+        build: Optional[Union[String, int]] = None,
     ):
         # Build a dictionary of the arguments except prerelease and build
         version_parts = {"major": int(major), "minor": int(minor), "patch": int(patch)}

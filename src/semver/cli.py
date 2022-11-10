@@ -12,7 +12,7 @@ The result of each command is printed on stdout.
 
 import argparse
 import sys
-from typing import cast, List
+from typing import cast, List, Optional
 
 from .version import Version
 from .__about__ import __version__
@@ -152,7 +152,7 @@ def process(args: argparse.Namespace) -> str:
     return args.func(args)
 
 
-def main(cliargs: List[str] = None) -> int:
+def main(cliargs: Optional[List[str]] = None) -> int:
     """
     Entry point for the application script.
 
