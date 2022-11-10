@@ -7,7 +7,7 @@ import inspect
 import warnings
 from functools import partial, wraps
 from types import FrameType
-from typing import Type, Callable, cast
+from typing import Type, Callable, Optional, cast
 
 from . import cli
 from .version import Version
@@ -15,9 +15,9 @@ from ._types import Decorator, F, String
 
 
 def deprecated(
-    func: F = None,
-    replace: str = None,
-    version: str = None,
+    func: Optional[F] = None,
+    replace: Optional[str] = None,
+    version: Optional[str] = None,
     category: Type[Warning] = DeprecationWarning,
 ) -> Decorator:
     """

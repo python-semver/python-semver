@@ -11,12 +11,12 @@ This makes it also possible to "run" a wheel like in this command::
 """
 import os.path
 import sys
-from typing import List
+from typing import List, Optional
 
 from semver import cli
 
 
-def main(cliargs: List[str] = None) -> int:
+def main(cliargs: Optional[List[str]] = None) -> int:
     if __package__ == "":
         path = os.path.dirname(os.path.dirname(__file__))
         sys.path[0:0] = [path]
