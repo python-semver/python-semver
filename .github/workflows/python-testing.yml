@@ -11,7 +11,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - name: Output env variables
         run: |
            echo "Default branch=${default-branch}"
@@ -32,7 +32,7 @@ jobs:
            echo "\n"
            echo "::debug::---end"
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.7
       - name: Install dependencies
@@ -49,14 +49,19 @@ jobs:
     strategy:
       max-parallel: 5
       matrix:
-        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10", "3.11.0-rc.2",
+        python-version: ["3.6",
+                         "3.7",
+                         "3.8",
+                         "3.9",
+                         "3.10",
+                         "3.11",
                          # "3.12"
                          ]
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
