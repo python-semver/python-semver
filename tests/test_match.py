@@ -1,6 +1,7 @@
 import pytest
 
 from semver import match, Version
+from semver.spec import InvalidSpecifier
 
 
 def test_should_match_simple():
@@ -60,20 +61,26 @@ def test_should_not_raise_value_error_for_expected_match_expression(
 
 
 @pytest.mark.parametrize(
-    "left,right", [("2.3.7", "=2.3.7"), ("2.3.7", "~2.3.7"), ("2.3.7", "^2.3.7")]
+    "left,right",
+    [
+        ("2.3.7", "=2.3.7"),
+        ("2.3.7", "!2.3.7"),
+        # ("2.3.7", "~2.3.7"),
+        # ("2.3.7", "^2.3.7")
+    ],
 )
 def test_should_raise_value_error_for_unexpected_match_expression(left, right):
-    with pytest.raises(ValueError):
+    with pytest.raises(InvalidSpecifier):
         match(left, right)
-    with pytest.raises(ValueError):
+    with pytest.raises(InvalidSpecifier):
         Version.parse(left).match(right)
 
 
 @pytest.mark.parametrize("left,right", [("1.0.0", ""), ("1.0.0", "!")])
 def test_should_raise_value_error_for_invalid_match_expression(left, right):
-    with pytest.raises(ValueError):
+    with pytest.raises(InvalidSpecifier):
         match(left, right)
-    with pytest.raises(ValueError):
+    with pytest.raises(InvalidSpecifier):
         Version.parse(left).match(right)
 
 
@@ -89,3 +96,5 @@ def test_should_raise_value_error_for_invalid_match_expression(left, right):
     ],
 )
 def test_should_match_with_asterisk(left, right, expected):
+    assert match(left, right) is expected
+    assert Version.parse(left).match(right) is expected

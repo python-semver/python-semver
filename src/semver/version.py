@@ -16,7 +16,7 @@ from typing import (
     cast,
     Callable,
     Collection,
-    Match
+    Match,
     Type,
     TypeVar,
 )
@@ -28,6 +28,21 @@ from ._types import (
     String,
     VersionPart,
 )
+
+from .versionregex import (
+    VersionRegex,
+    # BUILD as _BUILD,
+    # RE_NUMBER as _RE_NUMBER,
+    # LAST_NUMBER as _LAST_NUMBER,
+    # MAJOR as _MAJOR,
+    # MINOR as _MINOR,
+    # PATCH as _PATCH,
+    # PRERELEASE as _PRERELEASE,
+    # REGEX as _REGEX,
+    # REGEX_TEMPLATE as _REGEX_TEMPLATE,
+    # REGEX_OPTIONAL_MINOR_AND_PATCH as _REGEX_OPTIONAL_MINOR_AND_PATCH,
+)
+
 
 # These types are required here because of circular imports
 Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], str]
@@ -61,7 +76,7 @@ def _cmp(a: T_cmp, b: T_cmp) -> int:
     return (a > b) - (a < b)
 
 
-class Version:
+class Version(VersionRegex):
     """
     A semver compatible version class.
 
@@ -79,53 +94,12 @@ class Version:
     #: The names of the different parts of a version
     NAMES: ClassVar[Tuple[str, ...]] = tuple([item[1:] for item in __slots__])
 
-    #:
-    _RE_NUMBER = r"0|[1-9]\d*"
-
-
-    #: Regex for number in a prerelease
-    _LAST_NUMBER: ClassVar[Pattern[str]] = re.compile(r"(?:[^\d]*(\d+)[^\d]*)+")
-    #: Regex template for a semver version
-    _REGEX_TEMPLATE: ClassVar[
-        str
-    ] = r"""
-            ^
-            (?P<major>0|[1-9]\d*)
-            (?:
-                \.
-                (?P<minor>0|[1-9]\d*)
-                (?:
-                    \.
-                    (?P<patch>0|[1-9]\d*)
-                ){opt_patch}
-            ){opt_minor}
-            (?:-(?P<prerelease>
-                (?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)
-                (?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*
-            ))?
-            (?:\+(?P<build>
-                [0-9a-zA-Z-]+
-                (?:\.[0-9a-zA-Z-]+)*
-            ))?
-            $
-        """
-    #: Regex for a semver version
-    _REGEX: ClassVar[Pattern[str]] = re.compile(
-        _REGEX_TEMPLATE.format(opt_patch="", opt_minor=""),
-        re.VERBOSE,
-    )
-    #: Regex for a semver version that might be shorter
-    _REGEX_OPTIONAL_MINOR_AND_PATCH: ClassVar[Pattern[str]] = re.compile(
-        _REGEX_TEMPLATE.format(opt_patch="?", opt_minor="?"),
-        re.VERBOSE,
-    )
-
     #: The default prefix for the prerelease part.
-    #: Used in :meth:`Version.bump_prerelease`.
+    #: Used in :meth:`Version.bump_prerelease <semver.Version.bump_prerelease>`.
     default_prerelease_prefix = "rc"
 
     #: The default prefix for the build part
-    #: Used in :meth:`Version.bump_build`.
+    #: Used in :meth:`Version.bump_build <semver.Version.bump_build>`.
     default_build_prefix = "build"
 
     def __init__(
@@ -137,7 +111,11 @@ class Version:
         build: Optional[Union[String, int]] = None,
     ):
         # Build a dictionary of the arguments except prerelease and build
-        version_parts = {"major": int(major), "minor": int(minor), "patch": int(patch)}
+        version_parts = {
+            "major": int(major),
+            "minor": int(minor),
+            "patch": int(patch)
+        }
 
         for name, value in version_parts.items():
             if value < 0:
@@ -570,163 +548,30 @@ build='build.10')
         cls = type(self)
         return cls(self.major, self.minor, self.patch)
 
-    def _match(self, match_expr: str) -> bool:
+    def match(self, match_expr: str) -> bool:
         """
         Compare self to match a match expression.
 
+        .. versionchanged:: 3.0.0
+            Allow tilde and caret expressions. Delegate expressions
+            to the :class:`Spec <semver.spec.Spec>` class.
+
         :param match_expr: optional operator and version; valid operators are
-              ``<```  smaller than
+              ``<``   smaller than
               ``>``   greater than
               ``>=``  greator or equal than
               ``<=``  smaller or equal than
               ``==``  equal
               ``!=``  not equal
-              ``~=``  compatible release clause
+              ``~``   compatible release clause ("tilde ranges")
+              ``^``   compatible with version
         :return: True if the expression matches the version, otherwise False
         """
-        prefix = match_expr[:2]
-        if prefix in (">=", "<=", "==", "!="):
-            match_version = match_expr[2:]
-        elif prefix and prefix[0] in (">", "<"):
-            prefix = prefix[0]
-            match_version = match_expr[1:]
-        elif match_expr and match_expr[0] in "0123456789":
-            prefix = "=="
-            match_version = match_expr
-        else:
-            raise ValueError(
-                "match_expr parameter should be in format <op><ver>, "
-                "where <op> is one of "
-                "['<', '>', '==', '<=', '>=', '!=', '~=']. "
-                "You provided: %r" % match_expr
-            )
+        # needed to avoid recursive import
+        from .spec import Spec
 
-        possibilities_dict = {
-            ">": (1,),
-            "<": (-1,),
-            "==": (0,),
-            "!=": (-1, 1),
-            ">=": (0, 1),
-            "<=": (-1, 0),
-        }
-
-        possibilities = possibilities_dict[prefix]
-        cmp_res = self.compare(match_version)
-
-        return cmp_res in possibilities
-
-    def match(self, match_expr: str) -> bool:
-        """Compare self to match a match expression.
-
-        :param match_expr: optional operator and version; valid operators are
-              ``<```  smaller than
-              ``>``   greater than
-              ``>=``  greator or equal than
-              ``<=``  smaller or equal than
-              ``==``  equal
-              ``!=``  not equal
-              ``~=``  compatible release clause
-        :return: True if the expression matches the version, otherwise False
-        """
-        # TODO: The following function should be better
-        # integrated into a special Spec class
-        def compare_eq(index, other) -> bool:
-            return self[:index] == other[:index]
-
-        def compare_ne(index, other) -> bool:
-            return not compare_eq(index, other)
-
-        def compare_lt(index, other) -> bool:
-            return self[:index] < other[:index]
-
-        def compare_gt(index, other) -> bool:
-            return not compare_lt(index, other)
-
-        def compare_le(index, other) -> bool:
-            return self[:index] <= other[:index]
-
-        def compare_ge(index, other) -> bool:
-            return self[:index] >= other[:index]
-
-        def compare_compatible(index, other) -> bool:
-            return compare_gt(index, other) and compare_eq(index, other)
-
-        op_table: Dict[str, Callable[[int, Tuple], bool]] = {
-            '==': compare_eq,
-            '!=': compare_ne,
-            '<': compare_lt,
-            '>': compare_gt,
-            '<=': compare_le,
-            '>=': compare_ge,
-            '~=': compare_compatible,
-        }
-
-        regex = r"""(?P<operator>[<]|[>]|<=|>=|~=|==|!=)?
-                 (?P<version>
-                  (?P<major>0|[1-9]\d*)
-                   (?:\.(?P<minor>\*|0|[1-9]\d*)
-                   (?:\.(?P<patch>\*|0|[1-9]\d*))?
-                   )?
-                 )"""
-        match = re.match(regex, match_expr, re.VERBOSE)
-        if match is None:
-            raise ValueError(
-                "match_expr parameter should be in format <op><ver>, "
-                "where <op> is one of %s. "
-                "<ver> is a version string like '1.2.3' or '1.*' "
-                "You provided: %r" % (list(op_table.keys()), match_expr)
-            )
-        match_version = match["version"]
-        operator = cast(Dict, match).get('operator', '==')
-
-        if "*" not in match_version:
-            # conventional compare
-            possibilities_dict = {
-                ">": (1,),
-                "<": (-1,),
-                "==": (0,),
-                "!=": (-1, 1),
-                ">=": (0, 1),
-                "<=": (-1, 0),
-            }
-
-            possibilities = possibilities_dict[operator]
-            cmp_res = self.compare(match_version)
-
-            return cmp_res in possibilities
-
-        # Advanced compare with "*" like "<=1.2.*"
-        # Algorithm:
-        # TL;DR: Delegate the comparison to tuples
-        #
-        # 1. Create a tuple of the string with major, minor, and path
-        #    unless one of them is None
-        # 2. Determine the position of the first "*" in the tuple from step 1
-        # 3. Extract the matched operators
-        # 4. Look up the function in the operator table
-        # 5. Call the found function and pass the index (step 2) and
-        #    the tuple (step 1)
-        # 6. Compare the both tuples up to the position of index
-        #    For example, if you have (1, 2, "*") and self is
-        #    (1, 2, 3, None, None), you compare (1, 2) <OPERATOR> (1, 2)
-        # 7. Return the result of the comparison
-        match_version = tuple([match[item]
-                               for item in ('major', 'minor', 'patch')
-                               if item is not None
-                               ]
-                              )
-
-        try:
-            index = match_version.index("*")
-        except ValueError:
-            index = None
-
-        if not index:
-            raise ValueError("Major version cannot be set to '*'")
-
-        # At this point, only valid operators should be available
-        func: Callable[[int, Tuple], bool] = op_table[operator]
-        return func(index, match_version)
+        spec = Spec(match_expr)
+        return spec.match(self)
 
     @classmethod
     def parse(

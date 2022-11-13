@@ -134,9 +134,11 @@ intersphinx_mapping = {
         (None, "inventories/pydantic.inv"),
     ),
 }
+
 # Avoid side-effects (namely that documentations local references can
 # suddenly resolve to an external location.)
 intersphinx_disabled_reftypes = ["*"]
+
 
 # -- Options for HTML output ----------------------------------------------
 
