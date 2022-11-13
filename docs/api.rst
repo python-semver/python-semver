@@ -87,4 +87,29 @@ Version Handling :mod:`semver.version`
 
 .. autoclass:: semver.version.Version
    :members:
+   :inherited-members:
    :special-members: __iter__, __eq__, __ne__, __lt__, __le__, __gt__, __ge__, __getitem__, __hash__, __repr__, __str__
+
+
+Version Regular Expressions :mod:`semver.versionregex`
+------------------------------------------------------
+
+.. automodule:: semver.versionregex
+
+.. autoclass:: semver.versionregex.VersionRegex
+   :members:
+   :private-members:
+
+
+Spec Handling :mod:`semver.spec`
+--------------------------------
+
+.. automodule:: semver.spec
+
+.. autoclass:: semver.spec.Spec
+   :members: match
+   :private-members: _caret, _tilde
+   :special-members: __eq__, __ne__, __lt__, __le__, __gt__, __ge__, __repr__, __str__
+
+.. autoclass:: semver.spec.InvalidSpecifier
+

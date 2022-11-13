@@ -13,13 +13,14 @@ import packaging.version
 def add_semver(doctest_namespace):
     doctest_namespace["Version"] = semver.version.Version
     doctest_namespace["semver"] = semver
+    doctest_namespace["Spec"] = semver.Spec
     doctest_namespace["coerce"] = coerce
     doctest_namespace["SemVerWithVPrefix"] = SemVerWithVPrefix
     doctest_namespace["PyPIVersion"] = packaging.version.Version
 
 
 @pytest.fixture
-def version():
+def version() -> semver.Version:
     """
     Creates a version
 
@@ -27,5 +28,7 @@ def version():
     :rtype: Version
     """
     return semver.Version(
-        major=1, minor=2, patch=3, prerelease="alpha.1.2", build="build.11.e0f985a"
+        major=1, minor=2, patch=3,
+        prerelease="alpha.1.2",
+        build="build.11.e0f985a"
     )
