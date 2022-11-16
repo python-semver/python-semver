@@ -647,7 +647,7 @@ prerelease='pre.2', build='build.4')
             raise TypeError(error)
 
     @classmethod
-    def isvalid(cls, version: str) -> bool:
+    def is_valid(cls, version: str) -> bool:
         """
         Check if the string is a valid semver version.
 
@@ -662,6 +662,42 @@ prerelease='pre.2', build='build.4')
             return True
         except ValueError:
             return False
+
+    def is_compatible(self, other: "Version") -> bool:
+        """
+        Check if current version is compatible with other version.
+
+        The result is True, if either of the following is true:
+
+        * both versions are equal, or
+        * both majors are equal and higher than 0. Same for both minors.
+          Both pre-releases are equal, or
+        * both majors are equal and higher than 0. The minor of b's
+          minor version is higher then a's. Both pre-releases are equal.
+
+        The algorithm does *not* check patches.
+
+        :param other: the version to check for compatibility
+        :return: True, if ``other`` is compatible with the old version,
+                 otherwise False
+
+        >>> Version(1, 1, 0).is_compatible(Version(1, 0, 0))
+        False
+        >>> Version(1, 0, 0).is_compatible(Version(1, 1, 0))
+        True
+        """
+        if not isinstance(other, Version):
+            raise TypeError(f"Expected a Version type but got {type(other)}")
+
+        # All major-0 versions should be incompatible with anything but itself
+        if (0 == self.major == other.major) and (self[:4] != other[:4]):
+            return False
+
+        return (
+            (self.major == other.major)
+            and (other.minor >= self.minor)
+            and (self.prerelease == other.prerelease)
+        )
 
 
 #: Keep the VersionInfo name for compatibility

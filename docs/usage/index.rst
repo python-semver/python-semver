@@ -8,6 +8,7 @@ Using semver
    create-a-version
    parse-version-string
    check-valid-semver-version
+   check-compatible-semver-version
    access-parts-of-a-version
    access-parts-through-index
    replace-parts-of-a-version

@@ -1,0 +1,1 @@
+Implement :meth:`Version.is_compatible <semver.version.Version.is_compatible>` to make "is self compatible with X".
