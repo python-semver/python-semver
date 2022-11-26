@@ -77,15 +77,9 @@ include = [
 
 [tool.hatch.envs.default]
 dependencies = [
-    "pytest",
-    "pytest-cov",
     "towncrier",
     "wheel",
 ]
-
-[tool.hatch.envs.default.scripts]
-cov = "pytest -vx"
-no-cov = "cov --no-cov"
 
 [tool.hatch.envs.style]
 dependencies = [
@@ -113,6 +107,16 @@ dependencies = [
 [tool.hatch.envs.docs.scripts]
 build = "pdoc --html --output-dir docs python-semver"
 serve = "pdoc --http : python-semver"
+
+[tool.hatch.envs.test]
+dependencies = [
+    "pytest-cov",
+    "tox"
+]
+
+[tool.hatch.envs.test.scripts]
+cov = "pytest -vx"
+no-cov = "cov --no-cov"
 
 [[tool.hatch.envs.test.matrix]]
 python = ["310", "311"]
