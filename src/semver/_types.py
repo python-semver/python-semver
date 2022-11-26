@@ -1,7 +1,7 @@
 """Typing for semver."""
 
 from functools import partial
-from typing import Union, Optional, Tuple, Dict, Iterable, Callable, TypeVar
+from typing import Callable, Dict, Iterable, Optional, Tuple, TypeVar, Union
 
 VersionPart = Union[int, Optional[str]]
 VersionTuple = Tuple[int, int, int, Optional[str], Optional[str]]

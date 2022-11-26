@@ -1,7 +1,7 @@
 import re
-from semver import Version
 from typing import Optional, Tuple
 
+from semver import Version
 
 BASEVERSION = re.compile(
     r"""[vV]?

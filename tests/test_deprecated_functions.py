@@ -2,29 +2,11 @@ from argparse import Namespace
 
 import pytest
 
-from semver import (
-    parse,
-    parse_version_info,
-    compare,
-    match,
-    max_ver,
-    min_ver,
-    format_version,
-    bump_major,
-    bump_minor,
-    bump_patch,
-    bump_prerelease,
-    bump_build,
-    finalize_version,
-    replace,
-    cmd_bump,
-    cmd_compare,
-    cmd_check,
-    cmd_nextver,
-    createparser,
-    process,
-    main,
-)
+from semver import (bump_build, bump_major, bump_minor, bump_patch,
+                    bump_prerelease, cmd_bump, cmd_check, cmd_compare,
+                    cmd_nextver, compare, createparser, finalize_version,
+                    format_version, main, match, max_ver, min_ver, parse,
+                    parse_version_info, process, replace)
 from semver._deprecated import deprecated
 
 

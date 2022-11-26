@@ -12,10 +12,10 @@ The result of each command is printed on stdout.
 
 import argparse
 import sys
-from typing import cast, List, Optional
+from typing import List, Optional, cast
 
-from .version import Version
 from .__about__ import __version__
+from .version import Version
 
 
 def cmd_bump(args: argparse.Namespace) -> str:

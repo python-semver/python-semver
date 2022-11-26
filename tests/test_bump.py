@@ -1,13 +1,7 @@
 import pytest
 
-from semver import (
-    bump_build,
-    bump_major,
-    bump_minor,
-    bump_patch,
-    bump_prerelease,
-    parse_version_info,
-)
+from semver import (bump_build, bump_major, bump_minor, bump_patch,
+                    bump_prerelease, parse_version_info)
 
 
 def test_should_bump_major():

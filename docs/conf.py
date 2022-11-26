@@ -17,10 +17,10 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import codecs
-from datetime import date
 import os
 import re
 import sys
+from datetime import date
 
 SRC_DIR = os.path.abspath("../src/")
 sys.path.insert(0, SRC_DIR)

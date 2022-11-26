@@ -14,7 +14,7 @@ authors = [
 ]
 maintainers = [
     { name = "Sebastien Celles", email = "s.celles@gmail.com" },
-    { name = "Tom Schraitle", },
+    { name = "Tom Schraitle" },
 ]
 keywords = [
     "python",
@@ -58,7 +58,6 @@ Changelog = "https://python-semver.readthedocs.io/en/latest/changelog.html"
 Documentation = "https://python-semver.rtfd.io"
 Releases = "https://github.com/python-semver/python-semver/releases"
 Issues = "https://github.com/python-semver/python-semver/issues"
-]
 
 [project.license]
 file = "LICENSE.txt"
@@ -67,7 +66,7 @@ file = "LICENSE.txt"
 pysemver = "semver.cli:main"
 
 [tool.hatch.version]
-path = "src/python_semver/__about__.py"
+path = "src/semver/__about__.py"
 
 [tool.hatch.build]
 include = [
@@ -91,11 +90,11 @@ dependencies = [
 
 [tool.hatch.envs.style.scripts]
 fmt = [
-    "isort .",
     "black .",
+    "isort .",
 ]
 lint = [
-    "flake8",
+    "flake8 --exit-zero",
     "pycodestyle",
 ]
 
@@ -105,18 +104,19 @@ dependencies = [
 ]
 
 [tool.hatch.envs.docs.scripts]
-build = "pdoc --html --output-dir docs python-semver"
+build = "pdoc --html --output-dir api-docs src/semver --force"
 serve = "pdoc --http : python-semver"
 
 [tool.hatch.envs.test]
 dependencies = [
     "pytest-cov",
-    "tox"
+    "tox",
 ]
 
 [tool.hatch.envs.test.scripts]
 cov = "pytest -vx"
 no-cov = "cov --no-cov"
+tox_test = "tox"
 
 [[tool.hatch.envs.test.matrix]]
 python = ["310", "311"]

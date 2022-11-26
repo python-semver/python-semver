@@ -7,11 +7,11 @@ import inspect
 import warnings
 from functools import partial, wraps
 from types import FrameType
-from typing import Type, Callable, Optional, cast
+from typing import Callable, Optional, Type, cast
 
 from . import cli
-from .version import Version
 from ._types import Decorator, F, String
+from .version import Version
 
 
 def deprecated(

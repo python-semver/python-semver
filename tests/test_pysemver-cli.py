@@ -4,15 +4,8 @@ from unittest.mock import patch
 
 import pytest
 
-from semver import (
-    cmd_bump,
-    cmd_check,
-    cmd_compare,
-    cmd_nextver,
-    createparser,
-    main,
-    __main__,
-)
+from semver import (__main__, cmd_bump, cmd_check, cmd_compare, cmd_nextver,
+                    createparser, main)
 
 
 @contextmanager

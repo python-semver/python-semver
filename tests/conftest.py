@@ -1,14 +1,13 @@
 import sys
 
+import packaging.version
 import pytest
+from coerce import coerce  # noqa:E402
+from semverwithvprefix import SemVerWithVPrefix  # noqa:E402
 
 import semver
 
 # sys.path.insert(0, "docs/usage")
-
-from coerce import coerce  # noqa:E402
-from semverwithvprefix import SemVerWithVPrefix  # noqa:E402
-import packaging.version
 
 
 @pytest.fixture(autouse=True)

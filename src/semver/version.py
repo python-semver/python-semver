@@ -3,26 +3,11 @@
 import collections
 import re
 from functools import wraps
-from typing import (
-    Any,
-    Dict,
-    Iterable,
-    Optional,
-    SupportsInt,
-    Tuple,
-    Union,
-    cast,
-    Callable,
-    Collection,
-)
+from typing import (Any, Callable, Collection, Dict, Iterable, Optional,
+                    SupportsInt, Tuple, Union, cast)
 
-from ._types import (
-    VersionTuple,
-    VersionDict,
-    VersionIterator,
-    String,
-    VersionPart,
-)
+from ._types import (String, VersionDict, VersionIterator, VersionPart,
+                     VersionTuple)
 
 # These types are required here because of circular imports
 Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], str]
