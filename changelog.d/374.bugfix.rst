@@ -1,0 +1,3 @@
+Correct Towncrier's config entries in the :file:`pyproject.toml` file.
+The old entries ``[[tool.towncrier.type]]`` are deprecated and need
+to be replaced by ``[tool.towncrier.fragment.<TYPE>]``.
