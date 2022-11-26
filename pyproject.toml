@@ -1,34 +1,180 @@
-#
-#
-# See also https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
-#
-# General idea taken from
-# https://godatadriven.com/blog/a-practical-guide-to-setuptools-and-pyproject-toml/
-
 [build-system]
 requires = [
-  # sync with setup.py until we discard non-pep-517/518
-  "setuptools",
-  "setuptools-scm",
-  "wheel",
-  "build",
+    "hatchling>=1.8.0",
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "hatchling.build"
 
+[project]
+name = "semver"
+description = "Python helper for Semantic Versioning (https://semver.org)"
+readme = "README.rst"
+requires-python = ">=3.7"
+authors = [
+    { name = "Kostiantyn Rybnikov", email = "k-bx@k-bx.com" },
+]
+maintainers = [
+    { name = "Sebastien Celles", email = "s.celles@gmail.com" },
+    { name = "Tom Schraitle", },
+]
+keywords = [
+    "python",
+    "version",
+    "semver",
+    "versioning",
+    "version",
+    "semantic-versioning",
+    "release",
+    "semver-format",
+    "semver-tag",
+    "semver-release",
+    "semver-cli",
+]
+classifiers = [
+    # I think python-semver is more "Console" than "Web Environment"
+    #"Environment :: Web Environment",
+    "Environment :: Console",
+    "Development Status :: 5 - Production/Stable",
+    "Topic :: Software Development",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = []
+dynamic = [
+    "version",
+]
 
+[project.urls]
+Homepage = "https://github.com/python-semver/python-semver"
+Changelog = "https://python-semver.readthedocs.io/en/latest/changelog.html"
+Documentation = "https://python-semver.rtfd.io"
+Releases = "https://github.com/python-semver/python-semver/releases"
+Issues = "https://github.com/python-semver/python-semver/issues"
+]
+
+[project.license]
+file = "LICENSE.txt"
+
+[project.scripts]
+pysemver = "semver.cli:main"
+
+[tool.hatch.version]
+path = "src/python_semver/__about__.py"
+
+[tool.hatch.build]
+include = [
+    "src/semver/*.py",
+    "src/semver/py.typed",
+]
+
+[tool.hatch.envs.default]
+dependencies = [
+    "pytest",
+    "pytest-cov",
+    "towncrier",
+    "wheel",
+]
+
+[tool.hatch.envs.default.scripts]
+cov = "pytest -vx"
+no-cov = "cov --no-cov"
+
+[tool.hatch.envs.style]
+dependencies = [
+    "black",
+    "isort",
+    "flake8",
+    "pycodestyle",
+]
+
+[tool.hatch.envs.style.scripts]
+fmt = [
+    "isort .",
+    "black .",
+]
+lint = [
+    "flake8",
+    "pycodestyle",
+]
+
+[tool.hatch.envs.docs]
+dependencies = [
+    "pdoc3"
+]
+
+[tool.hatch.envs.docs.scripts]
+build = "pdoc --html --output-dir docs python-semver"
+serve = "pdoc --http : python-semver"
+
+[[tool.hatch.envs.test.matrix]]
+python = ["310", "311"]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = [
+    # add files to exclude them from the coverage report, e.g.
+    # "src/semver/__about__.py"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "no cov",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.mypy]
+# the mypy settings go here
+# To have the `py.typed` file installed with the package we had to include it
+# in the build metadata (see [tool.hatch.build])
+
+[tool.pytest.ini_options]
+norecursedirs = ".git build .env/ env/ .pyenv/ .tmp/ .eggs/ venv/"
+testpaths = "tests docs"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    'ignore:Function semver.*:DeprecationWarning',
+]
+addopts = """
+    --no-cov-on-fail
+    --cov=semver
+    --cov-report=term-missing
+    --doctest-glob='*.rst'
+    --doctest-modules
+    --doctest-report ndiff
+"""
+
+# flake8 does not support configuration in pyproject.toml
+# see https://github.com/PyCQA/flake8/issues/234
+# (there are alternatives, e.g. https://github.com/john-hen/Flake8-pyproject)
+# we stick to the original flake8 with configuration 
+# in the `[flake8]` section of setup.cfg
+
+# pycodestyle does not support configuration in pyproject.toml
+# We stick to the original pycodestyle configuration
+# in the `[pycodestyle]` section of setup.cfg
 
 [tool.black]
 line-length = 88
-target-version = ['py36', 'py37', 'py38', 'py39', 'py310']
+target-version = ['py37', 'py38', 'py39', 'py310']
 # diff = true
-extend-exclude = '''
+extend-exclude = """
 # A regex preceded with ^/ will apply only to files and directories
 # in the root of the project.
 ^/*.py
-'''
-include = '''
+"""
+include = """
 ^/setup.py
-'''
+"""
 
 [tool.towncrier]
 package = "semver"
@@ -40,42 +186,35 @@ template = "changelog.d/_template.rst"
 # issue_format = "`#{issue} <https://github.com/python-attrs/attrs/issues/{issue}>`_"
 # issue_format = ":gh:`{issue}`"
 
-  # [[tool.towncrier.type]]
-  # directory = "breaking"
-  # name = "Breaking Changes"
-  # showcontent = true
+# [tool.towncrier.fragment.breaking]
+# name = "Breaking Changes"
+# showcontent = true
 
-  [[tool.towncrier.type]]
-  directory = "deprecation"
-  name = "Deprecations"
-  showcontent = true
+[tool.towncrier.fragment.deprecation]
+name = "Deprecations"
+showcontent = true
 
-  [[tool.towncrier.type]]
-  directory = "feature"
-  name = "Features"
-  showcontent = true
+[tool.towncrier.fragment.feature]
+directory = "feature"
+name = "Features"
+showcontent = true
 
-  # [[tool.towncrier.type]]
-  # directory = "improvement"
-  # name = "Improvements"
-  # showcontent = true
+# [tool.towncrier.fragment.improvement]
+# name = "Improvements"
+# showcontent = true
 
-  [[tool.towncrier.type]]
-  directory = "bugfix"
-  name = "Bug Fixes"
-  showcontent = true
+[tool.towncrier.fragment.bugfix]
+name = "Bug Fixes"
+showcontent = true
 
-  [[tool.towncrier.type]]
-  directory = "doc"
-  name = "Improved Documentation"
-  showcontent = true
+[tool.towncrier.fragment.doc]
+name = "Improved Documentation"
+showcontent = true
 
-  [[tool.towncrier.type]]
-  directory = "trivial"
-  name = "Trivial/Internal Changes"
-  showcontent = true
+[tool.towncrier.fragment.trivial]
+name = "Trivial/Internal Changes"
+showcontent = true
 
-  [[tool.towncrier.type]]
-  directory = "removal"
-  name = "Removals"
-  showcontent = true
+[tool.towncrier.fragment.removal]
+name = "Removals"
+showcontent = true

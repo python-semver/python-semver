@@ -1,0 +1,1 @@
+Updated format of Towncrier's configuration in ``pyproject.toml``
