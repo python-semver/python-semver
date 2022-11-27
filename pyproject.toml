@@ -144,6 +144,7 @@ test = "tox"
 [tool.coverage.run]
 source = [
     "semver",
+    #"src/semver/*",
 ]
 branch = true
 parallel = true
@@ -220,6 +221,7 @@ addopts = [
 line-length = 88
 target-version = ["py36", "py37", "py38", "py39", "py310"]
 # diff = true
+# note the use of single quotes below to denote "raw" strings in TOML
 extend-exclude = '''
 # A regex preceded with ^/ will apply only to files and directories
 # in the root of the project.
