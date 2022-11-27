@@ -117,7 +117,6 @@ python = ["37", ]
 [tool.hatch.envs.test.scripts]
 cov = "pytest -vx"
 no-cov = "cov --no-cov"
-tox_test = "tox"
 
 [tool.hatch.envs.testall]
 dependencies = [
