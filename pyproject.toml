@@ -1,34 +1,228 @@
-#
-#
-# See also https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
-#
-# General idea taken from
-# https://godatadriven.com/blog/a-practical-guide-to-setuptools-and-pyproject-toml/
-
 [build-system]
 requires = [
-  # sync with setup.py until we discard non-pep-517/518
-  "setuptools",
-  "setuptools-scm",
-  "wheel",
-  "build",
+    "hatchling>=1.8.0",
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "hatchling.build"
 
+[project]
+name = "semver"
+description = "Python helper for Semantic Versioning (https://semver.org)"
+readme = "README.rst"
+requires-python = ">=3.7"
+authors = [
+    { name = "Kostiantyn Rybnikov", email = "k-bx@k-bx.com" },
+]
+maintainers = [
+    { name = "Sebastien Celles", email = "s.celles@gmail.com" },
+    { name = "Tom Schraitle" },
+]
+keywords = [
+    "python",
+    "version",
+    "semver",
+    "versioning",
+    "version",
+    "semantic-versioning",
+    "release",
+    "semver-format",
+    "semver-tag",
+    "semver-release",
+    "semver-cli",
+]
+classifiers = [
+    "Environment :: Web Environment",
+    "Development Status :: 5 - Production/Stable",
+    "Topic :: Software Development",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = []
+dynamic = [
+    "version",
+]
 
+[project.urls]
+Homepage = "https://github.com/python-semver/python-semver"
+Changelog = "https://python-semver.readthedocs.io/en/latest/changelog.html"
+Documentation = "https://python-semver.rtfd.io"
+Releases = "https://github.com/python-semver/python-semver/releases"
+Issues = "https://github.com/python-semver/python-semver/issues"
+
+[project.license]
+file = "LICENSE.txt"
+
+[project.scripts]
+pysemver = "semver.cli:main"
+
+[tool.hatch.version]
+path = "src/semver/__about__.py"
+
+[tool.hatch.build]
+include = [
+    "src/semver/*.py",
+    "src/semver/py.typed",
+]
+
+[tool.hatch.envs.default]
+dependencies = [
+    "towncrier",
+    "wheel",
+]
+
+[tool.hatch.envs.style]
+dependencies = [
+    "black",
+    "flake8",
+    "pycodestyle",
+]
+
+[tool.hatch.envs.style.scripts]
+fmt = [
+    "black .",
+]
+lint = [
+    "flake8 --exit-zero",
+    "pycodestyle",
+]
+
+[tool.hatch.envs.docs]
+dependencies = [
+    "sphinx",
+    "sphinx-argparse",
+    "sphinx-autodoc-typehints",
+]
+
+[tool.hatch.envs.docs.scripts]
+build = "docs/make.bat -C docs html"
+linkcheck = "docs/make.bat -C docs linkcheck"
+serve = "python3 -m webbrowser -t docs/_build/html/index.html"
+
+[tool.hatch.envs.test]
+dependencies = [
+    "pytest-cov",
+]
+
+[[tool.hatch.envs.test.matrix]]
+python = ["37", ]
+
+[tool.hatch.envs.test.scripts]
+cov = "pytest -vx"
+no-cov = "cov --no-cov"
+tox_test = "tox"
+
+[tool.hatch.envs.testall]
+dependencies = [
+    "pytest-cov",
+]
+[[tool.hatch.envs.testall.matrix]]
+python = ["37", "38", "39", "310", "311", ]
+
+[tool.hatch.envs.testall.scripts]
+cov = "pytest -vx"
+no-cov = "cov --no-cov"
+
+[tool.hatch.envs.tox]
+dependencies = [
+    "tox",
+]
+
+[tool.hatch.envs.tox.scripts]
+test = "tox"
+
+[tool.coverage.run]
+source = "semver"
+branch = true
+parallel = true
+omit = [
+    # add files to exclude them from the coverage report, e.g.
+    "src/semver/_types.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+precicion = 1
+exclude_lines = [
+    "no cover",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    # note the use of single quote below to denote "raw" strings in TOML
+    'if not hasattr\(__builtins__, .cmp.\):',
+    'class .*\bProtocol\):',
+    '@(abc\.)?abstractmethod',
+]
+
+[tool.mypy]
+# the mypy settings go here
+# To have the `py.typed` file installed with the package we had to include it
+# in the build metadata (see [tool.hatch.build])
+enable_error_code = [
+    "ignore-without-code",
+]
+show_error_codes = true
+warn_unused_ignores = true
+implicit_reexport = true
+pretty = true
+follow_imports = "normal"
+
+[tool.pytest.ini_options]
+norecursedirs = [
+    ".git",
+    "build",
+    ".env/",
+    "env/",
+    ".pyenv/",
+    ".tmp/",
+    ".eggs/",
+    "venv/",
+]
+testpaths = [
+    "tests",
+    "docs",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    'ignore:Function semver.*:DeprecationWarning',
+]
+addopts = [
+    "--no-cov-on-fail",
+    "--cov=semver",
+    "--cov-report=term-missing",
+    "--doctest-glob='*.rst'",
+    "--doctest-modules",
+    "--doctest-report ndiff",
+]
+
+# flake8 does not support configuration in pyproject.toml
+# see https://github.com/PyCQA/flake8/issues/234
+# (there are alternatives, e.g. https://github.com/john-hen/Flake8-pyproject)
+# we stick to the original flake8 with configuration 
+# in the `[flake8]` section of setup.cfg
+
+# pycodestyle does not support configuration in pyproject.toml
+# We stick to the original pycodestyle configuration
+# in the `[pycodestyle]` section of setup.cfg
 
 [tool.black]
 line-length = 88
-target-version = ['py36', 'py37', 'py38', 'py39', 'py310']
+target-version = ["py36", "py37", "py38", "py39", "py310"]
 # diff = true
-extend-exclude = '''
+extend-exclude = """
 # A regex preceded with ^/ will apply only to files and directories
 # in the root of the project.
 ^/*.py
-'''
-include = '''
+"""
+include = """
 ^/setup.py
-'''
+"""
 
 [tool.towncrier]
 package = "semver"
