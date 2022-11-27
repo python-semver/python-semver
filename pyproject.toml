@@ -66,11 +66,13 @@ pysemver = "semver.cli:main"
 [tool.hatch.version]
 path = "src/semver/__about__.py"
 
-[tool.hatch.build]
-include = [
-    "src/semver/*.py",
-    "src/semver/py.typed",
+[tool.hatch.build.targets.wheel]
+packages = [
+    "src/semver",
 ]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/semver/py.typed" = "semver/py.typed"
 
 [tool.hatch.envs.default]
 dependencies = [
@@ -96,7 +98,7 @@ lint = [
 
 [tool.hatch.envs.docs]
 dependencies = [
-    "sphinx",
+    #"sphinx",
     "sphinx-argparse",
     "sphinx-autodoc-typehints",
 ]
@@ -108,6 +110,7 @@ serve = "python3 -m webbrowser -t docs/_build/html/index.html"
 
 [tool.hatch.envs.test]
 dependencies = [
+    "coverage[toml]",
     "pytest-cov",
 ]
 
@@ -120,6 +123,7 @@ no-cov = "cov --no-cov"
 
 [tool.hatch.envs.testall]
 dependencies = [
+    "coverage[toml]",
     "pytest-cov",
 ]
 [[tool.hatch.envs.testall.matrix]]
@@ -138,7 +142,9 @@ dependencies = [
 test = "tox"
 
 [tool.coverage.run]
-source = "semver"
+source = [
+    "semver",
+]
 branch = true
 parallel = true
 omit = [
@@ -148,7 +154,7 @@ omit = [
 
 [tool.coverage.report]
 show_missing = true
-precicion = 1
+precision = 1
 exclude_lines = [
     "no cover",
     "if __name__ == .__main__.:",
@@ -162,7 +168,7 @@ exclude_lines = [
 [tool.mypy]
 # the mypy settings go here
 # To have the `py.typed` file installed with the package we had to include it
-# in the build metadata (see [tool.hatch.build])
+# in the build metadata (see [tool.hatch.build.targets.wheel.force-include])
 enable_error_code = [
     "ignore-without-code",
 ]
