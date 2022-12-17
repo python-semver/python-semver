@@ -60,9 +60,7 @@ def test_should_raise_value_error_for_unexpected_match_expression(left, right):
         match(left, right)
 
 
-@pytest.mark.parametrize(
-    "left,right", [("1.0.0", ""), ("1.0.0", "!")]
-)
+@pytest.mark.parametrize("left,right", [("1.0.0", ""), ("1.0.0", "!")])
 def test_should_raise_value_error_for_invalid_match_expression(left, right):
     with pytest.raises(ValueError):
         match(left, right)
