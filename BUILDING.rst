@@ -12,7 +12,8 @@ Building semver
 This project changed slightly its way how it is built. The reason for this
 was to still support the "traditional" way with :command:`setup.py`,
 but at the same time try out the newer way with :file:`pyproject.toml`.
-Over time, once Python 3.6 gets deprecated, we will support only the newer way.
+As Python 3.6 got deprecated, this project does support from now on only
+:file:`pyproject.toml`.
 
 
 Background information
