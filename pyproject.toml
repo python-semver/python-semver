@@ -45,13 +45,13 @@ template = "changelog.d/_template.rst"
 name = "Breaking Changes"
 
 [tool.towncrier.fragment.bugfix]
-name = "Bug fixes"
+name = "Bug Fixes"
 
 [tool.towncrier.fragment.deprecation]
 name = "Deprecations"
 
 [tool.towncrier.fragment.doc]
-name = "Improved documentation"
+name = "Improved Documentation"
 
 [tool.towncrier.fragment.feature]
 name = "Features"
