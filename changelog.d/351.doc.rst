@@ -1,4 +1,0 @@
-Introduce new topics for:
-
-* "Migration to semver3"
-* "Advanced topics"

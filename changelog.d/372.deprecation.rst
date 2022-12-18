@@ -1,8 +1,0 @@
-Deprecate support for Python 3.6.
-
-Python 3.6 reached its end of life and isn't supported anymore.
-At the time of writing (Dec 2022), the lowest version is 3.7.
-
-Although the `poll <https://github.com/python-semver/python-semver/discussions/371>`
-didn't cast many votes, the majority agree to remove support for
-Python 3.6.
