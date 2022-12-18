@@ -21,14 +21,7 @@ build-backend = "setuptools.build_meta"
 line-length = 88
 target-version = ['py37', 'py38', 'py39', 'py310', 'py311']
 # diff = true
-extend-exclude = '''
-# A regex preceded with ^/ will apply only to files and directories
-# in the root of the project.
-^/*.py
-'''
-include = '''
-^/setup.py
-'''
+
 
 [tool.towncrier]
 package = "semver"

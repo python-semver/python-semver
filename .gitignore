@@ -259,8 +259,12 @@ fabric.properties
 # --------
 
 
-# Patch/Diff Files
-*.patch
-*.diff
+# Ignore files in the project's root:
+/*.patch
+/*.diff
+/*.py
+# but not this file:
+!/setup.py
+
 docs/_api
 !docs/_api/semver.__about__.rst
