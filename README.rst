@@ -17,7 +17,7 @@ A Python module for `semantic versioning`_. Simplifies comparing versions.
 
 .. note::
 
-   This project works for Python 3.6 and greater only. If you are
+   This project works for Python 3.7 and greater only. If you are
    looking for a compatible version for Python 2, use the
    maintenance branch |MAINT|_.
 
@@ -25,7 +25,7 @@ A Python module for `semantic versioning`_. Simplifies comparing versions.
    2.x.y However, keep in mind, the major 2 release is frozen: no new
    features nor backports will be integrated.
 
-   We recommend to upgrade your workflow to Python 3.x to gain support,
+   We recommend to upgrade your workflow to Python 3 to gain support,
    bugfixes, and new features.
 
 .. |MAINT| replace:: ``maint/v2``

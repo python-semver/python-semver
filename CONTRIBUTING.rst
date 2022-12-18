@@ -99,11 +99,11 @@ You can decide to run the complete test suite or only part of it:
      $ tox --skip-missing-interpreters
 
   It is possible to use one or more specific Python versions. Use the ``-e``
-  option and one or more abbreviations (``py36`` for Python 3.6, ``py37`` for
-  Python 3.7 etc.)::
+  option and one or more abbreviations (``py37`` for Python 3.7,
+  ``py38`` for Python 3.8 etc.)::
 
-      $ tox -e py36
-      $ tox -e py36,py37
+      $ tox -e py37
+      $ tox -e py37,py38
 
   To get a complete list and a short description, run::
 
@@ -116,7 +116,7 @@ You can decide to run the complete test suite or only part of it:
   :func:`test_immutable_major` in the file :file:`test_bump.py` for all
   Python versions::
 
-      $ tox -e py36 -- tests/test_bump.py::test_should_bump_major
+      $ tox -e py37 -- tests/test_bump.py::test_should_bump_major
 
   By default, pytest prints only a dot for each test function. To
   reveal the executed test function, use the following syntax::
@@ -124,16 +124,16 @@ You can decide to run the complete test suite or only part of it:
      $ tox -- -v
 
   You can combine the specific test function with the ``-e`` option, for
-  example, to limit the tests for Python 3.6 and 3.7 only::
+  example, to limit the tests for Python 3.7 and 3.8 only::
 
-      $ tox -e py36,py37 -- tests/test_bump.py::test_should_bump_major
+      $ tox -e py37,py38 -- tests/test_bump.py::test_should_bump_major
 
 Our code is checked against formatting, style, type, and docstring issues
 (`black`_, `flake8`_, `mypy`_, and `docformatter`_).
 It is recommended to run your tests in combination with :command:`checks`,
 for example::
 
-   $ tox -e checks,py36,py37
+   $ tox -e checks,py37,py38
 
 
 .. _doc:
