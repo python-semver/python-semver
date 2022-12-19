@@ -16,6 +16,94 @@ in our repository.
 
 .. towncrier release notes start
 
+Version 3.0.0-dev.4
+===================
+
+:Released: 2022-12-18
+:Maintainer:
+
+
+Bug Fixes
+---------
+
+* :gh:`374`: Correct Towncrier's config entries in the :file:`pyproject.toml` file.
+  The old entries ``[[tool.towncrier.type]]`` are deprecated and need
+  to be replaced by ``[tool.towncrier.fragment.<TYPE>]``.
+
+
+
+Deprecations
+------------
+
+* :gh:`372`: Deprecate support for Python 3.6.
+
+  Python 3.6 reached its end of life and isn't supported anymore.
+  At the time of writing (Dec 2022), the lowest version is 3.7.
+
+  Although the `poll <https://github.com/python-semver/python-semver/discussions/371>`_
+  didn't cast many votes, the majority agree to remove support for
+  Python 3.6.
+
+
+
+Improved Documentation
+----------------------
+
+* :gh:`335`: Add new section "Converting versions between PyPI and semver" the limitations
+  and possible use cases to convert from one into the other versioning scheme.
+
+* :gh:`340`: Describe how to get version from a file
+
+* :gh:`343`: Describe combining Pydantic with semver in the "Advanced topic"
+  section.
+
+* :gh:`350`: Restructure usage section. Create subdirectory "usage/" and splitted
+  all section into different files.
+
+* :gh:`351`: Introduce new topics for:
+
+  * "Migration to semver3"
+  * "Advanced topics"
+
+
+
+Features
+--------
+
+* :pr:`359`: Add optional parameter ``optional_minor_and_patch`` in :meth:`.Version.parse`  to allow optional
+  minor and patch parts.
+
+* :pr:`362`: Make :meth:`.Version.match` accept a bare version string as match expression, defaulting to
+  equality testing.
+
+* :gh:`364`: Enhance :file:`pyproject.toml` to make it possible to use the
+  :command:`pyproject-build` command from the build module.
+  For more information, see :ref:`build-semver`.
+
+* :gh:`365`: Improve :file:`pyproject.toml`.
+
+  * Use setuptools, add metadata. Taken approach from
+    `A Practical Guide to Setuptools and Pyproject.toml
+    <https://godatadriven.com/blog/a-practical-guide-to-setuptools-and-pyproject-toml/>`_.
+  * Doc: Describe building of semver
+  * Remove :file:`.travis.yml` in :file:`MANIFEST.in`
+    (not needed anymore)
+  * Distinguish between Python 3.6 and others in :file:`tox.ini`
+  * Add skip_missing_interpreters option for :file:`tox.ini`
+  * GH Action: Upgrade setuptools and setuptools-scm and test
+    against 3.11.0-rc.2
+
+
+
+Trivial/Internal Changes
+------------------------
+
+* :gh:`378`: Fix some typos in Towncrier configuration
+
+
+
+----
+
 
 Version 3.0.0-dev.3
 ===================

@@ -1,2 +1,0 @@
-Add new section "Converting versions between PyPI and semver" the limitations
-and possible use cases to convert from one into the other versioning scheme.
