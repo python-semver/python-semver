@@ -66,6 +66,10 @@ class Version:
     """
 
     __slots__ = ("_major", "_minor", "_patch", "_prerelease", "_build")
+
+    #: The names of the different parts of a version
+    NAMES = tuple([item[1:] for item in __slots__])
+
     #: Regex for number in a prerelease
     _LAST_NUMBER = re.compile(r"(?:[^\d]*(\d+)[^\d]*)+")
     #: Regex template for a semver version
@@ -398,13 +402,9 @@ build='build.10')
         :param prerelease_token: prefix string of prerelease, defaults to 'rc'
         :return: new object with the appropriate part raised
         """
-        validparts = {
-            "major",
-            "minor",
-            "patch",
-            "prerelease",
-            # "build", # currently not used
-        }
+        cls = type(self)
+        # "build" is currently not used, that's why we use [:-1]
+        validparts = cls.NAMES[:-1]
         if part not in validparts:
             raise ValueError(
                 "Invalid part. Expected one of {validparts}, but got {part!r}".format(
@@ -419,7 +419,8 @@ build='build.10')
         ):
             return version.replace(prerelease=None, build=None)
 
-        if part in ("major", "minor", "patch"):
+        # Only check the main parts:
+        if part in cls.NAMES[:3]:
             return getattr(version, "bump_" + part)()
 
         if not version.prerelease:
