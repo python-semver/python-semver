@@ -14,6 +14,8 @@ from typing import (
     cast,
     Callable,
     Collection,
+    Type,
+    TypeVar,
 )
 
 from ._types import (
@@ -51,6 +53,9 @@ def _comparator(operator: Comparator) -> Comparator:
 def _cmp(a, b):  # TODO: type hints
     """Return negative if a<b, zero if a==b, positive if a>b."""
     return (a > b) - (a < b)
+
+
+T = TypeVar("T", bound="Version")
 
 
 class Version:
@@ -571,8 +576,8 @@ build='build.10')
 
     @classmethod
     def parse(
-        cls, version: String, optional_minor_and_patch: bool = False
-    ) -> "Version":
+        cls: Type[T], version: String, optional_minor_and_patch: bool = False
+    ) -> T:
         """
         Parse version string to a Version instance.
 
