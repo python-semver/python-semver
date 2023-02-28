@@ -14,6 +14,8 @@ from typing import (
     cast,
     Callable,
     Collection,
+    Type,
+    TypeVar,
 )
 
 from ._types import (
@@ -27,6 +29,8 @@ from ._types import (
 # These types are required here because of circular imports
 Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], str]
 Comparator = Callable[["Version", Comparable], bool]
+
+T = TypeVar("T", bound="Version")
 
 
 def _comparator(operator: Comparator) -> Comparator:
@@ -571,8 +575,8 @@ build='build.10')
 
     @classmethod
     def parse(
-        cls, version: String, optional_minor_and_patch: bool = False
-    ) -> "Version":
+        cls: Type[T], version: String, optional_minor_and_patch: bool = False
+    ) -> T:
         """
         Parse version string to a Version instance.
 
