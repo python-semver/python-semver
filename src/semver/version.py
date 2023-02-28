@@ -30,6 +30,8 @@ from ._types import (
 Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], str]
 Comparator = Callable[["Version", Comparable], bool]
 
+T = TypeVar("T", bound="Version")
+
 
 def _comparator(operator: Comparator) -> Comparator:
     """Wrap a Version binary op method in a type-check."""
@@ -53,9 +55,6 @@ def _comparator(operator: Comparator) -> Comparator:
 def _cmp(a, b):  # TODO: type hints
     """Return negative if a<b, zero if a==b, positive if a>b."""
     return (a > b) - (a < b)
-
-
-T = TypeVar("T", bound="Version")
 
 
 class Version:
