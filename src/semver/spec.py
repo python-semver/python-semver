@@ -44,7 +44,7 @@ def preparecomparison(operator: SpecComparator) -> SpecComparator:
         if not isinstance(other, comparable_types):
             return NotImplemented
         # For compatible types, convert them to Version instance:
-        if isinstance(other, String.__args__):    # type: ignore
+        if isinstance(other, String.__args__):  # type: ignore
             other = Version.parse(cast(String, other))
         if isinstance(other, dict):
             other = Version(**other)
@@ -129,8 +129,7 @@ class Spec(VersionRegex):
     """
 
     _regex = re.compile(
-        rf"{_operator_regex_str}?\s*{_version_regex_str}",
-        re.VERBOSE | re.IGNORECASE
+        rf"{_operator_regex_str}?\s*{_version_regex_str}", re.VERBOSE | re.IGNORECASE
     )
 
     _regex_version_any = re.compile(_version_any, re.VERBOSE | re.IGNORECASE)
@@ -200,7 +199,7 @@ class Spec(VersionRegex):
         ]
 
         # This is the special case for 1 -> 1.0.0
-        if (minor is None and patch is None):
+        if minor is None and patch is None:
             self.real_version_tuple[1:3] = (0, 0)
         elif (minor not in placeholders) and (patch is None):
             self.real_version_tuple[2] = 0
@@ -309,10 +308,9 @@ class Spec(VersionRegex):
         """self == other."""
         # Find the position of the first "*"
         index = self.__get_index()
-        version = tuple([
-            int(cast(int, item))
-            for item in self.real_version_tuple[:index]
-        ])
+        version = tuple(
+            [int(cast(int, item)) for item in self.real_version_tuple[:index]]
+        )
 
         return cast(Version, other[:index]) == version
 
@@ -320,50 +318,45 @@ class Spec(VersionRegex):
     def __ne__(self, other: SpecComparable) -> bool:  # type: ignore
         """self != other."""
         index = self.__get_index()
-        version = tuple([
-            int(cast(int, item))
-            for item in self.real_version_tuple[:index]
-        ])
+        version = tuple(
+            [int(cast(int, item)) for item in self.real_version_tuple[:index]]
+        )
         return cast(Version, other[:index]) != version
 
     @preparecomparison
     def __lt__(self, other: SpecComparable) -> bool:
         """self < other."""
         index: Optional[int] = self.__get_index()
-        version = tuple([
-            int(cast(int, item))
-            for item in self.real_version_tuple[:index]
-        ])
+        version = tuple(
+            [int(cast(int, item)) for item in self.real_version_tuple[:index]]
+        )
         return cast(Version, other[:index]) < version
 
     @preparecomparison
     def __gt__(self, other: SpecComparable) -> bool:
         """self > other."""
         index = self.__get_index()
-        version = tuple([
-            int(cast(int, item))
-            for item in self.real_version_tuple[:index]
-        ])
+        version = tuple(
+            [int(cast(int, item)) for item in self.real_version_tuple[:index]]
+        )
         return cast(Version, other[:index]) > version
 
     @preparecomparison
     def __le__(self, other: SpecComparable) -> bool:
         """self <= other."""
         index = self.__get_index()
-        version = tuple([
-            int(cast(int, item))
-            for item in self.real_version_tuple[:index]
-        ])
+        version = tuple(
+            [int(cast(int, item)) for item in self.real_version_tuple[:index]]
+        )
         return cast(Version, other[:index]) <= version
 
     @preparecomparison
     def __ge__(self, other: SpecComparable) -> bool:
         """self >= other."""
         index = self.__get_index()
-        version = tuple([
-            int(cast(int, item))
-            for item in self.real_version_tuple[:index]
-        ])
+        version = tuple(
+            [int(cast(int, item)) for item in self.real_version_tuple[:index]]
+        )
         return cast(Version, other[:index]) >= version
 
     # @preparecomparison
@@ -391,7 +384,8 @@ class Spec(VersionRegex):
                 str(int(major) + 1 if length == 1 else major),
                 str(int(minor) + 1 if length >= 2 else minor),
                 "0",
-            ])
+            ]
+        )
         # print("> tilde", length, u_version)
 
         # Delegate it to other
