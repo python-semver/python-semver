@@ -1,3 +1,0 @@
-For pytest, switch to the more modern :mod:`importlib` approach
-as it doesn't require to modify :data:`sys.path`:
-https://docs.pytest.org/en/7.2.x/explanation/pythonpath.html

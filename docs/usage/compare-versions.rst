@@ -17,7 +17,7 @@ To compare two versions depends on your type:
   The return value is negative if ``version1 < version2``, zero if
   ``version1 == version2`` and strictly positive if ``version1 > version2``.
 
-* **Two** :class:`Version <semver.version.Version>` **instances**
+* **Two** :class:`~semver.version.Version` **instances**
 
   Use the specific operator. Currently, the operators ``<``,
   ``<=``, ``>``, ``>=``, ``==``, and ``!=`` are supported::
@@ -29,9 +29,9 @@ To compare two versions depends on your type:
     >>> v1 > v2
     False
 
-* **A** :class:`Version <semver.version.Version>` **type and a** :func:`tuple` **or** :func:`list`
+* **A** :class:`~semver.version.Version` **type and a** :func:`tuple` **or** :func:`list`
 
-  Use the operator as with two :class:`Version <semver.version.Version>` types::
+  Use the operator as with two :class:`~semver.version.Version` types::
 
     >>> v = Version.parse("3.4.5")
     >>> v > (1, 0)
@@ -46,7 +46,7 @@ To compare two versions depends on your type:
     >>> [3, 5] > v
     True
 
-* **A** :class:`Version <semver.version.Version>` **type and a** :func:`str`
+* **A** :class:`~semver.version.Version` **type and a** :func:`str`
 
   You can use also raw strings to compare::
 
@@ -69,7 +69,7 @@ To compare two versions depends on your type:
     ...
     ValueError: 1.0 is not valid SemVer string
 
-* **A** :class:`Version <semver.version.Version>` **type and a** :func:`dict`
+* **A** :class:`~semver.version.Version` **type and a** :func:`dict`
 
   You can also use a dictionary. In contrast to strings, you can have an "incomplete"
   version (as the other parts are set to zero)::

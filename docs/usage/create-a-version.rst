@@ -3,7 +3,7 @@ Creating a Version
 
 .. versionchanged:: 3.0.0
 
-  The former :class:`~semver.version.VersionInfo`
+  The former :class:`~semver.version.VersionInfo` class
   has been renamed to :class:`~semver.version.Version`.
 
 The preferred way to create a new version is with the class
@@ -15,7 +15,7 @@ The preferred way to create a new version is with the class
    create a version with module level functions.
    However, module level functions are marked as *deprecated*
    since version 2.x.y now.
-   These functions will be removed in semver 3.1.0.
+   These functions will be removed.
    For details, see the sections :ref:`sec_replace_deprecated_functions`
    and :ref:`sec_display_deprecation_warnings`.
 

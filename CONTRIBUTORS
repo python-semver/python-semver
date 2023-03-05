@@ -22,30 +22,37 @@ Old maintainer:
 * Kostiantyn Rybnikov <k-bx@k-bx.com>
 
 
-Significant contributors
-========================
+List of Contributors
+====================
 
+(in alphabetical order)
+
+* Jelo Agnasin <jelo@icannhas.com>
+* Carles Barrobés <carles@barrobes.com>
+* Eli Bishop <eli-darkly@users.noreply.github.com>
+* Peter Bittner <django@bittner.it>
+* Craig Blaszczyk <masterjakul@gmail.com>
+* Tyler Cross <tyler@crosscollab.com>
+* Dennis Felsing <def-@users.noreply.github.com>
+* Ben Finney <ben+python@benfinney.id.au>
+* Zane Geiger <zanecodes@users.noreply.github.com>
+* T. Jameson Little <t.jameson.little@gmail.com>
+* Raphael Krupinski <rafalkrupinski@users.noreply.github.com>
+* Thomas Laferriere <tlaferriere@users.noreply.github.com>
+* Zack Lalanne <zack.lalanne@gmail.com>
+* Tuure Laurinolli <tuure@laurinolli.net>
+* Damien Nadé <anvil@users.noreply.github.com>
+* Jan Pieter Waagmeester <jieter@jieter.nl>
 * Alexander Puzynia <werwolf.by@gmail.com>
+* Lexi Robinson <Lexicality@users.noreply.github.com>
+* robi-wan <robi-wan@suyu.de>
+* George Sakkis <gsakkis@users.noreply.github.com>
+* Mike Salvatore <mssalvatore@users.noreply.github.com>
+* sbrudenell <sbrudenell@users.noreply.github.com>
 * Alexander Shorin <kxepal@gmail.com>
 * Anton Talevnin <TalAntR@users.noreply.github.com>
-* Ben Finney <ben+python@benfinney.id.au>
-* Carles Barrobés <carles@barrobes.com>
-* Craig Blaszczyk <masterjakul@gmail.com>
-* Damien Nadé <anvil@users.noreply.github.com>
-* Eli Bishop <eli-darkly@users.noreply.github.com>
-* George Sakkis <gsakkis@users.noreply.github.com>
-* Jan Pieter Waagmeester <jieter@jieter.nl>
-* Jelo Agnasin <jelo@icannhas.com>
 * Karol Werner <karol.werner@ppkt.eu>
-* Peter Bittner <django@bittner.it>
-* robi-wan <robi-wan@suyu.de>
-* sbrudenell <sbrudenell@users.noreply.github.com>
-* T. Jameson Little <t.jameson.little@gmail.com>
-* Thomas Laferriere <tlaferriere@users.noreply.github.com>
-* Tuure Laurinolli <tuure@laurinolli.net>
-* Tyler Cross <tyler@crosscollab.com>
-* Zack Lalanne <zack.lalanne@gmail.com>
-
+ 
 ..
     Local variables:
     coding: utf-8

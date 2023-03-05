@@ -8,13 +8,14 @@ Semver |version| -- Semantic Versioning
    :maxdepth: 2
    :caption: Contents
    :hidden:
+   :numbered:
 
-   build
+   build-semver
    install
    usage/index
    migration/index
    advanced/index
-   development
+   contribute/index
    api
 
 .. toctree::
@@ -27,7 +28,7 @@ Semver |version| -- Semantic Versioning
 
 .. toctree::
    :maxdepth: 1
-   :caption: Changelogs
+   :caption: Development
    :hidden:
 
    changelog

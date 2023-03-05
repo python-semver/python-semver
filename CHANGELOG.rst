@@ -6,6 +6,8 @@ Changes for the upcoming release can be found in
 the `"changelog.d" directory <https://github.com/python-semver/python-semver/tree/master/changelog.d>`_
 in our repository.
 
+This section covers the changes between major version 2 and version 3.
+
 ..
    Do *NOT* add changelog entries here!
 
@@ -16,24 +18,73 @@ in our repository.
 
 .. towncrier release notes start
 
-Version 3.0.0-dev.4
-===================
+Version 3.0.0
+=============
 
-:Released: 2022-12-18
-:Maintainer:
+:Released: 2023-03-19
+:Maintainer: Tom Schraitle
 
 
 Bug Fixes
 ---------
 
+* :gh:`291`: Disallow negative numbers in VersionInfo arguments
+  for ``major``, ``minor``, and ``patch``.
+
+* :gh:`310`: Rework API documentation.
+  Follow a more "semi-manual" attempt and add auto directives
+  into :file:`docs/api.rst`.
+
+* :gh:`344`: Allow empty string, a string with a prefix, or ``None``
+  as token in
+  :meth:`~semver.version.Version.bump_build` and
+  :meth:`~semver.version.Version.bump_prerelease`.
+
 * :gh:`374`: Correct Towncrier's config entries in the :file:`pyproject.toml` file.
   The old entries ``[[tool.towncrier.type]]`` are deprecated and need
   to be replaced by ``[tool.towncrier.fragment.<TYPE>]``.
 
+* :pr:`384`: General cleanup, reformat files:
+
+  * Reformat source code with black again as some config options
+    did accidentely exclude the semver source code.
+    Mostly remove some includes/excludes in the black config.
+  * Integrate concurrency in GH Action
+  * Ignore Python files on project dirs in .gitignore
+  * Remove unused patterns in MANIFEST.in
+  * Use ``extend-exclude`` for flake in :file:`setup.cfg`` and adapt list.
+  * Use ``skip_install=True`` in :file:`tox.ini` for black
+
+* :pr:`393`: Fix command :command:`python -m semver` to avoid the error "invalid choice"
+
+* :pr:`396`: Calling :meth:`~semver.version.Version.parse` on a derived class will show correct type of derived class.
 
 
 Deprecations
 ------------
+
+* :gh:`169`: Deprecate CLI functions not imported from ``semver.cli``.
+
+* :gh:`234`: In :file:`setup.py` simplified file and remove
+  ``Tox`` and ``Clean`` classes
+
+* :gh:`284`: Deprecate the use of :meth:`~Version.isvalid`.
+
+  Rename :meth:`~semver.version.Version.isvalid`
+  to :meth:`~semver.version.Version.is_valid`
+  for consistency reasons with :meth:`~semver.version.Version.is_compatible`.
+
+
+* :pr:`290`: For semver 3.0.0-alpha0 deprecated:
+
+  * Remove anything related to Python2
+  * In :file:`tox.ini` and :file:`.travis.yml`
+    Remove targets py27, py34, py35, and pypy.
+    Add py38, py39, and nightly (allow to fail)
+  * In :file:`setup.py` simplified file and remove
+    ``Tox`` and ``Clean`` classes
+  * Remove old Python versions (2.7, 3.4, 3.5, and pypy)
+    from Travis
 
 * :gh:`372`: Deprecate support for Python 3.6.
 
@@ -41,40 +92,34 @@ Deprecations
   At the time of writing (Dec 2022), the lowest version is 3.7.
 
   Although the `poll <https://github.com/python-semver/python-semver/discussions/371>`_
-  didn't cast many votes, the majority agree to remove support for
+  didn't cast many votes, the majority agreed to remove support for
   Python 3.6.
-
-
-
-Improved Documentation
-----------------------
-
-* :gh:`335`: Add new section "Converting versions between PyPI and semver" the limitations
-  and possible use cases to convert from one into the other versioning scheme.
-
-* :gh:`340`: Describe how to get version from a file
-
-* :gh:`343`: Describe combining Pydantic with semver in the "Advanced topic"
-  section.
-
-* :gh:`350`: Restructure usage section. Create subdirectory "usage/" and splitted
-  all section into different files.
-
-* :gh:`351`: Introduce new topics for:
-
-  * "Migration to semver3"
-  * "Advanced topics"
-
 
 
 Features
 --------
 
-* :pr:`359`: Add optional parameter ``optional_minor_and_patch`` in :meth:`.Version.parse`  to allow optional
+* :gh:`169`: Create semver package and split code among different modules in the packages:
+
+  * Remove :file:`semver.py`
+  * Create :file:`src/semver/__init__.py`
+  * Create :file:`src/semver/cli.py` for all CLI methods
+  * Create :file:`src/semver/_deprecated.py` for the ``deprecated`` decorator and other deprecated functions
+  * Create :file:`src/semver/__main__.py` to allow calling the CLI using :command:`python -m semver`
+  * Create :file:`src/semver/_types.py` to hold type aliases
+  * Create :file:`src/semver/version.py` to hold the :class:`Version` class (old name :class:`VersionInfo`) and its utility functions
+  * Create :file:`src/semver/__about__.py` for all the metadata variables
+
+* :gh:`213`: Add typing information
+
+* :gh:`284`: Implement :meth:`~semver.version.Version.is_compatible` to make "is self compatible with X".
+
+* :gh:`305`: Rename :class:`~semver.version.VersionInfo` to :class:`~semver.version.Version` but keep an alias for compatibility
+
+* :pr:`359`: Add optional parameter ``optional_minor_and_patch`` in :meth:`~semver.version.Version.parse`  to allow optional
   minor and patch parts.
 
-* :pr:`362`: Make :meth:`.Version.match` accept a bare version string as match expression, defaulting to
-  equality testing.
+* :pr:`362`: Make :meth:`~semver.version.Version.match` accept a bare version string as match expression, defaulting to equality testing.
 
 * :gh:`364`: Enhance :file:`pyproject.toml` to make it possible to use the
   :command:`pyproject-build` command from the build module.
@@ -95,34 +140,28 @@ Features
 
 
 
-Trivial/Internal Changes
-------------------------
-
-* :gh:`378`: Fix some typos in Towncrier configuration
-
-
-
-----
-
-
-Version 3.0.0-dev.3
-===================
-
-:Released: 2022-01-19
-:Maintainer: Tom Schraitle
-
-
-Bug Fixes
----------
-
-* :gh:`310`: Rework API documentation.
-  Follow a more "semi-manual" attempt and add auto directives
-  into :file:`docs/api.rst`.
-
-
-
 Improved Documentation
 ----------------------
+
+* :gh:`276`: Document how to create a sublass from :class:`~semver.version.VersionInfo` class
+
+* :gh:`284`: Document deprecation of :meth:`~semver.version.Version.isvalid`.
+
+* :pr:`290`: Several improvements in the documentation:
+
+  * New layout to distinguish from the semver2 development line.
+  * Create new logo.
+  * Remove any occurances of Python2.
+  * Describe changelog process with Towncrier.
+  * Update the release process.
+
+* :gh:`304`: Several improvements in documentation:
+
+  * Reorganize API documentation.
+  * Add migration chapter from semver2 to semver3.
+  * Distinguish between changlog for version 2 and 3
+
+* :gh:`305`: Add note about :class:`~semver.version.Version` rename.
 
 * :gh:`312`: Rework "Usage" section.
 
@@ -130,36 +169,75 @@ Improved Documentation
     :class:`~semver.version.Version` class
   * Remove semver. prefix in doctests to make examples shorter
   * Correct some references to dunder methods like
-    :func:`~.semver.version.Version.__getitem__`,
-    :func:`~.semver.version.Version.__gt__` etc.
+    :func:`~semver.version.Version.__getitem__`,
+    :func:`~semver.version.Version.__gt__` etc.
   * Remove inconsistencies and mention module level function as
     deprecated and discouraged from using
   * Make empty :py:func:`super` call in :file:`semverwithvprefix.py` example
 
 * :gh:`315`: Improve release procedure text
 
+* :gh:`335`: Add new section "Converting versions between PyPI and semver" the limitations
+  and possible use cases to convert from one into the other versioning scheme.
+
+* :gh:`340`: Describe how to get version from a file
+
+* :gh:`343`: Describe combining Pydantic with semver in the "Advanced topic"
+  section.
+
+* :gh:`350`: Restructure usage section. Create subdirectory "usage/" and splitted
+  all section into different files.
+
+* :gh:`351`: Introduce new topics for:
+
+  * "Migration to semver3"
+  * "Advanced topics"
+
+* :pr:`392`: Fix the example in the documentation for combining semver and pydantic.
 
 
 Trivial/Internal Changes
 ------------------------
+
+* :gh:`169`: Adapted infrastructure code to the new project layout.
+
+  * Replace :file:`setup.py` with :file:`setup.cfg` because the :file:`setup.cfg` is easier to use
+  * Adapt documentation code snippets where needed
+  * Adapt tests
+  * Changed the ``deprecated`` to hardcode the ``semver`` package name in the warning.
+
+  Increase coverage to 100% for all non-deprecated APIs
+
+* :pr:`290`: Add supported Python versions to :command:`black`.
+
+* :gh:`304`: Support PEP-561 :file:`py.typed`.
+
+  According to the mentioned PEP:
+
+    "Package maintainers who wish to support type checking
+    of their code MUST add a marker file named :file:`py.typed`
+    to their package supporting typing."
+
+  Add package_data to :file:`setup.cfg` to include this marker in dist
+  and whl file.
 
 * :gh:`309`: Some (private) functions from the :mod:`semver.version`
   module has been changed.
 
   The following functions got renamed:
 
-  * function ``semver.version.comparator`` got renamed to
+  * function :func:`semver.version.comparator` got renamed to
     :func:`semver.version._comparator` as it is only useful
     inside the :class:`~semver.version.Version` class.
-  * function ``semver.version.cmp`` got renamed to
+  * function :func:`semver.version.cmp` got renamed to
     :func:`semver.version._cmp` as it is only useful
     inside the :class:`~semver.version.Version` class.
 
   The following functions got integrated into the
   :class:`~semver.version.Version` class:
 
-  * function ``semver.version._nat_cmd`` as a classmethod
-  * function ``semver.version.ensure_str``
+  * function :func:`semver.version._nat_cmd` as a classmethod
+  * function :func:`semver.version.ensure_str`
 
 * :gh:`313`: Correct :file:`tox.ini` for ``changelog`` entry to skip
   installation for semver. This should speed up the execution
@@ -185,169 +263,19 @@ Trivial/Internal Changes
 
 * :gh:`347`: Support Python 3.10 in GitHub Action and other config files.
 
+* :gh:`378`: Fix some typos in Towncrier configuration
 
+* :gh:`388`: For pytest, switch to the more modern :mod:`importlib` approach
+  as it doesn't require to modify :data:`sys.path`:
+  https://docs.pytest.org/en/7.2.x/explanation/pythonpath.html
 
-----
+* :pr:`389`: Add public class variable :data:`Version.NAMES <semver.version.Version.NAMES>`.
 
+  This class variable contains a tuple of strings that contains the names of
+  all attributes of a Version (like ``"major"``, ``"minor"`` etc).
 
-Version 3.0.0-dev.2
-===================
+  In cases we need to have dynamical values, this makes it easier to iterate.
 
-:Released: 2020-11-01
-:Maintainer: Tom Schraitle
-
-
-Deprecations
-------------
-
-* :gh:`169`: Deprecate CLI functions not imported from ``semver.cli``.
-
-
-
-Features
---------
-
-* :gh:`169`: Create semver package and split code among different modules in the packages.
-
-  * Remove :file:`semver.py`
-  * Create :file:`src/semver/__init__.py`
-  * Create :file:`src/semver/cli.py` for all CLI methods
-  * Create :file:`src/semver/_deprecated.py` for the ``deprecated`` decorator and other deprecated functions
-  * Create :file:`src/semver/__main__.py` to allow calling the CLI using :command:`python -m semver`
-  * Create :file:`src/semver/_types.py` to hold type aliases
-  * Create :file:`src/semver/version.py` to hold the :class:`Version` class (old name :class:`VersionInfo`) and its utility functions
-  * Create :file:`src/semver/__about__.py` for all the metadata variables
-
-* :gh:`305`: Rename :class:`VersionInfo` to :class:`Version` but keep an alias for compatibility
-
-
-
-Improved Documentation
-----------------------
-
-* :gh:`304`: Several improvements in documentation:
-
-  * Reorganize API documentation.
-  * Add migration chapter from semver2 to semver3.
-  * Distinguish between changlog for version 2 and 3
-
-* :gh:`305`: Add note about :class:`Version` rename.
-
-
-
-Trivial/Internal Changes
-------------------------
-
-* :gh:`169`: Adapted infrastructure code to the new project layout.
-
-  * Replace :file:`setup.py` with :file:`setup.cfg` because the :file:`setup.cfg` is easier to use
-  * Adapt documentation code snippets where needed
-  * Adapt tests
-  * Changed the ``deprecated`` to hardcode the ``semver`` package name in the warning.
-
-  Increase coverage to 100% for all non-deprecated APIs
-
-* :gh:`304`: Support PEP-561 :file:`py.typed`.
-
-  According to the mentioned PEP:
-
-    "Package maintainers who wish to support type checking
-    of their code MUST add a marker file named :file:`py.typed`
-    to their package supporting typing."
-
-  Add package_data to :file:`setup.cfg` to include this marker in dist
-  and whl file.
-
-
-
-----
-
-
-Version 3.0.0-dev.1
-===================
-
-:Released: 2020-10-26
-:Maintainer: Tom Schraitle
-
-
-Deprecations
-------------
-
-* :pr:`290`: For semver 3.0.0-alpha0:
-
-  * Remove anything related to Python2
-  * In :file:`tox.ini` and :file:`.travis.yml`
-    Remove targets py27, py34, py35, and pypy.
-    Add py38, py39, and nightly (allow to fail)
-  * In :file:`setup.py` simplified file and remove
-    ``Tox`` and ``Clean`` classes
-  * Remove old Python versions (2.7, 3.4, 3.5, and pypy)
-    from Travis
-
-* :gh:`234`: In :file:`setup.py` simplified file and remove
-  ``Tox`` and ``Clean`` classes
-
-
-
-Features
---------
-
-* :pr:`290`: Create semver 3.0.0-alpha0
-
-  * Update :file:`README.rst`, mention maintenance
-    branch ``maint/v2``.
-  * Remove old code mainly used for Python2 compatibility,
-    adjusted code to support Python3 features.
-  * Split test suite into separate files under :file:`tests/`
-    directory
-  * Adjust and update :file:`setup.py`. Requires Python >=3.6.*
-    Extract metadata directly from source (affects all the ``__version__``,
-    ``__author__`` etc. variables)
-
-* :gh:`270`: Configure Towncrier (:pr:`273`:)
-
-  * Add :file:`changelog.d/.gitignore` to keep this directory
-  * Create :file:`changelog.d/README.rst` with some descriptions
-  * Add :file:`changelog.d/_template.rst` as Towncrier template
-  * Add ``[tool.towncrier]`` section in :file:`pyproject.toml`
-  * Add "changelog" target into :file:`tox.ini`. Use it like
-    :command:`tox -e changelog -- CMD` whereas ``CMD`` is a
-    Towncrier command. The default :command:`tox -e changelog`
-    calls Towncrier to create a draft of the changelog file
-    and output it to stdout.
-  * Update documentation and add include a new section
-    "Changelog" included from :file:`changelog.d/README.rst`.
-
-* :gh:`276`: Document how to create a sublass from :class:`VersionInfo` class
-
-* :gh:`213`: Add typing information
-
-
-Bug Fixes
----------
-
-* :gh:`291`: Disallow negative numbers in VersionInfo arguments
-  for ``major``, ``minor``, and ``patch``.
-
-
-
-Improved Documentation
-----------------------
-
-* :pr:`290`: Several improvements in the documentation:
-
-  * New layout to distinguish from the semver2 development line.
-  * Create new logo.
-  * Remove any occurances of Python2.
-  * Describe changelog process with Towncrier.
-  * Update the release process.
-
-
-
-Trivial/Internal Changes
-------------------------
-
-* :pr:`290`: Add supported Python versions to :command:`black`.
 
 
 ..

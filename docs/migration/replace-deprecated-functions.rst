@@ -6,7 +6,7 @@ Replacing Deprecated Functions
 .. versionchanged:: 2.10.0
    The development team of semver has decided to deprecate certain functions on
    the module level. The preferred way of using semver is through the
-   :class:`semver.Version` class.
+   :class:`~semver.version.Version` class.
 
 The deprecated functions can still be used in version 2.10.0 and above. In version 3 of
 semver, the deprecated functions will be removed.
@@ -17,10 +17,10 @@ them with code which is compatible for future versions:
 
 * :func:`semver.bump_major`, :func:`semver.bump_minor`, :func:`semver.bump_patch`, :func:`semver.bump_prerelease`, :func:`semver.bump_build`
 
-  Replace them with the respective methods of the :class:`Version <semver.version.Version>`
+  Replace them with the respective methods of the :class:`~semver.version.Version`
   class.
   For example, the function :func:`semver.bump_major` is replaced by
-  :func:`semver.Version.bump_major` and calling the ``str(versionobject)``:
+  :meth:`~semver.version.Version.bump_major` and calling the ``str(versionobject)``:
 
   .. code-block:: python
 
@@ -33,12 +33,12 @@ them with code which is compatible for future versions:
 
 * :func:`semver.Version.isvalid`
 
-   Replace it with :meth:`semver.Version.is_valid`:
+   Replace it with :meth:`semver.version.Version.is_valid`:
 
 
 * :func:`semver.finalize_version`
 
-  Replace it with :func:`semver.Version.finalize_version`:
+  Replace it with :func:`semver.version.Version.finalize_version`:
 
   .. code-block:: python
 
@@ -60,7 +60,7 @@ them with code which is compatible for future versions:
 
 * :func:`semver.max_ver`
 
-  Replace it with ``max(version1, version2, ...)`` or ``max([version1, version2, ...])``:
+  Replace it with ``max(version1, version2, ...)`` or ``max([version1, version2, ...])`` and a ``key``:
 
   .. code-block:: python
 
@@ -82,8 +82,8 @@ them with code which is compatible for future versions:
 
 * :func:`semver.parse`
 
-  Replace it with :func:`semver.Version.parse` and
-  :func:`semver.Version.to_dict`:
+  Replace it with :meth:`semver.version.Version.parse` and call
+  :meth:`semver.version.Version.to_dict`:
 
   .. code-block:: python
 
@@ -94,7 +94,7 @@ them with code which is compatible for future versions:
 
 * :func:`semver.parse_version_info`
 
-  Replace it with :func:`semver.Version.parse`:
+  Replace it with :meth:`semver.version.Version.parse`:
 
   .. code-block:: python
 
@@ -105,7 +105,7 @@ them with code which is compatible for future versions:
 
 * :func:`semver.replace`
 
-  Replace it with :func:`semver.Version.replace`:
+  Replace it with :meth:`semver.version.Version.replace`:
 
   .. code-block:: python
 

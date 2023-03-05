@@ -1,1 +1,0 @@
-Fix command :command:`python -m semver` to avoid the error "invalid choice"

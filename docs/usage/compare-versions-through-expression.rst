@@ -2,7 +2,7 @@ Comparing Versions through an Expression
 ========================================
 
 If you need a more fine-grained approach of comparing two versions,
-use the :func:`semver.match` function. It expects two arguments:
+use the :meth:`~semver.version.Version.match` function. It expects two arguments:
 
 1. a version string
 2. a match expression
@@ -20,9 +20,9 @@ That gives you the following possibilities to express your condition:
 
 .. code-block:: python
 
-    >>> semver.match("2.0.0", ">=1.0.0")
+    >>> Version.parse("2.0.0").match(">=1.0.0")
     True
-    >>> semver.match("1.0.0", ">1.0.0")
+    >>> Version.parse("1.0.0").match(">1.0.0")
     False
 
 If no operator is specified, the match expression is interpreted as a
@@ -33,7 +33,7 @@ handle both cases:
 
 .. code-block:: python
 
-    >>> semver.match("2.0.0", "2.0.0")
+    >>> Version.parse("2.0.0").match("2.0.0")
     True
-    >>> semver.match("1.0.0", "3.5.1")
+    >>> Version.parse("1.0.0").match("3.5.1")
     False

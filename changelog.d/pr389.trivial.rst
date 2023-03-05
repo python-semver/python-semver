@@ -1,6 +1,0 @@
-Add public class variable :data:`Version.NAMES <semver.version.Version.NAMES>`.
-
-This class variable contains a tuple of strings that contains the names of
-all attributes of a Version (like ``"major"``, ``"minor"`` etc).
-
-In cases we need to have dynamical values, this makes it easier to iterate.

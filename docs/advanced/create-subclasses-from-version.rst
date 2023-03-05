@@ -16,7 +16,8 @@ but the other behavior is the same, use the following code:
 
 
 The derived class :class:`SemVerWithVPrefix` can be used like
-the original class:
+the original class. Additionally, you can pass "incomplete"
+version strings like ``v2.3``:
 
 .. code-block:: python
 
@@ -24,7 +25,7 @@ the original class:
      >>> assert str(v1) == "v1.2.3"
      >>> print(v1)
      v1.2.3
-     >>> v2 = SemVerWithVPrefix.parse("v2.3.4")
+     >>> v2 = SemVerWithVPrefix.parse("v2.3")
      >>> v2 > v1
      True
      >>> bad = SemVerWithVPrefix.parse("1.2.4")
