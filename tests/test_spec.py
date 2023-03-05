@@ -376,4 +376,4 @@ def test_compare_with_invalid_types(othertype, exception):
 
 def test_invalid_spec_raise_invalidspecifier():
     with pytest.raises(InvalidSpecifier):
-        s = Spec("1.x.2")
+        Spec("1.x.2")

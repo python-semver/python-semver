@@ -16,7 +16,6 @@ from typing import (
     cast,
     Callable,
     Collection,
-    Match,
     Type,
     TypeVar,
 )
@@ -111,11 +110,7 @@ class Version(VersionRegex):
         build: Optional[Union[String, int]] = None,
     ):
         # Build a dictionary of the arguments except prerelease and build
-        version_parts = {
-            "major": int(major),
-            "minor": int(minor),
-            "patch": int(patch)
-        }
+        version_parts = {"major": int(major), "minor": int(minor), "patch": int(patch)}
 
         for name, value in version_parts.items():
             if value < 0:

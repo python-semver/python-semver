@@ -10,6 +10,7 @@ class VersionRegex:
 
     You don't instantiate this class.
     """
+
     #: a number
     _RE_NUMBER: ClassVar[str] = r"0|[1-9]\d*"
 
@@ -51,12 +52,12 @@ class VersionRegex:
 
     #: Regex for a semver version
     _REGEX: ClassVar[Pattern[str]] = re.compile(
-        _REGEX_TEMPLATE.format(opt_patch='', opt_minor=''),
+        _REGEX_TEMPLATE.format(opt_patch="", opt_minor=""),
         re.VERBOSE,
     )
 
     #: Regex for a semver version that might be shorter
     _REGEX_OPTIONAL_MINOR_AND_PATCH: ClassVar[Pattern[str]] = re.compile(
-        _REGEX_TEMPLATE.format(opt_patch='?', opt_minor='?'),
+        _REGEX_TEMPLATE.format(opt_patch="?", opt_minor="?"),
         re.VERBOSE,
     )
