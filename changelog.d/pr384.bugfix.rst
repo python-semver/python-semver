@@ -1,0 +1,11 @@
+General cleanup, reformat files:
+
+* Reformat source code with black again as some config options
+  did accidentely exclude the semver source code.
+  Mostly remove some includes/excludes in the black config.
+* Integrate concurrency in GH Action
+* Ignore Python files on project dirs in .gitignore
+* Remove unused patterns in MANIFEST.in
+* Use ``extend-exclude`` for flake in :file:`setup.cfg`` and adapt list.
+* Use ``skip_install=True`` in :file:`tox.ini` for black
+

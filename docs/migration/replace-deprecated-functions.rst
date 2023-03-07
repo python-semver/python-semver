@@ -31,6 +31,11 @@ them with code which is compatible for future versions:
 
   Likewise with the other module level functions.
 
+* :func:`semver.Version.isvalid`
+
+   Replace it with :meth:`semver.Version.is_valid`:
+
+
 * :func:`semver.finalize_version`
 
   Replace it with :func:`semver.Version.finalize_version`:

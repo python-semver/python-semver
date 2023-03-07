@@ -4,8 +4,6 @@ import pytest
 
 import semver
 
-# sys.path.insert(0, "docs/usage")
-
 from coerce import coerce  # noqa:E402
 from semverwithvprefix import SemVerWithVPrefix  # noqa:E402
 import packaging.version

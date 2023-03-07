@@ -118,8 +118,8 @@ todo_include_todos = False
 # Markup to shorten external links
 # See https://www.sphinx-doc.org/en/master/usage/extensions/extlinks.html
 extlinks = {
-    "gh": ("https://github.com/python-semver/python-semver/issues/%s", "#"),
-    "pr": ("https://github.com/python-semver/python-semver/pull/%s", "PR #"),
+    "gh": ("https://github.com/python-semver/python-semver/issues/%s", "#%s"),
+    "pr": ("https://github.com/python-semver/python-semver/pull/%s", "PR #%s"),
 }
 
 # -- Options for HTML output ----------------------------------------------

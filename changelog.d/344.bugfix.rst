@@ -1,0 +1,5 @@
+Allow empty string, a string with a prefix, or ``None``
+as token in
+:meth:`Version.bump_build <semver.Version.bump_build>` and
+:meth:`Version.bump_prerelease <semver.Version.bump_prerelease>`.
+

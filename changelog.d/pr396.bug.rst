@@ -1,0 +1,2 @@
+Calling :func:`semver.Version.parse` on a derived class will show correct type
+of derived class.

@@ -1,2 +1,0 @@
-Describe combining Pydantic with semver in the "Advanced topic"
-section.

@@ -18,9 +18,13 @@ To work with Pydantic, use the following steps:
 
         class PydanticVersion(Version):
             @classmethod
+            def _parse(cls, version):
+                return cls.parse(version)
+
+            @classmethod
             def __get_validators__(cls):
                 """Return a list of validator methods for pydantic models."""
-                yield cls.parse
+                yield cls._parse
 
             @classmethod
             def __modify_schema__(cls, field_schema):

@@ -14,6 +14,8 @@ from typing import (
     cast,
     Callable,
     Collection,
+    Type,
+    TypeVar,
 )
 
 from ._types import (
@@ -27,6 +29,8 @@ from ._types import (
 # These types are required here because of circular imports
 Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], str]
 Comparator = Callable[["Version", Comparable], bool]
+
+T = TypeVar("T", bound="Version")
 
 
 def _comparator(operator: Comparator) -> Comparator:
@@ -66,11 +70,14 @@ class Version:
     """
 
     __slots__ = ("_major", "_minor", "_patch", "_prerelease", "_build")
+
+    #: The names of the different parts of a version
+    NAMES = tuple([item[1:] for item in __slots__])
+
     #: Regex for number in a prerelease
     _LAST_NUMBER = re.compile(r"(?:[^\d]*(\d+)[^\d]*)+")
     #: Regex template for a semver version
-    _REGEX_TEMPLATE = \
-        r"""
+    _REGEX_TEMPLATE = r"""
             ^
             (?P<major>0|[1-9]\d*)
             (?:
@@ -93,12 +100,12 @@ class Version:
         """
     #: Regex for a semver version
     _REGEX = re.compile(
-        _REGEX_TEMPLATE.format(opt_patch='', opt_minor=''),
+        _REGEX_TEMPLATE.format(opt_patch="", opt_minor=""),
         re.VERBOSE,
     )
     #: Regex for a semver version that might be shorter
     _REGEX_OPTIONAL_MINOR_AND_PATCH = re.compile(
-        _REGEX_TEMPLATE.format(opt_patch='?', opt_minor='?'),
+        _REGEX_TEMPLATE.format(opt_patch="?", opt_minor="?"),
         re.VERBOSE,
     )
 
@@ -298,30 +305,44 @@ class Version:
         cls = type(self)
         return cls(self._major, self._minor, self._patch + 1)
 
-    def bump_prerelease(self, token: str = "rc") -> "Version":
+    def bump_prerelease(self, token: Optional[str] = "rc") -> "Version":
         """
         Raise the prerelease part of the version, return a new object but leave
         self untouched.
 
-        :param token: defaults to ``rc``
-        :return: new object with the raised prerelease part
+        :param token: defaults to ``'rc'``
+        :return: new :class:`Version` object with the raised prerelease part.
+            The original object is not modified.
 
         >>> ver = semver.parse("3.4.5")
-        >>> ver.bump_prerelease()
-        Version(major=3, minor=4, patch=5, prerelease='rc.2', \
-build=None)
+        >>> ver.bump_prerelease().prerelease
+        'rc.2'
+        >>> ver.bump_prerelease('').prerelease
+        '1'
+        >>> ver.bump_prerelease(None).prerelease
+        'rc.1'
         """
         cls = type(self)
-        prerelease = cls._increment_string(self._prerelease or (token or "rc") + ".0")
+        if self._prerelease is not None:
+            prerelease = self._prerelease
+        elif token == "":
+            prerelease = "0"
+        elif token is None:
+            prerelease = "rc.0"
+        else:
+            prerelease = str(token) + ".0"
+
+        prerelease = cls._increment_string(prerelease)
         return cls(self._major, self._minor, self._patch, prerelease)
 
-    def bump_build(self, token: str = "build") -> "Version":
+    def bump_build(self, token: Optional[str] = "build") -> "Version":
         """
         Raise the build part of the version, return a new object but leave self
         untouched.
 
-        :param token: defaults to ``build``
-        :return: new object with the raised build part
+        :param token: defaults to ``'build'``
+        :return: new :class:`Version` object with the raised build part.
+            The original object is not modified.
 
         >>> ver = semver.parse("3.4.5-rc.1+build.9")
         >>> ver.bump_build()
@@ -329,7 +350,28 @@ build=None)
 build='build.10')
         """
         cls = type(self)
-        build = cls._increment_string(self._build or (token or "build") + ".0")
+        if self._build is not None:
+            build = self._build
+        elif token == "":
+            build = "0"
+        elif token is None:
+            build = "build.0"
+        else:
+            build = str(token) + ".0"
+
+        # self._build or (token or "build") + ".0"
+        build = cls._increment_string(build)
+        if self._build is not None:
+            build = self._build
+        elif token == "":
+            build = "0"
+        elif token is None:
+            build = "build.0"
+        else:
+            build = str(token) + ".0"
+
+        # self._build or (token or "build") + ".0"
+        build = cls._increment_string(build)
         return cls(self._major, self._minor, self._patch, self._prerelease, build)
 
     def compare(self, other: Comparable) -> int:
@@ -399,13 +441,9 @@ build='build.10')
         :param prerelease_token: prefix string of prerelease, defaults to 'rc'
         :return: new object with the appropriate part raised
         """
-        validparts = {
-            "major",
-            "minor",
-            "patch",
-            "prerelease",
-            # "build", # currently not used
-        }
+        cls = type(self)
+        # "build" is currently not used, that's why we use [:-1]
+        validparts = cls.NAMES[:-1]
         if part not in validparts:
             raise ValueError(
                 "Invalid part. Expected one of {validparts}, but got {part!r}".format(
@@ -420,7 +458,8 @@ build='build.10')
         ):
             return version.replace(prerelease=None, build=None)
 
-        if part in ("major", "minor", "patch"):
+        # Only check the main parts:
+        if part in cls.NAMES[:3]:
             return getattr(version, "bump_" + part)()
 
         if not version.prerelease:
@@ -571,10 +610,8 @@ build='build.10')
 
     @classmethod
     def parse(
-        cls,
-        version: String,
-        optional_minor_and_patch: bool = False
-    ) -> "Version":
+        cls: Type[T], version: String, optional_minor_and_patch: bool = False
+    ) -> T:
         """
         Parse version string to a Version instance.
 
@@ -611,10 +648,10 @@ prerelease='pre.2', build='build.4')
             raise ValueError(f"{version} is not valid SemVer string")
 
         matched_version_parts: Dict[str, Any] = match.groupdict()
-        if not matched_version_parts['minor']:
-            matched_version_parts['minor'] = 0
-        if not matched_version_parts['patch']:
-            matched_version_parts['patch'] = 0
+        if not matched_version_parts["minor"]:
+            matched_version_parts["minor"] = 0
+        if not matched_version_parts["patch"]:
+            matched_version_parts["patch"] = 0
 
         return cls(**matched_version_parts)
 
@@ -645,7 +682,7 @@ prerelease='pre.2', build='build.4')
             raise TypeError(error)
 
     @classmethod
-    def isvalid(cls, version: str) -> bool:
+    def is_valid(cls, version: str) -> bool:
         """
         Check if the string is a valid semver version.
 
@@ -660,6 +697,42 @@ prerelease='pre.2', build='build.4')
             return True
         except ValueError:
             return False
+
+    def is_compatible(self, other: "Version") -> bool:
+        """
+        Check if current version is compatible with other version.
+
+        The result is True, if either of the following is true:
+
+        * both versions are equal, or
+        * both majors are equal and higher than 0. Same for both minors.
+          Both pre-releases are equal, or
+        * both majors are equal and higher than 0. The minor of b's
+          minor version is higher then a's. Both pre-releases are equal.
+
+        The algorithm does *not* check patches.
+
+        :param other: the version to check for compatibility
+        :return: True, if ``other`` is compatible with the old version,
+                 otherwise False
+
+        >>> Version(1, 1, 0).is_compatible(Version(1, 0, 0))
+        False
+        >>> Version(1, 0, 0).is_compatible(Version(1, 1, 0))
+        True
+        """
+        if not isinstance(other, Version):
+            raise TypeError(f"Expected a Version type but got {type(other)}")
+
+        # All major-0 versions should be incompatible with anything but itself
+        if (0 == self.major == other.major) and (self[:4] != other[:4]):
+            return False
+
+        return (
+            (self.major == other.major)
+            and (other.minor >= self.minor)
+            and (self.prerelease == other.prerelease)
+        )
 
 
 #: Keep the VersionInfo name for compatibility

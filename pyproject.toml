@@ -219,7 +219,7 @@ addopts = [
 
 [tool.black]
 line-length = 88
-target-version = ["py36", "py37", "py38", "py39", "py310"]
+target-version = ["py36", "py37", "py38", "py39", "py310", "py311"]
 # diff = true
 # note the use of single quotes below to denote "raw" strings in TOML
 extend-exclude = '''
@@ -246,13 +246,13 @@ template = "changelog.d/_template.rst"
 name = "Breaking Changes"
 
 [tool.towncrier.fragment.bugfix]
-name = "Bug fixes"
+name = "Bug Fixes"
 
 [tool.towncrier.fragment.deprecation]
 name = "Deprecations"
 
 [tool.towncrier.fragment.doc]
-name = "Improved documentation"
+name = "Improved Documentation"
 
 [tool.towncrier.fragment.feature]
 name = "Features"

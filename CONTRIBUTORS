@@ -2,7 +2,7 @@
 Contributors
 ############
 
-Python SemVer library
+Python Semver library
 #####################
 
 This document records the primary maintainers and significant
@@ -14,8 +14,12 @@ Thank you to everyone whose work has made this possible.
 Primary maintainers
 ===================
 
-* Kostiantyn Rybnikov <k-bx@k-bx.com>
+* Tom Schraitle <tom_schr@web.de>
 * Sébastien Celles <s.celles@gmail.com>
+
+Old maintainer:
+
+* Kostiantyn Rybnikov <k-bx@k-bx.com>
 
 
 Significant contributors
@@ -37,7 +41,6 @@ Significant contributors
 * robi-wan <robi-wan@suyu.de>
 * sbrudenell <sbrudenell@users.noreply.github.com>
 * T. Jameson Little <t.jameson.little@gmail.com>
-* Tom Schraitle <tom_schr@web.de>
 * Thomas Laferriere <tlaferriere@users.noreply.github.com>
 * Tuure Laurinolli <tuure@laurinolli.net>
 * Tyler Cross <tyler@crosscollab.com>

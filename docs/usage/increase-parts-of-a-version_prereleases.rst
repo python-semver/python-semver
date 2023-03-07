@@ -1,3 +1,4 @@
+.. _increase-parts-of-a-version:
 Increasing Parts of a Version Taking into Account Prereleases
 =============================================================
 

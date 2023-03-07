@@ -73,10 +73,65 @@ def test_should_be_able_to_use_integers_as_prerelease_build():
 
 
 def test_should_versioninfo_isvalid():
-    assert Version.isvalid("1.0.0") is True
-    assert Version.isvalid("foo") is False
+    assert Version.is_valid("1.0.0") is True
+    assert Version.is_valid("foo") is False
 
 
 def test_versioninfo_compare_should_raise_when_passed_invalid_value():
     with pytest.raises(TypeError):
         Version(1, 2, 3).compare(4)
+
+
+@pytest.mark.parametrize(
+    "old, new",
+    [
+        ((1, 2, 3), (1, 2, 3)),
+        ((1, 2, 3), (1, 2, 4)),
+        ((1, 2, 4), (1, 2, 3)),
+        ((1, 2, 3, "rc.0"), (1, 2, 4, "rc.0")),
+        ((0, 1, 0), (0, 1, 0)),
+    ],
+)
+def test_should_succeed_compatible_match(old, new):
+    old = Version(*old)
+    new = Version(*new)
+    assert old.is_compatible(new)
+
+
+@pytest.mark.parametrize(
+    "old, new",
+    [
+        ((1, 1, 0), (1, 0, 0)),
+        ((2, 0, 0), (1, 5, 0)),
+        ((1, 2, 3, "rc.1"), (1, 2, 3, "rc.0")),
+        ((1, 2, 3, "rc.1"), (1, 2, 4, "rc.0")),
+        ((0, 1, 0), (0, 1, 1)),
+        ((1, 0, 0), (1, 0, 0, "rc1")),
+        ((1, 0, 0, "rc1"), (1, 0, 0)),
+    ],
+)
+def test_should_fail_compatible_match(old, new):
+    old = Version(*old)
+    new = Version(*new)
+    assert not old.is_compatible(new)
+
+
+@pytest.mark.parametrize(
+    "wrongtype",
+    [
+        "wrongtype",
+        dict(a=2),
+        list(),
+    ],
+)
+def test_should_fail_with_incompatible_type_for_compatible_match(wrongtype):
+    with pytest.raises(TypeError, match="Expected a Version type .*"):
+        v = Version(1, 2, 3)
+        v.is_compatible(wrongtype)
+
+
+def test_should_succeed_with_compatible_subclass_for_is_compatible():
+    class CustomVersion(Version):
+        ...
+
+    assert CustomVersion(1, 0, 0).is_compatible(Version(1, 0, 0))
