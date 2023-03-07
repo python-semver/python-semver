@@ -8,5 +8,6 @@ VersionTuple = Tuple[int, int, int, Optional[str], Optional[str]]
 VersionDict = Dict[str, VersionPart]
 VersionIterator = Iterable[VersionPart]
 String = Union[str, bytes]
+StringOrInt = Union[String, int]
 F = TypeVar("F", bound=Callable)
 Decorator = Union[Callable[..., F], partial]

@@ -51,7 +51,7 @@ different parts, use the ``semver.Version.parse`` function:
 
 .. code-block:: python
 
-    >>> ver = semver.Version.parse('1.2.3-pre.2+build.4')
+    >>> ver = semver.Version('1.2.3-pre.2+build.4')
     >>> ver.major
     1
     >>> ver.minor
@@ -69,7 +69,7 @@ returns a new ``semver.Version`` instance with the raised major part:
 
 .. code-block:: python
 
-    >>> ver = semver.Version.parse("3.4.5")
+    >>> ver = semver.Version("3.4.5")
     >>> ver.bump_major()
     Version(major=4, minor=0, patch=0, prerelease=None, build=None)
 

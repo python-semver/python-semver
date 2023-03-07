@@ -5,29 +5,31 @@ import re
 from functools import wraps
 from typing import (
     Any,
+    Callable,
+    Collection,
     Dict,
     Iterable,
+    List,
     Optional,
     SupportsInt,
     Tuple,
-    Union,
-    cast,
-    Callable,
-    Collection,
     Type,
     TypeVar,
+    Union,
+    cast,
 )
 
 from ._types import (
-    VersionTuple,
+    String,
+    StringOrInt,
     VersionDict,
     VersionIterator,
-    String,
     VersionPart,
+    VersionTuple,
 )
 
 # These types are required here because of circular imports
-Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], str]
+Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], String]
 Comparator = Callable[["Version", Comparable], bool]
 
 T = TypeVar("T", bound="Version")
@@ -61,13 +63,48 @@ class Version:
     """
     A semver compatible version class.
 
+    :param args: a tuple with version information. It can consist of:
+
+        * a maximum length of 5 items that comprehend the major,
+          minor, patch, prerelease, or build parts.
+        * a str or bytes string at first position that contains a valid semver
+          version string.
     :param major: version when you make incompatible API changes.
     :param minor: version when you add functionality in
                   a backwards-compatible manner.
     :param patch: version when you make backwards-compatible bug fixes.
     :param prerelease: an optional prerelease string
     :param build: an optional build string
+
+    This gives you some options to call the :class:`Version` class.
+    Precedence has the keyword arguments over the positional arguments.
+
+    >>> Version(1, 2, 3)
+    Version(major=1, minor=2, patch=3, prerelease=None, build=None)
+    >>> Version("2.3.4-pre.2")
+    Version(major=2, minor=3, patch=4, prerelease="pre.2", build=None)
+    >>> Version(major=2, minor=3, patch=4, build="build.2")
+    Version(major=2, minor=3, patch=4, prerelease=None, build="build.2")
     """
+
+    #: The name of the version parts
+    VERSIONPARTS: Tuple[str, str, str, str, str] = (
+        "major",
+        "minor",
+        "patch",
+        "prerelease",
+        "build",
+    )
+    #: The default values for each part (position match with ``VERSIONPARTS``):
+    VERSIONPARTDEFAULTS: VersionTuple = (0, 0, 0, None, None)
+    #: The allowed types for each part (position match with ``VERSIONPARTS``):
+    ALLOWED_TYPES = (
+        (int, str, bytes),  # major
+        (int, str, bytes),  # minor
+        (int, str, bytes),  # patch
+        (int, str, bytes, type(None)),  # prerelease
+        (int, str, bytes, type(None)),  # build
+    )
 
     __slots__ = ("_major", "_minor", "_patch", "_prerelease", "_build")
 
@@ -109,28 +146,129 @@ class Version:
         re.VERBOSE,
     )
 
+    def _check_types(self, *args: Tuple) -> List[bool]:
+        """
+        Check if the given arguments conform to the types in ``ALLOWED_TYPES``.
+
+        :return: bool for each position
+        """
+        cls = self.__class__
+        return [
+            isinstance(item, expected_type)
+            for item, expected_type in zip(args, cls.ALLOWED_TYPES)
+        ]
+
+    def _raise_if_args_are_invalid(self, *args):
+        """
+        Checks conditions for positional arguments. For example:
+
+        * No more than 5 arguments.
+        * If first argument  is a string, contains a dot, and there
+          are more arguments.
+        * Arguments have invalid types.
+
+        :raises ValueError: if more arguments than 5 or if first argument
+           is a string, contains a dot, and there are more arguments.
+        :raises TypeError: if there are invalid types.
+        """
+        if args and len(args) > 5:
+            raise ValueError("You cannot pass more than 5 arguments to Version")
+        elif len(args) > 1 and "." in str(args[0]):
+            raise ValueError(
+                "You cannot pass a string and additional positional arguments"
+            )
+        types_in_args = self._check_types(*args)
+        if not all(types_in_args):
+            pos = types_in_args.index(False)
+            raise TypeError(
+                "not expecting type in argument position "
+                f"{pos} (type: {type(args[pos])})"
+            )
+
     def __init__(
         self,
-        major: SupportsInt,
+        *args: Tuple[
+            StringOrInt,  # major
+            Optional[StringOrInt],  # minor
+            Optional[StringOrInt],  # patch
+            Optional[StringOrInt],  # prerelease
+            Optional[StringOrInt],  # build
+        ],
+        major: SupportsInt = 0,
         minor: SupportsInt = 0,
         patch: SupportsInt = 0,
         prerelease: Optional[Union[String, int]] = None,
         build: Optional[Union[String, int]] = None,
     ):
-        # Build a dictionary of the arguments except prerelease and build
-        version_parts = {"major": int(major), "minor": int(minor), "patch": int(patch)}
+        #
+        # The algorithm to support different Version calls is this:
+        #
+        # 1. Check first, if there are invalid calls. For example
+        #    more than 5 items in args or a unsupported combination
+        #    of args and version part arguments (major, minor, etc.)
+        #    If yes, raise an exception.
+        #
+        # 2. Create a dictargs dict:
+        #    a. If the first argument is a version string which contains
+        #       a dot it's likely it's a semver string. Try to convert
+        #       them into a dict and save it to dictargs.
+        #    b. If the first argument is not a version string, try to
+        #       create the dictargs from the args argument.
+        #
+        # 3. Create a versiondict from the version part arguments.
+        #    This contains only items if the argument is not None.
+        #
+        # 4. Merge the two dicts, versiondict overwrites dictargs.
+        #    In other words, if the user specifies Version(1, major=2)
+        #    the major=2 has precedence over the 1.
+        #
+        # 5. Set all version components from versiondict. If the key
+        #    doesn't exist, set a default value.
 
-        for name, value in version_parts.items():
-            if value < 0:
-                raise ValueError(
-                    "{!r} is negative. A version can only be positive.".format(name)
-                )
+        cls = self.__class__
+        # (1) check combinations and types
+        self._raise_if_args_are_invalid(*args)
 
-        self._major = version_parts["major"]
-        self._minor = version_parts["minor"]
-        self._patch = version_parts["patch"]
-        self._prerelease = None if prerelease is None else str(prerelease)
-        self._build = None if build is None else str(build)
+        # (2) First argument was a string
+        if args and args[0] and "." in cls._enforce_str(args[0]):  # type: ignore
+            dictargs = cls._parse(cast(String, args[0]))
+        else:
+            dictargs = dict(zip(cls.VERSIONPARTS, args))
+
+        # (3) Only include part in versiondict if value is not None
+        versiondict = {
+            part: value
+            for part, value in zip(
+                cls.VERSIONPARTS, (major, minor, patch, prerelease, build)
+            )
+            if value is not None
+        }
+
+        # (4) Order here is important: versiondict overwrites dictargs
+        versiondict = {**dictargs, **versiondict}  # type: ignore
+
+        # (5) Set all version components:
+        self._major = cls._ensure_int(
+            cast(StringOrInt, versiondict.get("major", cls.VERSIONPARTDEFAULTS[0]))
+        )
+        self._minor = cls._ensure_int(
+            cast(StringOrInt, versiondict.get("minor", cls.VERSIONPARTDEFAULTS[1]))
+        )
+        self._patch = cls._ensure_int(
+            cast(StringOrInt, versiondict.get("patch", cls.VERSIONPARTDEFAULTS[2]))
+        )
+        self._prerelease = cls._enforce_str(
+            cast(
+                Optional[StringOrInt],
+                versiondict.get("prerelease", cls.VERSIONPARTDEFAULTS[3]),
+            )
+        )
+        self._build = cls._enforce_str(
+            cast(
+                Optional[StringOrInt],
+                versiondict.get("build", cls.VERSIONPARTDEFAULTS[4]),
+            )
+        )
 
     @classmethod
     def _nat_cmp(cls, a, b):  # TODO: type hints
@@ -154,6 +292,78 @@ class Version:
                 return cmp_result
         else:
             return _cmp(len(a), len(b))
+
+    @classmethod
+    def _ensure_int(cls, value: StringOrInt) -> int:
+        """
+        Ensures integer value type regardless if argument type is str or bytes.
+        Otherwise raise ValueError.
+
+        :param value:
+        :raises ValueError: Two conditions:
+          * If value is not an integer or cannot be converted.
+          * If value is negative.
+        :return: the converted value as integer
+        """
+        try:
+            value = int(value)
+        except ValueError:
+            raise ValueError(
+                "Expected integer or integer string for major, minor, or patch"
+            )
+
+        if value < 0:
+            raise ValueError(
+                f"Argument {value} is negative. A version can only be positive."
+            )
+        return value
+
+    @classmethod
+    def _enforce_str(cls, s: Optional[StringOrInt]) -> Optional[str]:
+        """
+        Forces input to be string, regardless of int, bytes, or string.
+
+        :param s: a string, integer or None
+        :return: a Unicode string (or None)
+        """
+        if isinstance(s, int):
+            return str(s)
+        return cls._ensure_str(s)
+
+    @classmethod
+    def _ensure_str(cls, s: Optional[String], encoding="UTF-8") -> Optional[str]:
+        """
+        Ensures string type regardless if argument type is str or bytes.
+
+        :param s: the string (or None)
+        :param encoding: the encoding, default to "UTF-8"
+        :return: a Unicode string (or None)
+        """
+        if isinstance(s, bytes):
+            return cast(str, s.decode(encoding))
+        return s
+
+    @classmethod
+    def _parse(cls, version: String) -> Dict:
+        """
+        Parse version string and return version parts.
+
+        :param version: version string
+        :return: a dictionary with version parts
+        :raises ValueError: if version is invalid
+        :raises TypeError: if version contains unexpected type
+
+        >>> semver.Version.parse('3.4.5-pre.2+build.4')
+        Version(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')
+        """
+        version = cast(str, cls._ensure_str(version))
+        if not isinstance(version, String.__args__):  # type: ignore
+            raise TypeError(f"not expecting type {type(version)!r}")
+        match = cls._REGEX.match(version)
+        if match is None:
+            raise ValueError(f"{version!r} is not valid SemVer string")
+
+        return cast(dict, match.groupdict())
 
     @property
     def major(self) -> int:
@@ -227,8 +437,7 @@ class Version:
           ``patch``, ``prerelease``, and ``build``.
 
         >>> semver.Version(3, 2, 1).to_dict()
-        OrderedDict([('major', 3), ('minor', 2), ('patch', 1), \
-('prerelease', None), ('build', None)])
+        OrderedDict([('major', 3), ('minor', 2), ('patch', 1), ('prerelease', None), ('build', None)])  # noqa: E501
         """
         return collections.OrderedDict(
             (
@@ -269,13 +478,11 @@ class Version:
 
         :return: new object with the raised major part
 
-
-        >>> ver = semver.parse("3.4.5")
-        >>> ver.bump_major()
+        >>> semver.Version("3.4.5").bump_major()
         Version(major=4, minor=0, patch=0, prerelease=None, build=None)
         """
         cls = type(self)
-        return cls(self._major + 1)
+        return cls(major=self._major + 1)
 
     def bump_minor(self) -> "Version":
         """
@@ -284,12 +491,11 @@ class Version:
 
         :return: new object with the raised minor part
 
-        >>> ver = semver.parse("3.4.5")
-        >>> ver.bump_minor()
+        >>> semver.Version("3.4.5").bump_minor()
         Version(major=3, minor=5, patch=0, prerelease=None, build=None)
         """
         cls = type(self)
-        return cls(self._major, self._minor + 1)
+        return cls(major=self._major, minor=self._minor + 1)
 
     def bump_patch(self) -> "Version":
         """
@@ -298,12 +504,11 @@ class Version:
 
         :return: new object with the raised patch part
 
-        >>> ver = semver.parse("3.4.5")
-        >>> ver.bump_patch()
+        >>> semver.Version("3.4.5").bump_patch()
         Version(major=3, minor=4, patch=6, prerelease=None, build=None)
         """
         cls = type(self)
-        return cls(self._major, self._minor, self._patch + 1)
+        return cls(major=self._major, minor=self._minor, patch=self._patch + 1)
 
     def bump_prerelease(self, token: Optional[str] = "rc") -> "Version":
         """
@@ -323,17 +528,13 @@ class Version:
         'rc.1'
         """
         cls = type(self)
-        if self._prerelease is not None:
-            prerelease = self._prerelease
-        elif token == "":
-            prerelease = "0"
-        elif token is None:
-            prerelease = "rc.0"
-        else:
-            prerelease = str(token) + ".0"
-
-        prerelease = cls._increment_string(prerelease)
-        return cls(self._major, self._minor, self._patch, prerelease)
+        prerelease = cls._increment_string(self._prerelease or (token or "rc") + ".0")
+        return cls(
+            major=self._major,
+            minor=self._minor,
+            patch=self._patch,
+            prerelease=prerelease,
+        )
 
     def bump_build(self, token: Optional[str] = "build") -> "Version":
         """
@@ -344,35 +545,18 @@ class Version:
         :return: new :class:`Version` object with the raised build part.
             The original object is not modified.
 
-        >>> ver = semver.parse("3.4.5-rc.1+build.9")
-        >>> ver.bump_build()
-        Version(major=3, minor=4, patch=5, prerelease='rc.1', \
-build='build.10')
+        >>> semver.Version("3.4.5-rc.1+build.9").bump_build()
+        Version(major=3, minor=4, patch=5, prerelease='rc.1', build='build.10')  # noqa: E501
         """
         cls = type(self)
-        if self._build is not None:
-            build = self._build
-        elif token == "":
-            build = "0"
-        elif token is None:
-            build = "build.0"
-        else:
-            build = str(token) + ".0"
-
-        # self._build or (token or "build") + ".0"
-        build = cls._increment_string(build)
-        if self._build is not None:
-            build = self._build
-        elif token == "":
-            build = "0"
-        elif token is None:
-            build = "build.0"
-        else:
-            build = str(token) + ".0"
-
-        # self._build or (token or "build") + ".0"
-        build = cls._increment_string(build)
-        return cls(self._major, self._minor, self._patch, self._prerelease, build)
+        build = cls._increment_string(self._build or (token or "build") + ".0")
+        return cls(
+            major=self._major,
+            minor=self._minor,
+            patch=self._patch,
+            prerelease=self._prerelease,
+            build=build,
+        )
 
     def compare(self, other: Comparable) -> int:
         """
@@ -382,18 +566,22 @@ build='build.10')
         :return: The return value is negative if ver1 < ver2,
              zero if ver1 == ver2 and strictly positive if ver1 > ver2
 
-        >>> semver.compare("2.0.0")
+        >>> semver.Version("1.0.0").compare("2.0.0")
         -1
-        >>> semver.compare("1.0.0")
-        1
-        >>> semver.compare("2.0.0")
+        >>> semver.Version("1.0.0").compare("1.0.0")
         0
-        >>> semver.compare(dict(major=2, minor=0, patch=0))
+        >>> semver.Version("1.0.0").compare("0.1.0")
+        -1
+        >>> semver.Version("2.0.0").compare(dict(major=2, minor=0, patch=0))
         0
         """
         cls = type(self)
+
+        # See https://github.com/python/mypy/issues/4019
         if isinstance(other, String.__args__):  # type: ignore
-            other = cls.parse(other)
+            if "." not in cast(str, cls._ensure_str(other)):
+                raise ValueError("Expected semver version string.")
+            other = cls(other)
         elif isinstance(other, dict):
             other = cls(**other)
         elif isinstance(other, (tuple, list)):
@@ -434,12 +622,12 @@ build='build.10')
         "preprelease" part. It gives you the next patch version of the
         prerelease, for example:
 
-        >>> str(semver.parse("0.1.4").next_version("prerelease"))
-        '0.1.5-rc.1'
-
         :param part: One of "major", "minor", "patch", or "prerelease"
         :param prerelease_token: prefix string of prerelease, defaults to 'rc'
         :return: new object with the appropriate part raised
+
+        >>> str(semver.Version("0.1.4").next_version("prerelease"))
+        '0.1.5-rc.1'
         """
         cls = type(self)
         # "build" is currently not used, that's why we use [:-1]
@@ -500,12 +688,12 @@ build='build.10')
         is undefined, it will throw an index error.
         Negative indices are not supported.
 
-        :param Union[int, slice] index: a positive integer indicating the
+        :param index: a positive integer indicating the
                offset or a :func:`slice` object
         :raises IndexError: if index is beyond the range or a part is None
         :return: the requested part of the version at position index
 
-        >>> ver = semver.Version.parse("3.4.5")
+        >>> ver = semver.Version("3.4.5")
         >>> ver[0], ver[1], ver[2]
         (3, 4, 5)
         """
@@ -535,11 +723,11 @@ build='build.10')
         return "%s(%s)" % (type(self).__name__, s)
 
     def __str__(self) -> str:
-        version = "%d.%d.%d" % (self.major, self.minor, self.patch)
+        version = f"{self.major:d}.{self.minor:d}.{self.patch:d}"
         if self.prerelease:
-            version += "-%s" % self.prerelease
+            version += f"-{self.prerelease}"
         if self.build:
-            version += "+%s" % self.build
+            version += f"+{self.build}"
         return version
 
     def __hash__(self) -> int:
@@ -551,11 +739,11 @@ build='build.10')
 
         :return: a new instance with the finalized version string
 
-        >>> str(semver.Version.parse('1.2.3-rc.5').finalize_version())
+        >>> str(semver.Version('1.2.3-rc.5').finalize_version())
         '1.2.3'
         """
         cls = type(self)
-        return cls(self.major, self.minor, self.patch)
+        return cls(major=self.major, minor=self.minor, patch=self.patch)
 
     def match(self, match_expr: str) -> bool:
         """
@@ -570,9 +758,9 @@ build='build.10')
               ``!=``  not equal
         :return: True if the expression matches the version, otherwise False
 
-        >>> semver.Version.parse("2.0.0").match(">=1.0.0")
+        >>> semver.Version("2.0.0").match(">=1.0.0")
         True
-        >>> semver.Version.parse("1.0.0").match(">1.0.0")
+        >>> semver.Version("1.0.0").match(">1.0.0")
         False
         >>> semver.Version.parse("4.0.4").match("4.0.4")
         True
@@ -631,9 +819,8 @@ build='build.10')
         :raises ValueError: if version is invalid
         :raises TypeError: if version contains the wrong type
 
-        >>> semver.Version.parse('3.4.5-pre.2+build.4')
-        Version(major=3, minor=4, patch=5, \
-prerelease='pre.2', build='build.4')
+        >>> semver.Version('3.4.5-pre.2+build.4')
+        Version(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')  # noqa: E501
         """
         if isinstance(version, bytes):
             version = version.decode("UTF-8")

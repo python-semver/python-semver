@@ -56,13 +56,10 @@ def test_should_be_able_to_use_strings_as_major_minor_patch():
     assert Version("1", "2", "3") == Version(1, 2, 3)
 
 
-def test_using_non_numeric_string_as_major_minor_patch_throws():
+@pytest.mark.parametrize("ver", [("a"), (1, "a"), (1, 2, "a")])
+def test_using_non_numeric_string_as_major_minor_patch_throws(ver):
     with pytest.raises(ValueError):
-        Version("a")
-    with pytest.raises(ValueError):
-        Version(1, "a")
-    with pytest.raises(ValueError):
-        Version(1, 2, "a")
+        Version(*ver)
 
 
 def test_should_be_able_to_use_integers_as_prerelease_build():
@@ -80,6 +77,78 @@ def test_should_versioninfo_isvalid():
 def test_versioninfo_compare_should_raise_when_passed_invalid_value():
     with pytest.raises(TypeError):
         Version(1, 2, 3).compare(4)
+
+
+def test_should_raise_when_too_many_arguments():
+    with pytest.raises(ValueError, match=".* more than 5 arguments .*"):
+        Version(1, 2, 3, 4, 5, 6)
+
+
+def test_should_raise_when_incompatible_type():
+    with pytest.raises(TypeError, match="not expecting type .*"):
+        Version.parse(complex(42))
+    with pytest.raises(TypeError, match="not expecting type .*"):
+        Version(complex(42))
+
+
+def test_should_raise_when_string_and_args():
+    with pytest.raises(ValueError):
+        Version("1.2.3", 5)
+
+
+@pytest.mark.parametrize(
+    "ver, expected",
+    [
+        (tuple(), "0.0.0"),
+        (("1"), "1.0.0"),
+        ((1, "2"), "1.2.0"),
+        ((1, 2, "3"), "1.2.3"),
+        ((b"1", b"2", b"3"), "1.2.3"),
+        ((1, 2, 3, None), "1.2.3"),
+        ((1, 2, 3, None, None), "1.2.3"),
+        ((1, 2, 3, "p1"), "1.2.3-p1"),
+        ((1, 2, 3, b"p1"), "1.2.3-p1"),
+        ((1, 2, 3, "p1", b"build1"), "1.2.3-p1+build1"),
+    ],
+)
+def test_should_allow_compatible_types(ver, expected):
+    v = Version(*ver)
+    assert expected == str(v)
+
+
+@pytest.mark.parametrize(
+    "ver, kwargs, expected",
+    [
+        ((), dict(major=None), "0.0.0"),
+        ((), dict(major=10), "10.0.0"),
+        ((1,), dict(major=10), "10.0.0"),
+        ((1, 2), dict(major=10), "10.2.0"),
+        ((1, 2, 3), dict(major=10), "10.2.3"),
+        ((1, 2), dict(major=10, minor=11), "10.11.0"),
+        ((1, 2, 3), dict(major=10, minor=11, patch=12), "10.11.12"),
+        ((1, 2, 3, 4), dict(major=10, minor=11, patch=12), "10.11.12-4"),
+        (
+            (1, 2, 3, 4, 5),
+            dict(major=10, minor=11, patch=12, prerelease=13),
+            "10.11.12-13+5",
+        ),
+        (
+            (1, 2, 3, 4, 5),
+            dict(major=10, minor=11, patch=12, prerelease=13, build=14),
+            "10.11.12-13+14",
+        ),
+        #
+        ((1,), dict(major=None, minor=None, patch=None), "1.0.0"),
+    ],
+)
+def test_should_allow_overwrite_with_keywords(ver, kwargs, expected):
+    v = Version(*ver, **kwargs)
+    assert expected == str(v)
+
+
+def test_should_raise_when_incompatible_semver_string():
+    with pytest.raises(ValueError, match=".* is not valid Sem[vV]er string"):
+        Version("1.2")
 
 
 @pytest.mark.parametrize(

@@ -1,5 +1,6 @@
 .. _semver2-to-3:
 
+
 Migrating from semver2 to semver3
 =================================
 
@@ -15,8 +16,8 @@ For a more detailed overview of all the changes, refer
 to our :ref:`change-log`.
 
 
-Use Version instead of VersionInfo
-----------------------------------
+Use :class:`Version` instead of :class:`VersionInfo`
+----------------------------------------------------
 
 The :class:`VersionInfo` has been renamed to :class:`Version`
 to have a more succinct name.
@@ -30,9 +31,20 @@ If you still need the old version, use this line:
    from semver.version import Version as VersionInfo
 
 
+Use :class:`Version` instead of :meth:`Version.parse`
+-----------------------------------------------------
 
-Use semver.cli instead of semver
---------------------------------
+The :class:`~semver.version.Version` class supports now different variants
+how a version can be called (see section :ref:`sec_creating_version`
+for more details).
+
+It's important to know that you do not need to use
+:meth:`Version.parse <semver.version.Version.parse>` anymore. You
+can pass a string directly to :class:`~semver.Version`.
+
+
+Use :mod:`semver.cli` instead of :mod:`semver`
+----------------------------------------------
 
 All functions related to CLI parsing are moved to :mod:`semver.cli`.
 If you need such functions, like :func:`semver.cmd_bump <semver.cli.cmd_bump>`,

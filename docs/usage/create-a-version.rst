@@ -21,17 +21,21 @@ The preferred way to create a new version is with the class
 
 A :class:`~semver.version.Version` instance can be created in different ways:
 
-* From a Unicode string::
+
+* Without any arguments::
 
     >>> from semver.version import Version
-    >>> Version.parse("3.4.5-pre.2+build.4")
+    >>> Version()
+    Version(major=0, minor=0, patch=0, prerelease=None, build=None)
+
+* From a Unicode string::
+
+    >>> Version("3.4.5-pre.2+build.4")
     Version(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')
-    >>> Version.parse(u"5.3.1")
-    Version(major=5, minor=3, patch=1, prerelease=None, build=None)
 
 * From a byte string::
 
-    >>> Version.parse(b"2.3.4")
+    >>> Version(b"2.3.4")
     Version(major=2, minor=3, patch=4, prerelease=None, build=None)
 
 * From individual parts by a dictionary::
@@ -47,7 +51,7 @@ A :class:`~semver.version.Version` instance can be created in different ways:
       >>> Version(**d)
       Traceback (most recent call last):
       ...
-      ValueError: 'major' is negative. A version can only be positive.
+      ValueError: Argument -3 is negative. A version can only be positive.
 
   As a minimum requirement, your dictionary needs at least the ``major``
   key, others can be omitted. You get a ``TypeError`` if your
@@ -66,6 +70,31 @@ A :class:`~semver.version.Version` instance can be created in different ways:
 
     >>> Version("3", "5", 6)
     Version(major=3, minor=5, patch=6, prerelease=None, build=None)
+
+It is possible to combine, positional and keyword arguments. In
+some use cases you have a fixed version string, but would like to
+replace parts of them. For example::
+
+    >>> Version(1, 2, 3, major=2, build="b2")
+    Version(major=2, minor=2, patch=3, prerelease=None, build='b2')
+
+It is also possible to use a version string and replace specific
+parts::
+
+    >>> Version("1.2.3", major=2, build="b2")
+    Version(major=2, minor=2, patch=3, prerelease=None, build='b2')
+
+However, it is not possible to use a string and additional positional
+arguments:
+
+    >>> Version("1.2.3", 4)
+    Traceback (most recent call last):
+      ...
+    ValueError: You cannot pass a string and additional positional arguments
+
+
+Using Deprecated Functions to Create a Version
+----------------------------------------------
 
 The old, deprecated module level functions are still available but
 using them are discoraged. They are available to convert old code
@@ -97,4 +126,4 @@ Depending on your use case, the following methods are available:
     >>> semver.parse("1.2")
     Traceback (most recent call last):
     ...
-    ValueError: 1.2 is not valid SemVer string
+    ValueError: '1.2' is not valid SemVer string

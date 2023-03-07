@@ -267,3 +267,19 @@ texinfo_documents = [
         "Miscellaneous",
     )
 ]
+
+# ----------------
+# Setup for Sphinx
+
+
+def remove_noqa(app, what, name, obj, options, lines):
+    """Remove any 'noqa' parts in a docstring"""
+    noqa_pattern = re.compile(r"\s+# noqa:.*$")
+    # Remove any "# noqa" parts in a line
+    for idx, line in enumerate(lines):
+        lines[idx] = noqa_pattern.sub("", line, count=1)
+
+
+def setup(app):
+    """Set up the Sphinx app."""
+    app.connect("autodoc-process-docstring", remove_noqa)
