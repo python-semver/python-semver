@@ -3,8 +3,9 @@
 Migrating from semver2 to semver3
 =================================
 
-This document describes the visible differences for
+This section describes the visible differences for
 users and how your code stays compatible for semver3.
+Some changes are backward incompatible.
 
 Although the development team tries to make the transition
 to semver3 as smooth as possible, at some point change
@@ -34,9 +35,16 @@ Use semver.cli instead of semver
 --------------------------------
 
 All functions related to CLI parsing are moved to :mod:`semver.cli`.
-If you are such functions, like :func:`semver.cmd_bump <semver.cli.cmd_bump>`,
+If you need such functions, like :func:`semver.cmd_bump <semver.cli.cmd_bump>`,
 import it from :mod:`semver.cli` in the future:
 
 .. code-block:: python
 
    from semver.cli import cmd_bump
+
+
+Use semver.Version.is_valid instead of semver.Version.isvalid
+-------------------------------------------------------------
+
+The pull request :pr:`284` introduced the method :meth:`Version.is_compatible <semver.Version.is_compatible>`. To keep consistency, the development team
+decided to rename the :meth:`isvalid <semver.Version.isvalid>` to :meth:`is_valid <semver.Version.is_valid>`.

@@ -6,7 +6,7 @@ classmethod :func:`Version.isvalid <semver.version.Version.isvalid>`:
 
 .. code-block:: python
 
-    >>> Version.isvalid("1.0.0")
+    >>> Version.is_valid("1.0.0")
     True
-    >>> Version.isvalid("invalid")
+    >>> Version.is_valid("invalid")
     False

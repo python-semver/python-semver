@@ -54,7 +54,7 @@ def cmd_check(args: argparse.Namespace) -> None:
 
     :param args: The parsed arguments
     """
-    if Version.isvalid(args.version):
+    if Version.is_valid(args.version):
         return None
     raise ValueError("Invalid version %r" % args.version)
 

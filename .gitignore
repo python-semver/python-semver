@@ -268,3 +268,6 @@ fabric.properties
 
 docs/_api
 !docs/_api/semver.__about__.rst
+
+# For node
+node_modules/
