@@ -87,7 +87,11 @@ class Version:
 
     #: The name of the version parts
     VERSIONPARTS: Tuple[str, str, str, str, str] = (
-        "major", "minor", "patch", "prerelease", "build"
+        "major",
+        "minor",
+        "patch",
+        "prerelease",
+        "build",
     )
     #: The default values for each part (position match with ``VERSIONPARTS``):
     VERSIONPARTDEFAULTS: VersionTuple = (0, 0, 0, None, None)
