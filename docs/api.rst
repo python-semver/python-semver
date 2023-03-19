@@ -17,6 +17,8 @@ Deprecated Functions in :mod:`semver._deprecated`
 
 .. automodule:: semver._deprecated
 
+.. autofunction:: semver._deprecated.compare
+
 .. autofunction:: semver._deprecated.bump_build
 
 .. autofunction:: semver._deprecated.bump_major
@@ -26,8 +28,6 @@ Deprecated Functions in :mod:`semver._deprecated`
 .. autofunction:: semver._deprecated.bump_patch
 
 .. autofunction:: semver._deprecated.bump_prerelease
-
-.. autofunction:: semver._deprecated.compare
 
 .. autofunction:: semver._deprecated.deprecated
 

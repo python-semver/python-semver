@@ -32,7 +32,7 @@ Semver |version| -- Semantic Versioning
    :hidden:
 
    changelog
-   changelog-semver2
+   changelog-semver3-devel
 
 
 Indices and Tables

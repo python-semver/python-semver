@@ -21,7 +21,7 @@ This section covers the changes between major version 2 and version 3.
 Version 3.0.0
 =============
 
-:Released: 2023-03-19
+:Released: 2023-04-02
 :Maintainer: Tom Schraitle
 
 
@@ -94,6 +94,14 @@ Deprecations
   Although the `poll <https://github.com/python-semver/python-semver/discussions/371>`_
   didn't cast many votes, the majority agreed to remove support for
   Python 3.6.
+
+* :pr:`402`: Keep :func:`semver.compare <semver._deprecated.compare>`.
+   Although it breaks consistency with module level functions, it seems it's
+   a much needed/used function. It's still unclear if we should deprecate
+   this function or not (that's why we use :py:exc:`PendingDeprecationWarning`).
+
+   As we don't have a uniform initializer yet, this function stays in the
+   :file:`_deprecated.py` file for the time being until we find a better solution. See :gh:`258` for details.
 
 
 Features

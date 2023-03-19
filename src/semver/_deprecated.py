@@ -16,8 +16,10 @@ from ._types import Decorator, F
 
 def deprecated(
     func: Optional[F] = None,
+    *,
     replace: Optional[str] = None,
     version: Optional[str] = None,
+    remove: Optional[str] = None,
     category: Type[Warning] = DeprecationWarning,
 ) -> Decorator:
     """
@@ -34,7 +36,13 @@ def deprecated(
     """
 
     if func is None:
-        return partial(deprecated, replace=replace, version=version, category=category)
+        return partial(
+            deprecated,
+            replace=replace,
+            version=version,
+            remove=remove,
+            category=category,
+        )
 
     @wraps(func)
     def wrapper(*args, **kwargs) -> Callable[..., F]:
@@ -42,7 +50,12 @@ def deprecated(
 
         if version:
             msg_list.append("Deprecated since version {v}. ")
-        msg_list.append("This function will be removed in semver 3.")
+
+        if not remove:
+            msg_list.append("This function will be removed in semver 3.")
+        else:
+            msg_list.append(str(remove))
+
         if replace:
             msg_list.append("Use {r!r} instead.")
         else:
@@ -67,6 +80,36 @@ def deprecated(
         return func(*args, **kwargs)  # type: ignore
 
     return wrapper
+
+
+@deprecated(
+    version="3.0.0",
+    remove="Still under investigation, see #258.",
+    category=PendingDeprecationWarning,
+)
+def compare(ver1: str, ver2: str) -> int:
+    """
+    Compare two versions strings.
+
+    .. deprecated:: 3.0.0
+       The situation of this function is unclear and it might
+       disappear in the future.
+       If possible, use :meth:`semver.version.Version.compare`.
+       See :gh:`258` for details.
+
+    :param ver1: first version string
+    :param ver2: second version string
+    :return: The return value is negative if ver1 < ver2,
+             zero if ver1 == ver2 and strictly positive if ver1 > ver2
+
+    >>> semver.compare("1.0.0", "2.0.0")
+    -1
+    >>> semver.compare("2.0.0", "1.0.0")
+    1
+    >>> semver.compare("2.0.0", "2.0.0")
+    0
+    """
+    return Version.parse(ver1).compare(ver2)
 
 
 @deprecated(version="2.10.0")
@@ -124,28 +167,6 @@ def parse_version_info(version):
     'build.4'
     """
     return Version.parse(version)
-
-
-@deprecated(version="2.10.0")
-def compare(ver1, ver2):
-    """
-    Compare two versions strings.
-
-    :param ver1: version string 1
-    :param ver2: version string 2
-    :return: The return value is negative if ver1 < ver2,
-             zero if ver1 == ver2 and strictly positive if ver1 > ver2
-    :rtype: int
-
-    >>> semver.compare("1.0.0", "2.0.0")
-    -1
-    >>> semver.compare("2.0.0", "1.0.0")
-    1
-    >>> semver.compare("2.0.0", "2.0.0")
-    0
-    """
-    v1 = Version.parse(ver1)
-    return v1.compare(ver2)
 
 
 @deprecated(version="2.10.0")
@@ -374,10 +395,16 @@ def replace(version, **parts):
 
 
 # CLI
-cmd_bump = deprecated(cli.cmd_bump, "semver.cli.cmd_bump", "3.0.0")
-cmd_check = deprecated(cli.cmd_check, "semver.cli.cmd_check", "3.0.0")
-cmd_compare = deprecated(cli.cmd_compare, "semver.cli.cmd_compare", "3.0.0")
-cmd_nextver = deprecated(cli.cmd_nextver, "semver.cli.cmd_nextver", "3.0.0")
-createparser = deprecated(cli.createparser, "semver.cli.createparser", "3.0.0")
-process = deprecated(cli.process, "semver.cli.process", "3.0.0")
-main = deprecated(cli.main, "semver.cli.main", "3.0.0")
+cmd_bump = deprecated(cli.cmd_bump, replace="semver.cli.cmd_bump", version="3.0.0")
+cmd_check = deprecated(cli.cmd_check, replace="semver.cli.cmd_check", version="3.0.0")
+cmd_compare = deprecated(
+    cli.cmd_compare, replace="semver.cli.cmd_compare", version="3.0.0"
+)
+cmd_nextver = deprecated(
+    cli.cmd_nextver, replace="semver.cli.cmd_nextver", version="3.0.0"
+)
+createparser = deprecated(
+    cli.createparser, replace="semver.cli.createparser", version="3.0.0"
+)
+process = deprecated(cli.process, replace="semver.cli.process", version="3.0.0")
+main = deprecated(cli.main, replace="semver.cli.main", version="3.0.0")

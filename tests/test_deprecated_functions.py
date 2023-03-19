@@ -5,7 +5,6 @@ import pytest
 from semver import (
     parse,
     parse_version_info,
-    compare,
     match,
     max_ver,
     min_ver,
@@ -36,7 +35,6 @@ from semver._deprecated import deprecated
         (bump_minor, ("1.2.3",), {}),
         (bump_patch, ("1.2.3",), {}),
         (bump_prerelease, ("1.2.3",), {}),
-        (compare, ("1.2.1", "1.2.2"), {}),
         (format_version, (3, 4, 5), {}),
         (finalize_version, ("1.2.3-rc.5",), {}),
         (match, ("1.0.0", ">=1.0.0"), {}),
