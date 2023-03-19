@@ -3,6 +3,7 @@ Advanced topics
 
 
 .. toctree::
+    :maxdepth: 1
 
     deal-with-invalid-versions
     create-subclasses-from-version

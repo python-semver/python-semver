@@ -1,8 +1,3 @@
-.. warning::
-
-   This is a development version. Do **NOT** use it
-   in production before the final 3.0.0 is released.
-
 Quickstart
 ==========
 

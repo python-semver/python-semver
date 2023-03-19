@@ -1,4 +1,4 @@
-"""Version handling."""
+"""Version handling by a semver compatible version class."""
 
 import collections
 import re
@@ -60,6 +60,8 @@ def _cmp(a, b):  # TODO: type hints
 class Version:
     """
     A semver compatible version class.
+
+    See specification at https://semver.org.
 
     :param major: version when you make incompatible API changes.
     :param minor: version when you add functionality in
@@ -205,7 +207,7 @@ class Version:
         Convert the Version object to a tuple.
 
         .. versionadded:: 2.10.0
-           Renamed ``VersionInfo._astuple`` to ``VersionInfo.to_tuple`` to
+           Renamed :meth:`Version._astuple` to :meth:`Version.to_tuple` to
            make this function available in the public API.
 
         :return: a tuple with all the parts
@@ -220,7 +222,7 @@ class Version:
         Convert the Version object to an OrderedDict.
 
         .. versionadded:: 2.10.0
-           Renamed ``VersionInfo._asdict`` to ``VersionInfo.to_dict`` to
+           Renamed :meth:`Version._asdict` to :meth:`Version.to_dict` to
            make this function available in the public API.
 
         :return: an OrderedDict with the keys in the order ``major``, ``minor``,
@@ -268,7 +270,6 @@ class Version:
         untouched.
 
         :return: new object with the raised major part
-
 
         >>> ver = semver.parse("3.4.5")
         >>> ver.bump_major()
@@ -446,9 +447,7 @@ build='build.10')
         validparts = cls.NAMES[:-1]
         if part not in validparts:
             raise ValueError(
-                "Invalid part. Expected one of {validparts}, but got {part!r}".format(
-                    validparts=validparts, part=part
-                )
+                f"Invalid part. Expected one of {validparts}, but got {part!r}"
             )
         version = self
         if (version.prerelease or version.build) and (
@@ -500,7 +499,7 @@ build='build.10')
         is undefined, it will throw an index error.
         Negative indices are not supported.
 
-        :param Union[int, slice] index: a positive integer indicating the
+        :param index: a positive integer indicating the
                offset or a :func:`slice` object
         :raises IndexError: if index is beyond the range or a part is None
         :return: the requested part of the version at position index
@@ -562,7 +561,7 @@ build='build.10')
         Compare self to match a match expression.
 
         :param match_expr: optional operator and version; valid operators are
-              ``<```   smaller than
+              ``<``   smaller than
               ``>``   greater than
               ``>=``  greator or equal than
               ``<=``  smaller or equal than
@@ -619,8 +618,8 @@ build='build.10')
            Changed method from static to classmethod to
            allow subclasses.
         .. versionchanged:: 3.0.0
-           Added optional parameter optional_minor_and_patch to allow optional
-           minor and patch parts.
+           Added optional parameter ``optional_minor_and_patch`` to allow
+           optional minor and patch parts.
 
         :param version: version string
         :param optional_minor_and_patch: if set to true, the version string to parse \
@@ -665,8 +664,8 @@ prerelease='pre.2', build='build.4')
 
         :param parts: the parts to be updated. Valid keys are:
           ``major``, ``minor``, ``patch``, ``prerelease``, or ``build``
-        :return: the new :class:`Version` object with the changed
-          parts
+        :return: the new :class:`~semver.version.Version` object with
+          the changed parts
         :raises TypeError: if ``parts`` contain invalid keys
         """
         version = self.to_dict()
@@ -687,6 +686,9 @@ prerelease='pre.2', build='build.4')
         Check if the string is a valid semver version.
 
         .. versionadded:: 2.9.1
+
+        .. versionchanged:: 3.0.0
+           Renamed from :meth:`~semver.version.Version.isvalid`
 
         :param version: the version string to check
         :return: True if the version string is a valid semver version, False
@@ -711,6 +713,8 @@ prerelease='pre.2', build='build.4')
           minor version is higher then a's. Both pre-releases are equal.
 
         The algorithm does *not* check patches.
+
+        .. versionadded:: 3.0.0
 
         :param other: the version to check for compatibility
         :return: True, if ``other`` is compatible with the old version,

@@ -20,7 +20,7 @@ class SemVerWithVPrefix(Version):
                 f"{version!r}: not a valid semantic version tag. "
                 "Must start with 'v' or 'V'"
             )
-        return super().parse(version[1:])
+        return super().parse(version[1:], optional_minor_and_patch=True)
 
     def __str__(self) -> str:
         # Reconstruct the tag

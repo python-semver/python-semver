@@ -18,10 +18,11 @@ to our :ref:`change-log`.
 Use Version instead of VersionInfo
 ----------------------------------
 
-The :class:`VersionInfo` has been renamed to :class:`Version`
-to have a more succinct name.
+The :class:`~semver.version.VersionInfo` has been renamed to
+:class:`~semver.version.Version` to have a more succinct name.
 An alias has been created to preserve compatibility but
-using the old name has been deprecated.
+using the old name has been deprecated and will be removed
+in future versions.
 
 If you still need the old version, use this line:
 
@@ -35,7 +36,7 @@ Use semver.cli instead of semver
 --------------------------------
 
 All functions related to CLI parsing are moved to :mod:`semver.cli`.
-If you need such functions, like :func:`semver.cmd_bump <semver.cli.cmd_bump>`,
+If you need such functions, like :meth:`~semver.cli.cmd_bump`,
 import it from :mod:`semver.cli` in the future:
 
 .. code-block:: python
@@ -46,5 +47,5 @@ import it from :mod:`semver.cli` in the future:
 Use semver.Version.is_valid instead of semver.Version.isvalid
 -------------------------------------------------------------
 
-The pull request :pr:`284` introduced the method :meth:`Version.is_compatible <semver.Version.is_compatible>`. To keep consistency, the development team
-decided to rename the :meth:`isvalid <semver.Version.isvalid>` to :meth:`is_valid <semver.Version.is_valid>`.
+The pull request :pr:`284` introduced the method :meth:`~semver.version.Version.is_compatible`. To keep consistency, the development team
+decided to rename the :meth:`~semver.Version.isvalid` to :meth:`~semver.Version.is_valid`.

@@ -7,9 +7,9 @@ Getting Minimum and Maximum of Multiple Versions
    The functions :func:`semver.max_ver` and :func:`semver.min_ver` are deprecated in
    favor of their builtin counterparts :func:`max` and :func:`min`.
 
-Since :class:`Version <semver.version.Version>` implements
-:func:`__gt__ <semver.version.Version.__gt__>` and
-:func:`__lt__ <semver.version.Version.__lt__>`, it can be used with builtins requiring:
+Since :class:`~semver.version.Version` implements
+:meth:`~semver.version.Version.__gt__` and
+:meth:`~semver.version.Version.__lt__`, it can be used with builtins requiring:
 
 .. code-block:: python
 
@@ -19,7 +19,7 @@ Since :class:`Version <semver.version.Version>` implements
     Version(major=0, minor=1, patch=0, prerelease=None, build=None)
 
 Incidentally, using :func:`map`, you can get the min or max version of any number of versions of the same type
-(convertible to :class:`Version <semver.version.Version>`).
+(convertible to :class:`~semver.version.Version`).
 
 For example, here are the maximum and minimum versions of a list of version strings:
 
@@ -40,12 +40,3 @@ And the same can be done with tuples:
     (0, 4, 99, None, None)
 
 For dictionaries, it is very similar to finding the max version tuple: see :ref:`sec.convert.versions`.
-
-The "old way" with :func:`semver.max_ver` or :func:`semver.min_ver` is still available, but not recommended:
-
-.. code-block:: python
-
-    >>> semver.max_ver("1.0.0", "2.0.0")
-    '2.0.0'
-    >>> semver.min_ver("1.0.0", "2.0.0")
-    '1.0.0'

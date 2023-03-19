@@ -3,6 +3,7 @@
 Building semver
 ===============
 
+
 .. _PEP 517: https://www.python.org/dev/peps/pep-0517/
 .. _PEP 621: https://www.python.org/dev/peps/pep-0621/
 .. _A Practical Guide to Setuptools and Pyproject.toml: https://godatadriven.com/blog/a-practical-guide-to-setuptools-and-pyproject-toml/

@@ -10,22 +10,22 @@ Raising Parts of a Version
    will lead to ``1.0.0-rc.1``, but ``1.0.0-rc.1`` is smaller than ``1.0.0``.
 
    If you search for a way to take into account this behavior, look for the
-   method :meth:`Version.next_version <semver.version.Version.next_version>`
+   method :meth:`~semver.version.Version.next_version`
    in section :ref:`increase-parts-of-a-version`.
 
 
 The ``semver`` module contains the following functions to raise parts of
 a version:
 
-* :func:`Version.bump_major <semver.version.Version.bump_major>`: raises the major part and set all other parts to
+* :meth:`~semver.version.Version.bump_major`: raises the major part and set all other parts to
   zero. Set ``prerelease`` and ``build`` to ``None``.
-* :func:`Version.bump_minor <semver.version.Version.bump_minor>`: raises the minor part and sets ``patch`` to zero.
+* :meth:`~semver.version.Version.bump_minor`: raises the minor part and sets ``patch`` to zero.
   Set ``prerelease`` and ``build`` to ``None``.
-* :func:`Version.bump_patch <semver.version.Version.bump_patch>`: raises the patch part. Set ``prerelease`` and
+* :meth:`~semver.version.Version.bump_patch`: raises the patch part. Set ``prerelease`` and
   ``build`` to ``None``.
-* :func:`Version.bump_prerelease <semver.version.Version.bump_prerelease>`: raises the prerelease part and set
+* :meth:`~semver.version.Version.bump_prerelease`: raises the prerelease part and set
   ``build`` to ``None``.
-* :func:`Version.bump_build <semver.version.Version.bump_build>`: raises the build part.
+* :meth:`~semver.version.Version.bump_build`: raises the build part.
 
 
 .. code-block:: python
@@ -43,9 +43,9 @@ a version:
 
 Likewise the module level functions :func:`semver.bump_major`.
 
-For the methods :meth:`Version.bump_prerelease <semver.version.Version.bump_prerelease>`
-and :meth:`Version.bump_build <semver.version.Version.bump_build>` it's possible to pass an empty string or ``None``.
-However, it gives different results::
+For the methods :meth:`~semver.version.Version.bump_prerelease`
+and :meth:`~semver.version.Version.bump_build` it's possible to pass an empty string or ``None``.
+However, it gives different results:
 
 .. code-block:: python
 

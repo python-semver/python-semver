@@ -135,7 +135,7 @@ semver:
     def convert2semver(ver: packaging.version.Version) -> semver.Version:
         """Converts a PyPI version into a semver version
 
-        :param packaging.version.Version ver: the PyPI version
+        :param ver: the PyPI version
         :return: a semver version
         :raises ValueError: if epoch or post parts are used
         """
@@ -145,7 +145,7 @@ semver:
             raise ValueError("Can't convert a post part to semver")
 
         pre = None if not ver.pre else "".join([str(i) for i in ver.pre])
-        semver.Version(*ver.release, prerelease=pre, build=ver.dev)
+        return semver.Version(*ver.release, prerelease=pre, build=ver.dev)
 
 
 .. _convert_semver_to_pypi:

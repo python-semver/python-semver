@@ -3,7 +3,7 @@ Checking for a Compatible Semver Version
 
 To check if a *change* from a semver version ``a`` to a semver
 version ``b`` is *compatible* according to semver rule, use the method
-:meth:`Version.is_compatible <semver.version.Version.is_compatible>`.
+:meth:`~semver.version.Version.is_compatible`.
 
 The expression ``a.is_compatible(b) is True`` if one of the following
 statements is true:

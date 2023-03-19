@@ -7,7 +7,7 @@ Accessing Parts Through Index Numbers
 
 Another way to access parts of a version is to use an index notation. The underlying
 :class:`~semver.version.Version` object allows to access its data through
-the magic method :func:`~semver.version.Version.__getitem__`.
+the magic method :meth:`~semver.version.Version.__getitem__`.
 
 For example, the ``major`` part can be accessed by index number 0 (zero).
 Likewise the other parts:

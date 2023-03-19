@@ -2,7 +2,7 @@ Checking for a Valid Semver Version
 ===================================
 
 If you need to check a string if it is a valid semver version, use the
-classmethod :func:`Version.isvalid <semver.version.Version.isvalid>`:
+classmethod :meth:`~semver.version.Version.is_valid`:
 
 .. code-block:: python
 

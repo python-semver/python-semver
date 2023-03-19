@@ -1,5 +1,0 @@
-Deprecate the use of :meth:`Version.isvalid`.
-
-Rename :meth:`Version.isvalid <semver.version.Version.isvalid>`
-to :meth:`Version.is_valid <semver.version.Version.is_valid>`
-for consistency reasons with :meth:`Version.is_compatible <semver.version.Version.is_compatible>`

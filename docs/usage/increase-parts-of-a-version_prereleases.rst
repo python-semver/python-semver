@@ -1,12 +1,13 @@
 .. _increase-parts-of-a-version:
+
 Increasing Parts of a Version Taking into Account Prereleases
 =============================================================
 
 .. versionadded:: 2.10.0
-   Added :func:`Version.next_version <semver.version.Version.next_version>`.
+   Added :meth:`~semver.version.Version.next_version`.
 
 If you want to raise your version and take prereleases into account,
-the function :func:`next_version <semver.version.Version.next_version>`
+the function :meth:`~semver.version.Version.next_version`
 would perhaps a better fit.
 
 

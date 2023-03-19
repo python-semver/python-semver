@@ -8,16 +8,17 @@ is to use the following function:
 
 .. code-block:: python
 
+    import os
+    from typing import Union
     from semver.version import Version
 
-    def get_version(path: str = "version") -> Version:
+    def get_version(path: Union[str, os.PathLike]) -> semver.Version:
         """
-        Construct a Version from a file
+        Construct a Version object from a file
         
         :param path: A text file only containing the semantic version
         :return: A :class:`Version` object containing the semantic
                  version from the file.
         """
-        with open(path,"r") as fh:
-            version = fh.read().strip()
+        version = open(path,"r").read().strip()
         return Version.parse(version)
