@@ -5,7 +5,7 @@ To compare two versions depends on your type:
 
 * **Two strings**
 
-  Use :func:`semver.compare`::
+  Use :func:`semver.compare <semver._deprecated.compare>`::
 
     >>> semver.compare("1.0.0", "2.0.0")
     -1

@@ -122,6 +122,17 @@ extlinks = {
     "pr": ("https://github.com/python-semver/python-semver/pull/%s", "PR #%s"),
 }
 
+# Link to other projects’ documentation
+# See https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html
+intersphinx_mapping = {
+    # Download it from the root with:
+    # wget -O docs/python-objects.inv https://docs.python.org/3/objects.inv
+    "python": ("https://docs.python.org/3", (None, "inventories/python-objects.inv")),
+}
+# Avoid side-effects (namely that documentations local references can
+# suddenly resolve to an external location.)
+intersphinx_disabled_reftypes = ["*"]
+
 # -- Options for HTML output ----------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
