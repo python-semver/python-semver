@@ -11,7 +11,7 @@ from typing import Type, Callable, Optional, cast
 
 from . import cli
 from .version import Version
-from ._types import Decorator, F, String
+from ._types import Decorator, F
 
 
 def deprecated(
@@ -192,15 +192,7 @@ def max_ver(ver1, ver2):
     >>> semver.max_ver("1.0.0", "2.0.0")
     '2.0.0'
     """
-    if isinstance(ver1, String.__args__):  # type: ignore
-        ver1 = Version.parse(ver1)
-    elif not isinstance(ver1, Version):
-        raise TypeError()
-    cmp_res = ver1.compare(ver2)
-    if cmp_res >= 0:
-        return str(ver1)
-    else:
-        return ver2
+    return str(max(ver1, ver2, key=Version.parse))
 
 
 @deprecated(replace="min", version="2.10.2")
@@ -219,12 +211,7 @@ def min_ver(ver1, ver2):
     >>> semver.min_ver("1.0.0", "2.0.0")
     '1.0.0'
     """
-    ver1 = Version.parse(ver1)
-    cmp_res = ver1.compare(ver2)
-    if cmp_res <= 0:
-        return str(ver1)
-    else:
-        return ver2
+    return str(min(ver1, ver2, key=Version.parse))
 
 
 @deprecated(replace="str(versionobject)", version="2.10.0")
