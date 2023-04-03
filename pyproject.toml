@@ -10,7 +10,6 @@ requires = [
   # sync with setup.py until we discard non-pep-517/518
   "setuptools",
   "setuptools-scm",
-  "wheel",
   "build",
 ]
 build-backend = "setuptools.build_meta"
