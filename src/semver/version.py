@@ -432,7 +432,7 @@ build='build.10')
         This function is taking prereleases into account.
         The "major", "minor", and "patch" raises the respective parts like
         the ``bump_*`` functions. The real difference is using the
-        "preprelease" part. It gives you the next patch version of the
+        "prerelease" part. It gives you the next patch version of the
         prerelease, for example:
 
         >>> str(semver.parse("0.1.4").next_version("prerelease"))
