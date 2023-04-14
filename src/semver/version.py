@@ -34,8 +34,12 @@ T = TypeVar("T", bound="Version")
 
 
 def _comparator(operator: Comparator) -> Comparator:
-    """Wrap a Version binary op method in a type-check."""
+    """
+    Wrap a Version binary op method in a type-check.
 
+    :param operator: the magic method to wrap
+    :return: the decorated magic method
+    """
     @wraps(operator)
     def wrapper(self: "Version", other: Comparable) -> bool:
         comparable_types = (
