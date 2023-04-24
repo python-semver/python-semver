@@ -3,9 +3,21 @@ name: Python
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "master", "main" ]
+    paths:
+      - 'pyproject.toml'
+      - '**.py'
+      - '.github/workflows/python-testing.yml'
+
   pull_request:
-    branches: [ master ]
+    branches: [ "master", "main" ]
+    paths:
+      - 'pyproject.toml'
+      - '**.py'
+      - '.github/workflows/python-testing.yml'
+
+permissions:
+  contents: read
 
 concurrency:
   # only cancel in-progress runs of the same workflow
@@ -17,6 +29,9 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
+    # Timout of 15min
+    timeout-minutes: 15
+
     steps:
       - uses: actions/checkout@v3
       - name: Output env variables
@@ -41,7 +56,8 @@ jobs:
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
-          python-version: 3.7
+          python-version: 3.8
+          cache: 'pip'
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip setuptools setuptools-scm
@@ -70,6 +86,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+          cache: 'pip'
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
