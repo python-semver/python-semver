@@ -1,0 +1,104 @@
+# This CITATION.cff file was generated with cffinit:
+# https://bit.ly/cffinit
+
+cff-version: 1.2.0
+title: python-semver
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+
+authors:
+  - given-names: Kostiantyn
+    family-names: Rybnikov
+    email: k-bx@k-bx.com
+  - given-names: Tom
+    family-names: Schraitle
+    email: tom_schr@web.de
+  - given-names: Sebastian
+    family-names: Celles
+    email: s.celles@gmail.com
+  - name: "The python-semver software team"
+
+identifiers:
+  - type: url
+    value: 'https://github.com/python-semver/python-semver'
+    description: GitHub python-semver/python-semver
+url: 'https://python-semver.readthedocs.io'
+repository-code: 'https://github.com/python-semver/python-semver'
+repository-artifact: 'https://pypi.org/project/semver/'
+
+abstract: >-
+  A Python module for semantic versioning. Simplifies
+  comparing versions. This modules follows the
+  MAJOR.MINOR.PATCH style.
+
+keywords:
+  - Python
+  - Python module
+  - semver
+  - versioning
+  - semantic versioning
+  - semver-format
+  - semver-tag
+  - versions
+
+references:
+  - authors:
+    - family-names: Preston-Werner
+      given-names: Tom
+    - name: "The semver team"
+    title: 'Semantic Versioning 2.0.0'
+    url: 'https://semver.org'
+    repository-code: 'https://github.com/semver/semver'
+    type: standard
+    version: 2.0.0
+    languages:
+      - ar
+      - bg
+      - ca
+      - cs
+      - da
+      - de
+      - el
+      - en
+      - es
+      - fa
+      - fr
+      - he
+      - hin
+      - hr
+      - hu
+      - hy
+      - id
+      - it
+      - ja
+      - ka
+      - kab
+      - ko
+      - nl
+      - pl
+      - pt
+      - ro
+      - ru
+      - sk
+      - sl
+      - sr
+      - sv
+      - tr
+      - uk
+      - vi
+      - zh
+    abstract: >-
+      Given a version number MAJOR.MINOR.PATCH, increment the:
+
+      1. MAJOR version when you make incompatible API changes
+      2. MINOR version when you add functionality in a backwards compatible manner
+      3. PATCH version when you make backwards compatible bug fixes
+
+      Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+
+license: BSD-3-Clause
+commit: 3a7680dc436211227c0aeae84c9b45e0b3345b8f
+version: 3.0.0
+date-released: '2023-04-02'
