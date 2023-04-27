@@ -20,6 +20,7 @@ create a new release.
    * `setup.cfg`
    * `tox.ini`
    * `.git/workflows/pythonpackage.yml`
+   * `CITATION.cff`
 
 1. Verify that the version has been updated and follow
    <https://semver.org>:
