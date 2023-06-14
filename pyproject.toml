@@ -21,6 +21,15 @@ target-version = ['py37', 'py38', 'py39', 'py310', 'py311']
 # diff = true
 
 
+[tool.docformatter]
+wrap-summaries = 80
+close-quotes-on-newline = true
+# make-summary-multi-line = true
+black = true
+pre-summary-newline = true
+recursive = true
+
+
 [tool.towncrier]
 package = "semver"
 package_dir = "src"
