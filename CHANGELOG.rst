@@ -18,6 +18,23 @@ This section covers the changes between major version 2 and version 3.
 
 .. towncrier release notes start
 
+Version 3.0.1
+=============
+
+:Released: 2023-06-14
+:Maintainer: Tom Schraitle
+
+
+Bug Fixes
+---------
+
+* :gh:`410`: Export functions properly using ``__all__`` in ``__init__.py``.
+
+
+
+----
+
+
 Version 3.0.0
 =============
 
