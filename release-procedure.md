@@ -26,7 +26,7 @@ create a new release.
    <https://semver.org>:
 
    * `src/semver/__about__.py`
-   * `docs/usage.rst`
+   * `docs/usage/semver-version.rst`
 
 1. Add eventually new contributor(s) to [CONTRIBUTORS](https://github.com/python-semver/python-semver/blob/master/CONTRIBUTORS).
 
