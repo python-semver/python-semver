@@ -61,7 +61,7 @@ def cmd_check(args: argparse.Namespace) -> None:
 
 def cmd_compare(args: argparse.Namespace) -> str:
     """
-    Subcommand: Compare two versions
+    Subcommand: Compare two versions.
 
     Synopsis: compare <VERSION1> <VERSION2>
 

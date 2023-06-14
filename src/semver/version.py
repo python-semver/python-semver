@@ -64,8 +64,8 @@ class Version:
     See specification at https://semver.org.
 
     :param major: version when you make incompatible API changes.
-    :param minor: version when you add functionality in
-                  a backwards-compatible manner.
+    :param minor: version when you add functionality in a backwards-
+        compatible manner.
     :param patch: version when you make backwards-compatible bug fixes.
     :param prerelease: an optional prerelease string
     :param build: an optional build string

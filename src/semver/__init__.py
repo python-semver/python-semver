@@ -1,5 +1,5 @@
 """
-semver package major release 3.
+Semver package major release 3.
 
 A Python module for semantic versioning. Simplifies comparing versions.
 """
