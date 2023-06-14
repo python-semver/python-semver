@@ -99,14 +99,18 @@ create a new release.
 
 1. Create a tag:
 
-    $ git tag -a x.x.x
+    ```bash
+    $ git tag -a x.y.z
+    ```
 
    It's recommended to use the generated Tox output
    from the Changelog.
 
 1. Push the tag:
 
-    $ git push --tags
+    ```bash
+    $ git push origin x.y.z
+    ```
 
 1. In [GitHub Release page](https://github.com/python-semver/python-semver/release)
    document the new release.
