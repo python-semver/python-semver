@@ -1,0 +1,1 @@
+Amend GitHub Actions to check against MacOS.
