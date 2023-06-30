@@ -68,9 +68,10 @@ jobs:
 
   tests:
     needs: check
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       max-parallel: 5
+      fail-fast: true
       matrix:
         python-version: ["3.7",
                          "3.8",
@@ -79,10 +80,11 @@ jobs:
                          "3.11",
                          # "3.12-dev"
                          ]
+        os: [ubuntu-latest, "macos-latest"]
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }} for ${{ matrix.os }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
