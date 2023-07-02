@@ -114,7 +114,7 @@ class Spec(VersionRegex):
     #: the spec regular expression
     _version_regex_str = rf"""
         (?P<version>
-            {VersionRegex._MAJOR}
+            {VersionRegex.MAJOR}
             (?:
                 \.
                 (?P<minor>{VersionRegex._RE_NUMBER}|{_version_any})
@@ -123,7 +123,7 @@ class Spec(VersionRegex):
                     (?P<patch>{VersionRegex._RE_NUMBER}|{_version_any})
                 )?
             )?
-            (?:-{VersionRegex._PRERELEASE})?
+            (?:-{VersionRegex.PRERELEASE})?
         )
         $
     """
