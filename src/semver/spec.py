@@ -15,8 +15,6 @@ from .versionregex import VersionRegex
 from .version import Version
 from ._types import String
 
-Int_or_Str = Union[int, str]
-
 
 class InvalidSpecifier(ValueError):
     """
@@ -31,7 +29,7 @@ class InvalidSpecifier(ValueError):
 
 
 # These types are required here because of circular imports
-SpecComparable = Union[Version, str, bytes, dict, tuple, list]
+SpecComparable = Union[Version, String, dict, tuple, list]
 SpecComparator = Callable[["Spec", SpecComparable], bool]
 
 
@@ -273,6 +271,8 @@ class Spec(VersionRegex):
         '>=1.2.3'
         >>> Spec(">=1.2.x").spec
         '>=1.2.*'
+        >>> Spec("2.1.4").spec
+        '==2.1.4'
         """
         return f"{self._operator}{self._realversion}"
 
