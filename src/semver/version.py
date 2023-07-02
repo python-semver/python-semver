@@ -601,9 +601,9 @@ prerelease='pre.2', build='build.4')
             raise TypeError("not expecting type '%s'" % type(version))
 
         if optional_minor_and_patch:
-            match = cls._REGEX_OPTIONAL_MINOR_AND_PATCH.match(version)
+            match = cls.REGEX_OPTIONAL_MINOR_AND_PATCH.match(version)
         else:
-            match = cls._REGEX.match(version)
+            match = cls.REGEX.match(version)
         if match is None:
             raise ValueError(f"{version} is not valid SemVer string")
 
