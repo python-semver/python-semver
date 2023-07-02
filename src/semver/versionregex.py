@@ -1,7 +1,7 @@
 """Defines basic regex constants."""
 
 import re
-from typing import ClassVar, Pattern
+from typing import ClassVar, Pattern, Tuple
 
 
 class VersionRegex:
@@ -18,7 +18,7 @@ class VersionRegex:
     _LAST_NUMBER: ClassVar[Pattern[str]]  = re.compile(r"(?:[^\d]*(\d+)[^\d]*)+")
 
     #: The names of the different parts of a version
-    NAMES = ("major", "minor", "patch", "prerelease", "build")
+    NAMES: ClassVar[Tuple[str, ...]] = ("major", "minor", "patch", "prerelease", "build")
 
     #: The regex of the major part of a version:
     MAJOR: ClassVar[str] = rf"(?P<major>{_RE_NUMBER})"
