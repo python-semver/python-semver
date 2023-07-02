@@ -90,9 +90,6 @@ class Version(VersionRegex):
 
     __slots__ = ("_major", "_minor", "_patch", "_prerelease", "_build")
 
-    #: The names of the different parts of a version
-    NAMES: ClassVar[Tuple[str, ...]] = tuple([item[1:] for item in __slots__])
-
     #: The default prefix for the prerelease part.
     #: Used in :meth:`Version.bump_prerelease <semver.Version.bump_prerelease>`.
     default_prerelease_prefix = "rc"
