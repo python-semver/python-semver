@@ -17,6 +17,9 @@ class VersionRegex:
     #:
     _LAST_NUMBER: ClassVar[Pattern[str]]  = re.compile(r"(?:[^\d]*(\d+)[^\d]*)+")
 
+    #: The names of the different parts of a version
+    NAMES = ("major", "minor", "patch", "prerelease", "build")
+
     #: The regex of the major part of a version:
     MAJOR: ClassVar[str] = rf"(?P<major>{_RE_NUMBER})"
     #: The regex of the minor part of a version:
