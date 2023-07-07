@@ -228,7 +228,8 @@ class Version:
           ``patch``, ``prerelease``, and ``build``.
 
         >>> semver.Version(3, 2, 1).to_dict()
-        OrderedDict({'major': 3, 'minor': 4, 'patch': 5, 'prerelease': None, 'build': None})
+        OrderedDict({'major': 3, 'minor': 4, 'patch': 5, 'prerelease': None, \
+                     'build': None})
         """
         return collections.OrderedDict(
             (
