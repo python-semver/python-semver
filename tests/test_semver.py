@@ -28,6 +28,7 @@ def test_should_versioninfo_to_dict(version):
     resultdict = version.to_dict()
     assert isinstance(resultdict, dict), "Got type from to_dict"
     assert list(resultdict.keys()) == ["major", "minor", "patch", "prerelease", "build"]
+    assert tuple(resultdict.values()) == tuple(version)
 
 
 def test_should_versioninfo_to_tuple(version):

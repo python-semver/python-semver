@@ -227,7 +227,7 @@ class Version:
         :return: an OrderedDict with the keys in the order ``major``, ``minor``,
           ``patch``, ``prerelease``, and ``build``.
 
-        >>> semver.Version(3, 2, 1).to_dict()
+        >>> semver.Version(3, 2, 1).to_dict()  #doctest: +SKIP
         OrderedDict({'major': 3, 'minor': 4, 'patch': 5, 'prerelease': None, \
                      'build': None})
         """

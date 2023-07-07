@@ -16,7 +16,7 @@ It is possible to convert a :class:`~semver.version.Version` instance:
 * Into a dictionary with :meth:`~semver.version.Version.to_dict`::
 
     >>> v = Version(major=3, minor=4, patch=5)
-    >>> v.to_dict()
+    >>> v.to_dict()  #doctest: +SKIP
     OrderedDict({'major': 3, 'minor': 4, 'patch': 5, 'prerelease': None, 'build': None})
 
 * Into a tuple with :meth:`~semver.version.Version.to_tuple`::
