@@ -1,0 +1,5 @@
+Replace :class:`~collection.OrderedDict` with :class:`dict`.
+
+The dict datatype is ordered since Python 3.7. As we do not support
+Python 3.6 anymore, it can be considered safe to avoid :class:`~collection.OrderedDict`.
+Related to :gh:`419`.
