@@ -90,7 +90,7 @@ Depending on your use case, the following methods are available:
   To access individual parts, you can use the function :func:`semver.parse`::
 
     >>> semver.parse("3.4.5-pre.2+build.4")
-    OrderedDict([('major', 3), ('minor', 4), ('patch', 5), ('prerelease', 'pre.2'), ('build', 'build.4')])
+    {'major': 3, 'minor': 4, 'patch': 5, 'prerelease': 'pre.2', 'build': 'build.4'}
 
   If you pass an invalid version string you will get a :py:exc:`ValueError`::
 

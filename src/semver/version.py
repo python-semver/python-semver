@@ -1,6 +1,5 @@
 """Version handling by a semver compatible version class."""
 
-import collections
 import re
 from functools import wraps
 from typing import (
@@ -218,27 +217,24 @@ class Version:
 
     def to_dict(self) -> VersionDict:
         """
-        Convert the Version object to an OrderedDict.
+        Convert the Version object to an dict.
 
         .. versionadded:: 2.10.0
            Renamed :meth:`Version._asdict` to :meth:`Version.to_dict` to
            make this function available in the public API.
 
-        :return: an OrderedDict with the keys in the order ``major``, ``minor``,
+        :return: an dict with the keys in the order ``major``, ``minor``,
           ``patch``, ``prerelease``, and ``build``.
 
         >>> semver.Version(3, 2, 1).to_dict()
-        OrderedDict([('major', 3), ('minor', 2), ('patch', 1), \
-('prerelease', None), ('build', None)])
+        {'major': 3, 'minor': 2, 'patch': 1, 'prerelease': None, 'build': None}
         """
-        return collections.OrderedDict(
-            (
-                ("major", self.major),
-                ("minor", self.minor),
-                ("patch", self.patch),
-                ("prerelease", self.prerelease),
-                ("build", self.build),
-            )
+        return dict(
+            major=self.major,
+            minor=self.minor,
+            patch=self.patch,
+            prerelease=self.prerelease,
+            build=self.build,
         )
 
     def __iter__(self) -> VersionIterator:
