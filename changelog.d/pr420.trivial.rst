@@ -1,0 +1,2 @@
+Introduce :py:class:`~typing.ClassVar` for some :class:`~semver.version.Version`
+class variables, mainly :data:`~semver.version.Version.NAMES` and some private.
