@@ -14,6 +14,14 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 
+[tool.mypy]
+# ignore_missing_imports = true
+check_untyped_defs = true
+show_error_codes = true
+# strict = true
+pretty = true
+
+
 [tool.black]
 line-length = 88
 target-version = ['py37', 'py38', 'py39', 'py310', 'py311']

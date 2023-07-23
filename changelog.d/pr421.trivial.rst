@@ -1,0 +1,2 @@
+Insert mypy configuration into :file:`pyproject.toml` and remove
+config options from :file:`tox.ini`.
