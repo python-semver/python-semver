@@ -54,7 +54,7 @@ jobs:
            echo "\n"
            echo "::debug::---end"
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: 3.8
           cache: 'pip'
