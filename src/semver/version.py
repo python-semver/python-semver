@@ -4,9 +4,11 @@ import re
 from functools import wraps
 from typing import (
     Any,
+    ClassVar,
     Dict,
     Iterable,
     Optional,
+    Pattern,
     SupportsInt,
     Tuple,
     Union,
@@ -72,12 +74,14 @@ class Version:
     __slots__ = ("_major", "_minor", "_patch", "_prerelease", "_build")
 
     #: The names of the different parts of a version
-    NAMES = tuple([item[1:] for item in __slots__])
+    NAMES: ClassVar[Tuple[str, ...]] = tuple([item[1:] for item in __slots__])
 
     #: Regex for number in a prerelease
-    _LAST_NUMBER = re.compile(r"(?:[^\d]*(\d+)[^\d]*)+")
+    _LAST_NUMBER: ClassVar[Pattern] = re.compile(r"(?:[^\d]*(\d+)[^\d]*)+")
     #: Regex template for a semver version
-    _REGEX_TEMPLATE = r"""
+    _REGEX_TEMPLATE: ClassVar[
+        str
+    ] = r"""
             ^
             (?P<major>0|[1-9]\d*)
             (?:
@@ -99,12 +103,12 @@ class Version:
             $
         """
     #: Regex for a semver version
-    _REGEX = re.compile(
+    _REGEX: ClassVar[Pattern] = re.compile(
         _REGEX_TEMPLATE.format(opt_patch="", opt_minor=""),
         re.VERBOSE,
     )
     #: Regex for a semver version that might be shorter
-    _REGEX_OPTIONAL_MINOR_AND_PATCH = re.compile(
+    _REGEX_OPTIONAL_MINOR_AND_PATCH: ClassVar[Pattern] = re.compile(
         _REGEX_TEMPLATE.format(opt_patch="?", opt_minor="?"),
         re.VERBOSE,
     )
