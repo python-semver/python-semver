@@ -5,11 +5,9 @@ import re
 from functools import wraps
 from typing import (
     Any,
-    ClassVar,
     Dict,
     Iterable,
     Optional,
-    Pattern,
     SupportsInt,
     Tuple,
     Union,
