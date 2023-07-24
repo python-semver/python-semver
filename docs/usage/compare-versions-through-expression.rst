@@ -47,10 +47,10 @@ implement, as the same code will handle both cases:
     False
 
 
-Using the :class:`Spec <semver.spec.Spec>` class
+Using the :class:`~semver.spec.Spec` class
 ------------------------------------------------
 
-The :class:`Spec <semver.spec.Spec>` class is the underlying object
+The :class:`~semver.spec.Spec` class is the underlying object
 which makes comparison possible.
 
 It supports comparisons through usual Python operators:
@@ -62,7 +62,7 @@ It supports comparisons through usual Python operators:
    >>> Spec("1.3") == '1.3.10'
    False
 
-If you need to reuse a ``Spec`` object, use the :meth:`match <semver.spec.Spec.match>` method:
+If you need to reuse a ``Spec`` object, use the :meth:`~semver.spec.Spec.match` method:
 
 .. code-block:: python
 
@@ -106,9 +106,9 @@ as in the following examples:
 Using caret expressions
 -----------------------
 
-Care expressions are "compatible with a version".
+Caret expressions are "compatible with a version".
 They are expressions like ``^1``, ``^1.2``, or ``^1.2.3``.
-Care expressions freezes the major number only.
+Caret expressions freezes the major number only.
 
 Internally they are converted into two comparisons:
 
@@ -124,7 +124,7 @@ Internally they are converted into two comparisons:
    >>> version.match("^1.3")
    False
 
-It is possible to add placeholders to the care expression. Placeholders
+It is possible to add placeholders to the caret expression. Placeholders
 are ``x``, ``X``, or ``*`` and are replaced by zeros like in the following examples:
 
 .. code-block:: python
