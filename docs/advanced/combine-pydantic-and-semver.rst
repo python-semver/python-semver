@@ -5,35 +5,59 @@ According to its homepage, `Pydantic <https://pydantic-docs.helpmanual.io>`_
 "enforces type hints at runtime, and provides user friendly errors when data
 is invalid."
 
-To work with Pydantic, use the following steps:
+To work with Pydantic>2.0, use the following steps:
 
 
 1. Derive a new class from :class:`~semver.version.Version`
-   first and add the magic methods :py:meth:`__get_validators__`
-   and :py:meth:`__modify_schema__` like this:
+   first and add the magic methods :py:meth:`__get_pydantic_core_schema__`
+   and :py:meth:`__get_pydantic_json_schema__` like this:
 
     .. code-block:: python
 
+        from typing import Annotated, Any, Callable
+        from pydantic import GetJsonSchemaHandler
+        from pydantic_core import core_schema
+        from pydantic.json_schema import JsonSchemaValue
         from semver import Version
 
-        class PydanticVersion(Version):
+
+        class _VersionPydanticAnnotation:
             @classmethod
-            def _parse(cls, version):
-                return cls.parse(version)
+            def __get_pydantic_core_schema__(
+                cls,
+                _source_type: Any,
+                _handler: Callable[[Any], core_schema.CoreSchema],
+            ) -> core_schema.CoreSchema:
+                def validate_from_str(value: str) -> Version:
+                    return Version.parse(value)
+
+                from_str_schema = core_schema.chain_schema(
+                    [
+                        core_schema.str_schema(),
+                        core_schema.no_info_plain_validator_function(validate_from_str),
+                    ]
+                )
+
+                return core_schema.json_or_python_schema(
+                    json_schema=from_str_schema,
+                    python_schema=core_schema.union_schema(
+                        [
+                            core_schema.is_instance_schema(Version),
+                            from_str_schema,
+                        ]
+                    ),
+                    serialization=core_schema.plain_serializer_function_ser_schema(
+                        lambda instance: instance.x
+                    ),
+                )
 
             @classmethod
-            def __get_validators__(cls):
-                """Return a list of validator methods for pydantic models."""
-                yield cls._parse
+            def __get_pydantic_json_schema__(
+                cls, _core_schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+            ) -> JsonSchemaValue:
+                return handler(core_schema.str_schema())
 
-            @classmethod
-            def __modify_schema__(cls, field_schema):
-                """Inject/mutate the pydantic field schema in-place."""
-                field_schema.update(examples=["1.0.2",
-                                              "2.15.3-alpha",
-                                              "21.3.15-beta+12345",
-                                              ]
-                                    )
+        ManifestVersion = Annotated[Version, _VersionPydanticAnnotation]
 
 2. Create a new model (in this example :class:`MyModel`) and derive
    it from :class:`pydantic.BaseModel`:
@@ -43,7 +67,7 @@ To work with Pydantic, use the following steps:
         import pydantic
 
         class MyModel(pydantic.BaseModel):
-            version: PydanticVersion
+            version: _VersionPydanticAnnotation
 
 3. Use your model like this:
 
