@@ -34,10 +34,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: "${{ github.event.before }}"
       - name: Check for file changes
         id: check_files
         run: |
-          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | egrep -q '.github/workflows/|pyproject.toml|\.py$'; then
+          if git diff --name-only ${{ github.event.after }} ${{ github.event.before }} | egrep -q '.github/workflows/|pyproject.toml|\.py$'; then
             echo "GitHub Action, pyproject.toml or Python files have been changed." >> $GITHUB_STEP_SUMMARY
             echo "can_run=1" >> $GITHUB_OUTPUT
           else
