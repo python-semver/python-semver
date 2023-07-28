@@ -36,6 +36,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: "${{ github.event.before }}"
+
       - name: Check for file changes
         id: check_files
         run: |
@@ -52,7 +53,7 @@ jobs:
     needs: check-files
     # Timout of 15min
     timeout-minutes: 15
-    if: ${{ needs.check-files.outputs.can_run }} == 1
+    if: ${{ needs.check-files.outputs.can_run  == 1 }}
 
     steps:
       - uses: actions/checkout@v3
