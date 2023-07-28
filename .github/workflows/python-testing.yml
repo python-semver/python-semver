@@ -33,6 +33,7 @@ jobs:
       can_run: ${{ steps.check_files.can_run }}
 
     steps:
+      - uses: actions/checkout@v3
       - name: Check for file changes
         id: check_files
         run: |
