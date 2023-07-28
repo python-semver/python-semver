@@ -10,6 +10,7 @@ A Python module for `semantic versioning`_. Simplifies comparing versions.
 
 .. teaser-end
 
+
 .. note::
 
    This project works for Python 3.7 and greater only. If you are
