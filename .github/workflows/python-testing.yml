@@ -7,14 +7,14 @@ on:
     paths:
       - 'pyproject.toml'
       - '**.py'
-      - '.github/workflows/python-testing.yml'
+      - '.github/workflows/*.yml'
 
   pull_request:
     branches: [ "master", "main" ]
     paths:
       - 'pyproject.toml'
       - '**.py'
-      - '.github/workflows/python-testing.yml'
+      - '.github/workflows/*.yml'
 
 permissions:
   contents: read
@@ -34,8 +34,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: "${{ github.event.before }}"
+        # with:
+        #  ref: "${{ github.event.before }}"
 
       - name: Check for file changes
         id: check_files
@@ -46,6 +46,7 @@ jobs:
           else
             # echo "" >> $GITHUB_STEP_SUMMARY
             echo "can_run=0" >> $GITHUB_OUTPUT
+            exit 1
           fi
 
   check:
@@ -53,7 +54,8 @@ jobs:
     needs: check-files
     # Timout of 15min
     timeout-minutes: 15
-    if: ${{ needs.check-files.outputs.can_run  != 1 }}
+    # needs.check-files.outputs.can_run
+    if: failed() && ${{ needs.check-files.outcome  != 'success' }}
 
     steps:
       - uses: actions/checkout@v3
