@@ -37,6 +37,8 @@ jobs:
         with:
           fetch-depth: 2
         #  ref: "${{ github.event.before }}"
+      - name: Checkout ${{ github.event.before }}
+        run: git checkout ${{ github.event.before }}
 
       - name: Check for file changes
         id: check_files
