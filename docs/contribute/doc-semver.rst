@@ -19,13 +19,19 @@ used efficiently.
 A new feature is *not* complete if it isn't proberly documented. A good
 documentation includes:
 
+  * **Type annotations**
+
+    This library supports type annotations. Therefore, each function
+    or method requires types for each arguments and return objects.
+    Exception of this rule is ``self``.
+
   * **A docstring**
 
     Each docstring contains a summary line, a linebreak, an optional
     directive (see next item), the description of its arguments in
     `Sphinx style`_, and an optional doctest.
     The docstring is extracted and reused in the :ref:`api` section.
-    An appropriate docstring should look like this::
+    An appropriate docstring looks like this::
 
          def to_tuple(self) -> VersionTuple:
             """
@@ -70,11 +76,11 @@ documentation includes:
 
   * **The documentation**
 
-    A docstring is good, but in most cases it's too dense. API documentation
-    cannot replace a good user documentation. Describe how
-    to use your new feature in our documentation. Here you can give your
-    readers more examples, describe it in a broader context or show
-    edge cases.
+    A docstring is good, but in most cases it is too short. API documentation
+    cannot replace good user documentation.
+    Describe *how* to use your new feature in the documentation.
+    Here you can give your readers more examples, describe it in a broader
+    context, or show edge cases.
 
 
 .. _Sphinx style: https://sphinx-rtd-tutorial.rtfd.io/en/latest/docstrings.html

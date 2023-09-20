@@ -3,7 +3,7 @@ Quickstart
 
 .. teaser-begin
 
-A Python module for `semantic versioning`_. Simplifies comparing versions.
+A Python module to simplify `semantic versioning`_.
 
 |GHAction| |python-support| |downloads| |license| |docs| |black|
 |openissues| |GHDiscussion|
