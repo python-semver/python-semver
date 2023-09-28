@@ -655,8 +655,8 @@ prerelease='pre.2', build='build.4')
 
     def replace(self, **parts: Union[int, Optional[str]]) -> "Version":
         """
-        Replace one or more parts of a version and return a new
-        :class:`Version` object, but leave self untouched
+        Replace one or more parts of a version and return a new :class:`Version`
+        object, but leave self untouched.
 
         .. versionadded:: 2.9.0
            Added :func:`Version.replace`
@@ -670,7 +670,7 @@ prerelease='pre.2', build='build.4')
         version = self.to_dict()
         version.update(parts)
         try:
-            return Version(**version)  # type: ignore
+            return type(self)(**version)  # type: ignore
         except TypeError:
             unknownkeys = set(parts) - set(self.to_dict())
             error = "replace() got %d unexpected keyword argument(s): %s" % (

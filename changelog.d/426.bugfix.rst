@@ -1,0 +1,2 @@
+Fix :meth:`~semver.version.Version.replace` method to use the derived class
+of an instance instead of :class:`~semver.version.Version` class.
