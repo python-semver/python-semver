@@ -60,7 +60,7 @@ jobs:
           cache: 'pip'
       - name: Install dependencies
         run: |
-          python3 -m pip install --upgrade pip setuptools setuptools-scm
+          python3 -m pip install --upgrade pip setuptools>60 setuptools-scm>=60
           pip install tox tox-gh-actions
       - name: Check
         run: |
