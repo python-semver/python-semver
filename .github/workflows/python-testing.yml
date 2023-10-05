@@ -1,20 +1,23 @@
 ---
 name: Python
 
+# HINT: Sync this paths with the egrep in step check_files
 on:
   push:
     branches: [ "master", "main" ]
     paths:
       - 'pyproject.toml'
+      - 'setup.cfg'
       - '**.py'
-      - '.github/workflows/python-testing.yml'
+      - '.github/workflows/*.yml'
 
   pull_request:
     branches: [ "master", "main" ]
     paths:
       - 'pyproject.toml'
+      - 'setup.cfg'
       - '**.py'
-      - '.github/workflows/python-testing.yml'
+      - '.github/workflows/*.yml'
 
 permissions:
   contents: read
@@ -22,37 +25,59 @@ permissions:
 concurrency:
   # only cancel in-progress runs of the same workflow
   group: ${{ github.workflow }}-${{ github.ref }}
-  # ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
 
 jobs:
-  check:
+  check-files:
     runs-on: ubuntu-latest
-    # Timout of 15min
-    timeout-minutes: 15
+    outputs:
+      can_run: ${{ steps.check_files.outputs.can_run }}
 
     steps:
       - uses: actions/checkout@v3
-      - name: Output env variables
+        with:
+          fetch-depth: 0
+
+      - name: GitHub variables
+        id: gh-vars
         run: |
-           echo "Default branch=${default-branch}"
-           echo "GITHUB_WORKFLOW=${GITHUB_WORKFLOW}"
-           echo "GITHUB_ACTION=$GITHUB_ACTION"
-           echo "GITHUB_ACTIONS=$GITHUB_ACTIONS"
-           echo "GITHUB_ACTOR=$GITHUB_ACTOR"
-           echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
-           echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
-           echo "GITHUB_EVENT_PATH=$GITHUB_EVENT_PATH"
-           echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
-           echo "GITHUB_SHA=$GITHUB_SHA"
-           echo "GITHUB_REF=$GITHUB_REF"
-           echo "GITHUB_HEAD_REF=$GITHUB_HEAD_REF"
-           echo "GITHUB_BASE_REF=$GITHUB_BASE_REF"
-           echo "::debug::---Start content of file $GITHUB_EVENT_PATH"
-           cat $GITHUB_EVENT_PATH
-           echo "\n"
-           echo "::debug::---end"
+          for var in GITHUB_WORKFLOW GITHUB_ACTION GITHUB_ACTIONS GITHUB_REPOSITORY GITHUB_EVEN_NAME GITHUB_EVENT_PATH GITHUB_WORKSPACE GITHUB_SHA GITHUB_REF GITHUB_HEAD_REF GITHUB_BASE_REF; do
+            echo "$var = ${!var}"
+          done
+
+      - name: Check for file changes
+        id: check_files
+        run: |
+          # ${{ github.event.after }} ${{ github.event.before }}
+          can_run=$(git diff --name-only HEAD~1 HEAD | \
+           egrep -q '.github/workflows/|pyproject.toml|setup.cfg|\.py$' && echo 1 || echo 0)
+          echo "can_run=$can_run"
+          echo "can_run=$can_run" >> $GITHUB_OUTPUT
+
+  skip_test:
+    runs-on: ubuntu-latest
+    needs: check-files
+    timeout-minutes: 2
+    if: ${{ needs.check-files.outputs.can_run == '0' }}
+
+    steps:
+      - name: Skip test
+        run: |
+          echo "Nothing to do as no TOML, Python, or YAML file has been changed.
+          "
+          echo "Skipping."
+
+  check:
+    runs-on: ubuntu-latest
+    needs: check-files
+    # Timout of 15min
+    timeout-minutes: 15
+    # needs.check-files.outputs.can_run
+    if: ${{ needs.check-files.outputs.can_run == '1' }}
+
+    steps:
+      - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
