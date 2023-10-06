@@ -46,9 +46,7 @@ To work with Pydantic>2.0, use the following steps:
                             from_str_schema,
                         ]
                     ),
-                    serialization=core_schema.plain_serializer_function_ser_schema(
-                        lambda instance: instance.x
-                    ),
+                    serialization = core_schema.to_string_ser_schema(),
                 )
 
             @classmethod
