@@ -10,12 +10,6 @@ A Python module to simplify `semantic versioning`_.
 
 .. teaser-end
 
-.. note::
-
-   This project works for Python 3.7 and greater only.
-   Refer to :ref:`version-policy` for more details.
-
-
 The module follows the ``MAJOR.MINOR.PATCH`` style:
 
 * ``MAJOR`` version when you make incompatible API changes,
