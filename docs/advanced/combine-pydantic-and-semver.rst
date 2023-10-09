@@ -58,7 +58,7 @@ To work with Pydantic>2.0, use the following steps:
         ManifestVersion = Annotated[Version, _VersionPydanticAnnotation]
 
 2. Create a new model (in this example :class:`MyModel`) and derive
-   it from :class:`pydantic.BaseModel`:
+   it from :py:class:`pydantic:pydantic.BaseModel`:
 
     .. code-block:: python
 
@@ -76,4 +76,4 @@ To work with Pydantic>2.0, use the following steps:
    The attribute :py:attr:`model.version` will be an instance of
    :class:`~semver.version.Version`.
    If the version is invalid, the construction will raise a
-   :py:exc:`pydantic.ValidationError`.
+   :py:class:`pydantic:pydantic_core.ValidationError`.

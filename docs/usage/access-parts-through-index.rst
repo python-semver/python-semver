@@ -33,7 +33,7 @@ Or, as an alternative, you can pass a :func:`slice` object:
     >>> ver[sl]
     (10, 3, 2)
 
-Negative numbers or undefined parts raise an :py:exc:`IndexError` exception:
+Negative numbers or undefined parts raise an :py:exc:`python:IndexError` exception:
 
 .. code-block:: python
 

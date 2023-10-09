@@ -41,7 +41,7 @@ A :class:`~semver.version.Version` instance can be created in different ways:
     Version(major=3, minor=4, patch=5, prerelease='pre.2', build='build.4')
 
   Keep in mind, the ``major``, ``minor``, ``patch`` parts has to
-  be positive integers or strings:
+  be positive integers or strings, otherwise a :py:exc:`python:ValueError` is raised:
 
       >>> d = {'major': -3, 'minor': 4, 'patch': 5,  'prerelease': 'pre.2', 'build': 'build.4'}
       >>> Version(**d)
@@ -50,7 +50,7 @@ A :class:`~semver.version.Version` instance can be created in different ways:
       ValueError: 'major' is negative. A version can only be positive.
 
   As a minimum requirement, your dictionary needs at least the ``major``
-  key, others can be omitted. You get a ``TypeError`` if your
+  key, others can be omitted. You get a :py:exc:`python:TypeError` if your
   dictionary contains invalid keys.
   Only the keys ``major``, ``minor``, ``patch``, ``prerelease``, and ``build``
   are allowed.
@@ -87,12 +87,12 @@ Depending on your use case, the following methods are available:
 
 * From a string into a dictionary
 
-  To access individual parts, you can use the function :func:`semver.parse`::
+  To access individual parts, you can use the function :func:`~semver._deprecated.parse`::
 
     >>> semver.parse("3.4.5-pre.2+build.4")
     {'major': 3, 'minor': 4, 'patch': 5, 'prerelease': 'pre.2', 'build': 'build.4'}
 
-  If you pass an invalid version string you will get a :py:exc:`ValueError`::
+  If you pass an invalid version string you will get a :py:exc:`python:ValueError`::
 
     >>> semver.parse("1.2")
     Traceback (most recent call last):

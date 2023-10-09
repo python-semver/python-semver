@@ -132,11 +132,11 @@ Improved Documentation
     :class:`~semver.version.Version` class
   * Remove semver. prefix in doctests to make examples shorter
   * Correct some references to dunder methods like
-    :func:`~.semver.version.Version.__getitem__`,
-    :func:`~.semver.version.Version.__gt__` etc.
+    :func:`~semver.version.Version.__getitem__`,
+    :func:`~semver.version.Version.__gt__` etc.
   * Remove inconsistencies and mention module level function as
     deprecated and discouraged from using
-  * Make empty :py:func:`super` call in :file:`semverwithvprefix.py` example
+  * Make empty :py:class:`python:super` call in :file:`semverwithvprefix.py` example
 
 * :gh:`315`: Improve release procedure text
 
@@ -151,33 +151,31 @@ Trivial/Internal Changes
 
   The following functions got renamed:
 
-  * function ``semver.version.comparator`` got renamed to
+  * function :func:`semver.version.comparator` got renamed to
     :func:`semver.version._comparator` as it is only useful
     inside the :class:`~semver.version.Version` class.
-  * function ``semver.version.cmp`` got renamed to
+  * function :func:`semver.version.cmp` got renamed to
     :func:`semver.version._cmp` as it is only useful
     inside the :class:`~semver.version.Version` class.
 
   The following functions got integrated into the
   :class:`~semver.version.Version` class:
 
-  * function ``semver.version._nat_cmd`` as a classmethod
-  * function ``semver.version.ensure_str``
+  * function :func:`semver.version._nat_cmd` as a classmethod
+  * function :func:`semver.version.ensure_str`
 
 * :gh:`313`: Correct :file:`tox.ini` for ``changelog`` entry to skip
   installation for semver. This should speed up the execution
   of towncrier.
 
 * :gh:`316`: Comparisons of :class:`~semver.version.Version` class and other
-  types return now a :py:const:`NotImplemented` constant instead
-  of a :py:exc:`TypeError` exception.
+  types return now a :py:data:`python:NotImplemented` constant instead
+  of a :py:exc:`python:TypeError` exception.
 
-  The `NotImplemented`_ section of the Python documentation recommends
-  returning this constant when comparing with ``__gt__``, ``__lt__``,
-  and other comparison operators to "to indicate that the operation is
+  In the Python documentation, :py:data:`python:NotImplemented` recommends
+  returning this constant when comparing with :py:meth:`__gt__ <python:object.__gt__>`, :py:meth:`__lt__ <python:object.__lt__>`,
+  and other comparison operators "to indicate that the operation is
   not implemented with respect to the other type".
-
-  .. _NotImplemented: https://docs.python.org/3/library/constants.html#NotImplemented
 
 * :gh:`319`: Introduce stages in :file:`.travis.yml`
   The config file contains now two stages: check and test. If
@@ -206,7 +204,7 @@ Version 3.0.0-dev.2
 Deprecations
 ------------
 
-* :gh:`169`: Deprecate CLI functions not imported from ``semver.cli``.
+* :gh:`169`: Deprecate CLI functions not imported from :mod:`semver.cli`.
 
 
 .. _semver-3.0.0-dev.2-features:
@@ -222,10 +220,10 @@ Features
   * Create :file:`src/semver/_deprecated.py` for the ``deprecated`` decorator and other deprecated functions
   * Create :file:`src/semver/__main__.py` to allow calling the CLI using :command:`python -m semver`
   * Create :file:`src/semver/_types.py` to hold type aliases
-  * Create :file:`src/semver/version.py` to hold the :class:`Version` class (old name :class:`VersionInfo`) and its utility functions
+  * Create :file:`src/semver/version.py` to hold the :class:`~semver.version.Version` class (old name :class:`~semver.version.VersionInfo`) and its utility functions
   * Create :file:`src/semver/__about__.py` for all the metadata variables
 
-* :gh:`305`: Rename :class:`VersionInfo` to :class:`Version` but keep an alias for compatibility
+* :gh:`305`: Rename :class:`~semver.version.VersionInfo` to :class:`~semver.version.Version` but keep an alias for compatibility
 
 
 .. _semver-3.0.0-dev.2-docs:
@@ -239,7 +237,7 @@ Improved Documentation
   * Add migration chapter from semver2 to semver3.
   * Distinguish between changlog for version 2 and 3
 
-* :gh:`305`: Add note about :class:`Version` rename.
+* :gh:`305`: Add note about :class:`~semver.version.Version` rename.
 
 
 .. _semver-3.0.0-dev.2-trivial:
@@ -314,8 +312,8 @@ Features
   * Split test suite into separate files under :file:`tests/`
     directory
   * Adjust and update :file:`setup.py`. Requires Python >=3.6.*
-    Extract metadata directly from source (affects all the ``__version__``,
-    ``__author__`` etc. variables)
+    Extract metadata directly from source (affects all the :data:`~semver.__about__.__version__`,
+    :data:`~semver.__about__.__author__` etc. variables)
 
 * :gh:`270`: Configure Towncrier (:pr:`273`:)
 
@@ -331,7 +329,7 @@ Features
   * Update documentation and add include a new section
     "Changelog" included from :file:`changelog.d/README.rst`.
 
-* :gh:`276`: Document how to create a sublass from :class:`VersionInfo` class
+* :gh:`276`: Document how to create a sublass from :class:`~semver.version.VersionInfo` class
 
 * :gh:`213`: Add typing information
 

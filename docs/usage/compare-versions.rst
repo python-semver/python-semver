@@ -62,7 +62,7 @@ To compare two versions depends on your type:
     >>> "3.5.0" > v
     True
 
-  However, if you compare incomplete strings, you get a :py:exc:`ValueError` exception::
+  However, if you compare incomplete strings, you get a :py:exc:`python:ValueError` exception::
 
     >>> v > "1.0"
     Traceback (most recent call last):
@@ -82,7 +82,7 @@ To compare two versions depends on your type:
    >>> dict(major=1) < v
    True
 
-  If the dictionary contains unknown keys, you get a :py:exc:`TypeError` exception::
+  If the dictionary contains unknown keys, you get a :py:exc:`python:TypeError` exception::
 
     >>> v > dict(major=1, unknown=42)
     Traceback (most recent call last):

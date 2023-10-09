@@ -21,7 +21,7 @@ parts of a version:
     'build.4'
 
 However, the attributes are read-only. You cannot change any of the above attributes.
-If you do, you get an :py:exc:`AttributeError`::
+If you do, you get an :py:exc:`python:AttributeError`::
 
     >>> v.minor = 5
     Traceback (most recent call last):
