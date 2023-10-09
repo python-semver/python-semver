@@ -211,6 +211,10 @@ html_theme_options = {
 html_static_path = ["_static"]
 html_css_files = ["css/custom.css"]
 
+# Canonical link relation
+if os.environ.get("READTHEDOCS_CANONICAL_URL"):
+    html_baseurl = f"{os.environ['READTHEDOCS_CANONICAL_URL']}"
+
 # html_logo = "logo.svg"
 
 # -- Options for HTMLHelp output ------------------------------------------
