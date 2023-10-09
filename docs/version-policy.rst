@@ -30,7 +30,9 @@ semver Version 3
 
 We will not intentionally make breaking changes in minor releases of V3.
 
-Methods marked as ``deprecated`` raise a warning message when used from the :py:mod:`warnings` module.
+Methods marked as ``deprecated`` raise a warning message when used from the
+:py:mod:`python:warnings` module.
+Refer to section :ref:`sec_display_deprecation_warnings` to get more information about how to customize it.
 Check section :ref:`sec_replace_deprecated_functions` to make your code
 ready for future major releases.
 

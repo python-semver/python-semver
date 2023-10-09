@@ -126,8 +126,13 @@ extlinks = {
 # See https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html
 intersphinx_mapping = {
     # Download it from the root with:
-    # wget -O docs/python-objects.inv https://docs.python.org/3/objects.inv
+    # wget -O docs/inventories/python-objects.inv https://docs.python.org/3/objects.inv
     "python": ("https://docs.python.org/3", (None, "inventories/python-objects.inv")),
+    # wget -O docs/inventories/pydantic.inv https://docs.pydantic.dev/latest/objects.inv
+    "pydantic": (
+        "https://docs.pydantic.dev/latest/",
+        (None, "inventories/pydantic.inv"),
+    ),
 }
 # Avoid side-effects (namely that documentations local references can
 # suddenly resolve to an external location.)
