@@ -16,6 +16,7 @@ Semver |version| -- Semantic Versioning
    migration/index
    advanced/index
    contribute/index
+   version-policy
    api
 
 .. toctree::

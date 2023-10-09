@@ -12,19 +12,8 @@ A Python module to simplify `semantic versioning`_.
 
 .. note::
 
-   This project works for Python 3.7 and greater only. If you are
-   looking for a compatible version for Python 2, use the
-   maintenance branch |MAINT|_.
-
-   The last version of semver which supports Python 2.7 to 3.5 will be
-   2.x.y However, keep in mind, the major 2 release is frozen: no new
-   features nor backports will be integrated.
-
-   We recommend to upgrade your workflow to Python 3 to gain support,
-   bugfixes, and new features.
-
-.. |MAINT| replace:: ``maint/v2``
-.. _MAINT: https://github.com/python-semver/python-semver/tree/maint/v2
+   This project works for Python 3.7 and greater only.
+   Refer to :ref:`version-policy` for more details.
 
 
 The module follows the ``MAJOR.MINOR.PATCH`` style:
