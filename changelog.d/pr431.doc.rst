@@ -1,0 +1,2 @@
+Clarify version policy for the different semver versions (v2, v3, >v3)
+and the supported Python versions.

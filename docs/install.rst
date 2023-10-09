@@ -6,25 +6,20 @@ Release Policy
 
 As semver uses `Semantic Versioning`_, breaking changes are only introduced in major
 releases (incremented ``X`` in "X.Y.Z").
+Refer to section :ref:`version-policy` for a general overview.
 
-For users who want to stay with major 2 releases only, add the following version
-restriction::
-
-    semver>=2,<3
-
-This line avoids surprises. You will get any updates within the major 2 release like
-2.11.0 or above. However, you will never get an update for semver 3.0.0.
-
-Keep in mind, as this line avoids any major version updates, you also will never
-get new exciting features or bug fixes.
-
-Same applies for semver v3, if you want to get all updates for the semver v3
-development line, but not a major update to semver v4::
+For users who want or need to stay with major 3 releases only, add the
+following version restriction (:file:`setup.py`, :file:`requirements.txt`,
+or :file:`pyproject.toml`)::
 
     semver>=3,<4
 
-You can add this line in your file :file:`setup.py`, :file:`requirements.txt`,
-:file:`pyproject.toml`, or any other file that lists your dependencies.
+This line avoids surprises. You will get any updates within the major 3 release like 3.1.x and above. However, you will never get an update for semver 4.0.0.
+
+For users who have to stay with major 2 releases only, use the following line::
+
+    semver>=2,<3
+
 
 Pip
 ---
