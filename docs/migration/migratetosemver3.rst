@@ -3,6 +3,10 @@
 Migrating from semver2 to semver3
 =================================
 
+.. meta::
+   :description lang=en:
+      Migrating from semver2 to semver3
+
 This section describes the visible differences for
 users and how your code stays compatible for semver3.
 Some changes are backward incompatible.

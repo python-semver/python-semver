@@ -1,6 +1,10 @@
 Determining Version Equality
 ============================
 
+.. meta::
+   :description lang=en:
+      Determining verison equality
+
 Version equality means for semver, that major, minor, patch, and prerelease
 parts are equal in both versions you compare. The build part is ignored.
 For example::

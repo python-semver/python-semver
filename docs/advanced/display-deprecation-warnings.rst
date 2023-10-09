@@ -3,6 +3,10 @@
 Displaying Deprecation Warnings
 ===============================
 
+.. meta::
+   :description lang=en:
+      Displaying and filtering deprecation warnings
+
 By default,  deprecation warnings are `ignored in Python <https://docs.python.org/3/library/warnings.html#warning-categories>`_.
 This also affects semver's own warnings.
 

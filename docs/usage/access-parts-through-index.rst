@@ -3,6 +3,10 @@
 Accessing Parts Through Index Numbers
 =====================================
 
+.. meta::
+   :description lang=en:
+      Accessing parts through index numbers
+
 .. versionadded:: 2.10.0
 
 Another way to access parts of a version is to use an index notation. The underlying

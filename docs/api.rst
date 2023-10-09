@@ -3,6 +3,10 @@
 API Reference
 =============
 
+.. meta::
+   :description lang=en:
+      API reference about Python semver
+
 .. currentmodule:: semver
 
 

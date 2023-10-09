@@ -3,6 +3,10 @@
 Dealing with Invalid Versions
 =============================
 
+.. meta::
+   :description lang=en:
+      Dealing with invalid versions
+
 As semver follows the semver specification, it cannot parse version
 strings which are considered "invalid" by that specification. The semver
 library cannot know all the possible variations so you need to help the

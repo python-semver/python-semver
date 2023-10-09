@@ -1,6 +1,10 @@
 Release Procedure
 =================
 
+.. meta::
+   :description lang=en:
+      Release procedure: prepare and create the release
+
 The following procedures gives a short overview of what steps are needed
 to create a new release.
 

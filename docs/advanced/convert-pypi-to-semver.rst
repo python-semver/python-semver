@@ -1,5 +1,9 @@
-Converting versions between PyPI and semver
+Converting Versions between PyPI and semver
 ===========================================
+
+.. meta::
+   :description lang=en:
+      Converting versions between PyPI and semver
 
 .. Link
    https://packaging.pypa.io/en/latest/_modules/packaging/version.html#InvalidVersion

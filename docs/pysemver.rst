@@ -3,6 +3,10 @@
 pysemver |version|
 ==================
 
+.. meta::
+   :description lang=en:
+      Commandline tool pysemver describing all commands and options
+
 Synopsis
 --------
 

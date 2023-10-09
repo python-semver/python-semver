@@ -3,6 +3,9 @@
 Building semver
 ===============
 
+.. meta::
+   :description lang=en:
+      Building semver
 
 .. _PEP 517: https://www.python.org/dev/peps/pep-0517/
 .. _PEP 621: https://www.python.org/dev/peps/pep-0621/

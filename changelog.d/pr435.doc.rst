@@ -1,0 +1,7 @@
+Several small improvements for documentation:
+
+* Add meta description to improve SEO
+* Use canonicals on ReadTheDocs (commit 87f639f)
+* Pin versions for reproducable doc builds (commit 03fb990)
+* Add missing :file:`.readthedocs.yaml` file (commit ec9348a)
+* Correct some smaller issues when building (commit f65feab)

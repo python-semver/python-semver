@@ -1,6 +1,10 @@
 Semver |version| -- Semantic Versioning
 =======================================
 
+.. meta::
+   :description lang=en:
+      Semantic versioning for Python
+
 .. include:: readme.rst
 
 

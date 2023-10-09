@@ -3,6 +3,11 @@
 Converting a Version instance into Different Types
 ==================================================
 
+.. meta::
+   :description lang=en:
+      Converting a version instance into different types
+
+
 Sometimes it is needed to convert a :class:`~semver.version.Version` instance into
 a different type. For example, for displaying or to access all parts.
 

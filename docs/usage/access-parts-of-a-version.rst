@@ -3,6 +3,10 @@
 Accessing Parts of a Version Through Names
 ==========================================
 
+.. meta::
+   :description lang=en:
+      Accessing parts of a version through names
+
 The :class:`~semver.version.Version` class contains attributes to access the different
 parts of a version:
 

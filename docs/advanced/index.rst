@@ -1,6 +1,9 @@
 Advanced topics
 ===============
 
+.. meta::
+   :description lang=en:
+      Advanced topics for Python semver
 
 .. toctree::
     :maxdepth: 1
