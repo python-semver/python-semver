@@ -1,2 +1,0 @@
-Improve external doc links to Python and Pydantic.
-

@@ -18,6 +18,58 @@ This section covers the changes between major version 2 and version 3.
 
 .. towncrier release notes start
 
+Version 3.0.2
+=============
+
+:Released: 2023-10-09
+:Maintainer:
+
+
+Bug Fixes
+---------
+
+* :pr:`418`: Replace :class:`~collection.OrderedDict` with :class:`dict`.
+
+  The dict datatype is ordered since Python 3.7. As we do not support
+  Python 3.6 anymore, it can be considered safe to avoid :class:`~collection.OrderedDict`.
+  Related to :gh:`419`.
+
+* :pr:`426`: Fix :meth:`~semver.version.Version.replace` method to use the derived class
+  of an instance instead of :class:`~semver.version.Version` class.
+
+
+
+Improved Documentation
+----------------------
+
+* :pr:`431`: Clarify version policy for the different semver versions (v2, v3, >v3)
+  and the supported Python versions.
+
+* :gh:`432`: Improve external doc links to Python and Pydantic.
+
+
+
+Features
+--------
+
+* :pr:`417`: Amend GitHub Actions to check against MacOS.
+
+
+
+Trivial/Internal Changes
+------------------------
+
+* :pr:`420`: Introduce :py:class:`~typing.ClassVar` for some :class:`~semver.version.Version`
+  class variables, mainly :data:`~semver.version.Version.NAMES` and some private.
+
+* :pr:`421`: Insert mypy configuration into :file:`pyproject.toml` and remove
+  config options from :file:`tox.ini`.
+
+
+
+----
+
+
 Version 3.0.1
 =============
 
