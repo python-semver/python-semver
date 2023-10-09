@@ -1,0 +1,3 @@
+Move search box more at the top. This makes it easier for
+users as if the TOC is long, the search box isn't visible
+anymore.

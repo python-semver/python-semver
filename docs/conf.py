@@ -211,6 +211,16 @@ html_theme_options = {
 html_static_path = ["_static"]
 html_css_files = ["css/custom.css"]
 
+html_sidebars = {
+    "**": [
+        "about.html",  # theme_logo
+        # 'relations.html',  # prev and next
+        "searchbox.html",  # basic/searchbox.html
+        "navigation.html",  # TOC
+        # 'donate.html',
+    ]
+}
+
 # Canonical link relation
 if os.environ.get("READTHEDOCS_CANONICAL_URL"):
     html_baseurl = f"{os.environ['READTHEDOCS_CANONICAL_URL']}"
