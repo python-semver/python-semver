@@ -1,7 +1,11 @@
 .. _sec_reading_versions_from_file:
 
-Reading versions from file
+Reading Versions from File
 ==========================
+
+.. meta::
+   :description lang=en:
+      Reading versions from file
 
 In cases where a version is stored inside a file, one possible solution
 is to use the following function:

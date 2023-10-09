@@ -3,6 +3,10 @@
 Creating Subclasses from Version
 ================================
 
+.. meta::
+   :description lang=en:
+      Creating subclasses from Version class
+
 If you do not like creating functions to modify the behavior of semver
 (as shown in section :ref:`sec_dealing_with_invalid_versions`), you can
 also create a subclass of the :class:`Version <semver.version.Version>` class.

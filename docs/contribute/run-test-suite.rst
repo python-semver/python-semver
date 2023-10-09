@@ -3,6 +3,10 @@
 Running the Test Suite
 ======================
 
+.. meta::
+   :description lang=en:
+      Running the test suite through tox
+
 We use `pytest`_ and `tox`_ to run tests against all supported Python
 versions.  All test dependencies are resolved automatically.
 

@@ -1,6 +1,10 @@
 Prerequisites
 -------------
 
+.. meta::
+   :description lang=en:
+      Overview of prerequisites for contributing
+
 .. -text-begin-
 
 Before you make changes to the code, we would highly appreciate if you

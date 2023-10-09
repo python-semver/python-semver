@@ -1,6 +1,10 @@
 Comparing Versions
 ==================
 
+.. meta::
+   :description lang=en:
+      Comparing versions with semver.compare and the Version class
+
 To compare two versions depends on your type:
 
 * **Two strings**

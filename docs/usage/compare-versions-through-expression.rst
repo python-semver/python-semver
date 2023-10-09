@@ -1,6 +1,10 @@
 Comparing Versions through an Expression
 ========================================
 
+.. meta::
+   :description lang=en:
+      Comparing versions through an expression
+
 If you need a more fine-grained approach of comparing two versions,
 use the :meth:`~semver.version.Version.match` function. It expects two arguments:
 

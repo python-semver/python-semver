@@ -1,6 +1,10 @@
 Checking for a Compatible Semver Version
 ========================================
 
+.. meta::
+   :description lang=en:
+      Check for a compatible semver version
+
 To check if a *change* from a semver version ``a`` to a semver
 version ``b`` is *compatible* according to semver rule, use the method
 :meth:`~semver.version.Version.is_compatible`.

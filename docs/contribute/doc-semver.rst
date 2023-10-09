@@ -3,6 +3,10 @@
 Documenting semver
 ==================
 
+.. meta::
+   :description lang=en:
+      Documenting semver with type annotations, docstrings, Sphinx directives
+
 Documenting the features of semver is very important. It gives our developers
 an overview what is possible with semver, how it "feels", and how it is
 used efficiently.

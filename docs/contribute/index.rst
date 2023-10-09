@@ -3,6 +3,10 @@
 Contributing to semver
 ======================
 
+.. meta::
+   :description lang=en:
+      Contributing to Python semver
+
 The semver source code is managed using Git and is hosted on GitHub::
 
    git clone git://github.com/python-semver/python-semver

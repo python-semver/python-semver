@@ -3,6 +3,10 @@
 Reporting Bugs and Asking Questions
 -----------------------------------
 
+.. meta::
+   :description lang=en:
+      Reporting bugs and asking questions about semver
+
 If you think you have encountered a bug in semver or have an idea for a new
 feature? Great! We like to hear from you!
 

@@ -3,6 +3,10 @@
 Getting Minimum and Maximum of Multiple Versions
 ================================================
 
+.. meta::
+   :description lang=en:
+      Getting minimum and maximum of multiple versions
+
 .. versionchanged:: 2.10.2
    The functions :func:`semver.max_ver` and :func:`semver.min_ver` are deprecated in
    favor of their builtin counterparts :func:`max` and :func:`min`.

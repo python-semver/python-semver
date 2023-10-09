@@ -3,6 +3,10 @@
 Finish the Release
 ==================
 
+.. meta::
+   :description lang=en:
+      Finish the semver release by creating tags
+
 1. Create a tag:
 
    $ git tag -a x.x.x

@@ -1,6 +1,10 @@
 Installing semver
 =================
 
+.. meta::
+   :description lang=en:
+      Installing semver on the system
+
 Release Policy
 --------------
 

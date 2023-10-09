@@ -1,6 +1,10 @@
 Creating a Version
 ==================
 
+.. meta::
+   :description lang=en:
+      Creating a version using different methods
+
 .. versionchanged:: 3.0.0
 
   The former :class:`~semver.version.VersionInfo` class

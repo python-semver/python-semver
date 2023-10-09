@@ -1,6 +1,10 @@
 Combining Pydantic and semver
 =============================
 
+.. meta::
+   :description lang=en:
+      Combining Pydantic and semver
+
 According to its homepage, `Pydantic <https://pydantic-docs.helpmanual.io>`_
 "enforces type hints at runtime, and provides user friendly errors when data
 is invalid."

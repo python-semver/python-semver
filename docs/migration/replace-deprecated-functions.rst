@@ -3,6 +3,10 @@
 Replacing Deprecated Functions
 ==============================
 
+.. meta::
+   :description lang=en:
+      Replacing deprecated functions
+
 .. versionchanged:: 2.10.0
    The development team of semver has decided to deprecate certain functions on
    the module level. The preferred way of using semver is through the
