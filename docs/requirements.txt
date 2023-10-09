@@ -1,5 +1,5 @@
-# requirements file for documentation
-# sphinx
-# required in .readthedocs.yaml
-sphinx-argparse
-sphinx-autodoc-typehints
+# Sphinx requirements file for documentation
+# Required in .readthedocs.yaml
+sphinx==7.0.1
+sphinx-argparse==0.4.0
+sphinx-autodoc-typehints==1.24.0
