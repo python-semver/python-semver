@@ -31,6 +31,10 @@ div.related.top nav {
     margin-bottom: -0.75em;
 }
 
+#searchbox {
+  margin-bottom: 1.25em;
+}
+
 .section h1 {
     font-weight: 700;
 }
