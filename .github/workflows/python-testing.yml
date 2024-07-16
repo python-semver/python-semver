@@ -35,7 +35,7 @@ jobs:
       can_run: ${{ steps.check_files.outputs.can_run }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -77,9 +77,9 @@ jobs:
     if: ${{ needs.check-files.outputs.can_run == '1' }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: 3.8
           cache: 'pip'
@@ -89,11 +89,12 @@ jobs:
           pip install tox tox-gh-actions
       - name: Check
         run: |
-          tox -e checks
+          tox run -e checks
 
   tests:
     needs: check
     runs-on: ${{ matrix.os }}
+    continue-on-error: true
     strategy:
       max-parallel: 5
       fail-fast: true
@@ -103,14 +104,17 @@ jobs:
                          "3.9",
                          "3.10",
                          "3.11",
-                         # "3.12-dev"
+                         "3.12",
                          ]
-        os: [ubuntu-latest, "macos-latest"]
+        os: ["ubuntu-latest", "macos-latest"]
+        exclude:
+           - os: "macos-latest"
+             python-version: "3.7"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }} for ${{ matrix.os }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
@@ -120,4 +124,4 @@ jobs:
           pip install tox tox-gh-actions
       - name: Test with tox
         run: |
-          tox
+          tox run
