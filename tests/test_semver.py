@@ -131,7 +131,6 @@ def test_should_fail_with_incompatible_type_for_compatible_match(wrongtype):
 
 
 def test_should_succeed_with_compatible_subclass_for_is_compatible():
-    class CustomVersion(Version):
-        ...
+    class CustomVersion(Version): ...
 
     assert CustomVersion(1, 0, 0).is_compatible(Version(1, 0, 0))
