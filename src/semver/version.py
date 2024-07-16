@@ -32,6 +32,7 @@ Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], s
 Comparator = Callable[["Version", Comparable], bool]
 
 T = TypeVar("T", bound="Version")
+T_cmp = TypeVar("T_cmp", tuple, str, int)
 
 
 def _comparator(operator: Comparator) -> Comparator:
@@ -53,7 +54,7 @@ def _comparator(operator: Comparator) -> Comparator:
     return wrapper
 
 
-def _cmp(a, b):  # TODO: type hints
+def _cmp(a: T_cmp, b: T_cmp) -> int:
     """Return negative if a<b, zero if a==b, positive if a>b."""
     return (a > b) - (a < b)
 
@@ -137,7 +138,7 @@ class Version:
         self._build = None if build is None else str(build)
 
     @classmethod
-    def _nat_cmp(cls, a, b):  # TODO: type hints
+    def _nat_cmp(cls, a: Optional[str], b: Optional[str]) -> int:
         def cmp_prerelease_tag(a, b):
             if isinstance(a, int) and isinstance(b, int):
                 return _cmp(a, b)
@@ -150,9 +151,10 @@ class Version:
 
         a, b = a or "", b or ""
         a_parts, b_parts = a.split("."), b.split(".")
-        a_parts = [int(x) if re.match(r"^\d+$", x) else x for x in a_parts]
-        b_parts = [int(x) if re.match(r"^\d+$", x) else x for x in b_parts]
-        for sub_a, sub_b in zip(a_parts, b_parts):
+        re_digits = re.compile(r"^\d+$")
+        parts_a = [int(x) if re_digits.match(x) else x for x in a_parts]
+        parts_b = [int(x) if re_digits.match(x) else x for x in b_parts]
+        for sub_a, sub_b in zip(parts_a, parts_b):
             cmp_result = cmp_prerelease_tag(sub_a, sub_b)
             if cmp_result != 0:
                 return cmp_result
