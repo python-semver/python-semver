@@ -9,7 +9,7 @@ According to its homepage, `Pydantic <https://pydantic-docs.helpmanual.io>`_
 "enforces type hints at runtime, and provides user friendly errors when data
 is invalid."
 
-If you are working with Pydantic>2.0 and pydantic-extra-types>=2.10.0 you can use the built in `_VersionPydanticAnnotation` type, which wraps the `python-semver` `Version` type.
+If you are working with Pydantic>2.0 and pydantic-extra-types>=2.10.0 use the built in `_VersionPydanticAnnotation` type, which wraps the :class:`Version <semver.version.Version>` class.
 
     .. code-block:: python
 
