@@ -25,7 +25,7 @@ If you are working with Pydantic>2.0 and pydantic-extra-types>=2.10.0 use the bu
         print(app_version.version)
         # > 1.2.3
 
-To work with Pydantic>2.0 and without pydantic-extra-types you can use the following example to define your own type:
+To work with Pydantic>2.0 and without pydantic-extra-types use the following example to define your own type:
 
 
 1. Derive a new class from :class:`~semver.version.Version`
