@@ -28,6 +28,7 @@ from ._deprecated import (
     main,
 )
 from .version import Version, VersionInfo
+from .spec import Spec
 from .__about__ import (
     __version__,
     __author__,

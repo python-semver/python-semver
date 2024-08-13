@@ -1,14 +1,13 @@
 """Version handling by a semver compatible version class."""
 
+# from ast import operator
 import re
 from functools import wraps
 from typing import (
     Any,
-    ClassVar,
     Dict,
     Iterable,
     Optional,
-    Pattern,
     SupportsInt,
     Tuple,
     Union,
@@ -26,6 +25,21 @@ from ._types import (
     String,
     VersionPart,
 )
+
+from .versionregex import (
+    VersionRegex,
+    # BUILD as _BUILD,
+    # RE_NUMBER as _RE_NUMBER,
+    # LAST_NUMBER as _LAST_NUMBER,
+    # MAJOR as _MAJOR,
+    # MINOR as _MINOR,
+    # PATCH as _PATCH,
+    # PRERELEASE as _PRERELEASE,
+    # REGEX as _REGEX,
+    # REGEX_TEMPLATE as _REGEX_TEMPLATE,
+    # REGEX_OPTIONAL_MINOR_AND_PATCH as _REGEX_OPTIONAL_MINOR_AND_PATCH,
+)
+
 
 # These types are required here because of circular imports
 Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], str]
@@ -59,7 +73,7 @@ def _cmp(a: T_cmp, b: T_cmp) -> int:
     return (a > b) - (a < b)
 
 
-class Version:
+class Version(VersionRegex):
     """
     A semver compatible version class.
 
@@ -74,45 +88,13 @@ class Version:
 
     __slots__ = ("_major", "_minor", "_patch", "_prerelease", "_build")
 
-    #: The names of the different parts of a version
-    NAMES: ClassVar[Tuple[str, ...]] = tuple([item[1:] for item in __slots__])
+    #: The default prefix for the prerelease part.
+    #: Used in :meth:`Version.bump_prerelease <semver.Version.bump_prerelease>`.
+    default_prerelease_prefix = "rc"
 
-    #: Regex for number in a prerelease
-    _LAST_NUMBER: ClassVar[Pattern[str]] = re.compile(r"(?:[^\d]*(\d+)[^\d]*)+")
-    #: Regex template for a semver version
-    _REGEX_TEMPLATE: ClassVar[
-        str
-    ] = r"""
-            ^
-            (?P<major>0|[1-9]\d*)
-            (?:
-                \.
-                (?P<minor>0|[1-9]\d*)
-                (?:
-                    \.
-                    (?P<patch>0|[1-9]\d*)
-                ){opt_patch}
-            ){opt_minor}
-            (?:-(?P<prerelease>
-                (?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)
-                (?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*
-            ))?
-            (?:\+(?P<build>
-                [0-9a-zA-Z-]+
-                (?:\.[0-9a-zA-Z-]+)*
-            ))?
-            $
-        """
-    #: Regex for a semver version
-    _REGEX: ClassVar[Pattern[str]] = re.compile(
-        _REGEX_TEMPLATE.format(opt_patch="", opt_minor=""),
-        re.VERBOSE,
-    )
-    #: Regex for a semver version that might be shorter
-    _REGEX_OPTIONAL_MINOR_AND_PATCH: ClassVar[Pattern[str]] = re.compile(
-        _REGEX_TEMPLATE.format(opt_patch="?", opt_minor="?"),
-        re.VERBOSE,
-    )
+    #: The default prefix for the build part
+    #: Used in :meth:`Version.bump_build <semver.Version.bump_build>`.
+    default_build_prefix = "build"
 
     def __init__(
         self,
@@ -384,22 +366,21 @@ build='build.10')
         :return: The return value is negative if ver1 < ver2,
              zero if ver1 == ver2 and strictly positive if ver1 > ver2
 
-        >>> semver.compare("2.0.0")
+        >>> ver = semver.Version.parse("3.4.5")
+        >>> ver.compare("4.0.0")
         -1
-        >>> semver.compare("1.0.0")
+        >>> ver.compare("3.0.0")
         1
-        >>> semver.compare("2.0.0")
-        0
-        >>> semver.compare(dict(major=2, minor=0, patch=0))
+        >>> ver.compare("3.4.5")
         0
         """
         cls = type(self)
         if isinstance(other, String.__args__):  # type: ignore
-            other = cls.parse(other)
+            other = cls.parse(other)  # type: ignore
         elif isinstance(other, dict):
-            other = cls(**other)
+            other = cls(**other)  # type: ignore
         elif isinstance(other, (tuple, list)):
-            other = cls(*other)
+            other = cls(*other)  # type: ignore
         elif not isinstance(other, cls):
             raise TypeError(
                 f"Expected str, bytes, dict, tuple, list, or {cls.__name__} instance, "
@@ -561,6 +542,10 @@ build='build.10')
         """
         Compare self to match a match expression.
 
+        .. versionchanged:: 3.0.0
+            Allow tilde and caret expressions. Delegate expressions
+            to the :class:`Spec <semver.spec.Spec>` class.
+
         :param match_expr: optional operator and version; valid operators are
               ``<``   smaller than
               ``>``   greater than
@@ -568,45 +553,15 @@ build='build.10')
               ``<=``  smaller or equal than
               ``==``  equal
               ``!=``  not equal
+              ``~``   compatible release clause ("tilde ranges")
+              ``^``   compatible with version
         :return: True if the expression matches the version, otherwise False
-
-        >>> semver.Version.parse("2.0.0").match(">=1.0.0")
-        True
-        >>> semver.Version.parse("1.0.0").match(">1.0.0")
-        False
-        >>> semver.Version.parse("4.0.4").match("4.0.4")
-        True
         """
-        prefix = match_expr[:2]
-        if prefix in (">=", "<=", "==", "!="):
-            match_version = match_expr[2:]
-        elif prefix and prefix[0] in (">", "<"):
-            prefix = prefix[0]
-            match_version = match_expr[1:]
-        elif match_expr and match_expr[0] in "0123456789":
-            prefix = "=="
-            match_version = match_expr
-        else:
-            raise ValueError(
-                "match_expr parameter should be in format <op><ver>, "
-                "where <op> is one of "
-                "['<', '>', '==', '<=', '>=', '!=']. "
-                "You provided: %r" % match_expr
-            )
+        # needed to avoid recursive import
+        from .spec import Spec
 
-        possibilities_dict = {
-            ">": (1,),
-            "<": (-1,),
-            "==": (0,),
-            "!=": (-1, 1),
-            ">=": (0, 1),
-            "<=": (-1, 0),
-        }
-
-        possibilities = possibilities_dict[prefix]
-        cmp_res = self.compare(match_version)
-
-        return cmp_res in possibilities
+        spec = Spec(match_expr)
+        return spec.match(self)
 
     @classmethod
     def parse(
@@ -641,9 +596,9 @@ prerelease='pre.2', build='build.4')
             raise TypeError("not expecting type '%s'" % type(version))
 
         if optional_minor_and_patch:
-            match = cls._REGEX_OPTIONAL_MINOR_AND_PATCH.match(version)
+            match = cls.REGEX_OPTIONAL_MINOR_AND_PATCH.match(version)
         else:
-            match = cls._REGEX.match(version)
+            match = cls.REGEX.match(version)
         if match is None:
             raise ValueError(f"{version} is not valid SemVer string")
 
