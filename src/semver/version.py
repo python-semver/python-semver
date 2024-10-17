@@ -149,17 +149,15 @@ class Version:
             else:
                 return _cmp(a, b)
 
-        a, b = a or "", b or ""
-        a_parts, b_parts = a.split("."), b.split(".")
-        re_digits = re.compile(r"^\d+$")
-        parts_a = [int(x) if re_digits.match(x) else x for x in a_parts]
-        parts_b = [int(x) if re_digits.match(x) else x for x in b_parts]
-        for sub_a, sub_b in zip(parts_a, parts_b):
+        a_parts = [int(x) if x.isdigit() else x for x in (a or "").split(".")]
+        b_parts = [int(x) if x.isdigit() else x for x in (b or "").split(".")]
+
+        for sub_a, sub_b in zip(a_parts, b_parts):
             cmp_result = cmp_prerelease_tag(sub_a, sub_b)
             if cmp_result != 0:
                 return cmp_result
-        else:
-            return _cmp(len(a), len(b))
+
+        return _cmp(len(a_parts), len(b_parts))
 
     @property
     def major(self) -> int:
@@ -384,13 +382,11 @@ build='build.10')
         :return: The return value is negative if ver1 < ver2,
              zero if ver1 == ver2 and strictly positive if ver1 > ver2
 
-        >>> semver.compare("2.0.0")
+        >>> Version.parse("1.0.0").compare("2.0.0")
         -1
-        >>> semver.compare("1.0.0")
+        >>> Version.parse("2.0.0").compare("1.0.0")
         1
-        >>> semver.compare("2.0.0")
-        0
-        >>> semver.compare(dict(major=2, minor=0, patch=0))
+        >>> Version.parse("2.0.0").compare("2.0.0")
         0
         """
         cls = type(self)
