@@ -8,14 +8,127 @@
 [build-system]
 requires = [
   # sync with setup.py until we discard non-pep-517/518
-  "setuptools",
-  "setuptools-scm",
+  "setuptools>=61",
+  # "setuptools-scm>=8",
 ]
 build-backend = "setuptools.build_meta"
 
+
+[project]
+requires-python = ">=3.7"
+name = "semver"
+description = "Python helper for Semantic Versioning (https://semver.org)"
+readme = "README.rst"
+# readme.content-type = "text/x-rst"
+license = { file = "LICENSE.txt" }
+authors = [
+  {name = "Kostiantyn Rybnikov", email = "k-bx@k-bx.com"},
+  {name = "Tom Schraitle", email = "toms@suse.de"},
+]
+maintainers = [
+  {name = "Tom Schraitle", email = "toms@suse.de"},
+  {name = "Sebastien Celles", email = "s.celles@gmail.com"},
+]
+dynamic = ["version",]
+classifiers = [
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+
+[project.urls]
+"GitHub Homepage" = "https://github.com/python-semver/python-semver"
+Changelog = "https://python-semver.readthedocs.io/en/latest/changelog.html"
+Documentation = "https://python-semver.rtfd.io"
+Releases = "https://github.com/python-semver/python-semver/releases"
+"Bug Tracker" = "https://github.com/python-semver/python-semver/issues"
+
+
+[project.scripts]
+pysemver = "semver.cli:main"
+
+
+[dependency-groups]
+# See https://github.com/astral-sh/uv/issues/5632
+# See https://peps.python.org/pep-0735/
+typing = [
+  "mypy",
+  "pyright",
+]
+formatting = [
+  "black",
+  "ruff",
+  "docformatter",
+]
+test = [
+  "tox",
+  "pytest",
+  "pytest-cov",
+  
+]
+publish = [
+  "twine",
+  # pyproject-build is required for building the package
+  "build",
+]
+changelog = [
+  "towncrier",
+]
+docs = [
+  # Required in .readthedocs.yaml
+  "sphinx",  # ==7.0.1
+  "sphinx-argparse",  # ==0.4.0
+  "sphinx-autodoc-typehints",  # ==1.24.0
+]
+devel = [
+  {include-group = "typing"},
+  {include-group = "formatting"},
+  {include-group = "test"},
+  {include-group = "changelog"},
+  {include-group = "docs"},
+  {include-group = "publish"},
+]
+# Only needed when using GitHub Actions
+gh-action = [
+  {include-group = "devel"},
+  "tox-gh-actions",
+]
+
+# --- Setuptools configuration ---
+[tool.setuptools]
+package-dir = {"" = "src"}
+package-data = { "semver" = ["py.typed"] }
+include-package-data = true
+
+
+[tool.setuptools.packages.find]
+# Is that still necessary?
+# list of folders that contain the packages (["."] by default)
+where = ["src"]
+
+
+[tool.setuptools.dynamic]
+version = {attr = "semver.__about__.__version__"}
+
+
+# ---------------------------------
 [tool.setuptools_scm]
 version_scheme = "post-release"
 local_scheme = "dirty-tag"
+
 
 [tool.mypy]
 # ignore_missing_imports = true
@@ -70,4 +183,7 @@ name = "Features"
 name = "Removals"
 
 [tool.towncrier.fragment.trivial]
-name = "Trivial/Internal Changes"
+name = "Trivial Changes"
+
+[tool.towncrier.fragment.internal]
+name = "Internal Changes"

@@ -1,0 +1,15 @@
+Modernize project configs with :file:`pyproject.toml`
+
+* In :file:`pyproject.toml`:
+  * Move all project related data from :file:`setup.cfg` to :file:`pyproject.toml`
+  * Use new dependency group from :pep:`735`
+  * Consolidate flake8, isort, pycodestyle with ruff
+  * Split towncrier config type "trivial" into "trivial" and
+    "internal"
+* Create config file for ruff (:file:`.ruff.toml`)
+* Create config file for pytest (:file:`.pytest.ini`)
+* Simplify :file:`tox.ini` and remove old stuff
+* Document installation with new :command:`uv` command
+* Simplify Sphinx config with :func:`find_version()`
+* Update the authors
+* Use :command:`uv` in GitHub Action :file:`python-testing.yml` workflow

@@ -25,10 +25,11 @@ For users who have to stay with major 2 releases only, use the following line::
     semver>=2,<3
 
 
-Pip
----
+With Pip
+--------
 
 .. code-block:: bash
+   :name: install-pip
 
     pip3 install semver
 
@@ -38,6 +39,19 @@ with an URL and its version:
 .. parsed-literal::
 
     pip3 install git+https://github.com/python-semver/python-semver.git@3.0.0
+
+
+With uv
+-------
+
+First, install the :command:`uv` command. Refer to https://docs.astral.sh/uv/getting-started/installation/ for more information.
+
+Then use the command :command:`uv` to install the package:
+
+.. code-block:: bash
+   :name: install-uv
+
+    uv pip install semver
 
 
 Linux Distributions
@@ -101,7 +115,9 @@ openSUSE
 
 1. Enable the ``devel:languages:python`` repository of the Open Build Service::
 
-    $ sudo zypper addrepo --refresh obs://devel:languages:python devel_languages_python
+    $ sudo zypper addrepo --refresh \
+      --name devel_languages_python \
+      "https://download.opensuse.org/repositories/devel:/languages:/python/\$releasever"
 
 2. Install the package::
 
