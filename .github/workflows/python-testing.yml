@@ -71,30 +71,34 @@ jobs:
   check:
     runs-on: ubuntu-latest
     needs: check-files
-    # Timout of 15min
     timeout-minutes: 15
     # needs.check-files.outputs.can_run
     if: ${{ needs.check-files.outputs.can_run == '1' }}
 
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
         with:
-          python-version: 3.8
-          cache: 'pip'
-      - name: Install dependencies
+          enable-cache: true
+
+      - name: Set up Python 3.7
+        # check tox.ini for the lowest version
+        run: uv python install 3.7
+
+      - name: Install the project
         run: |
-          python3 -m pip install --upgrade pip setuptools>60 setuptools-scm>=60
-          pip install tox tox-gh-actions
-      - name: Check
-        run: |
-          tox run -e checks
+          uv sync --all-extras --group gh-action
+
+      - name: Checks
+        continue-on-error: true
+        run: uv run tox run -e checks
 
   tests:
     needs: check
     runs-on: ${{ matrix.os }}
-    continue-on-error: true
+    # continue-on-error: true
     strategy:
       max-parallel: 5
       fail-fast: true
@@ -114,15 +118,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python ${{ matrix.python-version }} for ${{ matrix.os }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'pip'
-      - name: Install dependencies
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install the project
         run: |
-          python3 -m pip install --upgrade pip
-          pip install tox tox-gh-actions
-      - name: Test with tox
-        run: |
-          tox run
+          uv sync --all-extras --dev
+          uv pip install tox tox-gh-actions
+
+      - name: Checks
+        run: uv run tox run -e ${{ matrix.python-version }}

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # python-semver documentation build configuration file
 #
@@ -16,37 +15,31 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import codecs
-from datetime import date
+
 import os
 import re
-import sys
+from datetime import date
+from pathlib import Path
 
-SRC_DIR = os.path.abspath("../src/")
-sys.path.insert(0, SRC_DIR)
-# from semver import __version__  # noqa: E402
+SRC_DIR = Path(__file__).absolute().parent.parent / "src"
 YEAR = date.today().year
 
 
-def read(*parts):
-    """
-    Build an absolute path from *parts* and and return the contents of the
-    resulting file.  Assume UTF-8 encoding.
-    """
-    here = os.path.abspath(os.path.dirname(__file__))
-    with codecs.open(os.path.join(here, *parts), "rb", "utf-8") as f:
-        return f.read()
-
-
-def find_version(*file_paths):
+def find_version(path: Path) -> str:
     """
     Build a path from *file_paths* and search for a ``__version__``
     string inside.
     """
-    version_file = read(*file_paths)
-    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
+    content = Path(path).read_text(encoding="utf-8")
+
+    version_match = re.search(
+        r"^__version__ = ['\"]([^'\"]*)['\"]",
+        content,
+        re.MULTILINE
+    )
     if version_match:
         return version_match.group(1)
+
     raise RuntimeError("Unable to find version string.")
 
 
@@ -86,14 +79,14 @@ master_doc = "index"
 # General information about the project.
 project = "python-semver"
 copyright = f"{YEAR}, Kostiantyn Rybnikov and all"
-author = "Kostiantyn Rybnikov and all"
+author = "Kostiantyn Rybnikov, Tom Schraitle, Sebastien Celles, and others"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
-release = find_version("../src/semver/__about__.py")
+release = find_version(SRC_DIR / "semver/__about__.py")
 # The full version, including alpha/beta/rc tags.
 version = release  # .rsplit(u".", 1)[0]
 
@@ -174,7 +167,7 @@ html_theme_options = {
     "github_button": True,
     #:
     "github_type": "star",
-    #: whether to apply a ‘Fork me on Github’ banner
+    #: whether to apply a "Fork me on Github" banner
     #: in the top right corner of the page:
     # "github_banner": True,
     #

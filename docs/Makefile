@@ -8,6 +8,12 @@ SPHINXPROJ    = semver
 SOURCEDIR     = .
 BUILDDIR      = _build
 
+# Set the source directory for your project
+SRC_DIR       = ../src
+
+# Set the PYTHONPATH environment variable
+export PYTHONPATH := $(SRC_DIR):$(PYTHONPATH)
+
 # Put it first so that "make" without argument is like "make help".
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
