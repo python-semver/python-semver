@@ -1,0 +1,36 @@
+name: Feature request
+description: Suggest an idea for this project
+# title: ''
+labels: [enhancement]
+assignees: [tomschr]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature request!
+
+  - type: textarea
+    id: situation
+    attributes:
+      label: Situation
+      description: A clear and concise description of what the feature is. Ex. I'm always frustrated when [...]
+      placeholder: Describe the situation...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_solution
+    attributes:
+      label: Expected solution
+      description: A clear and concise description of what you want to happen.
+      placeholder: Describe the expected solution...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: A clear and concise description of any alternative solutions or features you've considered.
+      placeholder: Describe any alternatives...
