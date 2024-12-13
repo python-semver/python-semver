@@ -14,6 +14,7 @@ build:
     pre_install:
       - curl -LsSf https://astral.sh/uv/install.sh | sh
       - uv python install 3.11
+      - source $HOME/.local/bin/env
     post_install:
       - uv sync --all-extras --group devel
     pre_build:
