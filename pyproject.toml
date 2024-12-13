@@ -7,7 +7,6 @@
 
 [build-system]
 requires = [
-  # sync with setup.py until we discard non-pep-517/518
   "setuptools>=61",
   # "setuptools-scm>=8",
 ]
@@ -19,6 +18,8 @@ requires-python = ">=3.7"
 name = "semver"
 description = "Python helper for Semantic Versioning (https://semver.org)"
 readme = "README.rst"
+# PEP 639
+# licence = "BSD-2-Clause"
 # readme.content-type = "text/x-rst"
 license = { file = "LICENSE.txt" }
 authors = [
@@ -34,7 +35,7 @@ classifiers = [
     "Environment :: Web Environment",
     "Intended Audience :: Developers",
     "Development Status :: 5 - Production/Stable",
-    "License :: OSI Approved :: BSD License",
+    # "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.7",
@@ -92,6 +93,7 @@ docs = [
   "sphinx",  # ==7.0.1
   "sphinx-argparse",  # ==0.4.0
   "sphinx-autodoc-typehints",  # ==1.24.0
+  "restview",
 ]
 devel = [
   {include-group = "typing"},

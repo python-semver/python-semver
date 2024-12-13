@@ -278,7 +278,7 @@ name = "click"
 version = "8.1.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "platform_system == 'Windows'" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
     { name = "importlib-metadata", marker = "python_full_version < '3.8'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/96/d3/f04c7bfcf5c1862a2a5b845c6b2b360488cf47af55dfa79c98f6a6bf98b5/click-8.1.7.tar.gz", hash = "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de", size = 336121 }
@@ -876,16 +876,16 @@ wheels = [
 
 [[package]]
 name = "readme-renderer"
-version = "37.3"
+version = "36.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "bleach" },
     { name = "docutils" },
     { name = "pygments" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/81/c3/d20152fcd1986117b898f66928938f329d0c91ddc47f081c58e64e0f51dc/readme_renderer-37.3.tar.gz", hash = "sha256:cd653186dfc73055656f090f227f5cb22a046d7f71a841dfa305f55c9a513273", size = 29718 }
+sdist = { url = "https://files.pythonhosted.org/packages/15/4e/0ffa80eb3e0d0fcc0c6b901b36d4faa11c47d10b9a066fdd42f24c7e646a/readme_renderer-36.0.tar.gz", hash = "sha256:f71aeef9a588fcbed1f4cc001ba611370e94a0cd27c75b1140537618ec78f0a2", size = 28680 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/97/52/fd8a77d6f0a9ddeb26ed8fb334e01ac546106bf0c5b8e40dc826c5bd160f/readme_renderer-37.3-py3-none-any.whl", hash = "sha256:f67a16caedfa71eef48a31b39708637a6f4664c4394801a7b0d6432d13907343", size = 14055 },
+    { url = "https://files.pythonhosted.org/packages/0a/3e/ce07c86adbc46cfedf637dd77333184bcd0a913f9c169b0b3afc25f67b6b/readme_renderer-36.0-py3-none-any.whl", hash = "sha256:2c37e472ca96755caba6cc58bcbf673a5574bc033385a2ac91d85dfef2799876", size = 14076 },
 ]
 
 [[package]]
@@ -913,6 +913,20 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/f3/61/d7545dafb7ac2230c70d38d31cbfe4cc64f7144dc41f6e4e4b78ecd9f5bb/requests-toolbelt-1.0.0.tar.gz", hash = "sha256:7681a0a3d047012b5bdc0ee37d7f8f07ebe76ab08caeccfc3921ce23c88d5bc6", size = 206888 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/3f/51/d4db610ef29373b879047326cbf6fa98b6c1969d6f6dc423279de2b1be2c/requests_toolbelt-1.0.0-py2.py3-none-any.whl", hash = "sha256:cccfdd665f0a24fcf4726e690f65639d272bb0637b9b92dfd91a5568ccf6bd06", size = 54481 },
+]
+
+[[package]]
+name = "restview"
+version = "3.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "docutils" },
+    { name = "pygments" },
+    { name = "readme-renderer" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3d/d4/36ed06051e9702d3dae5f7bb0296b79b18621ff5a1bf43247509cbfeff8d/restview-3.0.2.tar.gz", hash = "sha256:8b4d75a0bed76b67b456ef7011f4eb6c98a556c9f837642df2202c7312fccc1a", size = 50048 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/11/69/4046cbec75d4574e84fa3b2be53487ae9054129527211961555631805849/restview-3.0.2-py3-none-any.whl", hash = "sha256:9fbd26507f6ddc436a49d0ffced5bc8102a898f289fe53c1234a17be46eb660d", size = 38020 },
 ]
 
 [[package]]
@@ -978,7 +992,6 @@ wheels = [
 
 [[package]]
 name = "semver"
-version = "3.0.3a1"
 source = { editable = "." }
 
 [package.dev-dependencies]
@@ -993,6 +1006,7 @@ devel = [
     { name = "pyright" },
     { name = "pytest" },
     { name = "pytest-cov" },
+    { name = "restview" },
     { name = "ruff" },
     { name = "sphinx" },
     { name = "sphinx-argparse" },
@@ -1002,6 +1016,7 @@ devel = [
     { name = "twine" },
 ]
 docs = [
+    { name = "restview" },
     { name = "sphinx" },
     { name = "sphinx-argparse" },
     { name = "sphinx-autodoc-typehints" },
@@ -1019,6 +1034,7 @@ gh-action = [
     { name = "pyright" },
     { name = "pytest" },
     { name = "pytest-cov" },
+    { name = "restview" },
     { name = "ruff" },
     { name = "sphinx" },
     { name = "sphinx-argparse" },
@@ -1054,6 +1070,7 @@ devel = [
     { name = "pyright" },
     { name = "pytest" },
     { name = "pytest-cov" },
+    { name = "restview" },
     { name = "ruff" },
     { name = "sphinx" },
     { name = "sphinx-argparse" },
@@ -1063,6 +1080,7 @@ devel = [
     { name = "twine" },
 ]
 docs = [
+    { name = "restview" },
     { name = "sphinx" },
     { name = "sphinx-argparse" },
     { name = "sphinx-autodoc-typehints" },
@@ -1080,6 +1098,7 @@ gh-action = [
     { name = "pyright" },
     { name = "pytest" },
     { name = "pytest-cov" },
+    { name = "restview" },
     { name = "ruff" },
     { name = "sphinx" },
     { name = "sphinx-argparse" },
