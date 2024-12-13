@@ -14,16 +14,14 @@ build:
     pre_install:
       - curl -LsSf https://astral.sh/uv/install.sh | sh
       - uv python install 3.11
-      - source $HOME/.local/bin/env
     post_install:
+      - source $HOME/.local/bin/env
       - uv sync --all-extras --group devel
     pre_build:
+      - source $HOME/.local/bin/env
       - uv run make -C docs html
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
   configuration: docs/conf.py
 
-#python:
-#  install:
-#    - requirements: docs/requirements.txt
