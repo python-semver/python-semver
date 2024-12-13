@@ -41,7 +41,7 @@ def _comparator(operator: Comparator) -> Comparator:
     @wraps(operator)
     def wrapper(self: "Version", other: Comparable) -> bool:
         comparable_types = (
-            Version,
+            type(self),
             dict,
             tuple,
             list,

@@ -1,4 +1,5 @@
 from semver import Version
+import pytest
 
 
 def test_subclass_from_versioninfo():
@@ -51,3 +52,20 @@ def test_replace_from_subclass():
     dev_version = version.replace(prerelease="dev.0")
 
     assert str(dev_version) == "v1.1.0-dev.0"
+
+
+def test_compare_with_subclass():
+    class SemVerSubclass(Version):
+        pass
+
+    with pytest.raises(TypeError):
+        SemVerSubclass.parse("1.0.0").compare(Version.parse("1.0.0"))
+    assert Version.parse("1.0.0").compare(SemVerSubclass.parse("1.0.0")) == 0
+
+    assert (
+        SemVerSubclass.parse("1.0.0").__eq__(Version.parse("1.0.0")) is NotImplemented
+    )
+    assert Version.parse("1.0.0").__eq__(SemVerSubclass.parse("1.0.0")) is True
+
+    assert SemVerSubclass.parse("1.0.0") == Version.parse("1.0.0")
+    assert Version.parse("1.0.0") == SemVerSubclass.parse("1.0.0")
