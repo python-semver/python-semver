@@ -10,6 +10,14 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.11"
+  jobs:
+    pre_install:
+      - curl -LsSf https://astral.sh/uv/install.sh | sh
+      - uv python install 3.11
+    post_install:
+      - uv sync --all-extras --group devel
+    pre_build:
+      - uv run make -C docs html
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
