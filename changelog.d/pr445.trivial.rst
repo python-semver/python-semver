@@ -1,0 +1,5 @@
+Improve private :func:`_nat_cmp` method:
+
+* Remove obsolete else.
+* Find a better way to identify digits without the :mod:`re` module.
+* Fix docstring in :meth:`Version.compare`
