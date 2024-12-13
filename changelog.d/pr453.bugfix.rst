@@ -1,2 +1,0 @@
-The check in ``_comparator`` does not match the check in :meth:`Version.compare`. 
-This breaks comparision with subclasses.

@@ -1,1 +1,0 @@
-Replace organization placeholder in license
