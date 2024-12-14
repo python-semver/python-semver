@@ -17,7 +17,6 @@ create a new release.
 1. Create a new branch `release/<VERSION>`.
 
 1. If one or several supported Python versions have been removed or added, verify that the 3 following files have been updated:
-   * `setup.cfg`
    * `tox.ini`
    * `.git/workflows/pythonpackage.yml`
    * `CITATION.cff`
