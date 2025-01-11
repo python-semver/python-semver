@@ -1,0 +1,88 @@
+name: 🐞Bug report
+description: Create a bug report to help us improve
+# title: ''
+labels: [bug]
+assignees: [tomschr]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks a lot for taking the time to fill out this bug report! 🐛
+        It will help us to improve the project for everyone. 🌟
+
+        Find help from the community on our [GitHub Discussions](https://github.com/python-semver/python-semver/discussions) page or
+        on our [Documentation](https://python-semver.readthedocs.io/en/latest/).
+
+  - type: dropdown
+    id: python_version
+    attributes:
+      label: Which version of Python is the problem with?
+      multiple: true
+      options:
+        - "3.7"
+        - "3.8"
+        - "3.9"
+        - "3.10"
+        - "3.11"
+        - "3.12"
+        - "3.13"
+        - "3.14"
+    validations:
+      required: true
+
+  - type: input
+    id: semver_version
+    attributes:
+      label: What semver version are you using?
+      description: You can find this with `pip show semver`
+      placeholder: 3.0.2
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: What OS are you using? (Add more in the Environment section)
+      multiple: true
+      options:
+        - Linux
+        - Windows
+        - macOS
+        - Other
+
+  - type: textarea
+    id: situation
+    attributes:
+      label: Situation
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the problem you see...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: How to reproduce
+      description: |
+        Steps to reproduce the behavior:
+        1. Run '...'
+        2. Scroll down to '....'
+        3. See error
+      placeholder: Describe the steps to reproduce the issue...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen.
+      placeholder: Describe the expected behavior...
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Optionally provide some more details about your environment.
+      placeholder: Describe your environment...
