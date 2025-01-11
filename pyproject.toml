@@ -129,6 +129,12 @@ version = {attr = "semver.__about__.__version__"}
 version_scheme = "post-release"
 local_scheme = "dirty-tag"
 
+# ------------
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/semver/"
+publish-url = "https://test.pypi.org/legacy/"
+
 
 [tool.mypy]
 # ignore_missing_imports = true

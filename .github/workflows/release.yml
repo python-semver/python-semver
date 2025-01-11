@@ -1,0 +1,196 @@
+---
+name: release
+
+# Taken from arjancodes/bragir/.github/workflows/test.yaml@main
+
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+a[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+b[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+rc.?[0-9]+"
+
+env:
+  PACKAGE_NAME: "semver"
+  OWNER: "python-semver"
+
+jobs:
+  details:
+    runs-on: ubuntu-latest
+    # needs: unit-test
+    outputs:
+      new_version: ${{ steps.release.outputs.new_version }}
+      suffix: ${{ steps.release.outputs.suffix }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Extract tag and Details
+        id: release
+        run: |
+          echo "::notice::Extracting tag and new version"
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            TAG_NAME=${GITHUB_REF#refs/tags/}
+            NEW_VERSION=$(echo $TAG_NAME | awk -F'-' '{print $1}')
+            SUFFIX=$(echo $TAG_NAME | grep -oP '[a-z]+[0-9]+' || echo "")
+            echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+            echo "suffix=$SUFFIX" >> "$GITHUB_OUTPUT"
+            echo "tag_name=$TAG_NAME" >> "$GITHUB_OUTPUT"
+            echo "Version is $NEW_VERSION"
+            echo "Suffix is $SUFFIX"
+            echo "Tag name is $TAG_NAME"
+          else
+            echo "::error,line=43::No tag found"
+            exit 1
+          fi
+
+  check_pypi:
+    needs: details
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch information from PyPI
+        run: |
+          response=$(curl -s https://pypi.org/pypi/${{ env.PACKAGE_NAME }}/json || echo '{"releases": {"0.0.0": []}}' )
+          # We need to find the latest release in the "releases" key:
+          latest_previous_version=$(echo $response | jq -r '
+            .releases
+            | keys
+            | map(
+                split(".")
+                | map(select(test("^[0-9]+$")) | tonumber)
+                | .[0:3]
+                )
+            | sort_by(.[0], .[1], .[2])
+            | last
+            | join(".")
+            ' )
+          # This is actually not really needed; if the curl command fails,
+          # it creates an artifical "0.0.0" release which is an error.
+          #if [ -z "$latest_previous_version" ]; then
+          #  echo "Package not found on PyPI."
+          #  latest_previous_version="0.0.0"
+          #fi
+          if [[ $latest_previous_version = "0.0.0" ]]; then
+            echo "::error::semver release cannot be 0.0.0. Package not found on PyPI"
+            exit 10
+          fi
+          echo "::notice::Latest version on PyPI: $latest_previous_version"
+          echo "latest_previous_version=$latest_previous_version" >> $GITHUB_ENV
+
+      - name: Compare versions and exit if not newer
+        run: |
+          NEW_VERSION=${{ needs.details.outputs.new_version }}
+          PREV_VERSION=$latest_previous_version
+          if [ "$(printf '%s\n' "$PREV_VERSION" "$NEW_VERSION" | sort -rV | head -n 1)" != "$NEW_VERSION" ] || [ "$NEW_VERSION" == "$PREV_VERSION" ]; then
+            echo "::error::[ERROR] The new version $NEW_VERSION is NOT greater than the latest version $PREV_VERSION on PyPI."
+            exit 1
+          else
+            echo "::notice::The new version $NEW_VERSION is greater than the latest version $PREV_VERSION on PyPI."
+          fi
+
+  setup_and_build:
+    needs: [details, check_pypi]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Bump version
+        run: |
+          NEW_VERSION="${{ needs.details.outputs.new_version }}"
+          sed -i "s/version = \"[0-9]*\.[0-9]*\.[0-9]*\"/version = \"$NEW_VERSION\"/" $GITHUB_WORKSPACE/pyproject.toml
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Build source and wheel distribution
+        run: |
+          uv build
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  pypi_publish:
+    name: Upload release to PyPI
+    needs: [setup_and_build, details]
+    runs-on: ubuntu-latest
+    environment:
+      name: release
+    permissions:
+      id-token: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Publish to PyPI
+        run: |
+          # See Settings > Environments > release
+          # https://github.com/python-semver/python-semver/settings/environments/5171753885/
+          uv publish --index testpypi \
+            --username ${{ vars.UV_PUBLISH_USERNAME }} \
+            --token ${{ secrets.UV_PUBLISH_TOKEN }}
+
+  github_release:
+    name: Create GitHub Release
+    needs: [setup_and_build, details]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch full history to avoid issues with tags and branches
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist/
+
+      - name: Create GitHub Release
+        id: create_release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create ${{ needs.details.outputs.tag_name }} dist/* --title ${{ needs.details.outputs.tag_name }} --generate-notes
+
+
+#   bump_version:
+#     needs: [details, github_release, pypi_publish]
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v3
+#         with:
+#           fetch-depth: 0 # Fetch full history to avoid issues with tags and branches
+
+#       - name: Bump version
+#         run: |
+#           NEW_VERSION="${{ needs.details.outputs.new_version }}"
+#           sed -i "s/version = \"[0-9]*\.[0-9]*\.[0-9]*\"/version = \"$NEW_VERSION\"/" $GITHUB_WORKSPACE/pyproject.toml
+
+#       #- uses: stefanzweifel/git-auto-commit-action@v5
+#       #  with:
+#       #    commit_message: Bumping version to ${{ needs.details.outputs.new_version }}
+#       #    branch: bump-version-${{ needs.details.outputs.new_version }}
+#       #    file_pattern: "pyproject.toml"
+#       #    skip_dirty_check: true
+#       #    create_branch: true
