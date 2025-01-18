@@ -18,11 +18,96 @@ This section covers the changes between major version 2 and version 3.
 
 .. towncrier release notes start
 
+Version 3.0.3
+=============
+
+:Released: 2025-01-18
+:Maintainer: Tom Schraitle
+
+
+Bug Fixes
+---------
+
+* :pr:`453`: The check in ``_comparator`` does not match the check in :meth:`Version.compare`. 
+  This breaks comparision with subclasses.
+
+
+
+Improved Documentation
+----------------------
+
+* :pr:`435`: Several small improvements for documentation:
+
+  * Add meta description to improve SEO
+  * Use canonicals on ReadTheDocs (commit 87f639f)
+  * Pin versions for reproducable doc builds (commit 03fb990)
+  * Add missing :file:`.readthedocs.yaml` file (commit ec9348a)
+  * Correct some smaller issues when building (commit f65feab)
+
+* :pr:`436`: Move search box more at the top. This makes it easier for
+  users as if the TOC is long, the search box isn't visible
+  anymore.
+
+
+
+Features
+--------
+
+* :pr:`439`: Improve type hints to fix TODOs
+
+
+
+Internal Changes
+----------------
+
+* :pr:`440`: Update workflow file
+
+* :pr:`446`: Add Python 3.13 to GitHub Actions
+
+* :pr:`447`: Modernize project configs with :file:`pyproject.toml` and
+  use Astral's uv command.
+
+  * In :file:`pyproject.toml`:
+
+    * Move all project related data from :file:`setup.cfg` to :file:`pyproject.toml`
+    * Use new dependency group from :pep:`735`
+    * Consolidate flake8, isort, pycodestyle with ruff
+    * Split towncrier config type "trivial" into "trivial" and "internal"
+
+  * Create config file for ruff (:file:`.ruff.toml`)
+  * Create config file for pytest (:file:`.pytest.ini`)
+  * Simplify :file:`tox.ini` and remove old stuff
+  * Document installation with new :command:`uv` command
+  * Simplify Sphinx config with :func:`find_version()`
+  * Update the authors
+  * Use :command:`uv` in GitHub Action :file:`python-testing.yml` workflow
+
+* Update :file:`release-procedure.md`.
+
+* :pr:`451`: Turn our Markdown issue templates into YAML
+
+
+Trivial Changes
+---------------
+
+* :pr:`438`: Replace organization placeholder in license
+
+* :pr:`445`: Improve private :func:`_nat_cmp` method:
+
+  * Remove obsolete else.
+  * Find a better way to identify digits without the :mod:`re` module.
+  * Fix docstring in :meth:`Version.compare`
+
+
+
+----
+
+
 Version 3.0.2
 =============
 
 :Released: 2023-10-09
-:Maintainer:
+:Maintainer: Tom Schraitle
 
 
 Bug Fixes
