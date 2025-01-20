@@ -1,6 +1,18 @@
 include *.rst
 include *.txt
-include tests/test_*.py
+include tests/*.py
+include Makefile
+include *.md
+include changelog.d/*
+include CITATION.cff
+include tox.ini
+
+# The dot files:
+include .coveragerc
+include .editorconfig
+include .gitignore
+include .readthedocs.yaml
+
 
 prune docs/_build
 recursive-exclude .github  *
