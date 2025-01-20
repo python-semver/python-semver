@@ -1,8 +1,26 @@
+include *.md
 include *.rst
 include *.txt
-include tests/test_*.py
+include CONTRIBUTORS
+include CITATION.cff
+include Makefile
+include changelog.d/*
+graft docs/**
+include tests/*.py
+include tox.ini
+include .pytest.ini
+include .ruff.toml
+include uv.lock
+
+# The dot files:
+include .coveragerc
+include .editorconfig
+include .gitignore
+include .readthedocs.yaml
+
 
 prune docs/_build
 recursive-exclude .github  *
+prune docs/**/__pycache__
 
 global-exclude __pycache__

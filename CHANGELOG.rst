@@ -18,6 +18,25 @@ This section covers the changes between major version 2 and version 3.
 
 .. towncrier release notes start
 
+Version 3.0.4
+=============
+
+:Released: 2025-01-24
+:Maintainer: Tom Schraitle
+
+
+Bug Fixes
+---------
+
+* :gh:`459`: Fix 3.0.3:
+
+  * :pr:`457`: Re-enable Trove license identifier
+  * :pr:`456`: Fix source dist file
+
+
+----
+
+
 Version 3.0.3
 =============
 
