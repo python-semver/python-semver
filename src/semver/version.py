@@ -255,7 +255,6 @@ class Version:
 
         :param string: the prerelease version to increment
         :return: the incremented string
-
         """
         match = Version._LAST_PRERELEASE.search(string)
         if match:
@@ -353,6 +352,8 @@ class Version:
         '1'
         >>> ver.bump_prerelease(None).prerelease
         'rc.1'
+        >>> str(ver.bump_prerelease(bump_when_empty=True))
+        '3.4.6-rc.1'
         """
         cls = type(self)
         patch = self._patch
