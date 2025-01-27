@@ -9,7 +9,7 @@ Raising Parts of a Version
    For example, having version ``1.0.0`` and raising the pre-release
    will lead to ``1.0.0-rc.1``, but ``1.0.0-rc.1`` is smaller than ``1.0.0``.
 
-   You can work around this by supplying the `bump_when_empty=true` argument to the
+   To avoid this, set `bump_when_empty=True` in the
    :meth:`~semver.version.Version.bump_prerelease` method, or by using the
    method :meth:`~semver.version.Version.next_version`
    in section :ref:`increase-parts-of-a-version`.
@@ -68,10 +68,9 @@ is not taken into account:
     >>> str(Version.parse("3.4.5-rc.1").bump_prerelease(''))
     '3.4.5-rc.2'
 
-If the last part of the existing prerelease, split by dots (`.`), is not numeric,
-we will add `.0` to ensure the new prerelease is higher than the previous one
-(otherwise, raising `rc9` to `rc10` would result in a lower version, as non-numeric
-parts are sorted alphabetically):
+To ensure correct ordering, we append `.0` to the last prerelease identifier
+if it's not numeric. This prevents cases where `rc9` would incorrectly sort
+lower than `rc10` (non-numeric identifiers are compared alphabetically):
 
 .. code-block:: python
 

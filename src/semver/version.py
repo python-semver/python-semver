@@ -334,7 +334,7 @@ class Version:
         Raise the prerelease part of the version, return a new object but leave
         self untouched.
 
-        .. versionchanged:: VERSION
+        .. versionchanged:: 3.1.0
            Parameter `bump_when_empty` added. When set to true, bumps the patch version
            when called with a version that has no prerelease segment, so the return
            value will be considered a newer version.
