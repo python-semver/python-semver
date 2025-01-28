@@ -359,18 +359,6 @@ build='build.10')
         else:
             build = str(token) + ".0"
 
-        # self._build or (token or "build") + ".0"
-        build = cls._increment_string(build)
-        if self._build is not None:
-            build = self._build
-        elif token == "":
-            build = "0"
-        elif token is None:
-            build = "build.0"
-        else:
-            build = str(token) + ".0"
-
-        # self._build or (token or "build") + ".0"
         build = cls._increment_string(build)
         return cls(self._major, self._minor, self._patch, self._prerelease, build)
 
