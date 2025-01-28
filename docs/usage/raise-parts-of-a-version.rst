@@ -3,13 +3,14 @@ Raising Parts of a Version
 
 .. note::
 
-   Keep in mind, "raising" the pre-release only will make your
-   complete version *lower* than before.
+   Keep in mind, by default, "raising" the pre-release for a version without an existing
+   prerelease part, only will make your complete version *lower* than before.
 
    For example, having version ``1.0.0`` and raising the pre-release
    will lead to ``1.0.0-rc.1``, but ``1.0.0-rc.1`` is smaller than ``1.0.0``.
 
-   If you search for a way to take into account this behavior, look for the
+   To avoid this, set `bump_when_empty=True` in the
+   :meth:`~semver.version.Version.bump_prerelease` method, or by using the
    method :meth:`~semver.version.Version.next_version`
    in section :ref:`increase-parts-of-a-version`.
 
@@ -67,4 +68,14 @@ is not taken into account:
     >>> str(Version.parse("3.4.5-rc.1").bump_prerelease(''))
     '3.4.5-rc.2'
 
+To ensure correct ordering, we append `.0` to the last prerelease identifier
+if it's not numeric. This prevents cases where `rc9` would incorrectly sort
+lower than `rc10` (non-numeric identifiers are compared alphabetically):
+
+.. code-block:: python
+
+    >>> str(Version.parse("3.4.5-rc9").bump_prerelease())
+    '3.4.5-rc9.0'
+    >>> str(Version.parse("3.4.5-rc.9").bump_prerelease())
+    '3.4.5-rc.10'
 

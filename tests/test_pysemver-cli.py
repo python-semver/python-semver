@@ -55,7 +55,7 @@ def test_should_parse_cli_arguments(cli, expected):
         (
             cmd_bump,
             Namespace(bump="prerelease", version="1.2.3-rc1"),
-            does_not_raise("1.2.3-rc2"),
+            does_not_raise("1.2.3-rc1.0"),
         ),
         (
             cmd_bump,
