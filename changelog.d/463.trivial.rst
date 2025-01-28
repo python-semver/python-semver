@@ -1,0 +1,1 @@
+Remove double code in :meth:`Version.bump_build`
