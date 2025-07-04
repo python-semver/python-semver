@@ -9,16 +9,15 @@ According to its homepage, `Pydantic <https://pydantic-docs.helpmanual.io>`_
 "enforces type hints at runtime, and provides user friendly errors when data
 is invalid."
 
-If you are working with Pydantic>2.0 and pydantic-extra-types>=2.10.0 use the built in `_VersionPydanticAnnotation` type, which wraps the :class:`Version <semver.version.Version>` class.
+If you are working with Pydantic>2.0 and pydantic-extra-types>=2.10.5 use the built in `SemanticVersion` type, which wraps the :class:`Version <semver.version.Version>` class.
 
     .. code-block:: python
 
         from pydantic import BaseModel
-
-        from pydantic_extra_types.server import _VersionPydanticAnnotation
+        from pydantic_extra_types.semantic_version import SemanticVersion
 
         class appVersion(BaseModel):
-            version: _VersionPydanticAnnotation
+            version: SemanticVersion
         
         app_version = appVersion(version="1.2.3")
 
