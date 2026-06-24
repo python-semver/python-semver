@@ -198,6 +198,16 @@ def test_next_version_with_invalid_parts():
         ("0.2.0-rc.1", "patch", "0.2.0"),  # same as "minor"
         ("1.0.0-rc.1", "patch", "1.0.0"),  # same as "major"
         ("1.0.0-rc.1", "minor", "1.0.0"),  # same as "major"
+        # build-only versions: build metadata does not affect precedence,
+        # so next_version should bump the version, not just strip the build
+        ("1.2.3+build.5", "patch", "1.2.4"),
+        ("1.0.0+build.5", "patch", "1.0.1"),
+        ("0.1.4+build.5", "patch", "0.1.5"),
+        ("1.2.0+build.5", "minor", "1.3.0"),
+        ("1.0.0+build.5", "major", "2.0.0"),
+        # prerelease+build: build is stripped along with prerelease during finalization
+        ("1.2.3-rc.1+build.5", "patch", "1.2.3"),
+        ("1.2.3-rc.1+build.5", "prerelease", "1.2.3-rc.2"),
     ],
 )
 def test_next_version_with_versioninfo(version, part, expected):

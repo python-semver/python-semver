@@ -471,7 +471,7 @@ build='build.10')
                 f"Invalid part. Expected one of {validparts}, but got {part!r}"
             )
         version = self
-        if (version.prerelease or version.build) and (
+        if version.prerelease and (
             part == "patch"
             or (part == "minor" and version.patch == 0)
             or (part == "major" and version.minor == version.patch == 0)
