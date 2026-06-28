@@ -14,7 +14,7 @@ build-backend = "setuptools.build_meta"
 
 
 [project]
-requires-python = ">=3.7"
+requires-python = ">=3.10"
 name = "semver"
 description = "Python helper for Semantic Versioning (https://semver.org)"
 readme = "README.rst"
@@ -38,9 +38,6 @@ classifiers = [
     "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -66,34 +63,31 @@ pysemver = "semver.cli:main"
 # See https://github.com/astral-sh/uv/issues/5632
 # See https://peps.python.org/pep-0735/
 typing = [
-  "mypy",
-  "pyright",
+  "mypy<=2.1.0",
+  "pyright<=1.2",
 ]
 formatting = [
-  "black",
-  "ruff",
-  "docformatter",
+  "ruff<=0.16",
 ]
 test = [
-  "tox",
-  "pytest",
-  "pytest-cov",
+  "tox<=4.56.1",
+  "pytest<=9.1.1",
+  "pytest-cov<=7.1.0",
   
 ]
 publish = [
-  "twine",
+  "twine<=6.2.0",
   # pyproject-build is required for building the package
-  "build",
+  "build<=1.5.0",
 ]
 changelog = [
-  "towncrier",
+  "towncrier==25.8.0",
 ]
 docs = [
   # Required in .readthedocs.yaml
-  "sphinx",  # ==7.0.1
-  "sphinx-argparse",  # ==0.4.0
-  "sphinx-autodoc-typehints",  # ==1.24.0
-  "restview",
+  "sphinx<=8.1.3",
+  "sphinx-argparse<=0.5.2",
+  "sphinx-autodoc-typehints==3.0.1",
 ]
 devel = [
   {include-group = "typing"},
