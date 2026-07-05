@@ -289,7 +289,7 @@ class Version:
 
         :return: new object with the raised major part
 
-        >>> ver = semver.parse("3.4.5")
+        >>> ver = semver.Version.parse("3.4.5")
         >>> ver.bump_major()
         Version(major=4, minor=0, patch=0, prerelease=None, build=None)
         """
@@ -303,7 +303,7 @@ class Version:
 
         :return: new object with the raised minor part
 
-        >>> ver = semver.parse("3.4.5")
+        >>> ver = semver.Version.parse("3.4.5")
         >>> ver.bump_minor()
         Version(major=3, minor=5, patch=0, prerelease=None, build=None)
         """
@@ -317,7 +317,7 @@ class Version:
 
         :return: new object with the raised patch part
 
-        >>> ver = semver.parse("3.4.5")
+        >>> ver = semver.Version.parse("3.4.5")
         >>> ver.bump_patch()
         Version(major=3, minor=4, patch=6, prerelease=None, build=None)
         """
@@ -345,7 +345,7 @@ class Version:
         :return: new :class:`Version` object with the raised prerelease part.
             The original object is not modified.
 
-        >>> ver = semver.parse("3.4.5")
+        >>> ver = semver.Version.parse("3.4.5")
         >>> ver.bump_prerelease().prerelease
         'rc.1'
         >>> ver.bump_prerelease('').prerelease
@@ -380,7 +380,7 @@ class Version:
         :return: new :class:`Version` object with the raised build part.
             The original object is not modified.
 
-        >>> ver = semver.parse("3.4.5-rc.1+build.9")
+        >>> ver = semver.Version.parse("3.4.5-rc.1+build.9")
         >>> ver.bump_build()
         Version(major=3, minor=4, patch=5, prerelease='rc.1', \
 build='build.10')
@@ -456,7 +456,7 @@ build='build.10')
         "prerelease" part. It gives you the next patch version of the
         prerelease, for example:
 
-        >>> str(semver.parse("0.1.4").next_version("prerelease"))
+        >>> str(semver.Version.parse("0.1.4").next_version("prerelease"))
         '0.1.5-rc.1'
 
         :param part: One of "major", "minor", "patch", or "prerelease"
