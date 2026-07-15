@@ -19,6 +19,6 @@ would perhaps a better fit.
     >>> str(Version.parse("3.4.5-pre.2+build.4").next_version(part="patch"))
     '3.4.5'
     >>> str(Version.parse("3.4.5+build.4").next_version(part="patch"))
-    '3.4.5'
+    '3.4.6'
     >>> str(Version.parse("0.1.4").next_version("prerelease"))
     '0.1.5-rc.1'
