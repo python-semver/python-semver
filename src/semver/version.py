@@ -482,6 +482,10 @@ build='build.10')
         if part in cls.NAMES[:3]:
             return getattr(version, "bump_" + part)()
         else:
+            if version.prerelease is not None and prerelease_token:
+                current_token = version.prerelease.split(".")[0]
+                if current_token != prerelease_token:
+                    return version.replace(prerelease=f"{prerelease_token}.1", build=None)
             return version.bump_prerelease(prerelease_token, bump_when_empty=True)
 
     @_comparator
