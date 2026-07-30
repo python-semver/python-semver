@@ -15,7 +15,7 @@ would perhaps a better fit.
 
     >>> v = Version.parse("3.4.5-pre.2+build.4")
     >>> str(v.next_version(part="prerelease"))
-    '3.4.5-pre.3'
+    '3.4.5-rc.1'
     >>> str(Version.parse("3.4.5-pre.2+build.4").next_version(part="patch"))
     '3.4.5'
     >>> str(Version.parse("3.4.5+build.4").next_version(part="patch"))
