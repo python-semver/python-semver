@@ -40,10 +40,16 @@ def cmd_bump(args: argparse.Namespace) -> str:
         # print the help and exit
         args.parser.parse_args(["bump", "-h"])
 
+    # print(">>> args:", args)
+
     ver = Version.parse(args.version)
     # get the respective method and call it
     func = getattr(ver, maptable[cast(str, args.bump)])
-    return str(func())
+    if args.bump in ("prerelease", "build"):
+        fargs = {"token": args.token}
+    else:
+        fargs = {}
+    return str(func(**fargs))
 
 
 def cmd_check(args: argparse.Namespace) -> None:
@@ -108,13 +114,14 @@ def createparser() -> argparse.ArgumentParser:
     sb = parser_bump.add_subparsers(title="Bump commands", dest="bump")
 
     # Create subparsers for the bump subparser:
-    for p in (
-        sb.add_parser("major", help="Bump the major part of the version"),
-        sb.add_parser("minor", help="Bump the minor part of the version"),
-        sb.add_parser("patch", help="Bump the patch part of the version"),
-        sb.add_parser("prerelease", help="Bump the prerelease part of the version"),
-        sb.add_parser("build", help="Bump the build part of the version"),
-    ):
+    maptable = {"prerelease": "rc", "build": "build"}
+    for item in ("major", "minor", "patch", "prerelease", "build"):
+        p = sb.add_parser(item, help="Bump the {} part of the version".format(item))
+        if item in ("prerelease", "build"):
+            p.add_argument("--token",
+                           default=maptable.get(item),
+                           help="The token to use for {}".format(item))
+
         p.add_argument("version", help="Version to raise")
 
     # Create the check subcommand

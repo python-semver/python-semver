@@ -23,14 +23,30 @@ def does_not_raise(item):
 @pytest.mark.parametrize(
     "cli,expected",
     [
-        (["bump", "major", "1.2.3"], Namespace(bump="major", version="1.2.3")),
-        (["bump", "minor", "1.2.3"], Namespace(bump="minor", version="1.2.3")),
-        (["bump", "patch", "1.2.3"], Namespace(bump="patch", version="1.2.3")),
         (
-            ["bump", "prerelease", "1.2.3"],
-            Namespace(bump="prerelease", version="1.2.3"),
+            ["bump", "major", "1.2.3"],
+            Namespace(bump="major", version="1.2.3"),
         ),
-        (["bump", "build", "1.2.3"], Namespace(bump="build", version="1.2.3")),
+        (
+            ["bump", "minor", "2.3.4"],
+            Namespace(bump="minor", version="2.3.4"),
+        ),
+        (
+            ["bump", "patch", "3.4.5"],
+            Namespace(bump="patch", version="3.4.5"),
+        ),
+        (
+            ["bump", "prerelease", "4.5.6"],
+            Namespace(
+                bump="prerelease",
+                token="rc",
+                version="4.5.6",
+            ),
+        ),
+        (
+            ["bump", "build", "5.6.7"],
+            Namespace(bump="build", token="build", version="5.6.7"),
+        ),
         # ---
         (["compare", "1.2.3", "2.1.3"], Namespace(version1="1.2.3", version2="2.1.3")),
         # ---
@@ -54,12 +70,12 @@ def test_should_parse_cli_arguments(cli, expected):
         (cmd_bump, Namespace(bump="patch", version="1.2.3"), does_not_raise("1.2.4")),
         (
             cmd_bump,
-            Namespace(bump="prerelease", version="1.2.3-rc1"),
+            Namespace(bump="prerelease", version="1.2.3-rc1", token="rc"),
             does_not_raise("1.2.3-rc1.0"),
         ),
         (
             cmd_bump,
-            Namespace(bump="build", version="1.2.3+build.13"),
+            Namespace(bump="build", version="1.2.3+build.13", token="rc"),
             does_not_raise("1.2.3+build.14"),
         ),
         # compare subcommand
