@@ -27,6 +27,11 @@ from ._types import (
     VersionPart,
 )
 
+try:
+    from fast_semver_rs_backend import parse_parts as _native_parse_parts
+except ImportError:  # optional backend is deliberately absent on the default path
+    _native_parse_parts = None
+
 # These types are required here because of circular imports
 Comparable = Union["Version", Dict[str, VersionPart], Collection[VersionPart], str]
 Comparator = Callable[["Version", Comparable], bool]
@@ -661,6 +666,14 @@ prerelease='pre.2', build='build.4')
             version = version.decode("UTF-8")
         elif not isinstance(version, String.__args__):  # type: ignore
             raise TypeError("not expecting type '%s'" % type(version))
+
+        if _native_parse_parts is not None and not optional_minor_and_patch:
+            try:
+                return cls(*_native_parse_parts(version))
+            except ValueError:
+                # The backend uses bounded Rust integers. Falling through keeps
+                # Python's arbitrary-size integer and exact error contracts.
+                pass
 
         if optional_minor_and_patch:
             match = cls._REGEX_OPTIONAL_MINOR_AND_PATCH.match(version)

@@ -55,6 +55,11 @@ Documentation = "https://python-semver.rtfd.io"
 Releases = "https://github.com/python-semver/python-semver/releases"
 "Bug Tracker" = "https://github.com/python-semver/python-semver/issues"
 
+[project.optional-dependencies]
+native = [
+  "fast-semver-rs-backend>=0.1.1; platform_python_implementation == 'CPython'",
+]
+
 
 [project.scripts]
 pysemver = "semver.cli:main"
