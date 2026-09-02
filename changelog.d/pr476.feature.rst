@@ -1,0 +1,3 @@
+Added optional ``[native]`` extra to accelerate parsing on CPython via the 
+``fast-semver-rs-backend`` package. The pure-Python parser remains the default; 
+the native backend is opt-in and only available on CPython.

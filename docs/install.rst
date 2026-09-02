@@ -54,6 +54,27 @@ Then use the command :command:`uv` to install the package:
     uv pip install semver
 
 
+Optional Native Backend
+-----------------------
+
+The ``semver`` package provides an optional native backend that can accelerate version parsing on CPython.
+Install it with the ``[native]`` extra:
+
+.. code-block:: bash
+
+    pip3 install 'semver[native]'
+
+Or with :command:`uv`:
+
+.. code-block:: bash
+
+    uv pip install 'semver[native]'
+
+The native backend uses the ``fast-semver-rs-backend`` package, which is only available
+on CPython. On other Python implementations or when the extra is not installed,
+``semver`` automatically falls back to its pure-Python parser. No code changes are required.
+
+
 Linux Distributions
 -------------------
 
