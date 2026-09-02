@@ -457,11 +457,23 @@ name = "exceptiongroup"
 version = "1.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/50/79/66800aadf48771f6b62f7eb014e352e5d06856655206165d775e675a02c9/exceptiongroup-1.3.1.tar.gz", hash = "sha256:8b412432c6055b0b7d14c310000ae93352ed6754f70fa8f7c34141f91c4e3219", size = 30371, upload-time = "2025-11-21T23:01:54.787Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/8a/0e/97c33bf5009bdbac74fd2beace167cab3f978feb69cc36f1ef79360d6c4e/exceptiongroup-1.3.1-py3-none-any.whl", hash = "sha256:a7a39a3bd276781e98394987d3a5701d0c4edffb633bb7a5144577f82c773598", size = 16740, upload-time = "2025-11-21T23:01:53.443Z" },
+]
+
+[[package]]
+name = "fast-semver-rs-backend"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/93/c8/87f9efd2f679f5625b5264ceeb5ef3c868b75f114863b0fa43909e170870/fast_semver_rs_backend-0.1.1-cp37-abi3-macosx_10_12_x86_64.whl", hash = "sha256:f783e6ec658ee13fd540b9c60872a6086e680deabcbcf222ce9c68516078e6af", size = 206407, upload-time = "2026-09-02T06:18:37.705Z" },
+    { url = "https://files.pythonhosted.org/packages/95/82/813f2b13687bc8cc7876ab889bca31a91b541c8ffc6ff8df39334508d93f/fast_semver_rs_backend-0.1.1-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:ca9675f90ae6e97df4ee2388a1a86f3b732f91720cb6bc5f7643b99bedcd4d4e", size = 204117, upload-time = "2026-09-02T06:18:39.571Z" },
+    { url = "https://files.pythonhosted.org/packages/66/a0/c78ad12f82a0caa1f627ca3ec4d53957471e9fb8fe63ab2d86a7270957f8/fast_semver_rs_backend-0.1.1-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:982391ced44a6971ab8ade43a9701786f451c7172af75c415c146c0e9e9a76ed", size = 231976, upload-time = "2026-09-02T06:18:41.203Z" },
+    { url = "https://files.pythonhosted.org/packages/d6/4e/735ca0d86deec16f8ffc67d2694c6852aff354d6c609695b56ee6d490371/fast_semver_rs_backend-0.1.1-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c675cf282293d783cea0297f02997256fb93422b6680b0b5a24f68dbb047dd70", size = 238546, upload-time = "2026-09-02T06:18:42.776Z" },
+    { url = "https://files.pythonhosted.org/packages/83/d1/4a86a81cf586de28e0679ddb1e8bdf87ef21a0972e11705e64e52b0c30fa/fast_semver_rs_backend-0.1.1-cp37-abi3-win_amd64.whl", hash = "sha256:228958dde973a8fe83f1f54c5ef0480c01e775b06436773d707b7f8ea4296c81", size = 106761, upload-time = "2026-09-02T06:18:44.264Z" },
 ]
 
 [[package]]
@@ -508,7 +520,7 @@ name = "importlib-metadata"
 version = "9.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "zipp" },
+    { name = "zipp", marker = "python_full_version < '3.12'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/a9/01/15bb152d77b21318514a96f43af312635eb2500c96b55398d020c93d86ea/importlib_metadata-9.0.0.tar.gz", hash = "sha256:a4f57ab599e6a2e3016d7595cfd72eb4661a5106e787a95bcc90c7105b831efc", size = 56405, upload-time = "2026-03-20T06:42:56.999Z" }
 wheels = [
@@ -1124,6 +1136,11 @@ wheels = [
 name = "semver"
 source = { editable = "." }
 
+[package.optional-dependencies]
+native = [
+    { name = "fast-semver-rs-backend", marker = "platform_python_implementation == 'CPython'" },
+]
+
 [package.dev-dependencies]
 changelog = [
     { name = "towncrier" },
@@ -1180,6 +1197,8 @@ typing = [
 ]
 
 [package.metadata]
+requires-dist = [{ name = "fast-semver-rs-backend", marker = "platform_python_implementation == 'CPython' and extra == 'native'", specifier = ">=0.1.1" }]
+provides-extras = ["native"]
 
 [package.metadata.requires-dev]
 changelog = [{ name = "towncrier", specifier = "==25.8.0" }]
