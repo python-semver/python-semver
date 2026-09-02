@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+# selftest marker: keep for fork CI path filter
+
+
 import importlib.util
 
 import pytest
