@@ -570,7 +570,17 @@ build='build.10')
         return version
 
     def __hash__(self) -> int:
-        return hash(self.to_tuple()[:4])
+        # Normalise the prerelease the same way _nat_cmp (and therefore
+        # __eq__) does: numeric identifiers compare as ints, so "1.0.0-01"
+        # and "1.0.0-1" are equal and MUST hash equal (see #283, which
+        # established that equal versions have equal hashes).
+        prerelease = self._prerelease
+        if prerelease is not None:
+            prerelease = tuple(
+                int(ident) if ident.isdigit() else ident
+                for ident in prerelease.split(".")
+            )
+        return hash((self._major, self._minor, self._patch, prerelease))
 
     def finalize_version(self) -> "Version":
         """

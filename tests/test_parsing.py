@@ -163,6 +163,22 @@ def test_equal_versions_have_equal_hashes():
     assert v2 in s
 
 
+def test_equal_versions_with_numeric_prerelease_have_equal_hashes():
+    # A numeric prerelease identifier compares numerically, so these two
+    # versions are equal; equal versions must hash equally (see #283).
+    v1 = Version(1, 2, 3, prerelease="1")
+    v2 = Version(1, 2, 3, prerelease="01")
+    assert v1 == v2
+    assert hash(v1) == hash(v2)
+    d = {}
+    d[v1] = 1
+    d[v2] = 2
+    assert d[v1] == 2
+    s = set()
+    s.add(v1)
+    assert v2 in s
+
+
 def test_parse_method_for_version_info():
     s_version = "1.2.3-alpha.1.2+build.11.e0f985a"
     v = Version.parse(s_version)
