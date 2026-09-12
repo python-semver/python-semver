@@ -79,3 +79,14 @@ lower than `rc10` (non-numeric identifiers are compared alphabetically):
     >>> str(Version.parse("3.4.5-rc.9").bump_prerelease())
     '3.4.5-rc.10'
 
+The same applies to :meth:`~semver.version.Version.bump_build`: if the
+last part of the dot-separated build metadata is not numeric, ``.0`` is
+appended to ensure a raised build:
+
+.. code-block:: python
+
+    >>> str(Version.parse("3.4.5+build.4").bump_build())
+    '3.4.5+build.5'
+    >>> str(Version.parse("3.4.5+alpha").bump_build())
+    '3.4.5+alpha.0'
+

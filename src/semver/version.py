@@ -389,6 +389,8 @@ class Version:
         >>> ver.bump_build()
         Version(major=3, minor=4, patch=5, prerelease='rc.1', \
 build='build.10')
+        >>> str(semver.Version.parse("3.4.5-rc.1+alpha").bump_build())
+        '3.4.5-rc.1+alpha.0'
         """
         cls = type(self)
         if self._build is not None:
@@ -401,6 +403,11 @@ build='build.10')
             build = str(token) + ".0"
 
         build = cls._increment_string(build)
+        if build == self._build:
+            # _increment_string leaves a build without any digits
+            # unchanged. Raise it nevertheless by appending ".0",
+            # analogous to _increment_prerelease (see :gh:`460`).
+            build += ".0"
         return cls(self._major, self._minor, self._patch, self._prerelease, build)
 
     def compare(self, other: Comparable) -> int:
