@@ -1,1 +1,0 @@
-Improve test coverage to 100% by ignoring the optional Rust backend fallback.

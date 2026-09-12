@@ -18,6 +18,65 @@ This section covers the changes between major version 2 and version 3.
 
 .. towncrier release notes start
 
+Version 3.1.0
+=============
+
+:Released: 2026-09-12
+:Maintainer: Tom Schraitle
+
+
+Bug Fixes
+---------
+
+* :pr:`478`: ``Version.parse()`` and ``Version.is_valid()`` now reject non-ASCII digits and
+  trailing newlines, in accordance with the SemVer grammar. Optional minor and
+  patch parsing applies the same character restrictions.
+
+* :pr:`479`: Comparing a :class:`~semver.Version` with a ``dict``, ``tuple``, or ``list`` that cannot construct a valid version (for example, an empty collection, wrong number of parts, non-numeric parts, or unknown keys) no longer raises internal errors from ``Version.__init__``. The comparison operators now return :py:const:`NotImplemented` for such operands, following the general rule for invalid comparison operand types: equality evaluates to ``False`` and ordering raises Python's standard :py:exc:`TypeError` (for example, ``'>' not supported between instances of 'Version' and 'dict'``).
+
+* :pr:`480`: (:meth:`~semver.version.Version.bump_build`) will now add ``.0`` to an existing build when the last segment of the current build metadata, split by dots (``.``), is not numeric. This is to ensure the bumped version contains a raised build instead of silently returning an unchanged version. For example, ``1.2.3+alpha`` is bumped to ``1.2.3+alpha.0``. This mirrors the corresponding fix for the prerelease part (:gh:`460`). Related to :gh:`466`.
+
+* :gh:`460`: :meth:`~semver.version.Version.bump_prerelease` will now add `.0` to an
+  existing prerelease when the last segment of the current prerelease, split by
+  dots (`.`), is not numeric. This is to ensure the new prerelease is considered
+  higher than the previous one.
+
+  :meth:`~semver.version.Version.bump_prerelease` now also support an argument
+  `bump_when_empty` which will bump the patch version if there is no existing
+  prerelease, to ensure the resulting version is considered a higher version than
+  the previous one.
+
+
+
+Features
+--------
+
+* :pr:`476`: Added optional ``[native]`` extra to accelerate parsing on CPython via the 
+  ``fast-semver-rs-backend`` package. The pure-Python parser remains the default; 
+  the native backend is opt-in and only available on CPython.
+
+
+
+Internal Changes
+----------------
+
+: Update GitHub Actions for astral-sh/setup-uv (version 0.10.1), github/codeql-action (version 4)
+
+
+
+Trivial Changes
+---------------
+
+* :gh:`463`: Remove double code in :meth:`Version.bump_build`
+
+: Improve test coverage to 100% by ignoring the optional Rust backend fallback.
+
+: Improve test suite for comparisons and fix test coverage.
+
+: Suppress deprecation warnings in test suite.
+
+
+
 Version 3.0.4
 =============
 
