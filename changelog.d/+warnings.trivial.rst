@@ -1,0 +1,1 @@
+Suppress deprecation warnings in test suite.
