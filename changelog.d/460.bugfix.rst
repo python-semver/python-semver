@@ -1,9 +1,0 @@
-:meth:`~semver.version.Version.bump_prerelease` will now add `.0` to an
-existing prerelease when the last segment of the current prerelease, split by
-dots (`.`), is not numeric. This is to ensure the new prerelease is considered
-higher than the previous one.
-
-:meth:`~semver.version.Version.bump_prerelease` now also support an argument
-`bump_when_empty` which will bump the patch version if there is no existing
-prerelease, to ensure the resulting version is considered a higher version than
-the previous one.

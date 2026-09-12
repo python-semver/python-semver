@@ -1,3 +1,0 @@
-``Version.parse()`` and ``Version.is_valid()`` now reject non-ASCII digits and
-trailing newlines, in accordance with the SemVer grammar. Optional minor and
-patch parsing applies the same character restrictions.
