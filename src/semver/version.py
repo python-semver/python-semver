@@ -674,7 +674,7 @@ prerelease='pre.2', build='build.4')
         elif not isinstance(version, String.__args__):  # type: ignore
             raise TypeError("not expecting type '%s'" % type(version))
 
-        if _native_parse_parts is not None and not optional_minor_and_patch:
+        if _native_parse_parts is not None and not optional_minor_and_patch:  # pragma: no cover
             try:
                 return cls(*_native_parse_parts(version))
             except ValueError:
