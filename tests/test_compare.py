@@ -302,3 +302,28 @@ def test_should_compare_prerelease_and_build_with_numbers():
     assert Version(1, 9, 1, 1, 1) < Version(1, 9, 1, 2, 1)
     assert Version("2") < Version(10)
     assert Version("2") < Version("10")
+
+def test_direct_compare_with_collections():
+    v1 = Version(1, 0, 0)
+    assert v1.compare((1, 0, 0)) == 0
+    assert v1.compare([1, 0, 0]) == 0
+    assert v1.compare({"major": 1, "minor": 0, "patch": 0}) == 0
+
+@pytest.mark.parametrize(
+    "other",
+    (
+        1,
+        1.0,
+        1.23,
+        1 + 5j,
+    ),
+    ids=[
+        "int",
+        "float",
+        "float_with_decimal",
+        "complex",
+    ],
+)
+def test_direct_compare_with_invalid_type(other):
+    with pytest.raises(TypeError):
+        Version(1, 0, 0).compare(other)
