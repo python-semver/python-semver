@@ -108,17 +108,17 @@ class Version:
                 [0-9a-zA-Z-]+
                 (?:\.[0-9a-zA-Z-]+)*
             ))?
-            $
+            \Z
         """
     #: Regex for a semver version
     _REGEX: ClassVar[Pattern[str]] = re.compile(
         _REGEX_TEMPLATE.format(opt_patch="", opt_minor=""),
-        re.VERBOSE,
+        re.VERBOSE | re.ASCII,
     )
     #: Regex for a semver version that might be shorter
     _REGEX_OPTIONAL_MINOR_AND_PATCH: ClassVar[Pattern[str]] = re.compile(
         _REGEX_TEMPLATE.format(opt_patch="?", opt_minor="?"),
-        re.VERBOSE,
+        re.VERBOSE | re.ASCII,
     )
 
     def __init__(
