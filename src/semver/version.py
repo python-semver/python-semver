@@ -45,8 +45,9 @@ def _comparator(operator: Comparator) -> Comparator:
 
     @wraps(operator)
     def wrapper(self: "Version", other: Comparable) -> bool:
+        cls = type(self)
         comparable_types = (
-            type(self),
+            cls,
             dict,
             tuple,
             list,
@@ -54,6 +55,14 @@ def _comparator(operator: Comparator) -> Comparator:
         )
         if not isinstance(other, comparable_types):
             return NotImplemented
+        if isinstance(other, (dict, tuple, list)):
+            # A collection that cannot construct a comparable version is
+            # not a valid comparison operand.  Return NotImplemented
+            # instead of leaking conversion errors from __init__.
+            try:
+                other = cls(**other) if isinstance(other, dict) else cls(*other)
+            except (TypeError, ValueError):
+                return NotImplemented
         return operator(self, other)
 
     return wrapper

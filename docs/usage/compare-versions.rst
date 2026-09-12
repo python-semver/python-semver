@@ -86,12 +86,17 @@ To compare two versions depends on your type:
    >>> dict(major=1) < v
    True
 
-  If the dictionary contains unknown keys, you get a :py:exc:`python:TypeError` exception::
+  If the dictionary contains keys that cannot construct a comparable version
+  (for example, unknown keys), the comparison is not supported.  The
+  comparison operators follow the general rule for invalid comparison operand
+  types and return :py:const:`NotImplemented` (see :gh:`316`), so Python
+  raises its standard :py:exc:`python:TypeError` instead of an internal
+  conversion error::
 
     >>> v > dict(major=1, unknown=42)
     Traceback (most recent call last):
     ...
-    TypeError: ... got an unexpected keyword argument 'unknown'
+    TypeError: '>' not supported between instances of 'Version' and 'dict'
 
 
 Other types cannot be compared.
