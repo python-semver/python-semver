@@ -129,6 +129,12 @@ class Version:
         _REGEX_TEMPLATE.format(opt_patch="?", opt_minor="?"),
         re.VERBOSE | re.ASCII,
     )
+    #: Regex for a single valid build identifier
+    _BUILD_IDENTIFIER: ClassVar[Pattern[str]] = re.compile(r"[0-9A-Za-z-]+", re.ASCII)
+    #: Regex for a single valid alphanumeric prerelease identifier
+    _PRERELEASE_IDENTIFIER: ClassVar[Pattern[str]] = re.compile(
+        r"0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*", re.ASCII
+    )
 
     def __init__(
         self,
@@ -152,6 +158,28 @@ class Version:
         self._patch = version_parts["patch"]
         self._prerelease = None if prerelease is None else str(prerelease)
         self._build = None if build is None else str(build)
+
+    @classmethod
+    def _validate_identifiers(
+        cls, value: str, pattern: Pattern[str], what: str
+    ) -> None:
+        """
+        Check that a dot-separated identifier string consists only of
+        identifiers allowed by the SemVer grammar.
+
+        :param value: the identifier string to check
+        :param pattern: the regex a single identifier must match
+        :param what: human readable name of the checked part,
+            used for the error message
+        :raises ValueError: if any dot-separated part is not a valid identifier
+        """
+        for identifier in value.split("."):
+            if not pattern.fullmatch(identifier):
+                raise ValueError(
+                    f"{value!r} is not a valid {what}. It may only consist of "
+                    "dot-separated identifiers, made of alphanumerics and "
+                    "hyphens."
+                )
 
     @classmethod
     def _nat_cmp(cls, a: Optional[str], b: Optional[str]) -> int:
@@ -381,7 +409,11 @@ class Version:
             elif token is None:
                 prerelease = "rc.1"
             else:
-                prerelease = str(token) + ".1"
+                token = str(token)
+                cls._validate_identifiers(
+                    token, cls._PRERELEASE_IDENTIFIER, "prerelease token"
+                )
+                prerelease = token + ".1"
 
         return cls(self._major, self._minor, patch, prerelease)
 
@@ -409,7 +441,9 @@ build='build.10')
         elif token is None:
             build = "build.0"
         else:
-            build = str(token) + ".0"
+            token = str(token)
+            cls._validate_identifiers(token, cls._BUILD_IDENTIFIER, "build token")
+            build = token + ".0"
 
         build = cls._increment_string(build)
         if build == self._build:
