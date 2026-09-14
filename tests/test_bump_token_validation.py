@@ -82,14 +82,17 @@ def test_bump_prerelease_still_accepts_valid_tokens(token, expected):
     assert str(Version.parse("1.0.0").bump_prerelease(token)) == expected
 
 
-@pytest.mark.parametrize("empty", ["", None])
-def test_bump_methods_still_accept_empty_and_none(empty):
+@pytest.mark.parametrize(
+    "token, expected_prerelease, expected_build",
+    [
+        ("", "1.0.0-1", "1.0.0+1"),
+        (None, "1.0.0-rc.1", "1.0.0+build.1"),
+    ],
+    ids=["empty-string", "none"],
+)
+def test_bump_methods_still_accept_empty_and_none(
+    token, expected_prerelease, expected_build
+):
     """Empty string and None are documented and must keep their meaning."""
-    assert str(Version.parse("1.0.0").bump_prerelease(empty)) in (
-        "1.0.0-1",
-        "1.0.0-rc.1",
-    )
-    assert str(Version.parse("1.0.0").bump_build(empty)) in (
-        "1.0.0+1",
-        "1.0.0+build.1",
-    )
+    assert str(Version.parse("1.0.0").bump_prerelease(token)) == expected_prerelease
+    assert str(Version.parse("1.0.0").bump_build(token)) == expected_build
