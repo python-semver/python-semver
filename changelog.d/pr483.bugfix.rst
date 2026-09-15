@@ -1,0 +1,1 @@
+Fix :meth:`~semver.Version.bump_prerelease` and :meth:`~semver.Version.bump_build` to raise a :class:`ValueError` when the ``token`` argument is not a valid dot-separated SemVer identifier (for example ``build+meta`` or ``rc.``). Previously such tokens were concatenated unchecked, producing version strings that :meth:`~semver.Version.parse` itself would reject.

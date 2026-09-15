@@ -95,10 +95,18 @@ class Version:
     _LAST_NUMBER: ClassVar[Pattern[str]] = re.compile(r"(?:[^\d]*(\d+)[^\d]*)+")
     #: Regex for number in a prerelease
     _LAST_PRERELEASE: ClassVar[Pattern[str]] = re.compile(r"^(.*\.)?(\d+)$")
+    #: Regex for a single valid alphanumeric prerelease identifier
+    _PRERELEASE_IDENTIFIER: ClassVar[Pattern[str]] = re.compile(
+        r"0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*", re.ASCII
+    )
+    #: Regex for a single valid build identifier
+    _BUILD_IDENTIFIER: ClassVar[Pattern[str]] = re.compile(
+        r"[0-9a-zA-Z-]+", re.ASCII
+    )
     #: Regex template for a semver version
     _REGEX_TEMPLATE: ClassVar[
         str
-    ] = r"""
+    ] = rf"""
             ^
             (?P<major>0|[1-9]\d*)
             (?:
@@ -107,15 +115,15 @@ class Version:
                 (?:
                     \.
                     (?P<patch>0|[1-9]\d*)
-                ){opt_patch}
-            ){opt_minor}
+                ){{opt_patch}}
+            ){{opt_minor}}
             (?:-(?P<prerelease>
-                (?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)
-                (?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*
+                (?:{_PRERELEASE_IDENTIFIER.pattern})
+                (?:\.(?:{_PRERELEASE_IDENTIFIER.pattern}))*
             ))?
             (?:\+(?P<build>
-                [0-9a-zA-Z-]+
-                (?:\.[0-9a-zA-Z-]+)*
+                (?:{_BUILD_IDENTIFIER.pattern})
+                (?:\.(?:{_BUILD_IDENTIFIER.pattern}))*
             ))?
             \Z
         """
@@ -152,6 +160,28 @@ class Version:
         self._patch = version_parts["patch"]
         self._prerelease = None if prerelease is None else str(prerelease)
         self._build = None if build is None else str(build)
+
+    @classmethod
+    def _validate_identifiers(
+        cls, value: str, pattern: Pattern[str], what: str
+    ) -> None:
+        """
+        Check that a dot-separated identifier string consists only of
+        identifiers allowed by the SemVer grammar.
+
+        :param value: the identifier string to check
+        :param pattern: the regex a single identifier must match
+        :param what: human readable name of the checked part,
+            used for the error message
+        :raises ValueError: if any dot-separated part is not a valid identifier
+        """
+        for identifier in value.split("."):
+            if not pattern.fullmatch(identifier):
+                raise ValueError(
+                    f"{value!r} is not a valid {what}. It may only consist of "
+                    "dot-separated identifiers, made of alphanumerics and "
+                    "hyphens."
+                )
 
     @classmethod
     def _nat_cmp(cls, a: Optional[str], b: Optional[str]) -> int:
@@ -381,7 +411,11 @@ class Version:
             elif token is None:
                 prerelease = "rc.1"
             else:
-                prerelease = str(token) + ".1"
+                token = str(token)
+                cls._validate_identifiers(
+                    token, cls._PRERELEASE_IDENTIFIER, "prerelease token"
+                )
+                prerelease = token + ".1"
 
         return cls(self._major, self._minor, patch, prerelease)
 
@@ -409,7 +443,9 @@ build='build.10')
         elif token is None:
             build = "build.0"
         else:
-            build = str(token) + ".0"
+            token = str(token)
+            cls._validate_identifiers(token, cls._BUILD_IDENTIFIER, "build token")
+            build = token + ".0"
 
         build = cls._increment_string(build)
         if build == self._build:
