@@ -95,18 +95,18 @@ class Version:
     _LAST_NUMBER: ClassVar[Pattern[str]] = re.compile(r"(?:[^\d]*(\d+)[^\d]*)+")
     #: Regex for number in a prerelease
     _LAST_PRERELEASE: ClassVar[Pattern[str]] = re.compile(r"^(.*\.)?(\d+)$")
-    #: Regex for a single prerelease identifier, shared by the version
-    #: template and the bump token validation
-    _PRERELEASE_IDENTIFIER_REGEX: ClassVar[str] = (
-        r"0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*"
+    #: Regex for a single valid alphanumeric prerelease identifier
+    _PRERELEASE_IDENTIFIER: ClassVar[Pattern[str]] = re.compile(
+        r"0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*", re.ASCII
     )
-    #: Regex for a single build identifier, shared by the version template
-    #: and the bump token validation
-    _BUILD_IDENTIFIER_REGEX: ClassVar[str] = r"[0-9a-zA-Z-]+"
+    #: Regex for a single valid build identifier
+    _BUILD_IDENTIFIER: ClassVar[Pattern[str]] = re.compile(
+        r"[0-9a-zA-Z-]+", re.ASCII
+    )
     #: Regex template for a semver version
     _REGEX_TEMPLATE: ClassVar[
         str
-    ] = r"""
+    ] = rf"""
             ^
             (?P<major>0|[1-9]\d*)
             (?:
@@ -115,45 +115,27 @@ class Version:
                 (?:
                     \.
                     (?P<patch>0|[1-9]\d*)
-                ){opt_patch}
-            ){opt_minor}
+                ){{opt_patch}}
+            ){{opt_minor}}
             (?:-(?P<prerelease>
-                (?:{prerelease})
-                (?:\.(?:{prerelease}))*
+                (?:{_PRERELEASE_IDENTIFIER.pattern})
+                (?:\.(?:{_PRERELEASE_IDENTIFIER.pattern}))*
             ))?
             (?:\+(?P<build>
-                (?:{build})
-                (?:\.(?:{build}))*
+                (?:{_BUILD_IDENTIFIER.pattern})
+                (?:\.(?:{_BUILD_IDENTIFIER.pattern}))*
             ))?
             \Z
         """
     #: Regex for a semver version
     _REGEX: ClassVar[Pattern[str]] = re.compile(
-        _REGEX_TEMPLATE.format(
-            opt_patch="",
-            opt_minor="",
-            prerelease=_PRERELEASE_IDENTIFIER_REGEX,
-            build=_BUILD_IDENTIFIER_REGEX,
-        ),
+        _REGEX_TEMPLATE.format(opt_patch="", opt_minor=""),
         re.VERBOSE | re.ASCII,
     )
     #: Regex for a semver version that might be shorter
     _REGEX_OPTIONAL_MINOR_AND_PATCH: ClassVar[Pattern[str]] = re.compile(
-        _REGEX_TEMPLATE.format(
-            opt_patch="?",
-            opt_minor="?",
-            prerelease=_PRERELEASE_IDENTIFIER_REGEX,
-            build=_BUILD_IDENTIFIER_REGEX,
-        ),
+        _REGEX_TEMPLATE.format(opt_patch="?", opt_minor="?"),
         re.VERBOSE | re.ASCII,
-    )
-    #: Regex for a single valid build identifier
-    _BUILD_IDENTIFIER: ClassVar[Pattern[str]] = re.compile(
-        _BUILD_IDENTIFIER_REGEX, re.ASCII
-    )
-    #: Regex for a single valid alphanumeric prerelease identifier
-    _PRERELEASE_IDENTIFIER: ClassVar[Pattern[str]] = re.compile(
-        _PRERELEASE_IDENTIFIER_REGEX, re.ASCII
     )
 
     def __init__(
