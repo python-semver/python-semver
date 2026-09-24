@@ -539,7 +539,13 @@ build='build.10')
         if part in cls.NAMES[:3]:
             return getattr(version, "bump_" + part)()
         else:
-            if version.prerelease is not None and prerelease_token:
+            if version.prerelease and prerelease_token:
+                # Handle old-style prereleases like "rc3" (no dot separator)
+                match = re.match(f"^{prerelease_token}(\\d+)$", version.prerelease)
+                if match:
+                    num = int(match.group(1))
+                    return version.replace(prerelease=f"{prerelease_token}{num + 1}")
+
                 current_token = version.prerelease.split(".")[0]
                 if current_token != prerelease_token:
                     return version.replace(prerelease=f"{prerelease_token}.1", build=None)

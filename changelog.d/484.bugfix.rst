@@ -1,0 +1,1 @@
+Fix :meth:`~semver.Version.next_version` to correctly increment old-style prerelease versions without a dot separator (for example ``rc3``). Previously, calling ``next_version("prerelease")`` on such versions would reset the prerelease number to 1 instead of incrementing it.
