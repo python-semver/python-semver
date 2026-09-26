@@ -544,7 +544,9 @@ build='build.10')
                 match = re.match(f"^{prerelease_token}(\\d+)$", version.prerelease)
                 if match:
                     num = int(match.group(1))
-                    return version.replace(prerelease=f"{prerelease_token}{num + 1}")
+                    return version.replace(
+                        prerelease=f"{prerelease_token}{num + 1}", build=None
+                    )
 
                 current_token = version.prerelease.split(".")[0]
                 if current_token != prerelease_token:

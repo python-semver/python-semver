@@ -31,3 +31,9 @@ def test_issue_484_custom_token():
     """Custom prerelease token should be respected."""
     v = Version.parse("1.2.3-beta2")
     assert str(v.next_version("prerelease", "beta")) == "1.2.3-beta3"
+
+
+def test_issue_484_old_style_drops_build():
+    """Build metadata is dropped, as it is for dot-separated prereleases."""
+    v = Version.parse("1.2.3-rc3+build.5")
+    assert v.next_version("prerelease").build is None

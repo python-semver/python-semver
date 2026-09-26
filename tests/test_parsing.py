@@ -208,6 +208,7 @@ def test_next_version_with_invalid_parts():
         # prerelease+build: build is stripped along with prerelease during finalization
         ("1.2.3-rc.1+build.5", "patch", "1.2.3"),
         ("1.2.3-rc.1+build.5", "prerelease", "1.2.3-rc.2"),
+        ("1.2.3-rc1+build.5", "prerelease", "1.2.3-rc2"),
     ],
 )
 def test_next_version_with_versioninfo(version, part, expected):
