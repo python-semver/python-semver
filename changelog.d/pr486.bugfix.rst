@@ -1,0 +1,1 @@
+Fix :meth:`~semver.Version.next_version` to drop the build metadata when incrementing an old-style prerelease without a dot separator (for example ``rc3``). Previously ``1.2.3-rc3+build.5`` became ``1.2.3-rc4+build.5`` while ``1.2.3-rc.3+build.5`` became ``1.2.3-rc.4``.
