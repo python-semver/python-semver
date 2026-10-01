@@ -186,14 +186,16 @@ class Version:
     @classmethod
     def _nat_cmp(cls, a: Optional[str], b: Optional[str]) -> int:
         def prerelease_key(identifier: str) -> tuple[int, int, str]:
-            if identifier.isdigit():
-                if not identifier.isascii():
-                    identifier = str(int(identifier))
-                # Compare decimal values without converting arbitrarily long
-                # ASCII identifiers to integers. Keep constructor leading zeros.
-                identifier = identifier.lstrip("0") or "0"
-                return (0, len(identifier), identifier)
-            return (1, 0, identifier)
+            if not identifier.isdigit():
+                return (1, 0, identifier)
+
+            if not identifier.isascii():
+                identifier = str(int(identifier))
+
+            # Compare decimal values without converting arbitrarily long
+            # ASCII identifiers to integers. Keep constructor leading zeros.
+            normalized = identifier.lstrip("0") or "0"
+            return (0, len(normalized), normalized)
 
         a_parts = [prerelease_key(x) for x in (a or "").split(".")]
         b_parts = [prerelease_key(x) for x in (b or "").split(".")]
