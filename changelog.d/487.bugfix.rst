@@ -1,0 +1,2 @@
+Comparing versions with long numeric prerelease identifiers no longer raises
+``ValueError`` because of Python's integer string conversion limit.

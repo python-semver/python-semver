@@ -185,21 +185,23 @@ class Version:
 
     @classmethod
     def _nat_cmp(cls, a: Optional[str], b: Optional[str]) -> int:
-        def cmp_prerelease_tag(a, b):
-            if isinstance(a, int) and isinstance(b, int):
-                return _cmp(a, b)
-            elif isinstance(a, int):
-                return -1
-            elif isinstance(b, int):
-                return 1
-            else:
-                return _cmp(a, b)
+        def prerelease_key(identifier: str) -> tuple[int, int, str]:
+            if not identifier.isdigit():
+                return (1, 0, identifier)
 
-        a_parts = [int(x) if x.isdigit() else x for x in (a or "").split(".")]
-        b_parts = [int(x) if x.isdigit() else x for x in (b or "").split(".")]
+            if not identifier.isascii():
+                identifier = str(int(identifier))
+
+            # Compare decimal values without converting arbitrarily long
+            # ASCII identifiers to integers. Keep constructor leading zeros.
+            normalized = identifier.lstrip("0") or "0"
+            return (0, len(normalized), normalized)
+
+        a_parts = [prerelease_key(x) for x in (a or "").split(".")]
+        b_parts = [prerelease_key(x) for x in (b or "").split(".")]
 
         for sub_a, sub_b in zip(a_parts, b_parts):
-            cmp_result = cmp_prerelease_tag(sub_a, sub_b)
+            cmp_result = _cmp(sub_a, sub_b)
             if cmp_result != 0:
                 return cmp_result
 
