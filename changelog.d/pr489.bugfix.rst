@@ -1,0 +1,3 @@
+``Version.next_version`` now validates used prerelease tokens and matches token
+families literally. Invalid tokens raise ``ValueError``. Dotted prefixes advance
+correctly while existing qualifier chains and legacy counters are preserved.
