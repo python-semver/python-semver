@@ -542,16 +542,26 @@ build='build.10')
             return getattr(version, "bump_" + part)()
         else:
             if version.prerelease and prerelease_token:
+                prerelease_token = str(prerelease_token)
+                cls._validate_identifiers(
+                    prerelease_token,
+                    cls._PRERELEASE_IDENTIFIER,
+                    "prerelease token",
+                )
                 # Handle old-style prereleases like "rc3" (no dot separator)
-                match = re.match(f"^{prerelease_token}(\\d+)$", version.prerelease)
+                match = re.fullmatch(
+                    rf"{re.escape(prerelease_token)}(\d+)", version.prerelease
+                )
                 if match:
                     num = int(match.group(1))
                     return version.replace(
                         prerelease=f"{prerelease_token}{num + 1}", build=None
                     )
 
-                current_token = version.prerelease.split(".")[0]
-                if current_token != prerelease_token:
+                if not (
+                    version.prerelease == prerelease_token
+                    or version.prerelease.startswith(prerelease_token + ".")
+                ):
                     return version.replace(prerelease=f"{prerelease_token}.1", build=None)
             return version.bump_prerelease(prerelease_token, bump_when_empty=True)
 
