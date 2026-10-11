@@ -294,6 +294,20 @@ class Version:
         yield from self.to_tuple()
 
     @staticmethod
+    def _increment_number(number: str) -> str:
+        """Increment an ASCII decimal string without a size limit."""
+        if not number.isascii():
+            return str(int(number) + 1)
+
+        number = number.lstrip("0")
+        prefix = number.rstrip("9")
+        if prefix:
+            return prefix[:-1] + str(int(prefix[-1]) + 1) + "0" * (
+                len(number) - len(prefix)
+            )
+        return "1" + "0" * len(number)
+
+    @staticmethod
     def _increment_prerelease(string: str) -> str:
         """
         Check if the last part of a dot-separated string is numeric. If yes,
@@ -304,7 +318,7 @@ class Version:
         """
         match = Version._LAST_PRERELEASE.search(string)
         if match:
-            next_ = str(int(match.group(2)) + 1)
+            next_ = Version._increment_number(match.group(2))
             string = match.group(1) + next_ if match.group(1) else next_
         else:
             string += ".0"
@@ -323,7 +337,7 @@ class Version:
         """
         match = Version._LAST_NUMBER.search(string)
         if match:
-            next_ = str(int(match.group(1)) + 1)
+            next_ = Version._increment_number(match.group(1))
             start, end = match.span(1)
             string = string[: max(end - len(next_), start)] + next_ + string[end:]
         return string
@@ -553,9 +567,9 @@ build='build.10')
                     rf"{re.escape(prerelease_token)}(\d+)", version.prerelease
                 )
                 if match:
-                    num = int(match.group(1))
+                    num = cls._increment_number(match.group(1))
                     return version.replace(
-                        prerelease=f"{prerelease_token}{num + 1}", build=None
+                        prerelease=f"{prerelease_token}{num}", build=None
                     )
 
                 if not (
