@@ -106,3 +106,26 @@ If you need to convert some types into others, refer to :ref:`sec.convert.versio
 The use of these comparison operators also implies that you can use builtin
 functions that leverage this capability; builtins including, but not limited to: :func:`max`, :func:`min`
 (for examples, see :ref:`sec_max_min`) and :func:`sorted`.
+
+Finding the First Differing Part
+-------------------------------
+
+Use :meth:`~semver.version.Version.diff` with another ``Version`` instance to
+find the first differing part, in the order ``major``, ``minor``, ``patch``,
+``prerelease``, and ``build``::
+
+    >>> Version.parse("1.0.0").diff(Version.parse("1.1.5"))
+    'minor'
+    >>> Version.parse("1.1.5").diff(Version.parse("1.0.0"))
+    'minor'
+    >>> Version(1).diff(Version(1)) is None
+    True
+
+This reports field differences rather than version precedence. Build metadata
+is included even though it is ignored by comparison operators::
+
+    >>> Version.parse("1.0.0+one").diff(Version.parse("1.0.0+two"))
+    'build'
+
+Convert strings or other representations into ``Version`` instances before
+calling ``diff``. Unsupported operands raise ``TypeError``.

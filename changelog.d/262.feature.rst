@@ -1,0 +1,3 @@
+Added ``Version.diff(other)`` to identify the first differing version part,
+including build metadata, independently of comparison direction. It returns
+``None`` when all parts are identical.

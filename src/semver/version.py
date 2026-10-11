@@ -457,6 +457,33 @@ build='build.10')
             build += ".0"
         return cls(self._major, self._minor, self._patch, self._prerelease, build)
 
+    def diff(self, other: "Version") -> str | None:
+        """
+        Return the first version part that differs from other.
+
+        Parts are checked in the order major, minor, patch, prerelease, build,
+        regardless of which version is greater. Unlike precedence comparisons,
+        build metadata is included. Identical parts return ``None``.
+
+        :param other: the second Version instance
+        :return: the name of the first differing part, or None
+        :raises TypeError: if other is not a Version instance
+
+        >>> Version.parse("1.0.0").diff(Version.parse("1.1.5"))
+        'minor'
+        >>> Version.parse("1.0.0+one").diff(Version.parse("1.0.0+two"))
+        'build'
+        >>> Version(1).diff(Version(1)) is None
+        True
+        """
+        if not isinstance(other, Version):
+            raise TypeError(f"Expected Version instance, but got {type(other)}")
+
+        for part in self.to_dict():
+            if getattr(self, part) != getattr(other, part):
+                return part
+        return None
+
     def compare(self, other: Comparable) -> int:
         """
         Compare self with other.
