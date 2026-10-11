@@ -107,25 +107,65 @@ The use of these comparison operators also implies that you can use builtin
 functions that leverage this capability; builtins including, but not limited to: :func:`max`, :func:`min`
 (for examples, see :ref:`sec_max_min`) and :func:`sorted`.
 
-Finding the First Differing Part
+Classifying Version Differences
 -------------------------------
 
-Use :meth:`~semver.version.Version.diff` with another ``Version`` instance to
-find the first differing part, in the order ``major``, ``minor``, ``patch``,
-``prerelease``, and ``build``::
+Use :meth:`~semver.version.Version.diff` to classify two versions like
+`node-semver 7.7.2 <https://github.com/npm/node-semver/blob/v7.7.2/functions/diff.js>`_.
+It returns ``major``, ``minor``, ``patch``, ``premajor``, ``preminor``,
+``prepatch``, or ``prerelease``. Versions with equal precedence return ``None``,
+including versions that differ only in build metadata::
 
-    >>> Version.parse("1.0.0").diff(Version.parse("1.1.5"))
+    >>> Version.parse("1.0.0").diff("1.1.5")
     'minor'
-    >>> Version.parse("1.1.5").diff(Version.parse("1.0.0"))
-    'minor'
-    >>> Version(1).diff(Version(1)) is None
+    >>> Version.parse("1.0.0+one").diff("1.0.0+two") is None
     True
 
-This reports field differences rather than version precedence. Build metadata
-is included even though it is ignored by comparison operators::
+The higher version determines the classification, regardless of argument order.
+If it is a prerelease and a core part differs, the result has a ``pre`` prefix.
+Different prereleases with the same core return ``prerelease``::
 
-    >>> Version.parse("1.0.0+one").diff(Version.parse("1.0.0+two"))
-    'build'
+    >>> Version.parse("1.2.3").diff("1.2.4-rc.1")
+    'prepatch'
+    >>> Version.parse("1.2.4-rc.1").diff("1.2.3")
+    'prepatch'
+    >>> Version.parse("1.2.3-alpha").diff("1.2.3-beta")
+    'prerelease'
 
-Convert strings or other representations into ``Version`` instances before
-calling ``diff``. Unsupported operands raise ``TypeError``.
+When the lower version is a prerelease and the higher version is a release,
+node-semver applies special rules. A lower version with zero minor and patch
+always gives ``major``, even if the core versions differ. Otherwise, for equal
+core versions, zero patch gives ``minor`` and nonzero patch gives ``patch``::
+
+    >>> Version.parse("1.0.0-alpha").diff("1.0.0")
+    'major'
+    >>> Version.parse("1.0.0-alpha").diff("1.1.1")
+    'major'
+    >>> Version.parse("1.1.0-alpha").diff("1.1.0")
+    'minor'
+    >>> Version.parse("1.0.1-rc.1").diff("1.0.1")
+    'patch'
+
+``diff`` classifies version differences; it does not decide which bump to apply
+on a staging branch. For example, the last pair gives ``patch``, even if your
+release policy calls for a minor bump. It does not change ``next_version`` or
+the bump methods.
+
+The operand may be a ``Version`` (including a subclass), ``str``, ``bytes``,
+``dict``, ``tuple``, or ``list``. Strings and bytes are parsed using the receiver's
+class; collections are passed as keyword or positional constructor arguments::
+
+    >>> Version(1).diff(b"2.0.0")
+    'major'
+    >>> Version(1).diff({"major": 2})
+    'major'
+    >>> Version(1).diff((2, 0, 0))
+    'major'
+    >>> Version(1).diff([2, 0, 0])
+    'major'
+
+Existing ``Version`` instances are used without reconstruction. Classification
+uses SemVer precedence, including on subclass receivers. Unsupported types and
+invalid constructor argument types or shapes raise ``TypeError``. Invalid
+strings, byte decoding, and invalid constructor values raise ``ValueError``;
+conversion errors are propagated as in Python's parsing and construction APIs.

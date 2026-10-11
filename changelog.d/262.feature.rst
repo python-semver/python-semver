@@ -1,3 +1,7 @@
-Added ``Version.diff(other)`` to identify the first differing version part,
-including build metadata, independently of comparison direction. It returns
-``None`` when all parts are identical.
+Added ``Version.diff(other)`` to classify valid version pairs like
+node-semver 7.7.2: ``major``, ``minor``, ``patch``, ``premajor``, ``preminor``,
+``prepatch``, or ``prerelease``, including its prerelease-to-release rules.
+Equal precedence returns ``None`` and build metadata is ignored. It accepts
+``Version``, ``str``, ``bytes``, ``dict``, ``tuple``, and ``list`` operands with
+Python conversion errors. This classification does not choose a staging-branch
+bump policy.
