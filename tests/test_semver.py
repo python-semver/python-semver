@@ -2,6 +2,8 @@ import pytest  # noqa
 
 from semver import Version
 
+_UTF8_VERSION = "1.0.0"
+
 
 @pytest.mark.parametrize(
     "string,expected", [("rc", "rc"), ("rc.1", "rc.2"), ("2x", "3x")]
@@ -75,6 +77,19 @@ def test_should_be_able_to_use_integers_as_prerelease_build():
 def test_should_versioninfo_isvalid():
     assert Version.is_valid("1.0.0") is True
     assert Version.is_valid("foo") is False
+
+
+@pytest.mark.parametrize(
+    "version,expected",
+    [
+        pytest.param(b"1.0.0", True, id="valid-bytes"),
+        pytest.param(b"foo", False, id="invalid-version-bytes"),
+        pytest.param(_UTF8_VERSION.encode("UTF-8"), True, id="utf8-encoded-version"),
+        pytest.param(b"\xff", False, id="invalid-utf8"),
+    ],
+)
+def test_is_valid_bytes(version, expected):
+    assert Version.is_valid(version) is expected
 
 
 def test_versioninfo_compare_should_raise_when_passed_invalid_value():
