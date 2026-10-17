@@ -160,7 +160,7 @@ def test_should_ignore_build_on_prerelease_bump():
         ("1.2.3-alpha.beta.gamma.1", "alpha", "1.2.3-alpha.beta.gamma.2"),
         ("1.2.3-rc3", "rc", "1.2.3-rc4"),
         ("1.2.3-rc.3", "rc", "1.2.3-rc.4"),
-        ("1.2.3-alphaXbeta9", "alpha.beta", "1.2.3-alpha.beta.1"),
+        ("1.2.3-alphaXbeta9", "alpha.beta", "1.2.4-alpha.beta.1"),
     ],
 )
 def test_next_version_matches_literal_prerelease_token_family(
@@ -170,6 +170,7 @@ def test_next_version_matches_literal_prerelease_token_family(
     result = original.next_version("prerelease", token)
     assert str(result) == expected
     assert Version.parse(str(result)).to_tuple() == result.to_tuple()
+    assert result > original
     assert str(original) == version
 
 

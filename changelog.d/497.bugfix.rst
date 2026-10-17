@@ -1,0 +1,4 @@
+``Version.next_version("prerelease", prerelease_token=...)`` now advances the
+patch version when switching tokens would otherwise produce a lower version.
+For example, switching from ``1.2.3-rc.1`` to ``alpha`` returns
+``1.2.4-alpha.1``. Forward token changes retain the current patch version.

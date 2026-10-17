@@ -518,6 +518,12 @@ build='build.10')
         >>> str(semver.Version.parse("0.1.4").next_version("prerelease"))
         '0.1.5-rc.1'
 
+        Switching to an earlier prerelease token advances the patch version
+        so the result remains greater than the original version:
+
+        >>> str(semver.Version.parse("1.2.3-rc.1").next_version("prerelease", "alpha"))
+        '1.2.4-alpha.1'
+
         :param part: One of "major", "minor", "patch", or "prerelease"
         :param prerelease_token: prefix string of prerelease, defaults to 'rc'
         :return: new object with the appropriate part raised
@@ -562,7 +568,12 @@ build='build.10')
                     version.prerelease == prerelease_token
                     or version.prerelease.startswith(prerelease_token + ".")
                 ):
-                    return version.replace(prerelease=f"{prerelease_token}.1", build=None)
+                    candidate = version.replace(
+                        prerelease=f"{prerelease_token}.1", build=None
+                    )
+                    if candidate > version:
+                        return candidate
+                    return version.bump_patch().bump_prerelease(prerelease_token)
             return version.bump_prerelease(prerelease_token, bump_when_empty=True)
 
     @_comparator
