@@ -2,7 +2,7 @@ import pytest  # noqa
 
 from semver import Version
 
-_UTF8_VERSION = "1.0.0"
+UTF8_VERSION = "1.0.0"
 
 
 @pytest.mark.parametrize(
@@ -84,7 +84,7 @@ def test_should_versioninfo_isvalid():
     [
         pytest.param(b"1.0.0", True, id="valid-bytes"),
         pytest.param(b"foo", False, id="invalid-version-bytes"),
-        pytest.param(_UTF8_VERSION.encode("UTF-8"), True, id="utf8-encoded-version"),
+        pytest.param(UTF8_VERSION.encode("UTF-8"), True, id="utf8-encoded-version"),
         pytest.param(b"\xff", False, id="invalid-utf8"),
     ],
 )
