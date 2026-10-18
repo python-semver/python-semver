@@ -789,7 +789,7 @@ prerelease='pre.2', build='build.4')
             raise TypeError(error)
 
     @classmethod
-    def is_valid(cls, version: str) -> bool:
+    def is_valid(cls, version: String) -> bool:
         """
         Check if the string is a valid semver version.
 
@@ -798,7 +798,7 @@ prerelease='pre.2', build='build.4')
         .. versionchanged:: 3.0.0
            Renamed from :meth:`~semver.version.Version.isvalid`
 
-        :param version: the version string to check
+        :param version: the version string to check, as str or UTF-8 encoded bytes
         :return: True if the version string is a valid semver version, False
                  otherwise.
         """

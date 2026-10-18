@@ -1,0 +1,1 @@
+The type annotation of ``Version.is_valid()`` now includes its existing support for UTF-8 encoded byte strings.
