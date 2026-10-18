@@ -22,3 +22,18 @@ would perhaps a better fit.
     '3.4.6'
     >>> str(Version.parse("0.1.4").next_version("prerelease"))
     '0.1.5-rc.1'
+
+Switching Prerelease Tokens
+--------------------------
+
+When switching between prerelease tokens, :meth:`~semver.version.Version.next_version`
+preserves natural ordering. Advancing to a higher token retains the patch version,
+while switching to an earlier token increments the patch version to prevent a downgrade:
+
+.. code-block:: python
+
+    >>> v = Version.parse("1.2.3-alpha.1")
+    >>> str(v.next_version("prerelease", prerelease_token="beta"))
+    '1.2.3-beta.1'
+    >>> str(Version.parse("1.2.3-rc.1").next_version("prerelease", prerelease_token="alpha"))
+    '1.2.4-alpha.1'
