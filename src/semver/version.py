@@ -524,6 +524,12 @@ build='build.10')
         >>> str(semver.Version.parse("1.2.3-rc.1").next_version("prerelease", "alpha"))
         '1.2.4-alpha.1'
 
+        Old-style counters also advance the patch version if incrementing
+        the counter would move backwards under SemVer's lexical ordering:
+
+        >>> str(semver.Version.parse("1.2.3-rc9").next_version("prerelease"))
+        '1.2.4-rc10'
+
         :param part: One of "major", "minor", "patch", or "prerelease"
         :param prerelease_token: prefix string of prerelease, defaults to 'rc'
         :return: new object with the appropriate part raised
@@ -560,8 +566,13 @@ build='build.10')
                 )
                 if match:
                     num = int(match.group(1))
-                    return version.replace(
+                    candidate = version.replace(
                         prerelease=f"{prerelease_token}{num + 1}", build=None
+                    )
+                    if candidate > version:
+                        return candidate
+                    return candidate.bump_patch().replace(
+                        prerelease=candidate.prerelease
                     )
 
                 if not (
