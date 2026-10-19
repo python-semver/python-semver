@@ -31,9 +31,11 @@ def test_issue_484_rc3_to_rc4():
 
 
 def test_issue_484_rc9_to_rc10():
-    """Ensure numeric bumping works across digit boundaries."""
+    """Keep the legacy counter while ensuring digit rollover moves forward."""
     v = Version.parse("1.2.3-rc9")
-    assert str(v.next_version("prerelease")) == "1.2.3-rc10"
+    result = v.next_version("prerelease")
+    assert str(result) == "1.2.4-rc10"
+    assert result > v
 
 
 def test_issue_484_dot_style_unchanged():
