@@ -1,6 +1,27 @@
 """Regression test for issue #484: next_version with old-style prereleases."""
 
+import pytest
+
 from semver import Version
+
+
+@pytest.mark.parametrize(
+    "current, token, expected",
+    [
+        ("1.2.3-rc.1", "alpha", "1.2.4-alpha.1"),
+        ("1.2.3-beta.3", "alpha", "1.2.4-alpha.1"),
+        ("1.2.3-rc.1+build.7", "dev", "1.2.4-dev.1"),
+        ("1.2.3-rc3", "alpha", "1.2.4-alpha.1"),
+        ("1.2.3-rc.1", "2", "1.2.4-2.1"),
+        ("1.2.3-alpha.4", "rc", "1.2.3-rc.1"),
+    ],
+)
+def test_token_switch_preserves_version_order(current, token, expected):
+    original = Version.parse(current)
+    result = original.next_version("prerelease", token)
+    assert str(result) == expected
+    assert result > original
+    assert str(original) == current
 
 
 def test_issue_484_rc3_to_rc4():
