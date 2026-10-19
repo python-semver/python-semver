@@ -1,0 +1,5 @@
+``Version.next_version("prerelease")`` now advances the patch version when
+incrementing an old-style prerelease counter would produce an older version.
+For example, ``1.2.3-rc9`` becomes ``1.2.4-rc10``. The legacy token and
+incremented counter are preserved; increments that already move forward keep
+the current patch version.
