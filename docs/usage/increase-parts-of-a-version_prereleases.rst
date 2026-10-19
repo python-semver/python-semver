@@ -24,7 +24,7 @@ would perhaps a better fit.
     '0.1.5-rc.1'
 
 Switching Prerelease Tokens
---------------------------
+---------------------------
 
 When switching between prerelease tokens, :meth:`~semver.version.Version.next_version`
 preserves natural ordering. Advancing to a higher token retains the patch version,
