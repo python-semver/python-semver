@@ -457,6 +457,86 @@ build='build.10')
             build += ".0"
         return cls(self._major, self._minor, self._patch, self._prerelease, build)
 
+    # Adapted from node-semver v7.7.2 functions/diff.js:
+    # https://github.com/npm/node-semver/blob/v7.7.2/functions/diff.js
+    # The ISC License
+    #
+    # Copyright (c) Isaac Z. Schlueter and Contributors
+    #
+    # Permission to use, copy, modify, and/or distribute this software for any
+    # purpose with or without fee is hereby granted, provided that the above
+    # copyright notice and this permission notice appear in all copies.
+    #
+    # THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+    # WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+    # MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+    # ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+    # WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+    # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
+    # IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+    def diff(self, other: Comparable | bytes) -> str | None:
+        """
+        Classify the difference between versions, matching node-semver 7.7.2.
+
+        Return ``major``, ``minor``, ``patch``, ``premajor``, ``preminor``,
+        ``prepatch``, or ``prerelease``. Equal precedence returns ``None``;
+        build metadata is ignored. The higher version determines the
+        prerelease prefix, so swapping the operands gives the same result.
+        Prerelease-to-release transitions follow node-semver's special rules.
+        This classification does not choose a staging-branch bump policy.
+
+        :param other: a Version, str, bytes, dict, tuple, or list. Strings are
+            parsed and collections are passed to the constructor of type(self).
+            Existing Version instances, including subclasses, are used directly.
+        :return: the difference classification, or None for equal precedence
+        :raises TypeError: if other is unsupported or its constructor arguments
+            have invalid types or shape
+        :raises ValueError: if parsing, decoding, or constructor values are invalid
+
+        >>> Version.parse("1.0.0").diff("1.1.5")
+        'minor'
+        >>> Version.parse("1.2.3").diff("1.2.4-rc.1")
+        'prepatch'
+        >>> Version.parse("1.0.0-alpha").diff("1.1.1")
+        'major'
+        >>> Version.parse("1.0.0+one").diff("1.0.0+two") is None
+        True
+        """
+        cls = type(self)
+        if isinstance(other, String.__args__):  # type: ignore
+            other = cls.parse(other)
+        elif isinstance(other, dict):
+            other = cls(**other)
+        elif isinstance(other, (tuple, list)):
+            other = cls(*other)
+        elif not isinstance(other, Version):
+            raise TypeError(
+                "Expected str, bytes, dict, tuple, list, or Version instance, "
+                f"but got {type(other)}"
+            )
+
+        # Use base SemVer precedence while accepting base and sibling instances
+        # on subclass receivers, without invoking their custom constructors.
+        current = Version(self.major, self.minor, self.patch, self.prerelease)
+        comparison = current.compare(other)
+        if comparison == 0:
+            return None
+
+        high, low = (self, other) if comparison > 0 else (other, self)
+        if low.prerelease and not high.prerelease:
+            if not low.minor and not low.patch:
+                return "major"
+            low_core = (low.major, low.minor, low.patch)
+            high_core = (high.major, high.minor, high.patch)
+            if low_core == high_core:
+                return "minor" if low.minor and not low.patch else "patch"
+
+        prefix = "pre" if high.prerelease else ""
+        for part in ("major", "minor", "patch"):
+            if getattr(self, part) != getattr(other, part):
+                return prefix + part
+        return "prerelease"
+
     def compare(self, other: Comparable) -> int:
         """
         Compare self with other.
