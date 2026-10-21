@@ -23,14 +23,30 @@ def does_not_raise(item):
 @pytest.mark.parametrize(
     "cli,expected",
     [
-        (["bump", "major", "1.2.3"], Namespace(bump="major", version="1.2.3")),
-        (["bump", "minor", "1.2.3"], Namespace(bump="minor", version="1.2.3")),
-        (["bump", "patch", "1.2.3"], Namespace(bump="patch", version="1.2.3")),
         (
-            ["bump", "prerelease", "1.2.3"],
-            Namespace(bump="prerelease", version="1.2.3"),
+            ["bump", "major", "1.2.3"],
+            Namespace(bump="major", version="1.2.3"),
         ),
-        (["bump", "build", "1.2.3"], Namespace(bump="build", version="1.2.3")),
+        (
+            ["bump", "minor", "2.3.4"],
+            Namespace(bump="minor", version="2.3.4"),
+        ),
+        (
+            ["bump", "patch", "3.4.5"],
+            Namespace(bump="patch", version="3.4.5"),
+        ),
+        (
+            ["bump", "prerelease", "4.5.6"],
+            Namespace(
+                bump="prerelease",
+                token="rc",
+                version="4.5.6",
+            ),
+        ),
+        (
+            ["bump", "build", "5.6.7"],
+            Namespace(bump="build", token="build", version="5.6.7"),
+        ),
         # ---
         (["compare", "1.2.3", "2.1.3"], Namespace(version1="1.2.3", version2="2.1.3")),
         # ---
@@ -54,12 +70,12 @@ def test_should_parse_cli_arguments(cli, expected):
         (cmd_bump, Namespace(bump="patch", version="1.2.3"), does_not_raise("1.2.4")),
         (
             cmd_bump,
-            Namespace(bump="prerelease", version="1.2.3-rc1"),
+            Namespace(bump="prerelease", version="1.2.3-rc1", token="rc"),
             does_not_raise("1.2.3-rc1.0"),
         ),
         (
             cmd_bump,
-            Namespace(bump="build", version="1.2.3+build.13"),
+            Namespace(bump="build", version="1.2.3+build.13", token="rc"),
             does_not_raise("1.2.3+build.14"),
         ),
         # compare subcommand
@@ -142,3 +158,28 @@ def test_main_file_should_call_cli_main(package_name):
         with patch("semver.__main__.__package__", package_name):
             __main__.main()
             mocked_main.assert_called_once()
+
+
+@pytest.mark.parametrize(
+    "part,version,token,expected",
+    [
+        ("prerelease", "1.2.3", None, "1.2.3-rc.1"),
+        ("build", "1.2.3", None, "1.2.3+build.1"),
+        ("prerelease", "1.2.3", "preview", "1.2.3-preview.1"),
+        ("build", "1.2.3", "ci", "1.2.3+ci.1"),
+        ("prerelease", "1.2.3", "", "1.2.3-1"),
+        ("build", "1.2.3", "", "1.2.3+1"),
+        ("prerelease", "1.2.3-8", "preview", "1.2.3-9"),
+        ("build", "1.2.3+ci.8", "other", "1.2.3+ci.9"),
+    ],
+)
+def test_should_process_bump_tokens(capsys, part, version, token, expected):
+    cli = ["bump", part, version]
+    if token is not None:
+        cli.extend(["--token", token])
+
+    assert main(cli) == 0
+    captured = capsys.readouterr()
+    assert captured.out.rstrip() == expected
+    assert captured.err == ""
+
