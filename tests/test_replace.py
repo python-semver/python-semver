@@ -48,3 +48,16 @@ def test_should_return_versioninfo_with_replaced_parts(version, parts, expected)
 def test_replace_raises_ValueError_for_non_numeric_values():
     with pytest.raises(ValueError):
         Version.parse("1.2.3").replace(major="x")
+
+
+@pytest.mark.parametrize("part", ["major", "minor", "patch"])
+@pytest.mark.parametrize("value", [None, object()])
+def test_replace_preserves_constructor_type_error(part, value):
+    version = Version.parse("1.2.3")
+    parts = version.to_dict()
+    parts[part] = value
+    with pytest.raises(TypeError) as expected:
+        Version(**parts)
+    with pytest.raises(TypeError) as actual:
+        version.replace(**{part: value})
+    assert str(actual.value) == str(expected.value)

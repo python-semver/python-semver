@@ -804,6 +804,8 @@ prerelease='pre.2', build='build.4')
             return type(self)(**version)  # type: ignore
         except TypeError:
             unknownkeys = set(parts) - set(self.to_dict())
+            if not unknownkeys:
+                raise
             error = "replace() got %d unexpected keyword argument(s): %s" % (
                 len(unknownkeys),
                 ", ".join(unknownkeys),
