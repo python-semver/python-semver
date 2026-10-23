@@ -1,0 +1,3 @@
+``Version.replace()`` now preserves the original constructor ``TypeError``
+when an existing version component receives an invalid value, rather than
+reporting zero unexpected keyword arguments.
