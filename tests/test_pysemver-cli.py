@@ -142,3 +142,16 @@ def test_main_file_should_call_cli_main(package_name):
         with patch("semver.__main__.__package__", package_name):
             __main__.main()
             mocked_main.assert_called_once()
+
+
+@pytest.mark.parametrize(
+    "cliargs",
+    [
+        ["check", "2.1"],
+        ["compare", "1.2.3", "2.4"],
+    ],
+)
+def test_should_return_documented_error_code_for_invalid_version(cliargs, capsys):
+    # docs/pysemver.rst shows ``echo $?`` printing 2 for both commands
+    assert main(cliargs) == 2
+    assert capsys.readouterr().err.startswith("ERROR")

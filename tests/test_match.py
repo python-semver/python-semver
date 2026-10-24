@@ -64,3 +64,18 @@ def test_should_raise_value_error_for_unexpected_match_expression(left, right):
 def test_should_raise_value_error_for_invalid_match_expression(left, right):
     with pytest.raises(ValueError):
         match(left, right)
+
+
+@pytest.mark.parametrize(
+    "left,right,expected",
+    [
+        # inclusive operators must include the boundary version itself
+        ("2.3.7", ">=2.3.7", True),
+        ("2.3.7", "<=2.3.7", True),
+        # ... and must still exclude the other side
+        ("2.3.7", ">=2.3.8", False),
+        ("2.3.8", "<=2.3.7", False),
+    ],
+)
+def test_should_match_inclusive_operators_at_the_boundary(left, right, expected):
+    assert match(left, right) is expected

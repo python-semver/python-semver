@@ -212,3 +212,15 @@ def test_next_version_ignores_token_for_main_parts(part, token, expected):
 def test_should_bump_build(version, expected):
     assert bump_build(version) == expected
     assert compare(version, expected) == 0
+
+
+@pytest.mark.parametrize(
+    "version,expected",
+    [
+        # a prerelease that is only a number has no "<prefix>." part
+        ("1.2.3-3", "1.2.3-4"),
+        ("1.2.3-9", "1.2.3-10"),
+    ],
+)
+def test_should_bump_numeric_only_prerelease(version, expected):
+    assert Version.parse(version).bump_prerelease() == Version.parse(expected)

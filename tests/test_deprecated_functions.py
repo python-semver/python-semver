@@ -73,3 +73,27 @@ def test_deprecated_deco_without_argument():
 
     with pytest.deprecated_call():
         assert mock_func()
+
+
+def test_deprecated_message_uses_the_remove_text():
+    @deprecated(remove="Gone in 99.")
+    def mock_func():
+        return True
+
+    with pytest.warns(DeprecationWarning) as record:
+        mock_func()
+    msg = str(record[0].message)
+    assert "Gone in 99." in msg
+    assert "will be removed in semver 3" not in msg
+
+
+def test_deprecated_message_names_the_function_when_no_replacement_given():
+    @deprecated(version="2.10.0")
+    def mock_func():
+        return True
+
+    with pytest.warns(DeprecationWarning) as record:
+        mock_func()
+    msg = str(record[0].message)
+    assert "Use the respective 'semver.Version." in msg
+    assert msg.endswith(".mock_func' instead.")
