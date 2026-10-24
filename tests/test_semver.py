@@ -149,3 +149,15 @@ def test_should_succeed_with_compatible_subclass_for_is_compatible():
     class CustomVersion(Version): ...
 
     assert CustomVersion(1, 0, 0).is_compatible(Version(1, 0, 0))
+
+
+@pytest.mark.parametrize(
+    "old, new",
+    [
+        # build metadata is ignored for compatibility, also for major 0
+        ((0, 1, 2, None, "build.1"), (0, 1, 2, None, "build.2")),
+        ((1, 2, 3, None, "build.1"), (1, 2, 3, None, "build.2")),
+    ],
+)
+def test_should_ignore_build_metadata_in_is_compatible(old, new):
+    assert Version(*old).is_compatible(Version(*new))
