@@ -304,11 +304,28 @@ class Version:
         """
         match = Version._LAST_PRERELEASE.search(string)
         if match:
-            next_ = str(int(match.group(2)) + 1)
+            next_ = Version._increment_digits(match.group(2))
             string = match.group(1) + next_ if match.group(1) else next_
         else:
             string += ".0"
         return string
+
+    @staticmethod
+    def _increment_digits(digits: str) -> str:
+        """Increment an ASCII decimal string without converting it to an int."""
+        if not digits.isascii():
+            # Preserve the historical handling of non-ASCII digits accepted
+            # by direct construction; parsed SemVer identifiers are ASCII.
+            return str(int(digits) + 1)
+
+        # Match int() normalization; the build caller preserves padding.
+        result = list(digits.lstrip("0") or "0")
+        for index in range(len(result) - 1, -1, -1):
+            if result[index] != "9":
+                result[index] = chr(ord(result[index]) + 1)
+                return "".join(result)
+            result[index] = "0"
+        return "1" + "".join(result)
 
     @staticmethod
     def _increment_string(string: str) -> str:
@@ -323,7 +340,7 @@ class Version:
         """
         match = Version._LAST_NUMBER.search(string)
         if match:
-            next_ = str(int(match.group(1)) + 1)
+            next_ = Version._increment_digits(match.group(1))
             start, end = match.span(1)
             string = string[: max(end - len(next_), start)] + next_ + string[end:]
         return string
