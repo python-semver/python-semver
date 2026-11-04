@@ -1,0 +1,5 @@
+Equality comparisons between :class:`~semver.version.Version` instances and strings or tuples now
+issue a :py:exc:`DeprecationWarning` and will be removed in semver 4. :class:`~semver.version.Version`
+remains hashable, but do not mix these types as dictionary keys or set elements
+during the transition. Convert strings with :meth:`~semver.version.Version.parse` and tuples
+with ``Version(*parts)``.

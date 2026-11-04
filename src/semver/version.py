@@ -1,6 +1,7 @@
 """Version handling by a semver compatible version class."""
 
 import re
+import warnings
 from functools import wraps
 from typing import (
     Any,
@@ -55,6 +56,18 @@ def _comparator(operator: Comparator) -> Comparator:
         )
         if not isinstance(other, comparable_types):
             return NotImplemented
+        if (
+            getattr(operator, "__name__", None) in ("__eq__", "__ne__")
+            and isinstance(other, (str, bytes, tuple, list))
+        ):
+            warnings.warn(
+                "Equality comparisons between Version and strings, tuples or lists "
+                "are deprecated and will be removed in semver 4; convert strings "
+                "with Version.parse() and tuples with Version(*parts). "
+                "See details in issue #506.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
         if isinstance(other, (dict, tuple, list)):
             # A collection that cannot construct a comparable version is
             # not a valid comparison operand.  Return NotImplemented

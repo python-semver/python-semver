@@ -34,11 +34,20 @@ def test_equality_with_malformed_collection_is_false(other):
     # equality must evaluate to False, not raise an internal error
     # such as "Version.__init__() missing 1 required positional
     # argument: 'major'".
-    assert (version == other) is False
-    assert version != other
-    # Symmetric case: the reflected operation must not raise either.
-    assert (other == version) is False
-    assert other != version
+    if isinstance(other, tuple):
+        with pytest.warns(DeprecationWarning):
+            assert (version == other) is False
+            assert version != other
+        # Symmetric case: the reflected operation must not raise either.
+        with pytest.warns(DeprecationWarning):
+            assert (other == version) is False
+            assert other != version
+    else:
+        assert (version == other) is False
+        assert version != other
+        # Symmetric case: the reflected operation must not raise either.
+        assert (other == version) is False
+        assert other != version
 
 
 @pytest.mark.parametrize("other", MALFORMED_COLLECTIONS)
@@ -58,11 +67,13 @@ def test_valid_collection_operands_still_compare():
     # Guards against over-rejecting: well-formed collections keep
     # comparing as versions.
     version = Version(1, 0, 0)
-    assert version == (1, 0, 0)
+    with pytest.warns(DeprecationWarning):
+        assert version == (1, 0, 0)
     assert version == [1, 0, 0]
     assert version == {"major": 1, "minor": 0, "patch": 0}
     assert version < (2, 0, 0)
     assert version < [2, 0, 0]
     assert version < {"major": 2, "minor": 0, "patch": 0}
     assert operator.gt((2, 0, 0), version)
-    assert version != (2, 0, 0)
+    with pytest.warns(DeprecationWarning):
+        assert version != (2, 0, 0)
