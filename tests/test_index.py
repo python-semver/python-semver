@@ -93,3 +93,25 @@ def test_version_info_should_throw_index_error_when_negative_index(version, inde
     version_info = Version.parse(version)
     with pytest.raises(IndexError, match=r"Version index cannot be negative"):
         version_info[index]
+
+
+class Index:
+    def __init__(self, value):
+        self.value = value
+
+    def __index__(self):
+        return self.value
+
+
+def test_version_accepts_index_protocol():
+    version = Version.parse("1.2.3")
+    assert version[Index(1)] == 2
+    assert version[Index(0):Index(2)] == (1, 2)
+    with pytest.raises(IndexError):
+        version[Index(-1)]
+
+
+@pytest.mark.parametrize("key", [None, "1", 1.0])
+def test_invalid_version_index_type(key):
+    with pytest.raises(TypeError):
+        Version.parse("1.2.3")[key]

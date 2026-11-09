@@ -1,0 +1,2 @@
+``Version`` subscripts now accept objects implementing ``__index__`` and raise
+``TypeError`` for invalid key types.
