@@ -1,5 +1,6 @@
 """Version handling by a semver compatible version class."""
 
+import operator
 import re
 from functools import wraps
 from typing import (
@@ -10,6 +11,7 @@ from typing import (
     Optional,
     Pattern,
     SupportsInt,
+    SupportsIndex,
     Tuple,
     Union,
     cast,
@@ -612,7 +614,7 @@ build='build.10')
         return self.compare(other) >= 0
 
     def __getitem__(
-        self, index: Union[int, slice]
+        self, index: Union[SupportsIndex, slice]
     ) -> Union[int, Optional[str], Tuple[Union[int, str], ...]]:
         """
         self.__getitem__(index) <==> self[index] Implement getitem.
@@ -630,15 +632,16 @@ build='build.10')
         >>> ver[0], ver[1], ver[2]
         (3, 4, 5)
         """
-        if isinstance(index, int):
-            index = slice(index, index + 1)
-        index = cast(slice, index)
+        if isinstance(index, slice):
+            start = None if index.start is None else operator.index(index.start)
+            stop = None if index.stop is None else operator.index(index.stop)
+            index = slice(start, stop, index.step)
+        else:
+            start = operator.index(index)
+            stop = start + 1
+            index = slice(start, stop)
 
-        if (
-            isinstance(index, slice)
-            and (index.start is not None and index.start < 0)
-            or (index.stop is not None and index.stop < 0)
-        ):
+        if (start is not None and start < 0) or (stop is not None and stop < 0):
             raise IndexError("Version index cannot be negative")
 
         part = tuple(
