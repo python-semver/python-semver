@@ -18,6 +18,59 @@ This section covers the changes between major version 2 and version 3.
 
 .. towncrier release notes start
 
+Version 3.1.1
+=============
+
+:Released: 2026-11-09
+:Maintainer: Tom Schraitle
+
+
+Bug Fixes
+---------
+
+* :pr:`483`: Fix :meth:`~semver.Version.bump_prerelease` and :meth:`~semver.Version.bump_build` to raise a :class:`ValueError` when the ``token`` argument is not a valid dot-separated SemVer identifier (for example ``build+meta`` or ``rc.``). Previously such tokens were concatenated unchecked, producing version strings that :meth:`~semver.Version.parse` itself would reject.
+
+* :pr:`486`: Fix :meth:`~semver.Version.next_version` to drop the build metadata when incrementing an old-style prerelease without a dot separator (for example ``rc3``). Previously ``1.2.3-rc3+build.5`` became ``1.2.3-rc4+build.5`` while ``1.2.3-rc.3+build.5`` became ``1.2.3-rc.4``.
+
+* :pr:`489`: ``Version.next_version`` now validates used prerelease tokens and matches token
+  families literally. Invalid tokens raise ``ValueError``. Dotted prefixes advance
+  correctly while existing qualifier chains and legacy counters are preserved.
+
+* :pr:`495`: The type annotation of ``Version.is_valid()`` now includes its existing support for UTF-8 encoded byte strings.
+
+* :pr:`501`: ``Version.replace()`` now preserves the original constructor ``TypeError``
+  when an existing version component receives an invalid value, rather than
+  reporting zero unexpected keyword arguments.
+
+* :pr:`508`: ``Version`` subscripts now accept objects implementing ``__index__`` and raise
+  ``TypeError`` for invalid key types.
+
+* :gh:`484`: Fix :meth:`~semver.Version.next_version` to correctly increment old-style prerelease versions without a dot separator (for example ``rc3``). Previously, calling ``next_version("prerelease")`` on such versions would reset the prerelease number to 1 instead of incrementing it.
+
+* :gh:`487`: Comparing versions with long numeric prerelease identifiers no longer raises
+  ``ValueError`` because of Python's integer string conversion limit.
+
+* :gh:`497`: ``Version.next_version("prerelease", prerelease_token=...)`` now advances the
+  patch version when switching tokens would otherwise produce a lower version.
+  For example, switching from ``1.2.3-rc.1`` to ``alpha`` returns
+  ``1.2.4-alpha.1``. Forward token changes retain the current patch version.
+
+* :gh:`499`: ``Version.next_version("prerelease")`` now advances the patch version when
+  incrementing an old-style prerelease counter would produce an older version.
+  For example, ``1.2.3-rc9`` becomes ``1.2.4-rc10``. The legacy token and
+  incremented counter are preserved; increments that already move forward keep
+  the current patch version.
+
+
+
+Trivial Changes
+---------------
+
+* :pr:`502`: Add tests for six behaviours that mutation testing showed were not covered: :func:`match()` at the boundary version, build metadata in :func:`is_compatible()`, numeric-only prereleases in :func:`bump_prerelease()`, the :command:`pysemver` return code for an invalid version, and the :func:`deprecated()` messages.
+
+
+----
+
 Version 3.1.0
 =============
 

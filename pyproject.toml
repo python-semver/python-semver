@@ -7,7 +7,7 @@
 
 [build-system]
 requires = [
-  "setuptools>=61",
+  "setuptools >= 77.0.3",
   # "setuptools-scm>=8",
 ]
 build-backend = "setuptools.build_meta"
@@ -18,10 +18,8 @@ requires-python = ">=3.10"
 name = "semver"
 description = "Python helper for Semantic Versioning (https://semver.org)"
 readme = "README.rst"
-# PEP 639
-# licence = "BSD-2-Clause"
-# readme.content-type = "text/x-rst"
-license = { file = "LICENSE.txt" }
+license = "BSD-3-Clause"
+license-files = ["LICENSE.txt"]
 authors = [
   {name = "Kostiantyn Rybnikov", email = "k-bx@k-bx.com"},
   {name = "Tom Schraitle", email = "toms@suse.de"},
@@ -35,7 +33,6 @@ classifiers = [
     "Environment :: Web Environment",
     "Intended Audience :: Developers",
     "Development Status :: 5 - Production/Stable",
-    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
