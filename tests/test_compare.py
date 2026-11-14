@@ -1,3 +1,5 @@
+import warnings
+
 import pytest
 
 import semver
@@ -312,6 +314,27 @@ def test_should_warn_when_testing_equality_with_strings_or_tuples(other):
         assert not (version != other)
 
     assert isinstance(hash(version), int)
+
+
+def test_should_filter_only_cross_type_equality_deprecation_warnings():
+    version = Version.parse("1.0.0")
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always", DeprecationWarning)
+        warnings.filterwarnings(
+            "ignore",
+            message=r"Equality comparisons between Version and strings, tuples or lists.*",
+            category=DeprecationWarning,
+        )
+
+        for other in ("1.0.0", b"1.0.0", (1, 0, 0), [1, 0, 0]):
+            assert version == other
+            assert (version != other) is False
+
+        warnings.warn("unrelated deprecation", DeprecationWarning)
+
+    assert len(caught) == 1
+    assert str(caught[0].message) == "unrelated deprecation"
 
 
 @pytest.mark.parametrize(
