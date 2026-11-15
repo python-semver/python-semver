@@ -507,16 +507,14 @@ build='build.10')
             return x
 
         rc1, rc2 = self.prerelease, other.prerelease
-        rccmp = self._nat_cmp(rc1, rc2)
-
-        if not rccmp:
+        if rc1 == rc2:
             return 0
         if not rc1:
-            return 1
+            return 1 if rc2 else 0
         elif not rc2:
             return -1
 
-        return rccmp
+        return self._nat_cmp(rc1, rc2)
 
     def next_version(self, part: str, prerelease_token: str = "rc") -> "Version":
         """
