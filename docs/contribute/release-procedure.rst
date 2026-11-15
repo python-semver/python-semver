@@ -32,7 +32,6 @@ Prepare the Release
 
    - :file:`setup.cfg`
    - :file:`tox.ini`
-   - :file:`.git/workflows/pythonpackage.yml`
    - :file:`.github/workflows/python-testing.yml`
 
 4. Verify that the version in file :file:`src/semver/__about__.py`

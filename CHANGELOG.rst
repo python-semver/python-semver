@@ -18,6 +18,32 @@ This section covers the changes between major version 2 and version 3.
 
 .. towncrier release notes start
 
+Version 3.1.2
+=============
+
+:Released: 2026-11-15
+:Maintainer: Tom Schraitle
+
+
+Deprecations
+------------
+
+* :gh:`506`: Equality comparisons between :class:`~semver.version.Version` instances and strings, bytes, tuples,
+  or lists now issue a :py:exc:`DeprecationWarning` and will be removed in semver 4.
+  :class:`~semver.version.Version` remains hashable, but do not mix these types as dictionary keys or
+  set elements during the transition. Convert strings and bytes with
+  :meth:`~semver.version.Version.parse` and tuples or lists with ``Version(*parts)``.
+
+
+
+Trivial Changes
+---------------
+
+* :gh:`511`: :meth:`Version.compare` now returns early when both prerelease parts are equal,
+  or when only one version has a prerelease. This makes comparisons and sorting faster.
+
+----
+
 Version 3.1.1
 =============
 
