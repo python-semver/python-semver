@@ -1,0 +1,2 @@
+:meth:`Version.compare` now returns early when both prerelease parts are equal,
+or when only one version has a prerelease. This makes comparisons and sorting faster.
