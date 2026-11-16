@@ -15,7 +15,7 @@ class SemVerWithVPrefix(Version):
         :raises ValueError: when version does not start with "v" or "V"
         :return: a new instance
         """
-        if not version[0] in ("v", "V"):
+        if not version.startswith(("v", "V")):
             raise ValueError(
                 f"{version!r}: not a valid semantic version tag. "
                 "Must start with 'v' or 'V'"
