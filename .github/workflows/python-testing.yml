@@ -122,9 +122,7 @@ jobs:
         run: uv python install ${{ matrix.python-version }}
 
       - name: Install the project
-        run: |
-          uv sync --all-extras --dev
-          uv pip install tox tox-gh-actions
+        run: uv sync --locked --all-extras --group gh-action
 
       - name: Checks
         run: uv run tox run -e ${{ matrix.python-version }}
