@@ -1015,12 +1015,32 @@ wheels = [
 name = "python-discovery"
 version = "1.6.1"
 source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version < '3.11'",
+]
 dependencies = [
     { name = "filelock" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/0c/57/250bd238b966cece44328235eb85290045d059265fdaf7527a3a958123db/python_discovery-1.6.1.tar.gz", hash = "sha256:cf87d3627dfb4412437fdd5b13eae402607722998d21567993aedbc59b23c15e", size = 84338, upload-time = "2026-09-18T01:31:53.971Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/16/7d/e9ffbadfbf89c93848412d04594135c4ae8c1d37d9e053b9c3ed718fabc4/python_discovery-1.6.1-py3-none-any.whl", hash = "sha256:d43fcdef879fe795352bd13ccf8d185ba5a9f86f36cfcd00529f596e737442b3", size = 38664, upload-time = "2026-09-18T01:31:52.448Z" },
+]
+
+[[package]]
+name = "python-discovery"
+version = "1.9.6"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.15'",
+    "python_full_version >= '3.12' and python_full_version < '3.15'",
+    "python_full_version == '3.11.*'",
+]
+dependencies = [
+    { name = "filelock" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/cb/4e/20a9c45c4bb839e6e03e5971a546c623d12f950aa496cf344dc8e9f07167/python_discovery-1.9.6.tar.gz", hash = "sha256:383aa67858d73a9585a843a37a4383c6be98e4d86a981a031328e393a6eb2632", size = 147742, upload-time = "2026-11-18T00:32:26.272Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c4/34/65e66e8c384dc08f0e58c474587c05c4bc952f60facd8a15e80748118bd1/python_discovery-1.9.6-py3-none-any.whl", hash = "sha256:93b10b90363d4151964cdeee2ec6601f3041b17fc2b253a1c3da7d6e7ddd8337", size = 98453, upload-time = "2026-11-18T00:32:24.849Z" },
 ]
 
 [[package]]
@@ -1157,7 +1177,8 @@ devel = [
     { name = "sphinx-argparse" },
     { name = "sphinx-autodoc-typehints" },
     { name = "towncrier" },
-    { name = "tox" },
+    { name = "tox", version = "4.65.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "tox", version = "4.67.13", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "twine" },
 ]
 docs = [
@@ -1179,7 +1200,8 @@ gh-action = [
     { name = "sphinx-argparse" },
     { name = "sphinx-autodoc-typehints" },
     { name = "towncrier" },
-    { name = "tox" },
+    { name = "tox", version = "4.65.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "tox", version = "4.67.13", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "tox-gh-actions" },
     { name = "twine" },
 ]
@@ -1190,7 +1212,8 @@ publish = [
 test = [
     { name = "pytest" },
     { name = "pytest-cov" },
-    { name = "tox" },
+    { name = "tox", version = "4.65.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "tox", version = "4.67.13", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
 ]
 typing = [
     { name = "mypy" },
@@ -1214,7 +1237,7 @@ devel = [
     { name = "sphinx-argparse", specifier = "<=0.5.2" },
     { name = "sphinx-autodoc-typehints", specifier = "==3.0.1" },
     { name = "towncrier", specifier = "==25.8.0" },
-    { name = "tox", specifier = "<=4.56.1" },
+    { name = "tox", specifier = "<4.67.14" },
     { name = "twine", specifier = "<=6.2.0" },
 ]
 docs = [
@@ -1234,7 +1257,7 @@ gh-action = [
     { name = "sphinx-argparse", specifier = "<=0.5.2" },
     { name = "sphinx-autodoc-typehints", specifier = "==3.0.1" },
     { name = "towncrier", specifier = "==25.8.0" },
-    { name = "tox", specifier = "<=4.56.1" },
+    { name = "tox", specifier = "<4.67.14" },
     { name = "tox-gh-actions" },
     { name = "twine", specifier = "<=6.2.0" },
 ]
@@ -1245,7 +1268,7 @@ publish = [
 test = [
     { name = "pytest", specifier = "<=9.1.1" },
     { name = "pytest-cov", specifier = "<=7.1.0" },
-    { name = "tox", specifier = "<=4.56.1" },
+    { name = "tox", specifier = "<4.67.14" },
 ]
 typing = [
     { name = "mypy", specifier = "<=2.1.0" },
@@ -1447,8 +1470,11 @@ wheels = [
 
 [[package]]
 name = "tox"
-version = "4.56.1"
+version = "4.65.0"
 source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version < '3.11'",
+]
 dependencies = [
     { name = "cachetools" },
     { name = "colorama" },
@@ -1457,15 +1483,42 @@ dependencies = [
     { name = "platformdirs" },
     { name = "pluggy" },
     { name = "pyproject-api" },
-    { name = "python-discovery" },
-    { name = "tomli", marker = "python_full_version < '3.11'" },
+    { name = "python-discovery", version = "1.6.1", source = { registry = "https://pypi.org/simple" } },
+    { name = "tomli" },
     { name = "tomli-w" },
-    { name = "typing-extensions", version = "4.16.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "typing-extensions", version = "4.16.0", source = { registry = "https://pypi.org/simple" } },
     { name = "virtualenv" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/60/6a/d20d405fc6661902ff803a9fa048d8aae27597c3b5dc750369ded82d08f7/tox-4.56.1.tar.gz", hash = "sha256:db1c2610802553189cf40de251661d066a635ee0ed9bf2a60093b5f1a7f36ef8", size = 283155, upload-time = "2026-06-25T06:18:36.802Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/41/05/a79f2c293f5b5b2188978b4e8b60d12c64277662de1254184769f3e96571/tox-4.65.0.tar.gz", hash = "sha256:582c4adba07b8fbeca1454b528a512dfc66c19635154289c7032555dbc72d56c", size = 333143, upload-time = "2026-10-09T20:33:09.306Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d8/97/560a5dfde154619d9643b1e208119dddc29bbb35a38a4ce4d095c16cf8f0/tox-4.56.1-py3-none-any.whl", hash = "sha256:4d06b925c4dd67872099b39c5a46fba79a2169c5f6e32060f95a8b1181f0ef55", size = 216469, upload-time = "2026-06-25T06:18:35.229Z" },
+    { url = "https://files.pythonhosted.org/packages/e0/1a/3408ad74ac353c519f7a38fbe35fe107b5fbeaa55539f189c19d0726f14c/tox-4.65.0-py3-none-any.whl", hash = "sha256:823ea3df020d7ede8f5df6ba4f374585063b39aa86140c098fbb97833543844e", size = 238074, upload-time = "2026-10-09T20:33:07.366Z" },
+]
+
+[[package]]
+name = "tox"
+version = "4.67.13"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.15'",
+    "python_full_version >= '3.12' and python_full_version < '3.15'",
+    "python_full_version == '3.11.*'",
+]
+dependencies = [
+    { name = "cachetools" },
+    { name = "colorama" },
+    { name = "filelock" },
+    { name = "packaging" },
+    { name = "platformdirs" },
+    { name = "pluggy" },
+    { name = "pyproject-api" },
+    { name = "python-discovery", version = "1.9.6", source = { registry = "https://pypi.org/simple" } },
+    { name = "tomli-w" },
+    { name = "typing-extensions", version = "4.15.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13'" },
+    { name = "virtualenv" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/da/4e/703160b580afbecef60e764708adbbf37f102aadfcbce9bb122e924e994d/tox-4.67.13.tar.gz", hash = "sha256:9f70b44ca2e31d91d8fe2e2917f505554950adc3961c0ee70bb42db16d903f62", size = 425618, upload-time = "2026-11-06T15:33:01.95Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d2/f0/f32e73acb872b67b97b51d67d7241838136f58127d763afcde7762832655/tox-4.67.13-py3-none-any.whl", hash = "sha256:4d6fa08dbe5e841f2abfee1dd4f5cdf31af30d68a3d78b85a7bf57eced5f3c6c", size = 263353, upload-time = "2026-11-06T15:33:00.306Z" },
 ]
 
 [[package]]
@@ -1473,7 +1526,8 @@ name = "tox-gh-actions"
 version = "3.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "tox" },
+    { name = "tox", version = "4.65.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "tox", version = "4.67.13", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/9c/11/6c3f818887c37a144a4b48bfc440150f006bdac7a68d92de1046680f578f/tox_gh_actions-3.5.0.tar.gz", hash = "sha256:cc8e148c4513042e5019973e5672594c3df241b035e7fb550f6f778588110051", size = 18815, upload-time = "2025-10-22T14:12:24.846Z" }
 wheels = [
@@ -1544,7 +1598,8 @@ dependencies = [
     { name = "filelock" },
     { name = "packaging" },
     { name = "platformdirs" },
-    { name = "python-discovery" },
+    { name = "python-discovery", version = "1.6.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "python-discovery", version = "1.9.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "typing-extensions", version = "4.16.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/70/aa/bff50daee0488e16d611258a9b6c5a1d0c9e128f8ca424e9f4e1c0444ef2/virtualenv-21.14.13.tar.gz", hash = "sha256:de5307ba4b9a0001d9c8ea02832d38f63ca432880f416c1bface61c4323fd905", size = 5570301, upload-time = "2026-10-22T20:10:16.952Z" }
