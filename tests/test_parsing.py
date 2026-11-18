@@ -185,6 +185,15 @@ def test_equal_prereleases_have_equal_hashes(prerelease_a, prerelease_b):
     assert {v1: "found"}[v2] == "found"
 
 
+def test_should_treat_superscript_digit_as_alphanumeric_identifier():
+    # "²" satisfies str.isdigit() but not str.isdecimal(), and int("²")
+    # raises ValueError. It must be treated as an alphanumeric identifier:
+    # numeric identifiers always have lower precedence than non-numeric ones.
+    v = Version(1, 2, 3, prerelease="²")
+    assert Version(1, 2, 3, prerelease="7") < v
+    assert isinstance(hash(v), int)
+
+
 def test_parse_method_for_version_info():
     s_version = "1.2.3-alpha.1.2+build.11.e0f985a"
     v = Version.parse(s_version)

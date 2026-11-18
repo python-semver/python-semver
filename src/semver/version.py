@@ -2,6 +2,7 @@
 
 import operator
 import re
+import unicodedata
 import warnings
 from functools import wraps
 from typing import (
@@ -200,11 +201,13 @@ class Version:
 
     @staticmethod
     def _prerelease_key(identifier: str) -> tuple[int, int, str]:
-        if not identifier.isdigit():
+        if not identifier.isdecimal():
             return (1, 0, identifier)
 
         if not identifier.isascii():
-            identifier = str(int(identifier))
+            identifier = "".join(
+                str(unicodedata.decimal(character)) for character in identifier
+            )
 
         # Compare decimal values without converting arbitrarily long
         # ASCII identifiers to integers. Keep constructor leading zeros.
