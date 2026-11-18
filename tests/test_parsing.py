@@ -163,6 +163,37 @@ def test_equal_versions_have_equal_hashes():
     assert v2 in s
 
 
+@pytest.mark.parametrize(
+    "prerelease_a,prerelease_b",
+    [
+        # no. 1: zero-padded numeric identifier
+        ("007", "7"),
+        # no. 2: zero-padded identifier among several
+        ("alpha.007.beta", "alpha.7.beta"),
+        # no. 3: non-ASCII digit normalizes to its decimal value
+        ("٧", "7"),
+        # no. 4: empty prerelease equals a missing one
+        ("", None),
+    ],
+)
+def test_equal_prereleases_have_equal_hashes(prerelease_a, prerelease_b):
+    v1 = Version(1, 2, 3, prerelease=prerelease_a)
+    v2 = Version(1, 2, 3, prerelease=prerelease_b)
+    assert v1 == v2
+    assert hash(v1) == hash(v2)
+    assert len({v1, v2}) == 1
+    assert {v1: "found"}[v2] == "found"
+
+
+def test_should_treat_superscript_digit_as_alphanumeric_identifier():
+    # "²" satisfies str.isdigit() but not str.isdecimal(), and int("²")
+    # raises ValueError. It must be treated as an alphanumeric identifier:
+    # numeric identifiers always have lower precedence than non-numeric ones.
+    v = Version(1, 2, 3, prerelease="²")
+    assert Version(1, 2, 3, prerelease="7") < v
+    assert isinstance(hash(v), int)
+
+
 def test_parse_method_for_version_info():
     s_version = "1.2.3-alpha.1.2+build.11.e0f985a"
     v = Version.parse(s_version)

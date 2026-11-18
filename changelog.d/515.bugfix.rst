@@ -1,0 +1,6 @@
+Fix :meth:`Version.__hash__` so that versions which compare equal now produce
+equal hashes. A numeric prerelease identifier with leading zeros (for example
+``"007"``) compares equal to its normalized form (``"7"``), but previously
+hashed differently, which broke ``set`` and ``dict`` behavior.
+
+Fix GitHub Python test to use pinned versions in :file:`pyproject.toml`.

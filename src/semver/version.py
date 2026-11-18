@@ -2,6 +2,7 @@
 
 import operator
 import re
+import unicodedata
 import warnings
 from functools import wraps
 from typing import (
@@ -198,22 +199,25 @@ class Version:
                     "hyphens."
                 )
 
+    @staticmethod
+    def _prerelease_key(identifier: str) -> tuple[int, int, str]:
+        if not identifier.isdecimal():
+            return (1, 0, identifier)
+
+        if not identifier.isascii():
+            identifier = "".join(
+                str(unicodedata.decimal(character)) for character in identifier
+            )
+
+        # Compare decimal values without converting arbitrarily long
+        # ASCII identifiers to integers. Keep constructor leading zeros.
+        normalized = identifier.lstrip("0") or "0"
+        return (0, len(normalized), normalized)
+
     @classmethod
     def _nat_cmp(cls, a: Optional[str], b: Optional[str]) -> int:
-        def prerelease_key(identifier: str) -> tuple[int, int, str]:
-            if not identifier.isdigit():
-                return (1, 0, identifier)
-
-            if not identifier.isascii():
-                identifier = str(int(identifier))
-
-            # Compare decimal values without converting arbitrarily long
-            # ASCII identifiers to integers. Keep constructor leading zeros.
-            normalized = identifier.lstrip("0") or "0"
-            return (0, len(normalized), normalized)
-
-        a_parts = [prerelease_key(x) for x in (a or "").split(".")]
-        b_parts = [prerelease_key(x) for x in (b or "").split(".")]
+        a_parts = [cls._prerelease_key(x) for x in (a or "").split(".")]
+        b_parts = [cls._prerelease_key(x) for x in (b or "").split(".")]
 
         for sub_a, sub_b in zip(a_parts, b_parts):
             cmp_result = _cmp(sub_a, sub_b)
@@ -678,7 +682,14 @@ build='build.10')
         return version
 
     def __hash__(self) -> int:
-        return hash(self.to_tuple()[:4])
+        # Normalize the prerelease with the same key used for comparison so
+        # that versions comparing equal (e.g. "007" and "7") hash equal.
+        prerelease = (
+            tuple(self._prerelease_key(x) for x in self.prerelease.split("."))
+            if self.prerelease
+            else ()
+        )
+        return hash((self.major, self.minor, self.patch, prerelease))
 
     def finalize_version(self) -> "Version":
         """

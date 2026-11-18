@@ -75,11 +75,18 @@ def test_should_reject_noncanonical_prerelease_when_parsing(prerelease):
 
 
 @pytest.mark.parametrize(
-    "left,right", [("\u00b2", "2"), ("a.\u00b2", "b.0"), ("a.0", "b.\u00b2")]
+    "left,right,expected",
+    [("\u00b2", "2", 1), ("a.\u00b2", "b.0", -1), ("a.0", "b.\u00b2", -1)],
 )
-def test_should_preserve_eager_invalid_unicode_digit_error(left, right):
-    with pytest.raises(ValueError):
-        Version(0, 0, 0, prerelease=left).compare(Version(0, 0, 0, prerelease=right))
+def test_should_compare_superscript_digit_as_alphanumeric(left, right, expected):
+    # "\u00b2" is not a decimal digit (int("\u00b2") raises ValueError), so it is an
+    # alphanumeric identifier: numeric identifiers always precede it.
+    assert (
+        Version(0, 0, 0, prerelease=left).compare(
+            Version(0, 0, 0, prerelease=right)
+        )
+        == expected
+    )
 
 
 def test_should_compare_core_before_invalid_prerelease():
