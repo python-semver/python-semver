@@ -18,11 +18,31 @@ This section covers the changes between major version 2 and version 3.
 
 .. towncrier release notes start
 
+Version 3.2.0
+=============
+
+:Released: 2026-11-26
+:Maintainer: Tom Schraitle
+
+
+Security
+--------
+
+* :gh:`523`: Updated ``filelock`` package to 4.1.0 due to security issues.
+
+
+Breaking Changes
+----------------
+
+* :gh:`521`: The :attr:`~semver.version.Version.MAX_LENGTH` limit was set too low, raising to to 255.
+
+----
+
 Version 3.1.3
 =============
 
 :Released: 2026-11-26
-:Maintainer:
+:Maintainer: Tom Schraitle
 
 Security
 --------
