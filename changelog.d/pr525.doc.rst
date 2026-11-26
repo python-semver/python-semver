@@ -1,0 +1,2 @@
+Updated the contributor test guide to use supported Python environments and
+current linting commands.
