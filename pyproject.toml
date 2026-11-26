@@ -162,27 +162,38 @@ template = "changelog.d/_template.rst"
 # issue_format = "`#{issue} <https://github.com/python-attrs/attrs/issues/{issue}>`_"
 # issue_format = ":gh:`{issue}`"
 
+[[tool.towncrier.type]]
+directory = "security"
+name = "Security"
 
-[tool.towncrier.fragment.breaking]
+[[tool.towncrier.type]]
+directory = "breaking"
 name = "Breaking Changes"
 
-[tool.towncrier.fragment.bugfix]
+[[tool.towncrier.type]]
+directory = "bugfix"
 name = "Bug Fixes"
 
-[tool.towncrier.fragment.deprecation]
+[[tool.towncrier.type]]
+directory = "deprecation"
 name = "Deprecations"
 
-[tool.towncrier.fragment.doc]
+[[tool.towncrier.type]]
+directory = "doc"
 name = "Improved Documentation"
 
-[tool.towncrier.fragment.feature]
+[[tool.towncrier.type]]
+directory = "feature"
 name = "Features"
 
-[tool.towncrier.fragment.removal]
+[[tool.towncrier.type]]
+directory = "removal"
 name = "Removals"
 
-[tool.towncrier.fragment.trivial]
+[[tool.towncrier.type]]
+directory = "trivial"
 name = "Trivial Changes"
 
-[tool.towncrier.fragment.internal]
+[[tool.towncrier.type]]
+directory = "internal"
 name = "Internal Changes"

@@ -18,6 +18,40 @@ This section covers the changes between major version 2 and version 3.
 
 .. towncrier release notes start
 
+Version 3.1.3
+=============
+
+:Released: 2026-11-26
+:Maintainer:
+
+Security
+--------
+
+* Fix potential denial-of-service vulnerability when parsing untrusted input with excessive length or large numeric components.
+  For details, see `GHSA-3qgw-g8j9-rcg4 <https://github.com/python-semver/python-semver/security/advisories/GHSA-3qgw-g8j9-rcg4>`_.
+
+
+Bug Fixes
+---------
+
+* :gh:`515`: Fix :meth:`Version.__hash__` so that versions which compare equal now produce
+  equal hashes. A numeric prerelease identifier with leading zeros (for example
+  ``"007"``) compares equal to its normalized form (``"7"``), but previously
+  hashed differently, which broke ``set`` and ``dict`` behavior.
+
+  Fix GitHub Python test to use pinned versions in :file:`pyproject.toml`.
+
+
+
+Improved Documentation
+----------------------
+
+* :pr:`514`: The prefixed-version documentation example now rejects empty input with
+  ``ValueError``, allowing its inherited ``is_valid`` method to return ``False``.
+
+
+----
+
 Version 3.1.2
 =============
 
