@@ -1,2 +1,0 @@
-The prefixed-version documentation example now rejects empty input with
-``ValueError``, allowing its inherited ``is_valid`` method to return ``False``.
