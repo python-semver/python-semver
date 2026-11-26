@@ -3,6 +3,28 @@ import pytest
 from semver import Version, parse, parse_version_info
 
 
+@pytest.mark.parametrize("as_bytes", [False, True])
+@pytest.mark.parametrize("optional_minor_and_patch", [False, True])
+def test_parse_version_length_limit(as_bytes, optional_minor_and_patch):
+    version = "1.2.3+" + "a" * (Version.MAX_LENGTH - len("1.2.3+"))
+    accepted = version.encode("utf-8") if as_bytes else version
+    rejected = accepted + (b"a" if as_bytes else "a")
+
+    assert str(Version.parse(accepted, optional_minor_and_patch)) == version
+    with pytest.raises(ValueError, match="maximum length"):
+        Version.parse(rejected, optional_minor_and_patch)
+    assert not Version.is_valid(rejected)
+
+
+def test_parse_rejects_long_versions_before_native_backend(monkeypatch):
+    def unexpected_backend(version):
+        pytest.fail("Oversized input must not reach the native backend")
+
+    monkeypatch.setattr("semver.version._native_parse_parts", unexpected_backend)
+    with pytest.raises(ValueError, match="maximum length"):
+        Version.parse("1.2.3+" + "a" * Version.MAX_LENGTH)
+
+
 @pytest.mark.parametrize(
     "version,expected",
     [

@@ -6,42 +6,6 @@ import semver
 from semver import Version, compare
 
 
-def test_should_compare_long_numeric_prerelease():
-    value = "0.0.0-" + "1" * 5000
-    assert Version.is_valid(value)
-    version = Version.parse(value)
-    assert version.compare(value) == 0
-    assert compare(value, "0.0.0-2") == 1
-    assert compare("0.0.0-2", value) == -1
-
-
-@pytest.mark.parametrize(
-    "lower,higher",
-    [
-        pytest.param("9" * 4999, "1" + "0" * 4999, id="digit-count"),
-        pytest.param(
-            "1" + "0" * 4998 + "1",
-            "1" + "0" * 4998 + "2",
-            id="equal-length",
-        ),
-        pytest.param("1" * 5000, "alpha", id="numeric-before-text"),
-        pytest.param("alpha." + "1" * 5000, "alpha." + "1" * 5000 + ".1", id="prefix"),
-    ],
-)
-def test_should_order_long_numeric_prereleases(lower, higher):
-    low = Version.parse("0.0.0-" + lower)
-    high = Version.parse("0.0.0-" + higher)
-    assert low.compare(high) == -1
-    assert high.compare(low) == 1
-    assert sorted([high, low]) == [low, high]
-
-
-def test_should_ignore_build_and_preserve_release_order_with_long_prerelease():
-    version = Version.parse("0.0.0-" + "1" * 5000)
-    assert version == version.replace(build="other")
-    assert version < Version(0, 0, 0)
-
-
 @pytest.mark.parametrize(
     "left,right,expected",
     [

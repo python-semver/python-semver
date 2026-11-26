@@ -1,8 +1,65 @@
+from typing import Any
 import pytest  # noqa
 
 from semver import Version
 
 UTF8_VERSION = "1.0.0"
+
+
+@pytest.mark.parametrize("part", Version.NAMES)
+@pytest.mark.parametrize("kind", ["str", "bytes", "int", "negative-int"])
+def test_constructor_rejects_oversized_parts(part, kind):
+    if kind == "str":
+        value = "1" * (Version.MAX_LENGTH + 1)
+    elif kind == "bytes":
+        value = b"1" * (Version.MAX_LENGTH + 1)
+    else:
+        value = 10 ** 10_000
+        if kind == "negative-int":
+            value = -value
+    parts = {"major": 1, part: value}
+    with pytest.raises(ValueError, match="maximum length"):
+        Version(**parts)
+
+
+@pytest.mark.parametrize("part", ["major", "minor", "patch"])
+def test_constructor_rejects_oversized_custom_integer(part):
+    class OversizedInteger:
+        def __int__(self) -> int:
+            return 10 ** 10_000
+
+    parts: dict[str, Any] = {"major": 1, part: OversizedInteger()}
+    with pytest.raises(ValueError, match="maximum length"):
+        Version(**parts)
+
+
+@pytest.mark.parametrize("part", Version.NAMES)
+def test_constructor_version_length_boundary(part):
+    overhead = 4 if part in ("major", "minor", "patch") else 6
+    value = "1" * (Version.MAX_LENGTH - overhead)
+    parts = {"major": 1, part: value}
+    assert len(str(Version(**parts))) == Version.MAX_LENGTH
+    parts[part] = value + "1"
+    with pytest.raises(ValueError, match="maximum length"):
+        Version(**parts)
+
+
+def test_constructor_counts_combined_parts_and_separators():
+    version = Version(1, prerelease="a", build="b" * (Version.MAX_LENGTH - 8))
+    assert len(str(version)) == Version.MAX_LENGTH
+    with pytest.raises(ValueError, match="maximum length"):
+        version.replace(prerelease="aa")
+
+
+@pytest.mark.parametrize("part", ["major", "minor", "patch", "prerelease", "build"])
+def test_bump_rejects_version_exceeding_length_limit(part):
+    overhead = 4 if part in ("major", "minor", "patch") else 6
+    value = "9" * (Version.MAX_LENGTH - overhead)
+    parts: dict[str, Any] = {"major": 1, part: value}
+    version = Version(**parts)
+    with pytest.raises(ValueError, match="maximum length"):
+        getattr(version, "bump_" + part)()
+    assert len(str(version)) == Version.MAX_LENGTH
 
 
 @pytest.mark.parametrize(

@@ -12,6 +12,24 @@ from semver import (
 )
 
 
+@pytest.mark.parametrize(
+    "string,expected",
+    [
+        ("", ""),
+        ("build", "build"),
+        ("build12.part003tail", "build12.part004tail"),
+        ("build12.part0099tail", "build12.part0100tail"),
+        ("build99tail", "build100tail"),
+        ("build12\npart003\ntail", "build12\npart004\ntail"),
+        ("build12.part\u0669tail", "build12.part10tail"),
+        ("a" * 100_000, "a" * 100_000),
+        ("1a" * 10_000 + "009tail", "1a" * 10_000 + "010tail"),
+    ],
+)
+def test_increment_string_preserves_last_digit_run(string, expected):
+    assert Version._increment_string(string) == expected
+
+
 def test_should_bump_major():
     assert bump_major("3.4.5") == "4.0.0"
 

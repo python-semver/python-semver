@@ -7,28 +7,29 @@ import warnings
 from functools import wraps
 from typing import (
     Any,
+    Callable,
     ClassVar,
+    Collection,
     Dict,
+    Final,
     Iterable,
     Optional,
     Pattern,
-    SupportsInt,
     SupportsIndex,
+    SupportsInt,
     Tuple,
-    Union,
-    cast,
-    Callable,
-    Collection,
     Type,
     TypeVar,
+    Union,
+    cast,
 )
 
 from ._types import (
-    VersionTuple,
+    String,
     VersionDict,
     VersionIterator,
-    String,
     VersionPart,
+    VersionTuple,
 )
 
 try:
@@ -95,11 +96,14 @@ class Version:
 
     See specification at https://semver.org.
 
+    :cvar MAX_LENGTH: maximum number of characters in a version string.
     :param major: version when you make incompatible API changes.
     :param minor: version when you add functionality in a backwards-compatible manner.
     :param patch: version when you make backwards-compatible bug fixes.
     :param prerelease: an optional prerelease string
     :param build: an optional build string
+    :raises ValueError: if a numeric part is negative or the version exceeds
+        :attr:`MAX_LENGTH`
     """
 
     __slots__ = ("_major", "_minor", "_patch", "_prerelease", "_build")
@@ -107,8 +111,10 @@ class Version:
     #: The names of the different parts of a version
     NAMES: ClassVar[Tuple[str, ...]] = tuple([item[1:] for item in __slots__])
 
+    MAX_LENGTH: Final[int] = 50
+
     #: Regex for number in a build
-    _LAST_NUMBER: ClassVar[Pattern[str]] = re.compile(r"(?:[^\d]*(\d+)[^\d]*)+")
+    _LAST_NUMBER: ClassVar[Pattern[str]] = re.compile(r"(\d+)")
     #: Regex for number in a prerelease
     _LAST_PRERELEASE: ClassVar[Pattern[str]] = re.compile(r"^(.*\.)?(\d+)$")
     #: Regex for a single valid alphanumeric prerelease identifier
@@ -162,20 +168,51 @@ class Version:
         prerelease: Optional[Union[String, int]] = None,
         build: Optional[Union[String, int]] = None,
     ):
+        length_error = (
+            f"Version string exceeds maximum length of {self.MAX_LENGTH} characters"
+        )
+        # Reject integers with more than MAX_LENGTH decimal digits without
+        # converting them to strings; the combined length is checked below.
+        numeric_limit = 10 ** self.MAX_LENGTH
+        # Check built-in inputs before int()/str() can perform costly conversions.
+        for value in (major, minor, patch, prerelease, build):
+            if isinstance(value, (str, bytes)) and len(value) > self.MAX_LENGTH:
+                raise ValueError(length_error)
+            if isinstance(value, int) and (
+                value >= numeric_limit or value <= -numeric_limit
+            ):
+                raise ValueError(length_error)
+
         # Build a dictionary of the arguments except prerelease and build
         version_parts = {"major": int(major), "minor": int(minor), "patch": int(patch)}
 
+        # Custom __int__ methods can return huge integers, so check the converted
+        # values too before rendering them for the combined-length calculation.
         for name, value in version_parts.items():
             if value < 0:
                 raise ValueError(
-                    "{!r} is negative. A version can only be positive.".format(name)
+                    f"{name!r} is negative. A version can only be positive."
                 )
+            if value >= numeric_limit:
+                raise ValueError(length_error)
+
+        prerelease = None if prerelease is None else str(prerelease)
+        build = None if build is None else str(build)
+        # Individually bounded parts can still exceed the total limit together.
+        # Count both dots and, for nonempty metadata, its '-' or '+' separator.
+        # Avoid str(self): subclasses may override it, and fields are not yet set.
+        length = sum(len(str(value)) for value in version_parts.values()) + 2
+        for identifier in (prerelease, build):
+            if identifier:
+                length += len(identifier) + 1
+        if length > self.MAX_LENGTH:
+            raise ValueError(length_error)
 
         self._major = version_parts["major"]
         self._minor = version_parts["minor"]
         self._patch = version_parts["patch"]
-        self._prerelease = None if prerelease is None else str(prerelease)
-        self._build = None if build is None else str(build)
+        self._prerelease = prerelease
+        self._build = build
 
     @classmethod
     def _validate_identifiers(
@@ -340,7 +377,9 @@ class Version:
         Source:
         http://code.activestate.com/recipes/442460-increment-numbers-in-a-string/#c1
         """
-        match = Version._LAST_NUMBER.search(string)
+        match = None
+        for candidate in Version._LAST_NUMBER.finditer(string):
+            match = candidate
         if match:
             next_ = str(int(match.group(1)) + 1)
             start, end = match.span(1)
@@ -768,13 +807,13 @@ build='build.10')
            Added optional parameter ``optional_minor_and_patch`` to allow
            optional minor and patch parts.
 
-        :param version: version string
+        :param version: version string, at most :attr:`MAX_LENGTH` characters
         :param optional_minor_and_patch: if set to true, the version string to parse \
            can contain optional minor and patch parts. Optional parts are set to zero.
            By default (False), the version string to parse has to follow the semver
            specification.
         :return: a new :class:`Version` instance
-        :raises ValueError: if version is invalid
+        :raises ValueError: if version is invalid or exceeds :attr:`MAX_LENGTH`
         :raises TypeError: if version contains the wrong type
 
         >>> semver.Version.parse('3.4.5-pre.2+build.4')
@@ -785,6 +824,11 @@ prerelease='pre.2', build='build.4')
             version = version.decode("UTF-8")
         elif not isinstance(version, String.__args__):  # type: ignore
             raise TypeError("not expecting type '%s'" % type(version))
+
+        if len(version) > cls.MAX_LENGTH:
+            raise ValueError(
+                f"Version string exceeds maximum length of {cls.MAX_LENGTH} characters"
+            )
 
         if _native_parse_parts is not None and not optional_minor_and_patch:  # pragma: no cover
             try:
