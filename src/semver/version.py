@@ -111,7 +111,7 @@ class Version:
     #: The names of the different parts of a version
     NAMES: ClassVar[Tuple[str, ...]] = tuple([item[1:] for item in __slots__])
 
-    MAX_LENGTH: Final[int] = 50
+    MAX_LENGTH: Final[int] = 255 
 
     #: Regex for number in a build
     _LAST_NUMBER: ClassVar[Pattern[str]] = re.compile(r"(\d+)")
