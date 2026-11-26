@@ -1,0 +1,2 @@
+The ``tox -e docs`` command now uses the available system ``make`` executable
+instead of resolving the unrelated PyPI ``make`` package through ``uvx``.
