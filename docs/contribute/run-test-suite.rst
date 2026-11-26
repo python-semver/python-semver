@@ -16,18 +16,15 @@ You can decide to run the complete test suite or only part of it:
 
      $ tox
 
-  If you have not all Python interpreters installed on your system
-  it will probably give you some errors (``InterpreterNotFound``).
-  To avoid such errors, use::
-
-     $ tox --skip-missing-interpreters
+  The configured ``skip_missing_interpreters`` option skips Python
+  interpreters that are not installed on your system.
 
   It is possible to use one or more specific Python versions. Use the ``-e``
-  option and one or more abbreviations (``py37`` for Python 3.7,
-  ``py38`` for Python 3.8 etc.)::
+  option and one or more abbreviations (``py311`` for Python 3.11,
+  ``py312`` for Python 3.12 etc.)::
 
-      $ tox -e py37
-      $ tox -e py37,py38
+      $ tox -e py311
+      $ tox -e py311,py312
 
   To get a complete list and a short description, run::
 
@@ -37,10 +34,9 @@ You can decide to run the complete test suite or only part of it:
   ``TEST_FILE::TEST_FUNCTION``.
 
   For example, the following line tests only the function
-  :func:`test_immutable_major` in the file :file:`test_bump.py` for all
-  Python versions::
+  ``test_should_bump_major`` in the file :file:`test_bump.py` using Python 3.11::
 
-      $ tox -e py37 -- tests/test_bump.py::test_should_bump_major
+      $ tox -e py311 -- tests/test_bump.py::test_should_bump_major
 
   By default, pytest prints only a dot for each test function. To
   reveal the executed test function, use the following syntax::
@@ -48,21 +44,21 @@ You can decide to run the complete test suite or only part of it:
      $ tox -- -v
 
   You can combine the specific test function with the ``-e`` option, for
-  example, to limit the tests for Python 3.7 and 3.8 only::
+  example, to limit the tests for Python 3.11 and 3.12 only::
 
-      $ tox -e py37,py38 -- tests/test_bump.py::test_should_bump_major
+      $ tox -e py311,py312 -- tests/test_bump.py::test_should_bump_major
 
-Our code is checked against formatting, style, type, and docstring issues
-(`black`_, `flake8`_, `mypy`_, and `docformatter`_).
-It is recommended to run your tests in combination with :command:`checks`,
-for example::
+The ``checks`` environment runs `Ruff`_ for code-style checks. The
+``mypy`` and ``docstrings`` environments run `mypy`_ and `docformatter`_,
+respectively.
 
-   $ tox -e checks,py37,py38
+It is recommended to run code-style checks together with the tests, for example::
+
+   $ tox -e checks,py311,py312
 
 
-.. _black: https://black.rtfd.io
+.. _Ruff: https://docs.astral.sh/ruff/
 .. _docformatter: https://pypi.org/project/docformatter/
-.. _flake8: https://flake8.rtfd.io
 .. _mypy: http://mypy-lang.org/
 .. _pytest: http://pytest.org/
 .. _tox: https://tox.rtfd.org/
