@@ -1,0 +1,1 @@
+The :attr:`~semver.version.Version.MAX_LENGTH` limit was set too low, raising to to 255.
