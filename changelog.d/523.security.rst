@@ -1,0 +1,2 @@
+Updated ``filelock`` package to 4.1.0 due to security issues.
+
